@@ -29,6 +29,7 @@ function key_check_func_dictionary(check_keys,item){
   })
 }
 
+//highlights syntax
 function syntaxHighlight(json) {
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
@@ -48,6 +49,7 @@ function syntaxHighlight(json) {
     });
 }
 
+// prettifies the json or the list
 function json_prettify(json_input){
 var str = JSON.stringify(json_input, undefined, 4);
     document.body.appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(str);
@@ -55,7 +57,7 @@ var str = JSON.stringify(json_input, undefined, 4);
 }
 
 
-
+//combines dictionaries
 function combine_dicts(a,b){//https://stackoverflow.com/questions/43449788/how-do-i-merge-two-dictionaries-in-javascript
   var a = a||{ fruit: "apple" },
     b = b||{ vegetable: "carrot" },

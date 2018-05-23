@@ -23,19 +23,13 @@ function completed_tasks_filter(ritual_name,task_name,completed_time,date,start_
 
 //loop through dates,loop through rituals, loop through completed for that date, append to date dictionary
 function completed_ritual_process_from_date(date,completed_tasks,ritual_dict){
-
   L = []
   ritual_dict['tasks'].forEach(function(ritual_dict_name){
-  
-
   completed_tasks =  completed_tasks.filter(function(D){return completed_tasks_filter(ritual_dict_name,
   D.content,D.completed_date,date,ritual_dict.start_time,
   ritual_dict.end_time)})
-
   L = L.concat(completed_tasks)
-
   })
-
  return L
 }
 

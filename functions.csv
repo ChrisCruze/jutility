@@ -2,10 +2,10 @@ name,description
 list_of_lists_from_array,// turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists
 array_to_dictionary,//convert array to dictionary
 key_check_func_dictionary,"//check if key has a value and if not, add it a value"
-syntaxHighlight,
+syntaxHighlight,//highlights syntax
 ,"    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');"
-json_prettify,
-combine_dicts,
+json_prettify,// prettifies the json or the list
+combine_dicts,//combines dictionaries
 daysInMonth ,
 days_this_month,
 read_text_file_data,
@@ -51,8 +51,9 @@ guesty_listing_data_pull,
 guesty_integration_data_pull,
 todoist_current_tasks_pull,//get current tasks 
 todoist_update_task,//update tasks
-todoist_complete_task,
-todoist_delete_task,
-todoist_completed_tasks_with_offset,
+todoist_complete_task,//completes todoist task
+todoist_delete_task,//deletes todoist task
+todoist_completed_tasks_with_offset,//child function of todoist_completed_tasks_all
+todoist_completed_tasks_all,//pulls all of todoist tasks 
 toggl_data_pull_iterate,
 toggl_data_pull,
