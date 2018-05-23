@@ -18,7 +18,21 @@ function query_elements_array_firebase(contactsRef,process_func){
   		process_func(snapshot.val())
 	})
 }
-    
+
+//pulls straight json if the firebase is open
+function firebase_json_pull(url){
+    url = url||"https://shippy-ac235.firebaseio.com/DataTablesTest/Test3.json"
+    l = $.ajax({
+      url: url,
+      method: "GET",
+      async:false,
+      headers: {"Accept":"application/json; odata=verbose"}
+    })
+    results = l.responseJSON
+    return results
+  }
+
+
 
 // initialize the firebase instance
 function firebase_initialize(){

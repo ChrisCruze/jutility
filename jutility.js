@@ -263,7 +263,21 @@ function query_elements_array_firebase(contactsRef,process_func){
   		process_func(snapshot.val())
 	})
 }
-    
+
+//pulls straight json if the firebase is open
+function firebase_json_pull(url){
+    url = url||"https://shippy-ac235.firebaseio.com/DataTablesTest/Test3.json"
+    l = $.ajax({
+      url: url,
+      method: "GET",
+      async:false,
+      headers: {"Accept":"application/json; odata=verbose"}
+    })
+    results = l.responseJSON
+    return results
+  }
+
+
 
 // initialize the firebase instance
 function firebase_initialize(){
@@ -446,7 +460,7 @@ function dates_past_n_days_formatted(days,strf){
 
 
 
-
+//return list of days in the past but strf formatted. This is as an array.
 function dates_past_n_days_formatted_array(days,strf){
     strf = strf || "YYYY-MM-DD"
     today = new Date()
@@ -464,6 +478,18 @@ function dates_past_n_days_formatted_array(days,strf){
     hours_list.reverse()
     return hours_list
   } 
+
+
+//pulls the dates between two dates
+function dates_between_dates_moment(startDate, stopDate) {
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push(currentDate.clone());
+        currentDate.add(1,'day');
+    }
+    return dateArray;
+}
 
 
 

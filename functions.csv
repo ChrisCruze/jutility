@@ -25,6 +25,7 @@ datatable_functions.js,datatables_initiate_render,
 firebase_functions.js,ref_attain_from_firebase,pull ref from firebase
 firebase_functions.js,data_push_to_firebase,push data to firebase
 firebase_functions.js,query_elements_array_firebase,query the contacts ref and run the process_func on the results
+firebase_functions.js,firebase_json_pull,pulls straight json if the firebase is open
 firebase_functions.js,firebase_initialize, initialize the firebase instance
 firebase_functions.js,firebase_auth_user_process,authenticate the user that has been authed
 jquery_functions.js,div_click_jquery,click on a button
@@ -41,7 +42,8 @@ moment_functions.js,number_of_days_ahead_calculate,return a list of days in the 
 moment_functions.js,number_of_days_ahead_calculate_array,return a list of days in the future. This returns an array 
 moment_functions.js,dates_past_n_days,return list of days in the past
 moment_functions.js,dates_past_n_days_formatted,return list of days in the past but strf formatted
-moment_functions.js,dates_past_n_days_formatted_array,
+moment_functions.js,dates_past_n_days_formatted_array,return list of days in the past but strf formatted. This is as an array.
+moment_functions.js,dates_between_dates_moment,pulls the dates between two dates
 underscore_functions.js,sum_float_convert_from_array_underscore, get sum from array with key
 gspread_functions.js,gspread_query,query google spreadsheets
 gspread_functions.js,array_pull_from_gspread,query from gspread directly using api key

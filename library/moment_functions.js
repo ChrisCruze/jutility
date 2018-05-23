@@ -138,7 +138,7 @@ function dates_past_n_days_formatted(days,strf){
 
 
 
-
+//return list of days in the past but strf formatted. This is as an array.
 function dates_past_n_days_formatted_array(days,strf){
     strf = strf || "YYYY-MM-DD"
     today = new Date()
@@ -156,5 +156,17 @@ function dates_past_n_days_formatted_array(days,strf){
     hours_list.reverse()
     return hours_list
   } 
+
+
+//pulls the dates between two dates
+function dates_between_dates_moment(startDate, stopDate) {
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push(currentDate.clone());
+        currentDate.add(1,'day');
+    }
+    return dateArray;
+}
 
 
