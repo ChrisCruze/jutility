@@ -64,3 +64,9 @@ function combine_dicts(a,b){//https://stackoverflow.com/questions/43449788/how-d
     food = Object.assign({}, a, b);
     return food
 }
+
+//check if the dictionary has two layers of key down and then pull and turn it to null to avoid error
+function key_check_make_double(item,primary_key,secondary_key){
+  item[primary_key] = item[primary_key]||{}
+  item[primary_key][secondary_key] = item[primary_key][secondary_key] ||'null'
+}

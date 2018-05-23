@@ -67,6 +67,12 @@ function combine_dicts(a,b){//https://stackoverflow.com/questions/43449788/how-d
     food = Object.assign({}, a, b);
     return food
 }
+
+//check if the dictionary has two layers of key down and then pull and turn it to null to avoid error
+function key_check_make_double(item,primary_key,secondary_key){
+  item[primary_key] = item[primary_key]||{}
+  item[primary_key][secondary_key] = item[primary_key][secondary_key] ||'null'
+}
 //date_functions.js
 
 
@@ -277,6 +283,32 @@ function firebase_json_pull(url){
     return results
   }
 
+//purpose is to check one dictionary against another and update it 
+function dictionary_cross_check_apply_key(D,firebase_defined_dict,key){
+    	if (firebase_defined_dict != undefined) {
+      		D[key] = firebase_defined_dict[key];
+    	} else {
+      		D[key] = "null";
+    	}
+
+}
+
+//purpose is to sync firebase array with regular array across keys
+function firebase_datatables_integrate(array,firebase_url,identifier,keys) {
+	keys = keys||['status']
+	firebase_url = firebase_url||"https://shippy-ac235.firebaseio.com/dashbot/accounts.json"
+	identifier = identifier||"DT_RowId"
+  	firebase_dict = firebase_json_pull(firebase_url)||{}
+  	array.forEach(function(D) {
+    	firebase_defined_dict = firebase_dict[D[identifier]]
+    	keys.forEach(function(key){
+    		dictionary_cross_check_apply_key(D,firebase_defined_dict,key)
+    	})
+    	
+
+  });
+  return array;
+}
 
 
 // initialize the firebase instance

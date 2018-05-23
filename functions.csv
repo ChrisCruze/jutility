@@ -5,6 +5,7 @@ array_functions.js,key_check_func_dictionary,"check if key has a value and if no
 array_functions.js,syntaxHighlight,highlights syntax
 array_functions.js,json_prettify, prettifies the json or the list
 array_functions.js,combine_dicts,combines dictionaries
+array_functions.js,key_check_make_double,check if the dictionary has two layers of key down and then pull and turn it to null to avoid error
 date_functions.js,daysInMonth ,
 date_functions.js,days_this_month,
 file_functions.js,read_text_file_data,read directly from a text file
@@ -26,6 +27,8 @@ firebase_functions.js,ref_attain_from_firebase,pull ref from firebase
 firebase_functions.js,data_push_to_firebase,push data to firebase
 firebase_functions.js,query_elements_array_firebase,query the contacts ref and run the process_func on the results
 firebase_functions.js,firebase_json_pull,pulls straight json if the firebase is open
+firebase_functions.js,dictionary_cross_check_apply_key,purpose is to check one dictionary against another and update it 
+firebase_functions.js,firebase_datatables_integrate,purpose is to sync firebase array with regular array across keys
 firebase_functions.js,firebase_initialize, initialize the firebase instance
 firebase_functions.js,firebase_auth_user_process,authenticate the user that has been authed
 jquery_functions.js,div_click_jquery,click on a button
