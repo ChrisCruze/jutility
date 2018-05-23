@@ -1,0 +1,127 @@
+
+//get hour from time
+function get_hour_from_time(i){
+  r = Date(i)
+  hour = parseInt(moment(r).format("h")) + 5
+  return hour
+}
+
+
+//get the current time from moment
+function attain_now_from_moment(){
+  date_time = moment().format();
+  return date_time
+}
+
+//return unix now moment
+function unix_now_moment(){
+	return moment().unix()
+}
+
+//return hour-minute format using moment
+function hour_format_moment(timestamp){
+	return moment(timestamp).format("hh:mmA")
+}
+
+//filter a certain date for current time range such as today, this month etc.
+function date_range_filter_moment(date_input,strf){
+    if (date_input){
+      this_month = moment().format(strf) //01
+      completed_date_moment = new moment(date_input)
+      completed_month = completed_date_moment.format(strf)
+      return completed_month === this_month
+    }
+}
+
+
+//set the hour from a given day
+function set_date_time_moment(date,hour){
+  new_date = new Date(moment(date).format())
+  new_date.setHours(hour)
+  return moment(new_date)
+}
+
+function date_difference_from_today_days_moment(date_added){
+    a = new moment()
+    b = new moment(date_added)
+    age_days = a.diff(b,'days')
+    return age_days
+}
+
+
+function dates_within_this_month(){
+    days = moment().daysInMonth();
+    today = new Date()
+    month = String(today.getMonth()+1)
+    year = String(today.getFullYear())
+    date_string = year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) { 
+        next_time = start_time.clone()
+        next_time.add(i,'day')
+        hours_list.push(next_time)
+
+    }
+    return hours_list
+  } 
+
+
+
+function dates_past_n_days(days){
+    today = new Date()
+    month = String(today.getMonth()+1)
+    year = String(today.getFullYear())
+    date_string = moment().format("YYYY-MM-DD")//year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) { 
+        next_time = start_time.clone()
+        next_time.subtract(i,'day')
+        hours_list.push(next_time)
+
+    }
+    hours_list.reverse()
+    return hours_list
+  } 
+
+
+function dates_past_n_days_formatted(days,strf){
+    strf = strf || "YYYY-MM-DD"
+    today = new Date()
+    month = String(today.getMonth()+1)
+    year = String(today.getFullYear())
+    date_string = moment().format("YYYY-MM-DD")//year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) { 
+        next_time = start_time.clone()
+        next_time.subtract(i,'day')
+        hours_list.push(next_time.format(strf))
+    }
+    hours_list.reverse()
+    return hours_list
+  } 
+
+
+
+
+function dates_past_n_days_formatted_array(days,strf){
+    strf = strf || "YYYY-MM-DD"
+    today = new Date()
+    month = String(today.getMonth()+1)
+    year = String(today.getFullYear())
+    date_string = moment().format("YYYY-MM-DD")//year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) { 
+        next_time = start_time.clone()
+        next_time.subtract(i,'day')
+        hours_list.push({date:next_time.format(strf)})
+
+    }
+    hours_list.reverse()
+    return hours_list
+  } 
+
+
