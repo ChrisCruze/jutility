@@ -1,0 +1,58 @@
+name,description
+list_of_lists_from_array,// turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists
+array_to_dictionary,//convert array to dictionary
+key_check_func_dictionary,"//check if key has a value and if not, add it a value"
+syntaxHighlight,
+,"    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');"
+json_prettify,
+combine_dicts,
+daysInMonth ,
+days_this_month,
+read_text_file_data,
+,"    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');"
+median_get,//get the median from list of numbers
+create_guid,//create g unique identifier
+s4,function create_guid() {
+file_formatted_string,//convert stirng to fromatted string 
+string_within_string_check,
+headers_key_names_list_format_string,//convert stirng to fromatted string 
+parameter_attain_from_url,//get url parameter 
+sort_by_unix_datatabes,//this should go at top of datatables
+callback_function_sum_datatables,"//based on filter from table , update a funciton"
+date_format_created_moment_datatables,//format the date as its created
+editor_initiate,
+editor_post_submit_function_datatables,//process the response from the psot submit
+,"    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');"
+datatables_initiate_render,
+ref_attain_from_firebase,//pull ref from firebase
+data_push_to_firebase,//push data to firebase
+query_elements_array_firebase,//query the contacts ref and run the process_func on the results
+firebase_initialize,// initialize the firebase instance
+firebase_auth_user_process,//authenticate the user that has been authed
+div_click_jquery,//click on a button
+enter_press_down_jquery,//press enter when clicked
+,"    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');"
+get_hour_from_time,//get hour from time
+attain_now_from_moment,//get the current time from moment
+unix_now_moment,//return unix now moment
+hour_format_moment,//return hour-minute format using moment
+date_range_filter_moment,"//filter a certain date for current time range such as today, this month etc."
+set_date_time_moment,//set the hour from a given day
+date_difference_from_today_days_moment,
+dates_within_this_month,
+dates_past_n_days,
+dates_past_n_days_formatted,
+dates_past_n_days_formatted_array,
+sum_float_convert_from_array_underscore,// get sum from array with key
+gspread_query,//query google spreadsheets
+array_pull_from_gspread,//query from gspread directly using api key
+guesty_reservation_data_pull,// The below function pulls the data from the guesty
+guesty_listing_data_pull,
+guesty_integration_data_pull,
+todoist_current_tasks_pull,//get current tasks 
+todoist_update_task,//update tasks
+todoist_complete_task,
+todoist_delete_task,
+todoist_completed_tasks_with_offset,
+toggl_data_pull_iterate,
+toggl_data_pull,

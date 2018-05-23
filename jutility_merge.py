@@ -1,6 +1,19 @@
 import os
 import re
+import csv
+import StringIO
 
+class CSVFunctions(object):
+    def write(self, lst, filename,sort=True,first_key=None):
+        keys = lst[0].keys()
+        f = open(filename, 'wb')
+        dict_writer = csv.DictWriter(f, keys)
+        dict_writer.writer.writerow(keys)
+
+        try:
+            dict_writer.writerows(lst)
+        except UnicodeEncodeError:
+            dict_writer.writerows(lst)
 
 
 class TextFunctions(object):
@@ -24,7 +37,7 @@ class TextFunctions(object):
     def javascript_function_pull(self, page_source, start='function ', end='\('):
     	function_list = TextFunctions().string_between_pull_multiple(page_source, start=start, end=end)
     	description_list = [page_source.split("\n")[self.line_number_pull_from_file(page_source,i)-1] for i in function_list]
-    	l = [{'name':function_name,'description':description}  for function_name,description in zip(function_list,description_list)]
+    	l = [{'name':str(function_name),'description':str(description)}  for function_name,description in zip(function_list,description_list)]
     	return l 
 
 
@@ -51,7 +64,11 @@ for i in L:
 	    s = s + divider+ payload
 print s
 
-print TextFunctions().javascript_function_pull(s)
+array = TextFunctions().javascript_function_pull(s)
+filename = os.path.join(os.getcwd(),'functions.csv')
+print filename
+CSVFunctions().write(array,filename)
+
 
 f = open(os.path.join(os.getcwd(),'jutility.js'), 'w+')
 f.write(str(s))
