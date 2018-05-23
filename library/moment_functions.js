@@ -49,6 +49,7 @@ function date_difference_from_today_days_moment(date_added){
 }
 
 
+//dates that are within this month
 function dates_within_this_month(){
     days = moment().daysInMonth();
     today = new Date()
@@ -66,8 +67,23 @@ function dates_within_this_month(){
     return hours_list
   } 
 
+//return a list of days in the future 
+function number_of_days_ahead_calculate(days_ahead){
+    today = new Date()
+    month = String(today.getMonth()+1)
+    year = String(today.getFullYear())
+    start_time = moment()
+    hours_list = []
+    for (i = 0; i < days_ahead; i++) { 
+        next_time = start_time.clone()
+        next_time.add(i,'day')
+        hours_list.push(next_time.format('YYYY-MM-DD'))
+    }
+    return hours_list
+  } 
 
 
+//return list of days in the past
 function dates_past_n_days(days){
     today = new Date()
     month = String(today.getMonth()+1)
@@ -85,7 +101,7 @@ function dates_past_n_days(days){
     return hours_list
   } 
 
-
+//return list of days in the past but strf formatted
 function dates_past_n_days_formatted(days,strf){
     strf = strf || "YYYY-MM-DD"
     today = new Date()

@@ -36,9 +36,10 @@ moment_functions.js,hour_format_moment,return hour-minute format using moment
 moment_functions.js,date_range_filter_moment,"filter a certain date for current time range such as today, this month etc."
 moment_functions.js,set_date_time_moment,set the hour from a given day
 moment_functions.js,date_difference_from_today_days_moment,
-moment_functions.js,dates_within_this_month,
-moment_functions.js,dates_past_n_days,
-moment_functions.js,dates_past_n_days_formatted,
+moment_functions.js,dates_within_this_month,dates that are within this month
+moment_functions.js,number_of_days_ahead_calculate,return a list of days in the future 
+moment_functions.js,dates_past_n_days,return list of days in the past
+moment_functions.js,dates_past_n_days_formatted,return list of days in the past but strf formatted
 moment_functions.js,dates_past_n_days_formatted_array,
 underscore_functions.js,sum_float_convert_from_array_underscore, get sum from array with key
 gspread_functions.js,gspread_query,query google spreadsheets
