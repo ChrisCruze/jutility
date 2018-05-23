@@ -1,5 +1,5 @@
 | # | Function | File | Definition |
-|---|:------|-------------|
+|---|:----|---|-------------|
 | 1 | [list_of_lists_from_array](http://cruzco.site44.com/streak.html) | array_functions.js |  turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists|
 | 2 | [array_to_dictionary](http://cruzco.site44.com/streak.html) | array_functions.js | convert array to dictionary|
 | 3 | [key_check_func_dictionary](http://cruzco.site44.com/streak.html) | array_functions.js | check if key has a value and if not, add it a value|

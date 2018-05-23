@@ -52,7 +52,7 @@ def readme_file_write(function_array):
 	readme_filename = os.path.join(os.getcwd(),'README.MD')
 	f = open(readme_filename, 'w+')
 
-	header_source = """| # | Function | File | Definition |\n|---|:------|-------------|\n"""
+	header_source = """| # | Function | File | Definition |\n|---|:----|---|-------------|\n"""
 
 	page_source = header_source + page_source
 
