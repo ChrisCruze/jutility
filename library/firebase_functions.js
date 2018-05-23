@@ -43,7 +43,7 @@ function dictionary_cross_check_apply_key(D,firebase_defined_dict,key){
 }
 
 //purpose is to sync firebase array with regular array across keys
-function firebase_datatables_integrate(array,firebase_url,identifier,keys) {
+function firebase_array_integrate(array,firebase_url,identifier,keys) {
 	keys = keys||['status']
 	firebase_url = firebase_url||"https://shippy-ac235.firebaseio.com/dashbot/accounts.json"
 	identifier = identifier||"DT_RowId"

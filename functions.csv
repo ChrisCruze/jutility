@@ -1,4 +1,6 @@
 file_name,name,description
+array_functions.js,dictionary_check_keys,checks if item has a key and gives it null if not
+array_functions.js,array_check_keys,checks if item has a key and gives it null if not (for the whole array)
 array_functions.js,list_of_lists_from_array, turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists
 array_functions.js,array_to_dictionary,convert array to dictionary
 array_functions.js,key_check_func_dictionary,"check if key has a value and if not, add it a value"
@@ -28,7 +30,7 @@ firebase_functions.js,data_push_to_firebase,push data to firebase
 firebase_functions.js,query_elements_array_firebase,query the contacts ref and run the process_func on the results
 firebase_functions.js,firebase_json_pull,pulls straight json if the firebase is open
 firebase_functions.js,dictionary_cross_check_apply_key,purpose is to check one dictionary against another and update it 
-firebase_functions.js,firebase_datatables_integrate,purpose is to sync firebase array with regular array across keys
+firebase_functions.js,firebase_array_integrate,purpose is to sync firebase array with regular array across keys
 firebase_functions.js,firebase_initialize, initialize the firebase instance
 firebase_functions.js,firebase_auth_user_process,authenticate the user that has been authed
 jquery_functions.js,div_click_jquery,click on a button

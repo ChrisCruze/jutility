@@ -1,6 +1,22 @@
 
 //array_functions.js
 
+//checks if item has a key and gives it null if not
+function dictionary_check_keys(item,check_keys){
+  check_keys = check_keys||['fullName','active','connectedAt','id']
+  check_keys.forEach(function(i){
+    item[i] = item[i]||'null'
+  })
+}
+
+//checks if item has a key and gives it null if not (for the whole array)
+function array_check_keys(array,check_keys){
+  check_keys = check_keys||['fullName','active','connectedAt','id']
+  array.forEach(function(item){
+    dictionary_check_keys(item,check_keys)
+  })
+}
+
 // turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists
 function list_of_lists_from_array(array,keys){
   list_of_lists = [] //this is an empty list that will be filled with sublists
@@ -294,7 +310,7 @@ function dictionary_cross_check_apply_key(D,firebase_defined_dict,key){
 }
 
 //purpose is to sync firebase array with regular array across keys
-function firebase_datatables_integrate(array,firebase_url,identifier,keys) {
+function firebase_array_integrate(array,firebase_url,identifier,keys) {
 	keys = keys||['status']
 	firebase_url = firebase_url||"https://shippy-ac235.firebaseio.com/dashbot/accounts.json"
 	identifier = identifier||"DT_RowId"
