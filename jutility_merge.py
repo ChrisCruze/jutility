@@ -36,12 +36,29 @@ class TextFunctions(object):
           
     def javascript_function_pull(self, page_source, start='function ', end='\('):
     	function_list = TextFunctions().string_between_pull_multiple(page_source, start=start, end=end)
+    	function_list = [i for i in function_list if i != '']
     	description_list = [page_source.split("\n")[self.line_number_pull_from_file(page_source,i)-1] for i in function_list]
-    	l = [{'name':str(function_name),'description':str(description)}  for function_name,description in zip(function_list,description_list)]
+    	l = [{'name':str(function_name),'description':str(description)[2:]}  for function_name,description in zip(function_list,description_list)]
     	return l 
 
 
 
+def readme_file_write(function_array):
+
+	line_func = lambda enum,D: """| {} | [{}](http://cruzco.site44.com/streak.html) | {}|""".format(str(enum+1),D['name'],D['description'])
+	#page_source = "\n".join(["{}. {} - {}".format(str(enum+1),D['name'],D['description']) for enum,D in enumerate(function_array)])
+	page_source = "\n".join([line_func(enum,D) for enum,D in enumerate(function_array)])
+
+	readme_filename = os.path.join(os.getcwd(),'README.MD')
+	f = open(readme_filename, 'w+')
+
+	header_source = """| # | Behavior | Metric |
+	|---|:------|-------------|\n"""
+
+	page_source = header_source + page_source
+
+	f.write(str(page_source))
+	f.close()
 
 
 
@@ -65,9 +82,11 @@ for i in L:
 print s
 
 array = TextFunctions().javascript_function_pull(s)
+print array 
 filename = os.path.join(os.getcwd(),'functions.csv')
-print filename
 CSVFunctions().write(array,filename)
+
+readme_file_write(array)
 
 
 f = open(os.path.join(os.getcwd(),'jutility.js'), 'w+')
