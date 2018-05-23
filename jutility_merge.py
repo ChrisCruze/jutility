@@ -34,25 +34,25 @@ class TextFunctions(object):
     			break 
     	return 0
           
-    def javascript_function_pull(self, page_source, start='function ', end='\('):
+    def javascript_function_pull(self, page_source, start='function ', end='\(',file_name='None'):
     	function_list = TextFunctions().string_between_pull_multiple(page_source, start=start, end=end)
     	function_list = [i for i in function_list if i != '']
     	description_list = [page_source.split("\n")[self.line_number_pull_from_file(page_source,i)-1] for i in function_list]
-    	l = [{'name':str(function_name),'description':str(description)[2:]}  for function_name,description in zip(function_list,description_list)]
+    	l = [{'name':str(function_name),'file_name':file_name,'description':str(description)[2:]}  for function_name,description in zip(function_list,description_list)]
     	return l 
 
 
 
 def readme_file_write(function_array):
 
-	line_func = lambda enum,D: """| {} | [{}](http://cruzco.site44.com/streak.html) | {}|""".format(str(enum+1),D['name'],D['description'])
+	line_func = lambda enum,D: """| {} | [{}](http://cruzco.site44.com/streak.html) | {} | {}|""".format(str(enum+1),D['name'],D['file_name'],D['description'])
 	#page_source = "\n".join(["{}. {} - {}".format(str(enum+1),D['name'],D['description']) for enum,D in enumerate(function_array)])
 	page_source = "\n".join([line_func(enum,D) for enum,D in enumerate(function_array)])
 
 	readme_filename = os.path.join(os.getcwd(),'README.MD')
 	f = open(readme_filename, 'w+')
 
-	header_source = """| # | Function | Definition |\n|---|:------|-------------|\n"""
+	header_source = """| # | Function | File | Definition |\n|---|:------|-------------|\n"""
 
 	page_source = header_source + page_source
 
@@ -71,17 +71,19 @@ for direct in directories:
 	files = [os.path.join(direct,i) for i in os.listdir(direct) if '.js' in i ]
 	L.extend(files)
 
-
+array = []
 s = ""
 for i in L: 
 	with open(i,'r') as f:
 	    payload = f.read()
+	    sub_array = TextFunctions().javascript_function_pull(payload,file_name=os.path.basename(i))
+	    array.extend(sub_array)
 	    divider = "\n//{}\n\n".format(os.path.basename(i))
 	    s = s + divider+ payload
 print s
 
-array = TextFunctions().javascript_function_pull(s)
-print array 
+#array = TextFunctions().javascript_function_pull(s)
+#print array 
 filename = os.path.join(os.getcwd(),'functions.csv')
 CSVFunctions().write(array,filename)
 
