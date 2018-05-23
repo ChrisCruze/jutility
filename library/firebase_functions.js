@@ -35,7 +35,7 @@ function firebase_json_pull(url){
 //purpose is to check one dictionary against another and update it 
 function dictionary_cross_check_apply_key(D,firebase_defined_dict,key){
     	if (firebase_defined_dict != undefined) {
-      		D[key] = firebase_defined_dict[key];
+      		D[key] = firebase_defined_dict[key]||"null";
     	} else {
       		D[key] = "null";
     	}
