@@ -2,7 +2,7 @@
 //get hour from time
 function get_hour_from_time(i){
   r = Date(i)
-  hour = parseInt(moment(r).format("h")) + 5
+  hour = parseInt(moment(r).format("H")) + 5
   return hour
 }
 

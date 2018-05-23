@@ -1,4 +1,4 @@
-//function turn an array (e.g. list of dictionaries) into a list of lists because certain functions such as datatables takes an input of a list of lists
+// turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists
 function list_of_lists_from_array(array,keys){
   list_of_lists = [] //this is an empty list that will be filled with sublists
   array.forEach(function(dictionary_object,index){ //we're going to loop through every dictionary in the array
