@@ -65,5 +65,6 @@ todoist_functions.js,todoist_complete_task,completes todoist task
 todoist_functions.js,todoist_delete_task,deletes todoist task
 todoist_functions.js,todoist_completed_tasks_with_offset,child function of todoist_completed_tasks_all
 todoist_functions.js,todoist_completed_tasks_all,pulls all of todoist tasks 
+todoist_functions.js,todoist_completed_tasks_all_custom,pulls all the todoist tasks and customizes each item
 toggl_functions.js,toggl_data_pull_iterate,
 toggl_functions.js,toggl_data_pull,

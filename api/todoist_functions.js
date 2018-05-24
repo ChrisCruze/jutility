@@ -26,7 +26,6 @@ function sub_project_from_task(item){
 function duration_from_task_dictionary(item){
   item_name = item.content 
   item_has_time = item_name.indexOf("|") != -1 && item_name.indexOf("[") != -1 && item_name.indexOf("]") != -1
-
   if (item_has_time){
     var duration =parseInt(item_name.substring(item_name.lastIndexOf("|")+1,item_name.lastIndexOf("min")));
   }
@@ -207,4 +206,19 @@ function todoist_completed_tasks_all(todoist_api_token,since){
   }
   return master_list
 }
+
+
+
+//pulls all the todoist tasks and customizes each item
+function todoist_completed_tasks_all_custom(todoist_api_token,since){
+  l = todoist_completed_tasks_all(todoist_api_token,since)
+  l.forEach(function(item){tasks_array_customize_item(item)})
+}
+
+
+
+
+
+
+
 
