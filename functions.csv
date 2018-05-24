@@ -55,6 +55,10 @@ gspread_functions.js,array_pull_from_gspread,query from gspread directly using a
 guesty_functions.js,guesty_reservation_data_pull, The below function pulls the data from the guesty
 guesty_functions.js,guesty_listing_data_pull,
 guesty_functions.js,guesty_integration_data_pull,
+todoist_functions.js,task_cost_calculation,calculate the cost of the task at 15 dollar per rate
+todoist_functions.js,sub_project_from_task,return the sub project by parsing it out from the colon
+todoist_functions.js,duration_from_task_dictionary,return duration from the task name
+todoist_functions.js,tasks_array_customize_item,customize each dictionary of todoist task for additional attributes
 todoist_functions.js,todoist_current_tasks_pull,get current tasks 
 todoist_functions.js,todoist_update_task,update tasks
 todoist_functions.js,todoist_complete_task,completes todoist task

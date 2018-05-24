@@ -1,5 +1,51 @@
 
 
+//calculate the cost of the task at 15 dollar per rate
+function task_cost_calculation(item,key_name,hourly_rate){
+  hourly_rate = hourly_rate||15
+  key_name = key_name|| 'duration'
+  minutes = parseFloat(item[key_name])
+  cost = minutes * (hourly_rate/60)
+  return cost 
+}
+
+//return the sub project by parsing it out from the colon
+function sub_project_from_task(item){
+  item_name = item.content 
+  sub_project = item_name.split(":")[0].trim()
+  is_sub_project = sub_project.indexOf("|") == -1 && sub_project.indexOf("[") == -1  && sub_project.indexOf("@") == -1 
+  if (is_sub_project){
+    return sub_project //'-'
+  }
+  else {
+    return '-'
+  }
+}
+
+//return duration from the task name
+function duration_from_task_dictionary(item){
+  item_name = item.content 
+  item_has_time = item_name.indexOf("|") != -1 && item_name.indexOf("[") != -1 && item_name.indexOf("]") != -1
+
+  if (item_has_time){
+    var duration =parseInt(item_name.substring(item_name.lastIndexOf("|")+1,item_name.lastIndexOf("min")));
+  }
+  else {
+    duration = 0
+  }
+  return duration
+}
+
+
+//customize each dictionary of todoist task for additional attributes
+function tasks_array_customize_item(item){
+  item['sub_project'] = sub_project_from_task(item)//item_name.split(":")[0].trim()
+  item['duration'] = duration_from_task_dictionary(item)
+  item['cost'] = task_cost_calculation(item)
+  return item 
+}
+
+
 //https://stackoverflow.com/questions/49394588/how-to-create-todoist-task-using-todoist-api-v7
 todoist_add_tasks_ajax = function(todoist_api_token,tasks,sync_token) {
   var sync_token = sync_token||"*"
