@@ -213,6 +213,7 @@ function todoist_completed_tasks_all(todoist_api_token,since){
 function todoist_completed_tasks_all_custom(todoist_api_token,since){
   l = todoist_completed_tasks_all(todoist_api_token,since)
   l.forEach(function(item){tasks_array_customize_item(item)})
+  return l 
 }
 
 
