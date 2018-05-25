@@ -8,8 +8,10 @@ array_functions.js,syntaxHighlight,highlights syntax
 array_functions.js,json_prettify, prettifies the json or the list
 array_functions.js,combine_dicts,combines dictionaries
 array_functions.js,key_check_make_double,check if the dictionary has two layers of key down and then pull and turn it to null to avoid error
-date_functions.js,daysInMonth ,
-date_functions.js,days_this_month,
+date_functions.js,parseTime,parses a time such as 1:00PM
+date_functions.js,daysInMonth ,gives days in the month
+date_functions.js,days_this_month,number of days this month
+date_functions.js,date_is_today,returns true if the date is todays date
 file_functions.js,read_text_file_data,read directly from a text file
 file_functions.js,downloadURI,convert a downloadable data url into a download
 math_functions.js,median_get,get the median from list of numbers
@@ -36,6 +38,7 @@ firebase_functions.js,firebase_auth_user_process,authenticate the user that has 
 jquery_functions.js,div_click_jquery,click on a button
 jquery_functions.js,enter_press_down_jquery,press enter when clicked
 jquery_functions.js,update_from_click_jquery,function that uses jquery to run a function from a click
+moment_functions.js,check_if_date_is_current_range,"check if the day is today, 'year, month, week, minute'"
 moment_functions.js,get_hour_from_time,get hour from time
 moment_functions.js,attain_now_from_moment,get the current time from moment
 moment_functions.js,unix_now_moment,return unix now moment

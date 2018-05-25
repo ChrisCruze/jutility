@@ -1,4 +1,11 @@
 
+//check if the day is today, 'year, month, week, minute'
+function check_if_date_is_current_range(input_date,date_range){
+  date_range = date_range || 'day'
+  return moment(input_date).isSame(Date.now(), date_range);
+}
+
+
 //get hour from time
 function get_hour_from_time(i){
   r = Date(i)
