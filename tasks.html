@@ -105,16 +105,21 @@ $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
   return r;
 };
 
+
 function date_format_check_in(td, cellData, rowData, row, col) {
   date_format = moment(cellData).format("MM/DD/YY (dd)");
   $(td).html(date_format);
 }
 
+
 function array_dictionary_customize(item, index) {
   item["DT_RowId"] = item.id;
 }
 
-array = todoist_completed_tasks_all_custom();
+
+
+
+array = todoist_tasks_pull_custom();
 array.forEach(array_dictionary_customize);
 array = firebase_array_integrate(array,"https://shippy-ac235.firebaseio.com/omni/"+omni_node+".json","DT_RowId",['status','notes'])
 
@@ -178,10 +183,10 @@ $("#table").DataTable({
       name: "notes"
     },
     {
-      data: "completed_date",
-      title: "completed_date",
+      data: "task_date",
+      title: "task_date",
       visible: true,
-      name: "completed_date",
+      name: "task_date",
       createdCell: date_format_check_in,
       type: "date-format-moment"
     }

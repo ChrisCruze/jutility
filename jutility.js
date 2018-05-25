@@ -948,7 +948,9 @@ function todoist_tasks_pull_custom(){
 
 
   current_tasks.forEach(function(D){D['task_type']='current'})
+  current_tasks.forEach(function(D){D['task_date']=D['due_date_utc']})
   completed_tasks.forEach(function(D){D['task_type']='completed'})
+  completed_tasks.forEach(function(D){D['task_date']=D['completed_date']})
 
 
 
@@ -957,7 +959,7 @@ function todoist_tasks_pull_custom(){
   current_completed_tasks.forEach(function(item){labels_add_from_labels_dictionary(item,labels_dictionary)})
   current_completed_tasks.forEach(function(item){project_name_append(item,projects_dictionary)})
 
-  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added'])
+  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
   return current_completed_tasks 
 }
 
