@@ -421,6 +421,22 @@ function update_from_click_jquery(div_id){
 	div_id = div_id||".cell-value"
 	$(div_id).on('click', function (e) { $(this)})
 }
+
+//get the td jquery objects from a table based on a table id
+function table_jquery_objects(table_id){
+	list_of_lists = []
+	$("#"+table_id+" tr").each(function() {
+	  row_list = []
+	  col_values = Object.values($(this).find('td'))
+	  if (col_values.length > 0){
+	  col_values.forEach(function(col_val){
+	    row_list.push(col_val)
+	  })
+	  list_of_lists.push(row_list)
+	  }
+	});
+}
+
 //moment_functions.js
 
 

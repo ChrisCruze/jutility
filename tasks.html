@@ -195,6 +195,12 @@ $("#table").DataTable({
       title: "task_date_range",
       visible: false,
       name: "task_date_range"
+    },
+     {
+      data: "task_type",
+      title: "task_type",
+      visible: false,
+      name: "task_type"
     }
   ],
   select: true,
@@ -206,6 +212,12 @@ $("#table").DataTable({
     { extend: "edit", editor: editor },
     {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
       dt.columns('').search('').draw()
+    }},
+     {text: 'Current',name:'Current', action: function ( e, dt, node, config ) {
+      dt.columns('task_type:name').search('current').draw()
+    }},
+      {text: 'Complete',name:'Complete', action: function ( e, dt, node, config ) {
+      dt.columns('task_type:name').search('complete').draw()
     }},
     {text: 'Today',name:'Today', action: function ( e, dt, node, config ) {
       dt.columns('task_date_range:name').search('today').draw()
