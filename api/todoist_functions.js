@@ -41,6 +41,7 @@ function tasks_array_customize_item(item){
   item['sub_project'] = sub_project_from_task(item)//item_name.split(":")[0].trim()
   item['duration'] = duration_from_task_dictionary(item)
   item['cost'] = task_cost_calculation(item)
+  item["DT_RowId"] = item.id;
   return item 
 }
 

@@ -226,6 +226,11 @@ function callback_function_sum_datatables(variable_name){
   variable_name = api.column(variable_name+":name", {page:'current'} ).data().sum()
   return api 
 }
+//format the datatables date with the date
+function date_format_with_day(td, cellData, rowData, row, col) {
+  date_format = moment(cellData).format("MM/DD/YY (dd)");
+  $(td).html(date_format);
+}
 
 //format the date as its created
 function date_format_created_moment_datatables(td, cellData, rowData, row, col) {
@@ -710,6 +715,7 @@ function tasks_array_customize_item(item){
   item['sub_project'] = sub_project_from_task(item)//item_name.split(":")[0].trim()
   item['duration'] = duration_from_task_dictionary(item)
   item['cost'] = task_cost_calculation(item)
+  item["DT_RowId"] = item.id;
   return item 
 }
 

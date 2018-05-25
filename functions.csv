@@ -23,6 +23,7 @@ string_functions.js,headers_key_names_list_format_string,convert stirng to froma
 web_functions.js,parameter_attain_from_url,get url parameter 
 datatable_functions.js,sort_by_unix_datatabes,this should go at top of datatables
 datatable_functions.js,callback_function_sum_datatables,"based on filter from table , update a funciton"
+datatable_functions.js,date_format_with_day,format the datatables date with the date
 datatable_functions.js,date_format_created_moment_datatables,format the date as its created
 datatable_functions.js,editor_initiate,
 datatable_functions.js,editor_post_submit_function_datatables,process the response from the psot submit

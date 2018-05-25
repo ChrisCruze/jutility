@@ -12,6 +12,11 @@ function callback_function_sum_datatables(variable_name){
   variable_name = api.column(variable_name+":name", {page:'current'} ).data().sum()
   return api 
 }
+//format the datatables date with the date
+function date_format_with_day(td, cellData, rowData, row, col) {
+  date_format = moment(cellData).format("MM/DD/YY (dd)");
+  $(td).html(date_format);
+}
 
 //format the date as its created
 function date_format_created_moment_datatables(td, cellData, rowData, row, col) {
