@@ -405,6 +405,23 @@ function check_if_date_is_current_range(input_date,date_range){
   date_range = date_range || 'day'
   return moment(input_date).isSame(Date.now(), date_range);
 }
+//creates a string that indicates whether its in the day,week,month,year
+function date_within_range_string_create(input_date){
+  date_string = ''
+  if (moment(input_date).isSame(Date.now(), 'day')){
+    date_string = date_string + "today"
+  }
+  if (moment(input_date).isSame(Date.now(), 'week')){
+    date_string = date_string + "this_week"
+  }
+  if (moment(input_date).isSame(Date.now(), 'month')){
+    date_string = date_string + "this_month"
+  }
+  if (moment(input_date).isSame(Date.now(), 'year')){
+    date_string = date_string + "this_year"
+  }
+  return date_string
+}
 
 
 //get hour from time
@@ -958,6 +975,7 @@ function todoist_tasks_pull_custom(){
   current_completed_tasks.forEach(function(item){tasks_array_customize_item(item)})
   current_completed_tasks.forEach(function(item){labels_add_from_labels_dictionary(item,labels_dictionary)})
   current_completed_tasks.forEach(function(item){project_name_append(item,projects_dictionary)})
+  current_completed_tasks.forEach(function(item){item['task_date_range'] = date_within_range_string_create(item['task_date'])})
 
   array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
   return current_completed_tasks 

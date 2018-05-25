@@ -4,6 +4,23 @@ function check_if_date_is_current_range(input_date,date_range){
   date_range = date_range || 'day'
   return moment(input_date).isSame(Date.now(), date_range);
 }
+//creates a string that indicates whether its in the day,week,month,year
+function date_within_range_string_create(input_date){
+  date_string = ''
+  if (moment(input_date).isSame(Date.now(), 'day')){
+    date_string = date_string + "today"
+  }
+  if (moment(input_date).isSame(Date.now(), 'week')){
+    date_string = date_string + "this_week"
+  }
+  if (moment(input_date).isSame(Date.now(), 'month')){
+    date_string = date_string + "this_month"
+  }
+  if (moment(input_date).isSame(Date.now(), 'year')){
+    date_string = date_string + "this_year"
+  }
+  return date_string
+}
 
 
 //get hour from time

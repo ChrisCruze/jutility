@@ -40,6 +40,7 @@ jquery_functions.js,div_click_jquery,click on a button
 jquery_functions.js,enter_press_down_jquery,press enter when clicked
 jquery_functions.js,update_from_click_jquery,function that uses jquery to run a function from a click
 moment_functions.js,check_if_date_is_current_range,"check if the day is today, 'year, month, week, minute'"
+moment_functions.js,date_within_range_string_create,"creates a string that indicates whether its in the day,week,month,year"
 moment_functions.js,get_hour_from_time,get hour from time
 moment_functions.js,attain_now_from_moment,get the current time from moment
 moment_functions.js,unix_now_moment,return unix now moment
