@@ -342,7 +342,7 @@ function firebase_array_integrate(array,firebase_url,identifier,keys) {
 	identifier = identifier||"DT_RowId"
   	firebase_dict = firebase_json_pull(firebase_url)||{}
   	array.forEach(function(D) {
-    	firebase_defined_dict = firebase_dict[D[identifier]]
+    	firebase_defined_dict = firebase_dict[D[String(identifier)]]
     	keys.forEach(function(key){
     		dictionary_cross_check_apply_key(D,firebase_defined_dict,key)
     	})
