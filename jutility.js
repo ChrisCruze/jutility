@@ -902,16 +902,63 @@ function todoist_completed_tasks_all_custom(todoist_api_token,since){
   return l 
 }
 
+//converts minute labels to minutes
+function labels_add_from_labels_dictionary(task_item,labels_dictionary){
+  labels_list = task_item.labels
+  label_list_is_undefined = labels_list == undefined
+  if (label_list_is_undefined){
+    r = 0 
+  }
+  try {
+    r = 0 
+    labels_list.forEach(function(item,index){
+      label_dict = labels_dictionary[item]
+      minute_number = label_dict.minute||label_minute_string_to_integer(label_dict.name)
+      r = r + minute_number
+    })
+  }
+  catch(err) {
+    r = 0
+  }
+
+   task_item['duration'] =r 
+
+}
+
+function project_name_append(item,projects_dictionary){
+  
+  item_project_dictionary = _.groupBy(projects_dictionary,'id')[item.project_id]
+  if (item_project_dictionary != undefined){
+    project_name = item_project_dictionary[0].name
+  }
+  else {
+    project_name = 'null'
+  }
+  item['project_name'] = project_name
+}
+
 //get dictionary of current_tasks and completed_tasks
-function todoist_completed_current_tasks_pull_custom(){
+function todoist_tasks_pull_custom(){
   current_tasks_base = todoist_current_tasks_pull()
+
+  completed_tasks = todoist_completed_tasks_all()
   current_tasks = current_tasks_base.items 
-  labels_dictionary = current_tasks_base.labels
-  labels_dictionary = array_to_dictionary(labels_dictionary) 
+  labels_dictionary = array_to_dictionary(current_tasks_base.labels) 
   projects_dictionary = current_tasks_base.projects 
-  current_tasks.forEach(function(D){tasks_array_customize_item(D)})
-  completed_tasks = todoist_completed_tasks_all_custom()
-  return {current_tasks:current_tasks,completed_tasks:completed_tasks}
+
+
+  current_tasks.forEach(function(D){D['task_type']='current'})
+  completed_tasks.forEach(function(D){D['task_type']='completed'})
+
+
+
+  current_completed_tasks = completed_tasks.concat(current_tasks) //combine both arrays together into one array
+  current_completed_tasks.forEach(function(item){tasks_array_customize_item(item)})
+  current_completed_tasks.forEach(function(item){labels_add_from_labels_dictionary(item,labels_dictionary)})
+  current_completed_tasks.forEach(function(item){project_name_append(item,projects_dictionary)})
+
+  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added'])
+  return current_completed_tasks 
 }
 
 
