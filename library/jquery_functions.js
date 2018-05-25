@@ -15,3 +15,9 @@ $(ref_id).keypress(function (e) {
 
 
 }
+
+//function that uses jquery to run a function from a click
+function update_from_click_jquery(div_id){
+	div_id = div_id||".cell-value"
+	$(div_id).on('click', function (e) { $(this)})
+}

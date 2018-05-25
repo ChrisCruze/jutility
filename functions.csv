@@ -35,6 +35,7 @@ firebase_functions.js,firebase_initialize, initialize the firebase instance
 firebase_functions.js,firebase_auth_user_process,authenticate the user that has been authed
 jquery_functions.js,div_click_jquery,click on a button
 jquery_functions.js,enter_press_down_jquery,press enter when clicked
+jquery_functions.js,update_from_click_jquery,function that uses jquery to run a function from a click
 moment_functions.js,get_hour_from_time,get hour from time
 moment_functions.js,attain_now_from_moment,get the current time from moment
 moment_functions.js,unix_now_moment,return unix now moment
@@ -60,11 +61,13 @@ todoist_functions.js,sub_project_from_task,return the sub project by parsing it 
 todoist_functions.js,duration_from_task_dictionary,return duration from the task name
 todoist_functions.js,tasks_array_customize_item,customize each dictionary of todoist task for additional attributes
 todoist_functions.js,todoist_current_tasks_pull,get current tasks 
+todoist_functions.js,todoist_current_tasks_pull_custom,get current tasks customized with project name and label name
 todoist_functions.js,todoist_update_task,update tasks
 todoist_functions.js,todoist_complete_task,completes todoist task
 todoist_functions.js,todoist_delete_task,deletes todoist task
 todoist_functions.js,todoist_completed_tasks_with_offset,child function of todoist_completed_tasks_all
 todoist_functions.js,todoist_completed_tasks_all,pulls all of todoist tasks 
 todoist_functions.js,todoist_completed_tasks_all_custom,pulls all the todoist tasks and customizes each item
+todoist_functions.js,todoist_completed_current_tasks_pull_custom,get dictionary of current_tasks and completed_tasks
 toggl_functions.js,toggl_data_pull_iterate,
 toggl_functions.js,toggl_data_pull,

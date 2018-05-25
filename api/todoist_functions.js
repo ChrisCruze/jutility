@@ -118,6 +118,17 @@ function todoist_current_tasks_pull(){
     }).responseJSON
 }
 
+//get current tasks customized with project name and label name
+function todoist_current_tasks_pull_custom(){
+  current_tasks_base = todoist_current_tasks_pull()
+  current_tasks = current_tasks_base.items 
+  labels_dictionary = current_tasks_base.labels
+  labels_dictionary = array_to_dictionary(labels_dictionary) 
+  projects_dictionary = current_tasks_base.projects 
+  current_tasks.forEach(function(D){tasks_array_customize_item(D)})
+  return current_tasks
+}
+
 //update tasks
 function todoist_update_task(task_id,content){
   return $.ajax({
@@ -214,6 +225,18 @@ function todoist_completed_tasks_all_custom(todoist_api_token,since){
   l = todoist_completed_tasks_all(todoist_api_token,since)
   l.forEach(function(item){tasks_array_customize_item(item)})
   return l 
+}
+
+//get dictionary of current_tasks and completed_tasks
+function todoist_completed_current_tasks_pull_custom(){
+  current_tasks_base = todoist_current_tasks_pull()
+  current_tasks = current_tasks_base.items 
+  labels_dictionary = current_tasks_base.labels
+  labels_dictionary = array_to_dictionary(labels_dictionary) 
+  projects_dictionary = current_tasks_base.projects 
+  current_tasks.forEach(function(D){tasks_array_customize_item(D)})
+  completed_tasks = todoist_completed_tasks_all_custom()
+  return {current_tasks:current_tasks,completed_tasks:completed_tasks}
 }
 
 
