@@ -21,6 +21,8 @@ string_functions.js,file_formatted_string,convert stirng to fromatted string
 string_functions.js,string_within_string_check,
 string_functions.js,headers_key_names_list_format_string,convert stirng to fromatted string 
 web_functions.js,parameter_attain_from_url,get url parameter 
+chartjs_functions.js,bar_chart_initiate_render_chartjs,initiates a simple bar chart using chartjs
+chartjs_functions.js,bar_chart_update_chartjs,updates bar_chart for data 
 datatable_functions.js,sort_by_unix_datatabes,this should go at top of datatables
 datatable_functions.js,callback_function_sum_datatables,"based on filter from table , update a funciton"
 datatable_functions.js,date_format_with_day,format the datatables date with the date
