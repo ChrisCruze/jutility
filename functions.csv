@@ -30,6 +30,12 @@ datatable_functions.js,date_format_created_moment_datatables,format the date as 
 datatable_functions.js,editor_initiate,
 datatable_functions.js,editor_post_submit_function_datatables,process the response from the psot submit
 datatable_functions.js,datatables_initiate_render,
+excel_functions.js,create_excel_object, Create an Excel with system default font
+excel_functions.js,create_excel_object_with_formatting, Create an Excel with Arial 10 Font
+excel_functions.js,generate_excel_download_file,Create an excel file to download
+excel_functions.js,excel_add_style,is used to register styles in the Excel document. It requires a style definition object which is made of up to 5 properties:
+excel_functions.js,excel_define_cell,define cell style and add cell value
+excel_functions.js,excel_define_sheet_name,defines the name of the sheet
 firebase_functions.js,ref_attain_from_firebase,pull ref from firebase
 firebase_functions.js,data_push_to_firebase,push data to firebase
 firebase_functions.js,query_elements_array_firebase,query the contacts ref and run the process_func on the results
