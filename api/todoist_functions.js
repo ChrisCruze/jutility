@@ -247,7 +247,7 @@ function labels_add_from_labels_dictionary(task_item,labels_dictionary){
     r = 0
   }
 
-   task_item['duration'] =r 
+   task_item['duration'] = task_item['duration']||r 
 
 }
 

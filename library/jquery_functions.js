@@ -28,13 +28,14 @@ function table_jquery_objects(table_id){
 	$("#"+table_id+" tr").each(function(row_number) {
 	  row_list = []
 	  col_values = Object.values($(this).find('td'))
-	  if (col_values.length > 0){
-	  col_values.forEach(function(col_val,col_number){
-	  	col_val['row_number'] = row_number
-	  	col_val['col_number'] = col_number
-	    row_list.push(col_val)
-	  })
-	  list_of_lists.push(row_list)
-	  }
+	  	if (col_values.length > 0){
+	  		col_values.forEach(function(col_val,col_number){
+	  			col_val['row_number'] = row_number
+	  			col_val['col_number'] = col_number
+	    		row_list.push(col_val)
+	  		})
+	  		list_of_lists.push(row_list)
+	  	}
 	});
+	return list_of_lists
 }
