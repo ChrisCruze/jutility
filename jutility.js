@@ -2,7 +2,8 @@
 //array_functions.js
 
 //checks if item has a key and gives it null if not
-function dictionary_check_keys(item,check_keys){
+function dictionary_check_keys(item,check_keys,alternative_val){
+  alternative_val = alternative_val||"null"
   check_keys = check_keys||['fullName','active','connectedAt','id']
   check_keys.forEach(function(i){
     item[i] = item[i]||'null'
@@ -235,6 +236,18 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 }
 
 //datatable_functions.js
+
+//convenience function for custom fields
+function editor_fields_array_from_custom_fields(custom_fields){
+  l = []
+  custom_fields.forEach(function(custom_field){
+    new_dictionary = { label: custom_field + ":", name: custom_field }
+    l.push(new_dictionary)
+  })
+  return l 
+}
+
+
 
 //this should go at top of datatables
 function sort_by_unix_datatabes(){
@@ -787,6 +800,23 @@ function guesty_integration_data_pull(){
   }).responseJSON
   return json_response.results
 }
+
+
+//create url for reservation for datatables functions
+function guesty_reservations_inbox_url_create(td, cellData, rowData, row, col) {
+  url = "https://app.guesty.com/reservations/" + rowData.guestId + "/inbox";
+  new_url = "<a href='" + url + "'>" + cellData + "</a>";
+  console.log(new_url);
+  return new_url;
+}
+
+//create user airbnb url for data tables
+function guest_airbnb_url_create(data, type, row, meta) {
+  url = "https://www.airbnb.com/users/show/" + row.id + "";
+  data = '<a target="_blank"  href="' + url + '">' + data + "</a>";
+  return data;
+}
+
 //todoist_functions.js
 
 

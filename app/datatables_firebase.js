@@ -17,6 +17,7 @@ function array_dictionary_customize(item, index) {
   item["DT_RowId"] = item.id;
 }
 array.forEach(array_dictionary_customize);
+array = firebase_array_integrate(array,firebase_url,"DT_RowId",custom_fields)
 
 
 //define editor

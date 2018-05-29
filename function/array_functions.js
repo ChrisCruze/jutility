@@ -1,5 +1,6 @@
 //checks if item has a key and gives it null if not
-function dictionary_check_keys(item,check_keys){
+function dictionary_check_keys(item,check_keys,alternative_val){
+  alternative_val = alternative_val||"null"
   check_keys = check_keys||['fullName','active','connectedAt','id']
   check_keys.forEach(function(i){
     item[i] = item[i]||'null'
