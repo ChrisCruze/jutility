@@ -59,7 +59,6 @@ editor = new $.fn.dataTable.Editor({
 
 $(table_id).on("click", "tbody td", function(e) {
   var table = $(table_id).DataTable();
-
   row_data = table.row(this).data();
   if (row_data.status == 'Green'){
     change_value = 'Red'

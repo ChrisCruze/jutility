@@ -1,3 +1,45 @@
+//when you click on row, it changes the value
+function clickable_change_value(table_id,editor,){
+  table_id = table_id||"#table"
+  $(table_id).on("click", "tbody td", function(e) {
+  var table = $(table_id).DataTable();
+  row_data = table.row(this).data();
+  if (row_data.status == 'Green'){
+    change_value = 'Red'
+  }
+  else {
+    change_value = 'Green'
+  }
+  row_data['status'] = change_value
+  editor
+    .edit(this, false)
+    .set("status", change_value)
+    .submit();
+    status_format(this, row_data.name, row_data, 1, 1)
+});
+}
+
+
+//update label of status of rag (created: 5/28/18)
+function status_format_datatables(td, cellData, rowData, row, col){
+    if (rowData.status == 'Green'){
+      html_result = '<span class="label label-primary" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
+    }
+    else if (rowData.status  == 'Amber'){
+      html_result = '<span class="label label-warning" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
+    }
+    else if (rowData.status  == 'Red'){
+      html_result = '<span class="label label-danger" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
+    }
+    else if (rowData.status  == 'Red'){
+      html_result = '<span class="label label-danger" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
+    }
+    else {
+      html_result = '<span class="label" style="min-width: 55px ;display: inline-block">'+cellData  +'</span>'
+    }
+    $(td).html(html_result)
+}
+
 //convenience function for custom fields
 function editor_fields_array_from_custom_fields(custom_fields){
   l = []
