@@ -1,3 +1,60 @@
+//determine state if reservation is current
+function guest_state_determine(item){
+  is_present = moment(item['checkIn']) <= moment() && moment() <= moment(item['checkOut']) 
+  if (is_present){
+    return 'current'
+  }
+  else {
+    return 'not current'
+  }
+}
+
+
+//using the information from guesty we are able to dictionary items
+function guest_reservation_dictionary_customize(item,index){
+    price = item['money']['netIncome']
+    days_difference = Math.round((new Date(item['checkOut']) - new Date(item['checkIn']))/(1000*60*60*24)) 
+    revenue_per_day = price/days_difference
+    run_rate = revenue_per_day * 30
+    guest_name = item.guest.fullName
+    price = parseInt(price)||0
+    revenue_per_day = parseInt(revenue_per_day)||0
+    run_rate = parseInt(run_rate)||0
+    room=item.listing.nickname
+    days_from_now = Math.round((new Date(item['checkOut']) - new Date())/(1000*60*60*24)) 
+    
+    item['days_from_now'] = days_from_now
+    item['days_from_now_absolute'] = Math.abs(days_from_now)
+    item['days_difference'] = days_difference
+    item['revenue_per_day'] = revenue_per_day
+    item['run_rate'] = run_rate
+    item['guest_name'] = guest_name
+    item['listing_nick_name'] = item.listing.nickname||'null'
+    item['listing_title'] = item.listing.title||'null'
+    item['account_name'] = item.integration.object.nickname||'null'
+    item['state'] = guest_state_determine(item)
+    item['DT_RowId'] = item._id
+
+    is_3009 = item['listing']['nickname'].indexOf("2608") != -1
+    is_401 = item['listing']['nickname'].indexOf("401") != -1
+    is_1806 = item['listing']['nickname'].indexOf("1806") != -1
+    if (is_3009){
+      item['room_number'] = '2608'
+    }
+    else if (is_401){
+      item['room_number'] = '401'
+    }
+    else if (is_1806){
+      item['room_number'] = '1806'
+    }
+    else{
+      item['room_number'] = 'N/A'
+
+    }
+  }
+
+
+
 // The below function pulls the data from the guesty
 function guesty_reservation_data_pull(){
     key = '57b6349a1f211d3c4b2b4c886c5632c7'
