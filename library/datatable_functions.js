@@ -1,3 +1,15 @@
+//convenience function for custom fields
+function editor_fields_array_from_custom_fields(custom_fields){
+  l = []
+  custom_fields.forEach(function(custom_field){
+    new_dictionary = { label: custom_field + ":", name: custom_field }
+    l.push(new_dictionary)
+  })
+  return l 
+}
+
+
+
 //this should go at top of datatables
 function sort_by_unix_datatabes(){
 	$.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
