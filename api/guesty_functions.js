@@ -1,3 +1,9 @@
+function guesty_reservation_data_pull_custom(){
+  l = guesty_reservation_data_pull()
+  l.forEach(guest_reservation_dictionary_customize)
+  return l 
+}
+
 //determine state if reservation is current
 function guest_state_determine(item){
   is_present = moment(item['checkIn']) <= moment() && moment() <= moment(item['checkOut']) 
