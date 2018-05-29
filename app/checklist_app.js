@@ -28,7 +28,6 @@ function array_firebase_merge(data_array) {
   });
   return data_array;
 }
-
 function status_format(td, cellData, rowData, row, col){
     if (rowData.status == 'Green'){
       html_result = '<span class="label label-primary" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
@@ -47,6 +46,7 @@ function status_format(td, cellData, rowData, row, col){
     }
     $(td).html(html_result)
 }
+
 
 gspread_array_data.forEach(array_dictionary_customize);
 gspread_array_data = array_firebase_merge(gspread_array_data);

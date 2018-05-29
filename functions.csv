@@ -70,6 +70,9 @@ moment_functions.js,dates_between_dates_moment,pulls the dates between two dates
 underscore_functions.js,sum_float_convert_from_array_underscore, get sum from array with key
 gspread_functions.js,gspread_query,query google spreadsheets
 gspread_functions.js,array_pull_from_gspread,query from gspread directly using api key
+guesty_functions.js,guesty_reservation_data_pull_custom,
+guesty_functions.js,guest_state_determine,determine state if reservation is current
+guesty_functions.js,guest_reservation_dictionary_customize,using the information from guesty we are able to dictionary items
 guesty_functions.js,guesty_reservation_data_pull, The below function pulls the data from the guesty
 guesty_functions.js,guesty_listing_data_pull,
 guesty_functions.js,guesty_integration_data_pull,
