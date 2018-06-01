@@ -13,7 +13,9 @@ date_functions.js,daysInMonth ,gives days in the month
 date_functions.js,days_this_month,number of days this month
 date_functions.js,date_is_today,returns true if the date is todays date
 file_functions.js,read_text_file_data,read directly from a text file
+file_functions.js,read_text_file_data_pull,read directly from a text file
 file_functions.js,downloadURI,convert a downloadable data url into a download
+file_functions.js,papa_parse_array,use paparse to read from file
 html_functions.js,create_image_div,creates an image div to append to a jquery object with append
 html_functions.js,append_image_div, appends the image div from create_image_div
 math_functions.js,median_get,get the median from list of numbers
