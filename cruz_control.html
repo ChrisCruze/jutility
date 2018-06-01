@@ -85,16 +85,48 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
 <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+<script src="jutility.js"></script>
 
 </head>
 
 <body>
+  <div class="row" id="metric_headers">
+  </div>
+
+
   <div class='ibox-content'>
       <table id="table" class="table table-striped table-bordered table-hover dataTables-example">
        </table>
   </div>
 
  <script>
+filter_text_list = ['Aesop','Bnb','Exercise']
+
+function headers_create(){
+  filter_text_list.forEach(function(i){
+    $('#metric_headers').append(metric_header_create(i,'duration',"-","-"))
+  })
+}
+
+function metric_headers_update(callback_array,filter_text){
+  filter_text = filter_text||'Aesop'  
+  count = task_filter_text_calculate_count(callback_array,filter_text)
+  sum = task_filter_text_calculate_sum(callback_array,filter_text)
+  $("."+filter_text).find(".metric_text").html(sum)
+  $("."+filter_text).find(".sub_metric_text").html("# "+count)
+}
+
+function metric_headers_update_list(callback_array,l){
+  l = l || filter_text_list
+  l.forEach(function(i){
+    metric_headers_update(callback_array,i)
+  })
+
+}
+
+
+headers_create()
+
 omni_node = 'todoist_tasks'
 var dbRef = dbRef||firebase.database();
 var FirebaseRef = dbRef.ref('omni').child(omni_node)
@@ -134,7 +166,10 @@ editor.on("postSubmit", function(e, json, data, action, xhr) {
 function callback_function() {
   var api = this.api();
   callback_array = api.rows({ page: "current" }).data();
-  console.log(callback_array);
+  metric_headers_update_list(callback_array)
+
+
+
 }
 
 $("#table").DataTable({

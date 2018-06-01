@@ -6,20 +6,20 @@ function task_filter_from_text(array,text){
   return array 
 }
 
-//filter tasks for text
-function task_filter_text_calculate_count(array,text,div_id,sum_field){
+//filter tasks for text and return length
+function task_filter_text_calculate_count(array,text){
   array = array.filter(function(D){return D.content.toLowerCase().indexOf(text.toLowerCase()) !== -1 })
   length_total = array.length
-  $(div_id).html(length_total)
+    return length_total
+  //$(div_id).html(length_total)
 }
 
 //filter tasks for text and add the sum to a div
-function task_filter_text_calculate_sum(array,text,sum_field,div_id){
+function task_filter_text_calculate_sum(array,text,sum_field){
   sum_field = sum_field||'duration'
-  div_id = div_id || "#" + text
   array = array.filter(function(D){return D.content.toLowerCase().indexOf(text.toLowerCase()) !== -1 })
   var sum_total = sum_float_convert_from_array_underscore(array,sum_field)
-  $(div_id).html(sum_total)
+    return sum_total
 }
 
 
