@@ -51,13 +51,13 @@ class TextFunctions(object):
         return function_text
 
 
-    def javascript_function_pull(self, page_source, start='function ', end='\(',file_name='None'):
+    def javascript_function_pull(self, page_source, start='function ', end='\(',file_name='None',folder_name="None"):
     	function_list = TextFunctions().string_between_pull_multiple(page_source, start=start, end=end)
     	function_list = [i for i in function_list if i != '']
     	description_list = [page_source.split("\n")[self.line_number_pull_from_file(page_source,i)-1] for i in function_list]
     	function_code_list = self.get_all_function_texts(page_source,function_list)
 
-        l = [{'name':str(function_name),'file_name':file_name,'description':str(description)[2:],'code':code}  for function_name,description,code in zip(function_list,description_list,function_code_list)]
+        l = [{'name':str(function_name),'file_name':file_name,'folder_name':folder_name,'description':str(description)[2:],'code':code}  for function_name,description,code in zip(function_list,description_list,function_code_list)]
     	return l 
 
 
@@ -95,7 +95,7 @@ s = ""
 for i in L: 
 	with open(i,'r') as f:
 	    payload = f.read()
-	    sub_array = TextFunctions().javascript_function_pull(payload,file_name=os.path.basename(i))
+	    sub_array = TextFunctions().javascript_function_pull(payload,file_name=os.path.basename(i),folder_name=os.path.basename(os.path.dirname(i)))
 	    array.extend(sub_array)
 	    divider = "\n//{}\n\n".format(os.path.basename(i))
 	    s = s + divider+ payload

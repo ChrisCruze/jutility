@@ -211,14 +211,25 @@ function date_format_check_in(td, cellData, rowData, row, col) {
   $(td).html(date_format);
 }
 
+function url_formulate(td, cellData, rowData, row, col) {
+  url = "https://github.com/ChrisCruze/jutility/blob/master/"
+  url = url + rowData['folder_name'] + "/" + rowData["file_name"]
+
+  new_link = "<a href='"+url+"'>"+cellData+"</a>"
+  $(td).html(new_link)
+}
+
+//https://github.com/ChrisCruze/jutility/blob/master/function/array_functions.js
+
 
 table_example = $('#table').DataTable({
     paging:false,
     dom: '<"html5buttons"B>lTfgitp',
     data: input_data,
     columns: [
-      {data:'name',title:'name',name:'name',visible:true},
+      {data:'name',title:'name',name:'name',visible:true,createdCell:url_formulate},
         {data:'code',title:'code',name:'code',visible:false},
+      {data:'folder_name',title:'folder_name',name:'folder_name',visible:true},
 
       {data:'file_name',title:'file_name',name:'file_name',visible:true},
       {data:'description',title:'description',name:'description',visible:true},
