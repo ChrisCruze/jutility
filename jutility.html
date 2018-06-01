@@ -165,7 +165,13 @@ var FirebaseRef = dbRef.ref('omni').child(omni_node)
 
 //determine sorting order
 $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
-  r = moment(d).utc();
+  if (d == 'null'){
+    r = moment().utc()
+  }
+  else {
+      r = moment(d).utc();
+
+  }
   return r;
 };
 
@@ -175,7 +181,7 @@ function array_dictionary_customize(item, index) {
 }
 
 
-url = "functions.csv"
+//url = "functions.csv"
 url = "https://rawgit.com/ChrisCruze/jutility/master/functions.csv"
 input_data = papa_parse_array(url)
 input_data.splice(0,1)
@@ -207,7 +213,7 @@ editor.on( 'postSubmit', function (e, json, data, action, xhr) {
   });
 
 function date_format_check_in(td, cellData, rowData, row, col) {
-  date_format = moment(cellData).format("MMM-YYYY hh:mmA");
+  date_format = moment(cellData).format("MM/DD/YY hh:mmA");
   $(td).html(date_format);
 }
 
@@ -234,7 +240,7 @@ table_example = $('#table').DataTable({
       {data:'file_name',title:'file_name',name:'file_name',visible:false},
       {data:'description',title:'description',name:'description',visible:true},
       {data:'timestamp',title:'timestamp',name:'timestamp',visible:false,createdCell:date_format_check_in,type:'date-format-moment'},
-      {data:'created_date',title:'created_date',name:'created_date',visible:false,createdCell:date_format_check_in,type:'date-format-moment'},
+      {data:'created_date',title:'created_date',name:'created_date',visible:true,createdCell:date_format_check_in,type:'date-format-moment'},
 
       {
       data: "status",
@@ -259,7 +265,7 @@ table_example = $('#table').DataTable({
     ],
     select: true,
     colReorder: true,
-    order: [4, "desc"],
+    order: [6, "desc"],
     buttons: [
       {extend: 'excel', title: document.title},
       {extend: 'colvis', title: document.title},
