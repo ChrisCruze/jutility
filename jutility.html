@@ -181,8 +181,8 @@ function array_dictionary_customize(item, index) {
 }
 
 
-//url = "functions.csv"
-url = "https://rawgit.com/ChrisCruze/jutility/master/functions.csv"
+url = "functions.csv"
+//url = "https://rawgit.com/ChrisCruze/jutility/master/functions.csv"
 input_data = papa_parse_array(url)
 input_data.splice(0,1)
 input_data.forEach(array_dictionary_customize);

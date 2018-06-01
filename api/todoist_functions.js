@@ -23,7 +23,6 @@ function task_filter_text_calculate_sum(array,text,sum_field){
 }
 
 
-
 //calculate the cost of the task at 15 dollar per rate
 function task_cost_calculation(item,key_name,hourly_rate){
   hourly_rate = hourly_rate||15

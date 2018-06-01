@@ -1,3 +1,22 @@
+
+//array filter tasks for text
+function array_filter_from_text(array,text,key_name){
+  key_name = key_name || "content"
+  array = array.filter(function(D){return D['key_name'].toLowerCase().indexOf(text.toLowerCase()) !== -1 })
+  return array 
+}
+
+
+
+//filter tasks for text and return sum from it
+function array_filter_from_text_sum(array,text,key_name,sum_field){
+  sum_field = sum_field||'duration'
+  array = array_filter_from_text(array,text,key_name)
+  var sum_total = sum_float_convert_from_array_underscore(array,sum_field)
+  return sum_total
+}
+
+
 //checks if item has a key and gives it null if not
 function dictionary_check_keys(item,check_keys,alternative_val){
   alternative_val = alternative_val||"null"
