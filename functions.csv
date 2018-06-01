@@ -14,12 +14,15 @@ date_functions.js,days_this_month,number of days this month
 date_functions.js,date_is_today,returns true if the date is todays date
 file_functions.js,read_text_file_data,read directly from a text file
 file_functions.js,downloadURI,convert a downloadable data url into a download
+html_functions.js,create_image_div,creates an image div to append to a jquery object with append
+html_functions.js,append_image_div, appends the image div from create_image_div
 math_functions.js,median_get,get the median from list of numbers
 math_functions.js,create_guid,create g unique identifier
 math_functions.js,s4,nction create_guid() {
 string_functions.js,file_formatted_string,convert stirng to fromatted string 
 string_functions.js,string_within_string_check,
 string_functions.js,headers_key_names_list_format_string,convert stirng to fromatted string 
+string_functions.js,text2Binary,convert string to binary
 web_functions.js,parameter_attain_from_url,get url parameter 
 chartjs_functions.js,bar_chart_initiate_render_chartjs,initiates a simple bar chart using chartjs
 chartjs_functions.js,bar_chart_update_chartjs,updates bar_chart for data 

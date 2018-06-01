@@ -156,6 +156,30 @@ function downloadURI(uri, name) {
   document.body.removeChild(link);
   delete link;
 }
+//html_functions.js
+
+
+//creates an image div to append to a jquery object with append
+function create_image_div(title_text,url,image_url){
+    url = url||"https://cruz.site44.com/profile.html"
+    image_url = image_url||"https://cruz.site44.com/img/a2.jpg"
+    title_text = title_text||"hello_world 2"
+    var outer_div = $("<div>", {"class": "col-md-2"});
+    var inner_div = $("<div>", {"class": "contact-box center-version"});
+    var link_elem = $("<a>", {"href": url});
+    var image_elem = $("<img>", {"src": image_url});
+    var text_elem = $("<h3>", {"class": "m-b-xs"}).text(title_text)
+    var final_div = link_elem.append(image_elem).append(text_elem)
+    var final_div = inner_div.append(final_div)
+    var final_div = outer_div.append(final_div)
+    return final_div
+}
+
+
+// appends the image div from create_image_div
+function append_image_div(div_id,title_text,url,image_url){
+    $(div_id).append(create_image_div(title_text,url,image_url))
+}
 //math_functions.js
 
 
@@ -200,6 +224,13 @@ function headers_key_names_list_format_string(headers){
         l.push(new_header)
       })
   return l 
+}
+
+//convert string to binary
+function text2Binary(string) {
+    return string.split('').map(function (char) {
+        return char.charCodeAt(0).toString(2);
+    }).join(' ');
 }
 //web_functions.js
 

@@ -16,3 +16,10 @@ function headers_key_names_list_format_string(headers){
       })
   return l 
 }
+
+//convert string to binary
+function text2Binary(string) {
+    return string.split('').map(function (char) {
+        return char.charCodeAt(0).toString(2);
+    }).join(' ');
+}
