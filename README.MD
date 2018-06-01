@@ -85,20 +85,23 @@
 | 83 | [guesty_integration_data_pull](http://cruzco.site44.com/streak.html) | guesty_functions.js | |
 | 84 | [guesty_reservations_inbox_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create url for reservation for datatables functions|
 | 85 | [guest_airbnb_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create user airbnb url for data tables|
-| 86 | [task_cost_calculation](http://cruzco.site44.com/streak.html) | todoist_functions.js | calculate the cost of the task at 15 dollar per rate|
-| 87 | [sub_project_from_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | return the sub project by parsing it out from the colon|
-| 88 | [duration_from_task_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | return duration from the task name|
-| 89 | [tasks_array_customize_item](http://cruzco.site44.com/streak.html) | todoist_functions.js | customize each dictionary of todoist task for additional attributes|
-| 90 | [todoist_current_tasks_pull](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks |
-| 91 | [todoist_current_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks customized with project name and label name|
-| 92 | [todoist_update_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | update tasks|
-| 93 | [todoist_complete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | completes todoist task|
-| 94 | [todoist_delete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | deletes todoist task|
-| 95 | [todoist_completed_tasks_with_offset](http://cruzco.site44.com/streak.html) | todoist_functions.js | child function of todoist_completed_tasks_all|
-| 96 | [todoist_completed_tasks_all](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all of todoist tasks |
-| 97 | [todoist_completed_tasks_all_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all the todoist tasks and customizes each item|
-| 98 | [labels_add_from_labels_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | converts minute labels to minutes|
-| 99 | [project_name_append](http://cruzco.site44.com/streak.html) | todoist_functions.js | |
-| 100 | [todoist_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get dictionary of current_tasks and completed_tasks|
-| 101 | [toggl_data_pull_iterate](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
-| 102 | [toggl_data_pull](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
+| 86 | [task_filter_from_text](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text|
+| 87 | [task_filter_text_calculate_count](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text|
+| 88 | [task_filter_text_calculate_sum](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text and add the sum to a div|
+| 89 | [task_cost_calculation](http://cruzco.site44.com/streak.html) | todoist_functions.js | calculate the cost of the task at 15 dollar per rate|
+| 90 | [sub_project_from_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | return the sub project by parsing it out from the colon|
+| 91 | [duration_from_task_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | return duration from the task name|
+| 92 | [tasks_array_customize_item](http://cruzco.site44.com/streak.html) | todoist_functions.js | customize each dictionary of todoist task for additional attributes|
+| 93 | [todoist_current_tasks_pull](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks |
+| 94 | [todoist_current_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks customized with project name and label name|
+| 95 | [todoist_update_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | update tasks|
+| 96 | [todoist_complete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | completes todoist task|
+| 97 | [todoist_delete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | deletes todoist task|
+| 98 | [todoist_completed_tasks_with_offset](http://cruzco.site44.com/streak.html) | todoist_functions.js | child function of todoist_completed_tasks_all|
+| 99 | [todoist_completed_tasks_all](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all of todoist tasks |
+| 100 | [todoist_completed_tasks_all_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all the todoist tasks and customizes each item|
+| 101 | [labels_add_from_labels_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | converts minute labels to minutes|
+| 102 | [project_name_append](http://cruzco.site44.com/streak.html) | todoist_functions.js | |
+| 103 | [todoist_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get dictionary of current_tasks and completed_tasks|
+| 104 | [toggl_data_pull_iterate](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
+| 105 | [toggl_data_pull](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
