@@ -567,6 +567,14 @@ function firebase_auth_user_process(user_process_func){
 //jquery_functions.js
 
 
+//add tooltip to element
+function tooltip_add_jquery(div_id,tooltip_text){
+	$(div_id).attr("data-toggle","tooltip")
+	$(div_id).attr("title",tooltip_text)
+	$('[data-toggle="tooltip"]').tooltip(); 
+}
+
+
 //click on a button
 function div_click_jquery(ref_id){
 	$(ref_id).click();
