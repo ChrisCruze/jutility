@@ -33,12 +33,31 @@ class TextFunctions(object):
     			return enum
     			break 
     	return 0
-          
+    
+    def get_all_function_texts(self,page_source,function_list):
+        page_lines = page_source.split("\n")
+
+        line_numbers = [self.line_number_pull_from_file(page_source,i)-1 for i in function_list]
+        def create_line_number_tup(line_number,enum):
+            try:
+                next_line_number = line_numbers[enum+1]
+            except:
+                next_line_number = len(page_lines)
+
+            function_page_lines = page_lines[line_number:next_line_number-1]
+            return "<br>".join(function_page_lines)
+
+        function_text = [create_line_number_tup(i,enum) for enum,i in enumerate(line_numbers)]
+        return function_text
+
+
     def javascript_function_pull(self, page_source, start='function ', end='\(',file_name='None'):
     	function_list = TextFunctions().string_between_pull_multiple(page_source, start=start, end=end)
     	function_list = [i for i in function_list if i != '']
     	description_list = [page_source.split("\n")[self.line_number_pull_from_file(page_source,i)-1] for i in function_list]
-    	l = [{'name':str(function_name),'file_name':file_name,'description':str(description)[2:]}  for function_name,description in zip(function_list,description_list)]
+    	function_code_list = self.get_all_function_texts(page_source,function_list)
+
+        l = [{'name':str(function_name),'file_name':file_name,'description':str(description)[2:],'code':code}  for function_name,description,code in zip(function_list,description_list,function_code_list)]
     	return l 
 
 

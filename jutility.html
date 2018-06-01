@@ -217,6 +217,8 @@ table_example = $('#table').DataTable({
     data: input_data,
     columns: [
       {data:'name',title:'name',name:'name',visible:true},
+        {data:'code',title:'code',name:'code',visible:false},
+
       {data:'file_name',title:'file_name',name:'file_name',visible:true},
       {data:'description',title:'description',name:'description',visible:true},
       {data:'timestamp',title:'timestamp',name:'timestamp',visible:true,createdCell:date_format_check_in,type:'date-format-moment'},
