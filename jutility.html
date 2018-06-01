@@ -80,8 +80,8 @@
   <link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
   <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
     <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
-    <script src="jutility.js"></script>
-
+<!--     <script src="jutility.js"></script>
+ -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.7/papaparse.min.js"></script>
 
@@ -176,6 +176,7 @@ function array_dictionary_customize(item, index) {
 
 
 url = "functions.csv"
+url = "https://rawgit.com/ChrisCruze/jutility/master/functions.csv"
 input_data = papa_parse_array(url)
 input_data.splice(0,1)
 input_data.forEach(array_dictionary_customize);
