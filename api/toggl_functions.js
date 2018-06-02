@@ -1,4 +1,19 @@
 
+//pulls from toggl with custom fields
+function toggl_data_pull_custom(since){
+  array = toggl_data_pull(since)
+  array.forEach(function(item){
+    minutes  = (parseFloat(item.dur)/1000)/60
+    cost = minutes * (15/60)
+    item['cost'] = cost//.toFixed(2)
+    item['minutes'] = minutes//.toFixed(2)
+    item['hours'] = minutes/60
+  })
+  return array
+}
+
+
+
 function toggl_data_pull_iterate(since,page){
   since = since||"2018-04-28"
   secret = "api_token"

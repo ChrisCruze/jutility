@@ -1,7 +1,14 @@
+//parse the float to two decimals
+function parse_float_datatable_format(td, cellData, rowData, row, col) {
+  r = (parseFloat(cellData)||0).toFixed(2)
+  $(td).html(r);
+}
+
+
 //format the datatables date with the date and time
-function date_time_data_tables_format(td, cellData, rowData, row, col) {
+function date_time_datatable_format(td, cellData, rowData, row, col) {
   date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");
-  $(td).attr('title',moment(cellData).fromNow();)
+  $(td).attr('title',moment(cellData).fromNow())
   $(td).html(date_format);
 }
 

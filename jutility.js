@@ -363,10 +363,17 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 
 //datatable_functions.js
 
+//parse the float to two decimals
+function parse_float_datatable_format(td, cellData, rowData, row, col) {
+  r = (parseFloat(cellData)||0).toFixed(2)
+  $(td).html(r);
+}
+
+
 //format the datatables date with the date and time
-function date_time_data_tables_format(td, cellData, rowData, row, col) {
+function date_time_datatable_format(td, cellData, rowData, row, col) {
   date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");
-  $(td).attr('title',moment(cellData).fromNow();)
+  $(td).attr('title',moment(cellData).fromNow())
   $(td).html(date_format);
 }
 
@@ -1537,6 +1544,21 @@ function todoist_tasks_pull_custom_gspread(){
 
 
 //toggl_functions.js
+
+
+//pulls from toggl with custom fields
+function toggl_data_pull_custom(since){
+  array = toggl_data_pull(since)
+  array.forEach(function(item){
+    minutes  = (parseFloat(item.dur)/1000)/60
+    cost = minutes * (15/60)
+    item['cost'] = cost//.toFixed(2)
+    item['minutes'] = minutes//.toFixed(2)
+    item['hours'] = minutes/60
+  })
+  return array
+}
+
 
 
 function toggl_data_pull_iterate(since,page){

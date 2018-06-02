@@ -103,12 +103,23 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 function headers_create(){
-	$('#metric_headers').append(metric_header_create('Count','duration',"-","-"))
+	$('#metric_headers').append(metric_header_create('Count','Toggl Tasks',"-","-"))
+	$('#metric_headers').append(metric_header_create('Cost','Dollars',"-","-"))
+	$('#metric_headers').append(metric_header_create('Hours','Hours',"-","-"))
+	$('#metric_headers').append(metric_header_create('Goal','Goal: 100 (06/08)',"-","-"))
+
 }
 
 
 function metric_headers_update_list(callback_array,l){
   $("."+'Count').find(".metric_text").html(callback_array.length)
+
+  $("."+'Hours').find(".metric_text").html(sum_float_convert_from_array_underscore(callback_array,'hours').toFixed(2))
+  $("."+'Cost').find(".metric_text").html(sum_float_convert_from_array_underscore(callback_array,'cost').toFixed(2))
+
+
+  $("."+'Goal').find(".metric_text").html((callback_array.length/100)*100 + "%")
+  $("."+'Goal').find(".sub_metric_text").html(100-callback_array.length + " Remaining")
 
 }
 
@@ -134,7 +145,7 @@ function array_dictionary_customize(item, index) {
 
 
 
-array =toggl_data_pull('2018-05-30')
+array =toggl_data_pull_custom('2018-05-30')
 array.forEach(array_dictionary_customize);
 array = firebase_array_integrate(array,"https://shippy-ac235.firebaseio.com/omni/"+omni_node+".json","DT_RowId",['status','notes'])
 
@@ -180,7 +191,7 @@ $("#table").DataTable({
       title: "start",
       visible: true,
       name: "start",
-      createdCell: date_format_with_day,
+      createdCell: date_time_datatable_format,
       type: "date-format-moment"
     },
      {
@@ -188,19 +199,40 @@ $("#table").DataTable({
       title: "end",
       visible: true,
       name: "end",
-      createdCell: date_format_with_day,
+      createdCell: date_time_datatable_format,
       type: "date-format-moment"
+    },
+    {
+      data: "cost",
+      title: "cost",
+      visible: true,
+      name: "cost",
+      createdCell: parse_float_datatable_format
+    },
+    {
+      data: "minutes",
+      title: "minutes",
+      visible: true,
+      name: "minutes",
+      createdCell: parse_float_datatable_format
+    },
+    {
+      data: "hours",
+      title: "hours",
+      visible: false,
+      name: "hours",
+      createdCell: parse_float_datatable_format
     },
     {
       data: "dur",
       title: "dur",
-      visible: true,
+      visible: false,
       name: "dur"
     },
     {
       data: "user",
       title: "user",
-      visible: true,
+      visible: false,
       name: "user"
     },
     {
@@ -227,7 +259,7 @@ $("#table").DataTable({
       dt.columns('').search('').draw()
     }}
   ],
-  order: [3, "desc"]
+  order: [1, "desc"]
 });
 
 
