@@ -1,3 +1,11 @@
+//format the datatables date with the date and time
+function date_time_data_tables_format(td, cellData, rowData, row, col) {
+  date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");
+  $(td).attr('title',moment(cellData).fromNow();)
+  $(td).html(date_format);
+}
+
+
 //simple datatable from array 
 function data_table_simple(array,div_id){
   key_names = Object.keys(array[0])

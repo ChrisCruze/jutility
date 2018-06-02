@@ -1,3 +1,7 @@
+//tells us how long ago 
+function moment_time_ago(input_time){
+  return moment(input_time).fromNow();
+}
 
 //check if the day is today, 'year, month, week, minute'
 function check_if_date_is_current_range(input_date,date_range){

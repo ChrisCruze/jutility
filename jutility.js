@@ -363,6 +363,14 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 
 //datatable_functions.js
 
+//format the datatables date with the date and time
+function date_time_data_tables_format(td, cellData, rowData, row, col) {
+  date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");
+  $(td).attr('title',moment(cellData).fromNow();)
+  $(td).html(date_format);
+}
+
+
 //simple datatable from array 
 function data_table_simple(array,div_id){
   key_names = Object.keys(array[0])
@@ -712,6 +720,10 @@ function table_jquery_objects(table_id){
 
 //moment_functions.js
 
+//tells us how long ago 
+function moment_time_ago(input_time){
+  return moment(input_time).fromNow();
+}
 
 //check if the day is today, 'year, month, week, minute'
 function check_if_date_is_current_range(input_date,date_range){
