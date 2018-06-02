@@ -1,7 +1,7 @@
 //parse the float to two decimals
 function parse_float_datatable_format(td, cellData, rowData, row, col) {
   r = (parseFloat(cellData)||0).toFixed(2)
-  $(td).html(r);
+  $(td).html(r)
 }
 
 

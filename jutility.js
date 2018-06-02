@@ -366,7 +366,7 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 //parse the float to two decimals
 function parse_float_datatable_format(td, cellData, rowData, row, col) {
   r = (parseFloat(cellData)||0).toFixed(2)
-  $(td).html(r);
+  $(td).html(r)
 }
 
 
