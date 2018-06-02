@@ -1,3 +1,27 @@
+//simple datatable from array 
+function data_table_simple(array,div_id){
+  key_names = Object.keys(array[0])
+  columns_list = []
+  key_names.forEach(function(i){
+    columns_list.push({data:i,title:i,name:i})
+  })
+  div_id = div_id || "#table"
+  return $(div_id).DataTable({
+  paging: false,
+  dom: '<"html5buttons"B>lTfgitp',
+  data: array,
+  columns:columns_list,
+  select: true,
+  colReorder: true,
+  buttons: [
+    { extend: "excel", title: document.title },
+    { extend: "colvis", title: document.title }
+  ],
+  order: [3, "desc"]
+});
+
+}
+
 //when you click on row, it changes the value
 function clickable_change_value(table_id,editor,){
   table_id = table_id||"#table"

@@ -8,6 +8,25 @@ function array_filter_from_text(array,text,key_name){
 
 
 
+
+//converts list of lists to array
+function list_of_lists_to_array(lol,key_names){
+  key_names = lol[0]||key_names
+  array = []
+  lol.forEach(function(row,row_num){
+    var new_dict =  {}
+    row.forEach(function(col,col_num){
+      cell_val = lol[row_num][col_num]
+      key_name = key_names[col_num]
+
+      new_dict[key_name] = cell_val
+    })
+    array.push(new_dict)
+  })
+  return array 
+}
+
+
 //filter tasks for text and return sum from it
 function array_filter_from_text_sum(array,text,key_name,sum_field){
   sum_field = sum_field||'duration'

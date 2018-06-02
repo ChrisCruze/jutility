@@ -1,3 +1,67 @@
+function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks){
+
+
+    gspread_array_data.forEach(function(gspread_dict){
+      filtered_completed_tasks = completed_tasks.filter(function(complete_dict){return complete_dict['content'].toLowerCase().indexOf(gspread_dict['Task'].toLowerCase()) != -1})
+      filtered_completed_tasks_today = filtered_completed_tasks.filter(function(complete_dict){return date_range_filter(complete_dict.completed_date,'YY-MM-DD')})
+      gspread_dict['duration_today'] = sum_float_convert_from_array(filtered_completed_tasks_today,'duration')
+      gspread_dict['duration'] = sum_float_convert_from_array(filtered_completed_tasks,'duration')
+      gspread_dict['completed_count'] = filtered_completed_tasks.length
+
+      if (filtered_completed_tasks.length > 0){
+        last_completed = _.max(filtered_completed_tasks, function(complete_dict){ return moment(complete_dict.completed_date).valueOf();}).completed_date
+        days_since_completed = moment().diff(last_completed, 'days')
+        gspread_dict['days_since_last_completed'] = days_since_completed
+        gspread_dict['last_completed'] = moment(last_completed).format("MM/DD hh:mm A");
+        is_good = parseFloat(gspread_dict['Max Age']) > days_since_completed
+        if (is_good){
+          gspread_dict['status'] = 'Green'
+          gspread_dict['task_assigned'] = 'Green'
+
+        }
+        else {
+        gspread_dict['status'] = 'Red'
+        }
+      }
+      else {
+        gspread_dict['last_completed'] = ''
+        gspread_dict['days_since_last_completed'] = ''
+        gspread_dict['status'] = 'N/A'
+
+      }
+      if (gspread_dict['status'] != 'Green'){
+
+      filtered_current_tasks = current_tasks.filter(function(current_dict){return current_dict['content'].toLowerCase().indexOf(gspread_dict['Task'].toLowerCase()) != -1})
+      is_assigned = filtered_current_tasks.length > 0
+      if (is_assigned){
+        filtered_current_tasks_with_due_date = filtered_current_tasks.filter(function(D){return D['due_date_utc'] != null})
+        has_due_date = filtered_current_tasks_with_due_date.length > 0 
+        if (has_due_date){
+            gspread_dict['task_assigned'] = 'Green'
+
+        }
+        else {
+            gspread_dict['task_assigned'] = 'Amber'
+
+        }
+      }
+
+      else {
+        gspread_dict['task_assigned'] = 'Red'
+
+      }
+    }
+
+
+    })
+
+
+    return gspread_array_data
+
+
+}
+
+
 
 
 //filter tasks for text
@@ -289,7 +353,6 @@ function project_name_append(item,projects_dictionary){
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom(){
   current_tasks_base = todoist_current_tasks_pull()
-
   completed_tasks = todoist_completed_tasks_all()
   current_tasks = current_tasks_base.items 
   labels_dictionary = array_to_dictionary(current_tasks_base.labels) 
@@ -315,6 +378,49 @@ function todoist_tasks_pull_custom(){
 
 
 
+//get dictionary of current_tasks and completed_tasks
+function todoist_tasks_pull_custom_gspread(){
+
+
+  current_tasks_base = todoist_current_tasks_pull()
+  completed_tasks = todoist_completed_tasks_all()
+  current_tasks = current_tasks_base.items 
+  labels_dictionary = array_to_dictionary(current_tasks_base.labels) 
+  projects_dictionary = current_tasks_base.projects 
+
+
+  current_tasks.forEach(function(D){D['task_type']='current'})
+  current_tasks.forEach(function(D){D['task_date']=D['due_date_utc']})
+  completed_tasks.forEach(function(D){D['task_type']='completed'})
+  completed_tasks.forEach(function(D){D['task_date']=D['completed_date']})
+
+
+  sheet_name = 'Tasks'
+  spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
+  gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
+
+
+
+  
+  gspread_array = gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks)
+
+
+
+  current_completed_tasks = completed_tasks.concat(current_tasks) //combine both arrays together into one array
+  current_completed_tasks.forEach(function(item){tasks_array_customize_item(item)})
+  current_completed_tasks.forEach(function(item){labels_add_from_labels_dictionary(item,labels_dictionary)})
+  current_completed_tasks.forEach(function(item){project_name_append(item,projects_dictionary)})
+  current_completed_tasks.forEach(function(item){item['task_date_range'] = date_within_range_string_create(item['task_date'])})
+
+
+
+
+
+
+
+  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
+  return {todoist:current_completed_tasks,gspread:gspread_array}
+}
 
 
 

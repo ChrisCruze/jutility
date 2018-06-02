@@ -11,6 +11,25 @@ function array_filter_from_text(array,text,key_name){
 
 
 
+
+//converts list of lists to array
+function list_of_lists_to_array(lol,key_names){
+  key_names = lol[0]||key_names
+  array = []
+  lol.forEach(function(row,row_num){
+    var new_dict =  {}
+    row.forEach(function(col,col_num){
+      cell_val = lol[row_num][col_num]
+      key_name = key_names[col_num]
+
+      new_dict[key_name] = cell_val
+    })
+    array.push(new_dict)
+  })
+  return array 
+}
+
+
 //filter tasks for text and return sum from it
 function array_filter_from_text_sum(array,text,key_name,sum_field){
   sum_field = sum_field||'duration'
@@ -343,6 +362,30 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 }
 
 //datatable_functions.js
+
+//simple datatable from array 
+function data_table_simple(array,div_id){
+  key_names = Object.keys(array[0])
+  columns_list = []
+  key_names.forEach(function(i){
+    columns_list.push({data:i,title:i,name:i})
+  })
+  div_id = div_id || "#table"
+  return $(div_id).DataTable({
+  paging: false,
+  dom: '<"html5buttons"B>lTfgitp',
+  data: array,
+  columns:columns_list,
+  select: true,
+  colReorder: true,
+  buttons: [
+    { extend: "excel", title: document.title },
+    { extend: "colvis", title: document.title }
+  ],
+  order: [3, "desc"]
+});
+
+}
 
 //when you click on row, it changes the value
 function clickable_change_value(table_id,editor,){
@@ -895,6 +938,19 @@ function gspread_query(range,spreadsheet_id,api_key){
 
 }
 
+//pulls from gspread in different format
+function gspread_array_pull(sheet_name,spreadsheet_id,api_key,key_names){
+        api_key = api_key||"AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+        spreadsheet_id = spreadsheet_id||"1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+        sheet_name = sheet_name||"Checklists"
+        range = sheet_name + "!A:Z"
+        lol = gspread_query(range,spreadsheet_id,api_key).responseJSON.values
+        key_names = lol[0]||key_names
+        array = list_of_lists_to_array(lol,key_names)
+        array.shift()
+        return array
+    }
+
 //query from gspread directly using api key
 function array_pull_from_gspread(sheet_name,spreadsheet_id,api_key,key_names){
     // sheet_name = 'Tasks'
@@ -1038,6 +1094,70 @@ function guest_airbnb_url_create(data, type, row, meta) {
 }
 
 //todoist_functions.js
+
+function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks){
+
+
+    gspread_array_data.forEach(function(gspread_dict){
+      filtered_completed_tasks = completed_tasks.filter(function(complete_dict){return complete_dict['content'].toLowerCase().indexOf(gspread_dict['Task'].toLowerCase()) != -1})
+      filtered_completed_tasks_today = filtered_completed_tasks.filter(function(complete_dict){return date_range_filter(complete_dict.completed_date,'YY-MM-DD')})
+      gspread_dict['duration_today'] = sum_float_convert_from_array(filtered_completed_tasks_today,'duration')
+      gspread_dict['duration'] = sum_float_convert_from_array(filtered_completed_tasks,'duration')
+      gspread_dict['completed_count'] = filtered_completed_tasks.length
+
+      if (filtered_completed_tasks.length > 0){
+        last_completed = _.max(filtered_completed_tasks, function(complete_dict){ return moment(complete_dict.completed_date).valueOf();}).completed_date
+        days_since_completed = moment().diff(last_completed, 'days')
+        gspread_dict['days_since_last_completed'] = days_since_completed
+        gspread_dict['last_completed'] = moment(last_completed).format("MM/DD hh:mm A");
+        is_good = parseFloat(gspread_dict['Max Age']) > days_since_completed
+        if (is_good){
+          gspread_dict['status'] = 'Green'
+          gspread_dict['task_assigned'] = 'Green'
+
+        }
+        else {
+        gspread_dict['status'] = 'Red'
+        }
+      }
+      else {
+        gspread_dict['last_completed'] = ''
+        gspread_dict['days_since_last_completed'] = ''
+        gspread_dict['status'] = 'N/A'
+
+      }
+      if (gspread_dict['status'] != 'Green'){
+
+      filtered_current_tasks = current_tasks.filter(function(current_dict){return current_dict['content'].toLowerCase().indexOf(gspread_dict['Task'].toLowerCase()) != -1})
+      is_assigned = filtered_current_tasks.length > 0
+      if (is_assigned){
+        filtered_current_tasks_with_due_date = filtered_current_tasks.filter(function(D){return D['due_date_utc'] != null})
+        has_due_date = filtered_current_tasks_with_due_date.length > 0 
+        if (has_due_date){
+            gspread_dict['task_assigned'] = 'Green'
+
+        }
+        else {
+            gspread_dict['task_assigned'] = 'Amber'
+
+        }
+      }
+
+      else {
+        gspread_dict['task_assigned'] = 'Red'
+
+      }
+    }
+
+
+    })
+
+
+    return gspread_array_data
+
+
+}
+
 
 
 
@@ -1330,7 +1450,6 @@ function project_name_append(item,projects_dictionary){
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom(){
   current_tasks_base = todoist_current_tasks_pull()
-
   completed_tasks = todoist_completed_tasks_all()
   current_tasks = current_tasks_base.items 
   labels_dictionary = array_to_dictionary(current_tasks_base.labels) 
@@ -1356,6 +1475,49 @@ function todoist_tasks_pull_custom(){
 
 
 
+//get dictionary of current_tasks and completed_tasks
+function todoist_tasks_pull_custom_gspread(){
+
+
+  current_tasks_base = todoist_current_tasks_pull()
+  completed_tasks = todoist_completed_tasks_all()
+  current_tasks = current_tasks_base.items 
+  labels_dictionary = array_to_dictionary(current_tasks_base.labels) 
+  projects_dictionary = current_tasks_base.projects 
+
+
+  current_tasks.forEach(function(D){D['task_type']='current'})
+  current_tasks.forEach(function(D){D['task_date']=D['due_date_utc']})
+  completed_tasks.forEach(function(D){D['task_type']='completed'})
+  completed_tasks.forEach(function(D){D['task_date']=D['completed_date']})
+
+
+  sheet_name = 'Tasks'
+  spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
+  gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
+
+
+
+  
+  gspread_array = gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks)
+
+
+
+  current_completed_tasks = completed_tasks.concat(current_tasks) //combine both arrays together into one array
+  current_completed_tasks.forEach(function(item){tasks_array_customize_item(item)})
+  current_completed_tasks.forEach(function(item){labels_add_from_labels_dictionary(item,labels_dictionary)})
+  current_completed_tasks.forEach(function(item){project_name_append(item,projects_dictionary)})
+  current_completed_tasks.forEach(function(item){item['task_date_range'] = date_within_range_string_create(item['task_date'])})
+
+
+
+
+
+
+
+  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
+  return {todoist:current_completed_tasks,gspread:gspread_array}
+}
 
 
 
