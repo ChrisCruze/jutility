@@ -84,9 +84,9 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
 <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
-<script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
-<!-- <script src="jutility.js"></script>
- -->
+<!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+ --><script src="jutility.js"></script>
+
 </head>
 
 <body>
@@ -139,6 +139,7 @@ $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
 
 function array_dictionary_customize(item, index) {
   item["DT_RowId"] = item.id;
+  item['task_date_range'] = date_within_range_string_create(item.start)
 }
 
 
@@ -246,7 +247,14 @@ $("#table").DataTable({
       title: "notes",
       visible: true,
       name: "notes"
+    },
+    {
+      data: "task_date_range",
+      title: "task_date_range",
+      visible: true,
+      name: "task_date_range"
     }
+    
   ],
   select: true,
   colReorder: true,
@@ -257,6 +265,15 @@ $("#table").DataTable({
     { extend: "edit", editor: editor },
     {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
       dt.columns('').search('').draw()
+    }},
+    {text: 'Today',name:'Today', action: function ( e, dt, node, config ) {
+      dt.columns('task_date_range:name').search('today').draw()
+    }},
+    {text: 'This Week',name:'This Week', action: function ( e, dt, node, config ) {
+      dt.columns('task_date_range:name').search('this_week').draw()
+    }},
+     {text: 'This Month',name:'This Month', action: function ( e, dt, node, config ) {
+      dt.columns('task_date_range:name').search('this_month').draw()
     }}
   ],
   order: [1, "desc"]
