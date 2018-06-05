@@ -9,7 +9,6 @@ class CSVFunctions(object):
         f = open(filename, 'wb')
         dict_writer = csv.DictWriter(f, keys)
         dict_writer.writer.writerow(keys)
-
         try:
             dict_writer.writerows(lst)
         except UnicodeEncodeError:

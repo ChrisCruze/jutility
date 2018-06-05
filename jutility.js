@@ -363,6 +363,13 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 
 //datatable_functions.js
 
+//get the data from the api 
+function datatables_data_get_from_api(table_id){
+  table_id = table_id||"#table"
+  return $(table_id).dataTable().api().rows({ page: "current" }).data();
+}
+
+
 //parse the float to two decimals
 function parse_float_datatable_format(td, cellData, rowData, row, col) {
   r = parseFloat(cellData)||0
