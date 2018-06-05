@@ -105,7 +105,7 @@ function number_of_days_ahead_calculate(days_ahead){
     for (i = 0; i < days_ahead; i++) { 
         next_time = start_time.clone()
         next_time.add(i,'day')
-        hours_list.push(next_time.format('YYYY-MM-DD'))
+        hours_list.push(next_time.format())
     }
     return hours_list
   } 
@@ -122,7 +122,7 @@ function number_of_days_ahead_calculate_array(days_ahead){
         next_time = start_time.clone()
         next_time.add(i,'day')
 
-        hours_list.push({date:next_time.format('YYYY-MM-DD')})
+        hours_list.push({date:next_time.format()})
     }
     return hours_list
   } 
