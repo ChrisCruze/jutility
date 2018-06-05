@@ -1,7 +1,15 @@
+//update label of status of rag (created: 5/28/18)
+function airbnb_url_create_datatables(td, cellData, rowData, row, col){
+  airbnb_url = rowData.airbnb_url
+  title = rowData.title
+  return $(td).html("<a target='_blank' href='"+airbnb_url+"'>" +title + "</a>")
+}
+
+
 //get the data from the api 
 function datatables_data_get_from_api(table_id){
   table_id = table_id||"#table"
-  return $(table_id).dataTable().api().rows({ page: "current" }).data();
+  return $(table_id).DataTable().api().rows({ page: "current" }).data();
 }
 
 

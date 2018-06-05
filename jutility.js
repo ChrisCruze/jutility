@@ -363,10 +363,18 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 
 //datatable_functions.js
 
+//update label of status of rag (created: 5/28/18)
+function airbnb_url_create_datatables(td, cellData, rowData, row, col){
+  airbnb_url = rowData.airbnb_url
+  title = rowData.title
+  return $(td).html("<a target='_blank' href='"+airbnb_url+"'>" +title + "</a>")
+}
+
+
 //get the data from the api 
 function datatables_data_get_from_api(table_id){
   table_id = table_id||"#table"
-  return $(table_id).dataTable().api().rows({ page: "current" }).data();
+  return $(table_id).DataTable().api().rows({ page: "current" }).data();
 }
 
 
@@ -885,7 +893,7 @@ function number_of_days_ahead_calculate(days_ahead){
     for (i = 0; i < days_ahead; i++) { 
         next_time = start_time.clone()
         next_time.add(i,'day')
-        hours_list.push(next_time.format('YYYY-MM-DD'))
+        hours_list.push(next_time.format())
     }
     return hours_list
   } 
@@ -902,7 +910,7 @@ function number_of_days_ahead_calculate_array(days_ahead){
         next_time = start_time.clone()
         next_time.add(i,'day')
 
-        hours_list.push({date:next_time.format('YYYY-MM-DD')})
+        hours_list.push({date:next_time.format()})
     }
     return hours_list
   } 
