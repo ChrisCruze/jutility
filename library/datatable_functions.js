@@ -1,3 +1,9 @@
+
+//add a record to datatables 
+function row_add_datatables(table,dictionary_obj){
+    table.row.add(dictionary_obj).draw( false );
+}
+
 //update label of status of rag (created: 5/28/18)
 function airbnb_url_create_datatables(td, cellData, rowData, row, col){
   airbnb_url = rowData.airbnb_url
