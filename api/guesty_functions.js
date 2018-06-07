@@ -30,7 +30,10 @@ function guest_reservation_dictionary_customize(item,index){
     days_from_now = Math.round((new Date(item['checkOut']) - new Date())/(1000*60*60*24)) 
     
 
-    item['guest_review']  = key_check_make_double(item,'review','guestReview')
+    item['guest_public_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','public')
+    item['guest_private_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','private')
+
+
     item['days_from_now'] = days_from_now
     item['days_from_now_absolute'] = Math.abs(days_from_now)
     item['days_difference'] = days_difference

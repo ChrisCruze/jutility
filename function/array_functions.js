@@ -34,7 +34,40 @@ function array_filter_from_text_sum(array,text,key_name,sum_field){
   var sum_total = sum_float_convert_from_array_underscore(array,sum_field)
   return sum_total
 }
+//make triple check for the key 
+function dictionary_check_keys_triple_return(item,check_key,second_key,third_key,alternative_val){
+  alternative_val = alternative_val||"null"
+  check_key = check_key||'fullName'
+  not_undefined = item[check_key] != undefined
+  if (not_undefined){
+      not_second_undefined = item[check_key][second_key] != undefined
+      if (not_second_undefined){
+        r = item[check_key][second_key][third_key]||alternative_val
+      }
+      else {
+        r = alternative_val
+      }
+  }
+  else {
+    r = alternative_val
+  }
+  return r 
+}
 
+//check for the key on second layer or return null
+function dictionary_check_keys_double_return(item,check_key,second_key,alternative_val){
+  alternative_val = alternative_val||"null"
+  check_key = check_key||'fullName'
+  not_undefined = item[check_key] != undefined
+  if (not_undefined){
+    r = item[check_key][second_key]||alternative_val
+
+  }
+  else {
+    r = alternative_val
+  }
+  return r 
+}
 
 //checks if item has a key and gives it null if not
 function dictionary_check_keys(item,check_keys,alternative_val){
@@ -125,3 +158,4 @@ function key_check_make_double(item,primary_key,secondary_key){
   item[primary_key] = item[primary_key]||{}
   item[primary_key][secondary_key] = item[primary_key][secondary_key] ||'null'
 }
+

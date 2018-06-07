@@ -37,7 +37,40 @@ function array_filter_from_text_sum(array,text,key_name,sum_field){
   var sum_total = sum_float_convert_from_array_underscore(array,sum_field)
   return sum_total
 }
+//make triple check for the key 
+function dictionary_check_keys_triple_return(item,check_key,second_key,third_key,alternative_val){
+  alternative_val = alternative_val||"null"
+  check_key = check_key||'fullName'
+  not_undefined = item[check_key] != undefined
+  if (not_undefined){
+      not_second_undefined = item[check_key][second_key] != undefined
+      if (not_second_undefined){
+        r = item[check_key][second_key][third_key]||alternative_val
+      }
+      else {
+        r = alternative_val
+      }
+  }
+  else {
+    r = alternative_val
+  }
+  return r 
+}
 
+//check for the key on second layer or return null
+function dictionary_check_keys_double_return(item,check_key,second_key,alternative_val){
+  alternative_val = alternative_val||"null"
+  check_key = check_key||'fullName'
+  not_undefined = item[check_key] != undefined
+  if (not_undefined){
+    r = item[check_key][second_key]||alternative_val
+
+  }
+  else {
+    r = alternative_val
+  }
+  return r 
+}
 
 //checks if item has a key and gives it null if not
 function dictionary_check_keys(item,check_keys,alternative_val){
@@ -128,6 +161,8 @@ function key_check_make_double(item,primary_key,secondary_key){
   item[primary_key] = item[primary_key]||{}
   item[primary_key][secondary_key] = item[primary_key][secondary_key] ||'null'
 }
+
+
 //date_functions.js
 
 
@@ -1132,7 +1167,10 @@ function guest_reservation_dictionary_customize(item,index){
     days_from_now = Math.round((new Date(item['checkOut']) - new Date())/(1000*60*60*24)) 
     
 
-    item['guest_review']  = key_check_make_double(item,'review','guestReview')
+    item['guest_public_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','public')
+    item['guest_private_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','private')
+
+
     item['days_from_now'] = days_from_now
     item['days_from_now_absolute'] = Math.abs(days_from_now)
     item['days_difference'] = days_difference
