@@ -1,4 +1,22 @@
 
+//add icon from favicon
+function add_favicon_div_from_javascript(title_text,url,image_url){
+    url = url||"https://cruz.site44.com/profile.html"
+    title_text = title_text||"hello_world 2"
+    icon_class = icon_class||"fa fa-trophy fa-5x"
+    var outer_div = $("<div>", {"class": "col-md-3"});
+    var inner_div = $("<div>", {"class": "contact-box center-version"});
+    var link_elem = $("<a>", {"href": url});
+    //var image_elem = $("<img>", {"src": image_url});
+    var image_elem = $("<i>", {"class": icon_class});
+
+    var text_elem = $("<h3>", {"class": "m-b-xs"}).text(title_text)
+    var final_div = link_elem.append(image_elem).append(text_elem)
+    var final_div = inner_div.append(final_div)
+    var final_div = outer_div.append(final_div)
+    $("#target").append(final_div)
+    return final_div
+}
 //creates an image div to append to a jquery object with append
 function create_image_div(title_text,url,image_url){
     url = url||"https://cruz.site44.com/profile.html"

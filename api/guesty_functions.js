@@ -29,6 +29,8 @@ function guest_reservation_dictionary_customize(item,index){
     room=item.listing.nickname
     days_from_now = Math.round((new Date(item['checkOut']) - new Date())/(1000*60*60*24)) 
     
+
+    item['guest_review']  = key_check_make_double(item,'review','guestReview')
     item['days_from_now'] = days_from_now
     item['days_from_now_absolute'] = Math.abs(days_from_now)
     item['days_difference'] = days_difference

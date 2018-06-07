@@ -144,7 +144,8 @@ function editor_initiate(table_id,fields_list){
 	fields_list == fields_list|| [{label: "Custom Field:",name: "custom_field"}]
 	editor = new $.fn.dataTable.Editor( {
       table: table_id,
-      fields:fields_list
+      fields:fields_list,
+      idSrc:  'id'
  	 });
 	return editor
 

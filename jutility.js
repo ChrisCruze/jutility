@@ -222,6 +222,24 @@ function papa_parse_array(file,delimter){
 //html_functions.js
 
 
+//add icon from favicon
+function add_favicon_div_from_javascript(title_text,url,image_url){
+    url = url||"https://cruz.site44.com/profile.html"
+    title_text = title_text||"hello_world 2"
+    icon_class = icon_class||"fa fa-trophy fa-5x"
+    var outer_div = $("<div>", {"class": "col-md-3"});
+    var inner_div = $("<div>", {"class": "contact-box center-version"});
+    var link_elem = $("<a>", {"href": url});
+    //var image_elem = $("<img>", {"src": image_url});
+    var image_elem = $("<i>", {"class": icon_class});
+
+    var text_elem = $("<h3>", {"class": "m-b-xs"}).text(title_text)
+    var final_div = link_elem.append(image_elem).append(text_elem)
+    var final_div = inner_div.append(final_div)
+    var final_div = outer_div.append(final_div)
+    $("#target").append(final_div)
+    return final_div
+}
 //creates an image div to append to a jquery object with append
 function create_image_div(title_text,url,image_url){
     url = url||"https://cruz.site44.com/profile.html"
@@ -328,6 +346,13 @@ function text2Binary(string) {
     }).join(' ');
 }
 //web_functions.js
+
+//open url in new tab
+function openInNewTab(url) {
+  var win = window.open(url, '_blank');
+  win.focus();
+}
+
 
 //get url parameter 
 function parameter_attain_from_url(param){
@@ -509,7 +534,8 @@ function editor_initiate(table_id,fields_list){
 	fields_list == fields_list|| [{label: "Custom Field:",name: "custom_field"}]
 	editor = new $.fn.dataTable.Editor( {
       table: table_id,
-      fields:fields_list
+      fields:fields_list,
+      idSrc:  'id'
  	 });
 	return editor
 
@@ -1105,6 +1131,8 @@ function guest_reservation_dictionary_customize(item,index){
     room=item.listing.nickname
     days_from_now = Math.round((new Date(item['checkOut']) - new Date())/(1000*60*60*24)) 
     
+
+    item['guest_review']  = key_check_make_double(item,'review','guestReview')
     item['days_from_now'] = days_from_now
     item['days_from_now_absolute'] = Math.abs(days_from_now)
     item['days_difference'] = days_difference
