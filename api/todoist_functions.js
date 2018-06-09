@@ -8,18 +8,18 @@ function html_link_from_todoist_task(task_title,task_id){
 //complete task in todoist
 function task_complete_todoist(task_name,project_id,todoist_api_token){
   todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
-  todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id},'item_complete')
+  return todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id},'item_complete')
 }
 
 //update task in todoist
 function task_update_todoist(task_name,project_id,todoist_api_token){
   todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
-  todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id},'item_update')
+  return todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id},'item_update')
 }
 //create task in todoist
 function task_create_todoist(task_name,project_id,todoist_api_token){
   todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
-  todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id})
+  return todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id})
 }
 
 
