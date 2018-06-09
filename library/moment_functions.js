@@ -1,3 +1,6 @@
+
+
+
 //create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time
 function time_interval_string_format_from_start_time(start_time){
       end_time = moment().format()
@@ -13,17 +16,22 @@ function time_interval_string_format_from_start_time(start_time){
 
 }
 
-//used in create_task_v2 to keep track of time
-function timer_html_update_from_start_time_moment(start_time,jquery_identifier){
-  jquery_identifier = jquery_identifier||"#input_label_timer"
-  function running_task_timer(){
+//update the html of the timer
+function html_timer_update_from_jquery(jquery_identifier,start_time){
     time_text = time_since_start_time_moment(start_time)
     $(jquery_identifier).html(time_text)
     document.title = time_text
-  }
-  setInterval(running_task_timer,1000)
-
 }
+
+
+//update from jquery identifier the time 
+function timer_jquery_html_update_from_start_time_moment(start_time,jquery_identifier){
+  jquery_identifier = jquery_identifier||"#input_label_timer"
+  setInterval(html_timer_update_from_jquery,1000,jquery_identifier,start_time)
+}
+
+
+
 //used in create_task_v2 to keep track of time
 function time_since_start_time_moment(start_time){
     now = moment().valueOf()  //now is the time right now
