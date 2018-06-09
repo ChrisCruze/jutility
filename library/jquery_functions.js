@@ -1,3 +1,5 @@
+
+
 //get the td jquery objects from a table based on a table id
 function table_jquery_objects_to_array(table_id){
 	list_of_lists = []

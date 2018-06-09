@@ -256,6 +256,16 @@ function papa_parse_array(file,delimter){
 }
 //html_functions.js
 
+//add dropdown item to list of items. used in create_task_v2
+function add_dropdown_item(title_text){
+    title_text = title_text||"hello_world 2"
+    var outer_div = $("<li>", {});
+    var link_elem = $("<a>", {"href": "#","target":"_blank"}).text(title_text)
+    var final_div = outer_div.append(link_elem)
+    $("#favicon_dropdown_menu").append(final_div)
+    return final_div
+}
+
 
 //add icon from favicon
 function add_favicon_div_from_javascript(title_text,url,image_url){
@@ -757,6 +767,8 @@ function firebase_auth_user_process(user_process_func){
   });
 }
 //jquery_functions.js
+
+
 
 //get the td jquery objects from a table based on a table id
 function table_jquery_objects_to_array(table_id){
