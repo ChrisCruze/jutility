@@ -1314,6 +1314,12 @@ function guest_airbnb_url_create(data, type, row, meta) {
 
 //todoist_functions.js
 
+//url create of todoist task from title and task id
+function html_link_from_todoist_task(task_title,task_id){
+  url = 'https://en.todoist.com/app?lang=en#task%2F'+String(task_id)
+  html_task = "<a target='_blank' href='" + url + "'>" + task_title + "</a>"
+  return html_task 
+}
 
 //complete task in todoist
 function task_complete_todoist(task_name,project_id,todoist_api_token){
