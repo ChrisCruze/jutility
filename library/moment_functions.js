@@ -1,3 +1,40 @@
+//create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time
+function time_interval_string_format_from_start_time(start_time){
+      end_time = moment().format()
+      start_time = moment(start_time).format("h:mm:ssa")
+      end_time = moment(end_time).format("h:mm:ssa")
+      var now = moment().valueOf()  //now is the time right now
+      start_time_instance = moment(start_time).valueOf()
+      var elapsed = now - start_time_instance;
+      seconds = elapsed/1000
+      elapsed_minutes = String(parseFloat(seconds/60).toFixed(3))  //add a two minute buffer
+      formatted_string = " [" + start_time + "-" + end_time + "|"+ elapsed_minutes+"min]"
+      return formatted_string
+
+}
+
+//used in create_task_v2 to keep track of time
+function timer_html_update_from_start_time_moment(start_time,jquery_identifier){
+  jquery_identifier = jquery_identifier||"#input_label_timer"
+  function running_task_timer(){
+    time_text = time_since_start_time_moment(start_time)
+    $(jquery_identifier).html(time_text)
+    document.title = time_text
+  }
+  setInterval(running_task_timer,1000)
+
+}
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment(start_time){
+    now = moment().valueOf()  //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = now - start_time_instance;
+    time_text_value = moment(elapsed).subtract({hours: 19}); //have to subtract 19 hours for some reason
+    time_text = time_text_value.format("HH:mm:ss")
+    return time_text
+ }
+
+
 //tells us how long ago 
 function moment_time_ago(input_time){
   return moment(input_time).fromNow();
