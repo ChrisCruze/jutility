@@ -28,7 +28,7 @@ function guest_reservation_dictionary_customize(item,index){
     run_rate = parseInt(run_rate)||0
     room=item.listing.nickname
     days_from_now = Math.round((new Date(item['checkOut']) - new Date())/(1000*60*60*24)) 
-    
+    item['guest_phone'] = dictionary_check_keys_double_return(item,'guest','phone')
 
     item['guest_public_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','public')
     item['guest_private_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','private')

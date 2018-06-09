@@ -1,3 +1,9 @@
+function task_create_todoist(task_name,project_id,todoist_api_token){
+  todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
+  todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id})
+}
+
+
 function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks){
 
 
@@ -419,7 +425,7 @@ function todoist_tasks_pull_custom_gspread(){
 
 
   array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
-  return {todoist:current_completed_tasks,gspread:gspread_array}
+  return {todoist:current_completed_tasks,gspread:gspread_array,projects:projects_dictionary,labels:labels_dictionary}
 }
 
 

@@ -1165,7 +1165,7 @@ function guest_reservation_dictionary_customize(item,index){
     run_rate = parseInt(run_rate)||0
     room=item.listing.nickname
     days_from_now = Math.round((new Date(item['checkOut']) - new Date())/(1000*60*60*24)) 
-    
+    item['guest_phone'] = dictionary_check_keys_double_return(item,'guest','phone')
 
     item['guest_public_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','public')
     item['guest_private_review'] = dictionary_check_keys_triple_return(item,'review','guestReview','private')
@@ -1264,6 +1264,12 @@ function guest_airbnb_url_create(data, type, row, meta) {
 }
 
 //todoist_functions.js
+
+function task_create_todoist(task_name,project_id,todoist_api_token){
+  todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
+  todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id})
+}
+
 
 function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks){
 
@@ -1686,7 +1692,7 @@ function todoist_tasks_pull_custom_gspread(){
 
 
   array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
-  return {todoist:current_completed_tasks,gspread:gspread_array}
+  return {todoist:current_completed_tasks,gspread:gspread_array,projects:projects_dictionary,labels:labels_dictionary}
 }
 
 
