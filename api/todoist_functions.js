@@ -1,3 +1,16 @@
+
+//complete task in todoist
+function task_complete_todoist(task_name,project_id,todoist_api_token){
+  todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
+  todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id},'item_complete')
+}
+
+//update task in todoist
+function task_update_todoist(task_name,project_id,todoist_api_token){
+  todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
+  todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id},'item_update')
+}
+//create task in todoist
 function task_create_todoist(task_name,project_id,todoist_api_token){
   todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
   todoist_add_tasks_ajax(todoist_api_token,{"content": task_name, "project_id": project_id})
@@ -140,15 +153,15 @@ function tasks_array_customize_item(item){
 
 
 //https://stackoverflow.com/questions/49394588/how-to-create-todoist-task-using-todoist-api-v7
-todoist_add_tasks_ajax = function(todoist_api_token,tasks,sync_token) {
+ function todoist_add_tasks_ajax(todoist_api_token,tasks,type,sync_token) {
   var sync_token = sync_token||"*"
+  type = type || "item_add"//item_update
 
   tasks_is_list_array = Array.isArray(tasks)
   if (!tasks_is_list_array){
     tasks = [tasks]
   }
-  var commands = todoist_tasks_to_commands(tasks);
-  
+  var commands = todoist_tasks_to_commands(tasks,type);
   var data = {
     "token" : todoist_api_token,
     'sync_token' : sync_token,
@@ -172,15 +185,15 @@ todoist_add_tasks_ajax = function(todoist_api_token,tasks,sync_token) {
   
 }
 
-//commands to to doist
-todoist_tasks_to_commands = function(tasks) {
-  
+//commands to to doist, item_update,item_add, item_complete, item_delete
+function todoist_tasks_to_commands(tasks,type) {
+  type = type || "item_add"//item_update
   var commands = [];
   
   tasks.forEach(function(args) {
     
     var temp_commands = {
-      "type": "item_add",
+      "type": type,
       "temp_id": create_guid(),
       "uuid": create_guid(),
       "args": args
