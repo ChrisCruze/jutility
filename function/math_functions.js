@@ -1,3 +1,8 @@
+//round the number
+function round_number(i){
+  i.toFixed(2)
+}
+
 
 //get the median from list of numbers
 function median_get(values) {

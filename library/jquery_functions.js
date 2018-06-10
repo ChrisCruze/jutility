@@ -1,4 +1,15 @@
+//sort a list of divs https://stackoverflow.com/questions/32362404/javascript-jquery-reorder-divs
 
+function sort_divs_jquery(parent_identifier,sort_attribute){
+  sort_attribute = sort_attribute || 'data-status'
+  parent_identifier = parent_identifier||'#target'
+  $(parent_identifier+' > div').sort(function (a, b) {
+    var contentA = parseInt($(a).attr(sort_attribute), 10);
+    var contentB = parseInt($(b).attr(sort_attribute), 10);
+    return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+  }).appendTo(parent_identifier);
+
+}
 
 //get the td jquery objects from a table based on a table id
 function table_jquery_objects_to_array(table_id){

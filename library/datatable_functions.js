@@ -1,4 +1,12 @@
+function datatables_search_negate(dt,search_word){
+  dt.columns('status:name').search('^((?!'+search_word+').)*$',true,false).draw()
 
+}
+
+//how to search with datatables
+function datatables_search(dt){
+  dt.columns('task_type:name').search('current').draw()
+}
 //add a record to datatables 
 function row_add_datatables(table,dictionary_obj){
     table.row.add(dictionary_obj).draw( false );
