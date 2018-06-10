@@ -1,3 +1,19 @@
+
+//complete_task
+function todoist_complete_task(task_id,todoist_api_token){
+  todoist_api_token = todoist_api_token || 'a14f98a6b546b044dbb84bcd8eee47fbe3788671'
+
+  r = $.ajax({
+      type: "POST",
+      url: 'https://beta.todoist.com/API/v8/tasks/'+String(task_id)+'/close',
+      dataType: 'json',
+      async: false,
+      data: {
+        'token': todoist_api_token
+      }
+    })
+}
+
 //url create of todoist task from title and task id
 function html_link_from_todoist_task(task_title,task_id){
   url = 'https://en.todoist.com/app?lang=en#task%2F'+String(task_id)
@@ -258,8 +274,11 @@ function todoist_update_task(task_id,content){
     })
 }
 
+      // "temp_id": create_guid(),
+      // "uuid": create_guid(),
+
 //completes todoist task
-function todoist_complete_task(task_id){
+function todoist_complete_task_v7(task_id){
   return $.ajax({
       type: "GET",
       url: 'https://en.todoist.com/api/v7/sync/',
@@ -269,7 +288,7 @@ function todoist_complete_task(task_id){
         'token': 'a14f98a6b546b044dbb84bcd8eee47fbe3788671',
         'sync_token':'*',
         'resource_types':'["items"]',
-        'commands':'[{"type": "item_complete", "uuid": "f8539c77-7fd7-4846-afad-3b201f0be8a5", "args": {"ids": ['+String(task_id)+']}}]'
+        'commands':'[{"type": "item_complete", "uuid": '+create_guid()+' "args": {"ids": ['+String(task_id)+']}}]'
       }
     })
 }

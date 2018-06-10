@@ -136,6 +136,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                                                 </ul>                                           
                                             </div>
                                              <input class="form-control" id="input_text" type="text">
+                                             <small id='task_content'></small>
 
                                 </div>
 
@@ -146,6 +147,8 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                                         <button class="btn btn-sm btn-white" type="submit" id='input_update'>Update</button>
 
                                         <button class="btn btn-sm btn-white" type="submit" id='input_complete'>Complete</button>
+                                        <button class="btn btn-sm btn-white" type="submit" id='input_delete'>Delete</button>
+
                                     </div>
                                 </div>
                             </form>
@@ -182,11 +185,26 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 //if create task, update timer instance dictionary 
 
+
+//update the html of the timer
+function html_timer_update_from_jquery(timer_instance_dictionary){
+    time_text = time_since_start_time_moment(timer_instance_dictionary.start_time)
+    $("#timer_text").html(time_text)
+    task_content = $("#input_text").val() + time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+    $("#task_content").html(html_link_from_todoist_task(task_content,timer_instance_dictionary.task_id))
+
+    document.title = time_text
+}
+
+
+
+
 //if complete, delete timer instance dictioary, update task, and done
 function timer_instance_dictionary_process(timer_instance_dictionary){
     $("#input_text").attr('task_id',timer_instance_dictionary.task_id)
     $("#input_text").val(timer_instance_dictionary.content)
-    timer_jquery_html_update_from_start_time_moment(timer_instance_dictionary.start_time,"#timer_text")
+    setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+
 
 }
 
@@ -197,13 +215,22 @@ timer_instance.on('value', function(snapshot) {
         $("#input_update").click(function(event) {
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            todoist_update_task(timer_instance_dictionary.task_id,timer_instance_dictionary.content + html_timer)
+            todoist_update_task(timer_instance_dictionary.task_id,$("#input_text").val() + html_timer)
+            timer_instance_dictionary['content'] = $("#input_text").val() 
+            timer_instance.set(timer_instance_dictionary)
         })
         $("#input_complete").click(function(event) {
             event.preventDefault()
-            todoist_complete_task(timer_instance_dictionary.task_id)
+            todoist_complete_task(String(timer_instance_dictionary.task_id))
+            timer_instance.set({})
         })
 
+        $("#input_delete").click(function(event) {
+            event.preventDefault()
+            todoist_delete_task(timer_instance_dictionary.task_id)
+            timer_instance.set({})
+
+        })
 
     }
       else {
