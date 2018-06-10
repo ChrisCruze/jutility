@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cruz Control</title>
+<link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
+<link href=https://rawgit.com/vderm9/jutility/master/style.css rel="stylesheet">
+<link href='https://cruzco.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
+<link href='https://cruzco.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
+<link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
+<link href="https://cruz.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+<link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+<link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
+<!-- Mainly scripts -->
+<script src="https://cruz.site44.com/js/jquery-3.1.1.min.js"></script>
+<script src="https://cruz.site44.com/js/bootstrap.min.js"></script>
+<script src="https://cruz.site44.com/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="https://cruz.site44.com/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Flot -->
+<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.js"></script>
+<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.spline.js"></script>
+<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.resize.js"></script>
+<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.pie.js"></script>
+<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.symbol.js"></script>
+<script src="https://cruz.site44.com/js/plugins/flot/curvedLines.js"></script>
+
+<!-- Peity -->
+<script src="https://cruz.site44.com/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="https://cruz.site44.com/js/demo/peity-demo.js"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="https://cruz.site44.com/js/inspinia.js"></script>
+<script src="https://cruz.site44.com/js/plugins/pace/pace.min.js"></script>
+
+<!-- jQuery UI -->
+<script src="https://cruz.site44.com/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+<!-- Jvectormap -->
+<script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+<script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+
+<!-- Sparkline -->
+<script src="https://cruz.site44.com/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+<!-- ChartJS-->
+<script src="https://cruz.site44.com/js/plugins/chartJs/Chart.min.js"></script>
+
+<!-- CodeMirror-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
+
+<!-- FirebaseJS-->
+<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+<script>
+firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authDomain: "shippy-ac235.firebaseapp.com", databaseURL: "https://shippy-ac235.firebaseio.com"});
+</script>
+<script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src='https://cruzco.site44.com/lib/moment.min.js'></script>
+<script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
+<script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+<script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
+<script src="https://cruzco.site44.com/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/vderm9/jutility/master/js/dataTables.editor.min.js"></script>
+<link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+<link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
+<link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
+<script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
+<script src="jutility.js"></script>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+<div id="page-wrapper2" class="gray-bg" style="min-height: 305px;">
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <h2>Bookmarks</h2>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+
+
+    <div class="row">
+
+<div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Input</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <form class="form-horizontal">
+
+                            <div class="form-group"><label class="col-lg-2 control-label" id="timer_text">Select</label>
+                                <div class="input-group m-b">
+                                            <div class="input-group-btn">
+                                                <button id="favicon_select_button" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">Select <span class="caret"></span></button>
+                                                <ul class="dropdown-menu" id="favicon_dropdown_menu">
+
+                                                </ul>                                           
+                                            </div>
+                                             <input class="form-control" id="input_text" type="text">
+
+                                </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-offset-2 col-lg-10">
+                                        <button class="btn btn-sm btn-white" type="submit" id='input_create'>Create</button>
+                                        <button class="btn btn-sm btn-white" type="submit" id='input_update'>Update</button>
+
+                                        <button class="btn btn-sm btn-white" type="submit" id='input_complete'>Complete</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<script>
+    var dbRef = firebase.database();
+    var timer_instance = dbRef.ref('omni').child('timer_instance')
+
+//timer_html_update_from_start_time_moment
+//html_link_from_todoist_task_dictionary
+//html_link_from_todoist_task
+//todoist_tasks_pull_custom_gspread
+//task_create_todoist
+//task_update_todoist
+//task_complete_todoist
+//time_interval_string_format_from_start_time
+//create, complete, update are the three functions of the buttons
+//if create, store in firebase and start timer. then can pull if that
+
+
+
+///check if timer instance dictioary
+//if there is one then, initiate timer, update html elements
+
+
+//if create task, update timer instance dictionary 
+
+//if complete, delete timer instance dictioary, update task, and done
+function timer_instance_dictionary_process(timer_instance_dictionary){
+    $("#input_text").attr('task_id',timer_instance_dictionary.task_id)
+    $("#input_text").val(timer_instance_dictionary.content)
+    timer_jquery_html_update_from_start_time_moment(timer_instance_dictionary.start_time,"#timer_text")
+
+}
+
+timer_instance.on('value', function(snapshot) {
+    timer_instance_dictionary = snapshot.val()
+    if (timer_instance_dictionary != null){
+        timer_instance_dictionary_process(timer_instance_dictionary)
+        $("#input_update").click(function(event) {
+            event.preventDefault()
+            html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+            todoist_update_task(timer_instance_dictionary.task_id,timer_instance_dictionary.content + html_timer)
+        })
+        $("#input_complete").click(function(event) {
+            event.preventDefault()
+            todoist_complete_task(timer_instance_dictionary.task_id)
+        })
+
+
+    }
+      else {
+    }
+});
+
+
+function add_dropdown_item(title_text,id){
+    title_text = title_text||"hello_world 2"
+    var outer_div = $("<li>", {});
+    var link_elem = $("<a>", {"href": "#","id":id,"class":"favicon_select"}).text(title_text)
+    var final_div = outer_div.append(link_elem)
+    $("#favicon_dropdown_menu").append(final_div)
+    return final_div
+}
+
+function create_project_dropdown_list(projects_dictionary){
+    projects_dictionary.forEach(function(D){
+        add_dropdown_item(D['name'],D['id'])
+    })  
+}
+
+
+r = todoist_tasks_pull_custom_gspread()
+projects_dictionary = r.projects
+create_project_dropdown_list(projects_dictionary)
+
+
+$('.favicon_select').on('click', function (e) {
+    $("#favicon_select_button").html($(this))
+})
+
+
+//task_create_todoist('test',2159934072)
+$("#input_create").click(function(event) {
+    event.preventDefault()
+    project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
+    content = $("#input_text").val()
+    start_time = moment().format()
+
+    //r = task_create_todoist(content,project_id)
+
+  function create_task_promise(input) {
+    return new Promise(function(resolve, reject) {
+      result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
+      resolve(result)
+    });}
+
+  create_task_promise({"content": content, "project_id": project_id}).then(function(r) {
+    task_id = Object.values(r.temp_id_mapping)[0]
+    upload_dictionary = {
+        start_time: moment().format(),
+        id: task_id,
+        task_id: task_id,
+        content:content,
+        project_id:project_id,
+        start_time:start_time
+    }
+    timer_instance.set(upload_dictionary)
+
+
+  });
+
+
+
+});
+
+
+
+
+
+// // //push data about the checkbox to firebase
+// $("#input_submit").click(function(event) {
+//     event.preventDefault()
+
+//   $.ajax({
+//       type: "POST",
+//       data:  {'new_task_name':$("#title").val()},
+//       url: "https://hooks.zapier.com/hooks/catch/229795/a0r91r/",
+//     })
+
+
+
+//     $("#title").val("")
+
+// });
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</body>
+
+</html>

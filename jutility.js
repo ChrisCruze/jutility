@@ -869,15 +869,15 @@ function table_jquery_objects(table_id){
 
 
 //create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time
-function time_interval_string_format_from_start_time(start_time){
+function time_interval_string_format_from_start_time(start_time_core){
       end_time = moment().format()
-      start_time = moment(start_time).format("h:mm:ssa")
-      end_time = moment(end_time).format("h:mm:ssa")
+      start_time = moment(start_time_core).format("h:mma")
+      end_time = moment(end_time).format("h:mma")
       var now = moment().valueOf()  //now is the time right now
-      start_time_instance = moment(start_time).valueOf()
+      start_time_instance = moment(start_time_core).valueOf()
       var elapsed = now - start_time_instance;
       seconds = elapsed/1000
-      elapsed_minutes = String(parseFloat(seconds/60).toFixed(3))  //add a two minute buffer
+      elapsed_minutes = String(parseFloat(seconds/60).toFixed(1))  //add a two minute buffer
       formatted_string = " [" + start_time + "-" + end_time + "|"+ elapsed_minutes+"min]"
       return formatted_string
 
