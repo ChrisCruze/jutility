@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cruz Control</title>
+    <title>Bookmark</title>
 <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
@@ -85,7 +85,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
 <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
-<script src="jutility.js"></script>
+<script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
 
 </head>
 
@@ -105,6 +105,34 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+    <div class="ibox-content">
+
+    <div class="row" id="target">
+
+  
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+    <div class="ibox-content">
+
+    <div class="row">
+    <table id="table" class="display" cellspacing="0" width="100%">
+    </table>
+  
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
 
     <div class="row">
 
@@ -126,29 +154,23 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                         </div>
                         <div class="ibox-content">
                             <form class="form-horizontal">
+                                <div class="form-group"><label class="col-lg-2 control-label">Name</label>
+                                    <div class="col-lg-10">
+                                      <input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
 
-                            <div class="form-group"><label class="col-lg-2 control-label" id="timer_text">Select</label>
-                                <div class="input-group m-b">
-                                            <div class="input-group-btn">
-                                                <button id="favicon_select_button" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false">Select <span class="caret"></span></button>
-                                                <ul class="dropdown-menu" id="favicon_dropdown_menu">
+                                    </div>
+                                </div>
 
-                                                </ul>                                           
-                                            </div>
-                                             <input class="form-control" id="input_text" type="text">
-                                             <small id='task_content'></small>
+
 
                                 </div>
 
+                                <div class="form-group"><label class="col-lg-2 control-label">Favicon</label>
+                                    <div class="col-lg-10"><input id='favicon' placeholder="favicon" class="form-control" type="text"></div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-lg-offset-2 col-lg-10">
-                                        <button class="btn btn-sm btn-white" type="submit" id='input_create'>Create</button>
-                                        <button class="btn btn-sm btn-white" type="submit" id='input_update'>Update</button>
-
-                                        <button class="btn btn-sm btn-white" type="submit" id='input_complete'>Complete</button>
-                                        <button class="btn btn-sm btn-white" type="submit" id='input_delete'>Delete</button>
-
+                                        <button class="btn btn-sm btn-white" type="submit" id='input_submit'>Submit</button>
                                     </div>
                                 </div>
                             </form>
@@ -163,150 +185,145 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 <script>
-    var dbRef = firebase.database();
-    var timer_instance = dbRef.ref('omni').child('timer_instance')
-
-//timer_html_update_from_start_time_moment
-//html_link_from_todoist_task_dictionary
-//html_link_from_todoist_task
-//todoist_tasks_pull_custom_gspread
-//task_create_todoist
-//task_update_todoist
-//task_complete_todoist
-//time_interval_string_format_from_start_time
-//create, complete, update are the three functions of the buttons
-//if create, store in firebase and start timer. then can pull if that
 
 
 
-///check if timer instance dictioary
-//if there is one then, initiate timer, update html elements
+var dbRef = firebase.database();
+var firebaseRef = dbRef.ref('cruz_control').child('food');
+fields = ['title','url','favicon']
 
 
-//if create task, update timer instance dictionary 
-
-
-//update the html of the timer
-function html_timer_update_from_jquery(timer_instance_dictionary){
-    time_text = time_since_start_time_moment(timer_instance_dictionary.start_time)
-    $("#timer_text").html(time_text)
-    task_content = $("#input_text").val() + time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-    $("#task_content").html(html_link_from_todoist_task(task_content,timer_instance_dictionary.id))
-
-    document.title = time_text
-}
-
-
-
-
-//if complete, delete timer instance dictioary, update task, and done
-function timer_instance_dictionary_process(timer_instance_dictionary){
-    $("#input_text").attr('task_id',timer_instance_dictionary.id)
-    $("#input_text").val(timer_instance_dictionary.content)
-    return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
-
-
-}
-
-timer_instance.on('value', function(snapshot) {
-    timer_instance_dictionary = snapshot.val()
-    if (timer_instance_dictionary != null){
-        timer_instance_interval = timer_instance_dictionary_process(timer_instance_dictionary)
-        $("#input_update").click(function(event) {
-            event.preventDefault()
-            html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            todoist_update_task(timer_instance_dictionary.id,$("#input_text").val() + html_timer)
-            timer_instance_dictionary['content'] = $("#input_text").val() 
-            timer_instance.set(timer_instance_dictionary)
-        })
-        $("#input_complete").click(function(event) {
-            $("#input_update").click();
-            event.preventDefault()
-            todoist_complete_task(String(timer_instance_dictionary.id))
-            timer_instance.set({})
-            $("#input_text").val("") 
-            clearInterval(timer_instance_interval)
-        })
-
-        $("#input_delete").click(function(event) {
-            event.preventDefault()
-            todoist_delete_task(timer_instance_dictionary.id)
-            timer_instance.set({})
-            clearInterval(timer_instance_interval)
-
-
-        })
-
-    }
-      else {
-    }
-});
-
-
-function add_dropdown_item(title_text,id){
-    title_text = title_text||"hello_world 2"
-    var outer_div = $("<li>", {});
-    var link_elem = $("<a>", {"href": "#","id":id,"class":"favicon_select"}).text(title_text)
-    var final_div = outer_div.append(link_elem)
-    $("#favicon_dropdown_menu").append(final_div)
-    return final_div
-}
-
-function create_project_dropdown_list(projects_dictionary){
-    projects_dictionary.forEach(function(D){
-        add_dropdown_item(D['name'],D['id'])
-    })  
-}
-
-
-r = todoist_tasks_pull_custom_gspread()
-projects_dictionary = r.projects
-create_project_dropdown_list(projects_dictionary)
 
 
 $('.favicon_select').on('click', function (e) {
     $("#favicon_select_button").html($(this))
 })
 
+// //push data about the checkbox to firebase
+// $("#input_submit").click(function(event) {
+//     event.preventDefault()
+//     r = firebaseRef.push(
+//         {'title':$("#title").val(),
+//         'url':$("#url").val(),
+//         'favicon':'glyphicon glyphicon-grain',//$("#favicon_select_button").find('.glyphicon').attr('class'),//$("#favicon").val(),
+//         'time_stamp':moment().format()})
+//     console.log(r)
+//     $("#title").val("")
+//     $("#url").val("")
+//     $("#favicon").val("")
 
-//task_create_todoist('test',2159934072)
-$("#input_create").click(function(event) {
-    event.preventDefault()
-    project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
-    content = $("#input_text").val()
-    start_time = moment().format()
-
-  function create_task_promise(input) {
-    return new Promise(function(resolve, reject) {
-      result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
-      resolve(result)
-    });}
-
-  create_task_promise({"content": content, "project_id": project_id}).then(function(r) {
-    task_id = Object.values(r.temp_id_mapping)[0]
-    upload_dictionary = {
-        start_time: moment().format(),
-        id: task_id,
-        task_id: task_id,
-        content:content,
-        project_id:project_id
-    }
-    timer_instance.set(upload_dictionary)
+// });
 
 
+
+
+editor = new $.fn.dataTable.Editor({
+  table: "#table",
+  idSrc:  'DT_RowId',
+  fields: [{ label: "title:", name: "title" },{ label: "url:", name: "url" },{ label: "favicon:", name: "favicon" }]
+});
+
+editor.on("postSubmit", function(e, json, data, action, xhr) {
+  json_array = json.data;
+  json_array.forEach(function(D) {
+    record_id = D["DT_RowId"];
+    D["time_stamp"] = moment().format();
+    firebaseRef.child(record_id).set(D);
   });
-
-
-
 });
 
 
 
+table = $('#table').DataTable({
+            paging:false,
+            dom: '<"html5buttons"B>lTfgitp',
+            data: [],
+            columns: [
+                {data:'url',title:'url',visible:false,name:'url'},
+                {data:'time_stamp',title:'time_stamp',visible:true,name:'time_stamp'},
+                {data:'DT_RowId',title:'DT_RowId',visible:true,name:'DT_RowId'}
+            ],
+            select: true,
+            colReorder: true,
+            buttons: [
+                { extend: "excel", title: document.title },
+                { extend: "colvis", title: document.title },
+                { extend: "edit", editor: editor },
+                {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+                  dt.columns('').search('').draw()
+                }}]
+        });
+
+
+function openInNewTab(url) {
+  var win = window.open(url, '_blank');
+  win.focus();
+}
+
+function add_bookmark_div(url,i){
+    url = url||"https://cruz.site44.com/profile.html"
+    var outer_div = $("<div>", {"class": "col-md-1"});
+    var inner_div = $("<div>", {"class": "contact-box center-version"});
+    //var link_elem = $("<a>", {"href": url,"target":"_blank","id":id});
+
+    var link_elem = $("<img>", {"src":url, "height":"100" ,"width":"100" });
+
+    //var image_elem = $("<img>", {"src": image_url});
+    // var image_elem = $("<i>", {"class": icon_class}).text(count);
+    // var text_elem = $("<h3>", {"class": "m-b-xs"}).text(title_text)
+    //var final_div = link_elem.append(image_elem).append(text_elem)
+    var final_div = inner_div.append(link_elem)
+    var final_div = outer_div.append(final_div)
+    $("#target").append(final_div)
+
+
+
+    return final_div
+}
 
 
 
 
+firebaseRef.on("child_added", function(snap) {
+    directory_addresses = snap.getRef().path.n
+    id = directory_addresses[directory_addresses.length-1]
 
+    firebase_dictionary = snap.val()
+    firebase_dictionary['DT_RowId'] = id
+    table.row.add(firebase_dictionary).draw(false);
+    add_bookmark_div(firebase_dictionary.url,firebase_dictionary.time_stamp)
+})
+
+
+
+const fileInput = document.getElementById('cameraInput');
+
+function doSomethingWithFiles(i){
+
+  encodeImageFileAsURL(i)
+  console.log(i)
+}
+
+function encodeImageFileAsURL(files) {
+  var file = files[0];
+  var reader = new FileReader();
+  reader.onloadend = function() {
+
+
+      r = firebaseRef.push(
+        {'url':reader.result,
+        'time_stamp':moment().format()})
+
+
+
+
+    //$("#image_source").attr("src",reader.result)
+  }
+  reader.readAsDataURL(file);
+}
+
+
+  fileInput.addEventListener('change', (e) => doSomethingWithFiles(e.target.files));
 
 
 </script>
