@@ -163,6 +163,11 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
 gspread_array = todoist_gspread_pull.gspread
 
+var dbRef = dbRef||firebase.database();
+var snapshot_ref = dbRef.ref('todoist_snapshots').child('gspread_recurring_tasks').child(moment().format("YYYYMMDD"))
+snapshot_ref.set(gspread_array)
+
+
 function percentage_complete_metric_generate(gspread_array){
   complete_array = gspread_array.filter(function(D){return D.status == 'Green'})
   percentage_complete = (complete_array.length/gspread_array.length)*100
@@ -171,7 +176,6 @@ function percentage_complete_metric_generate(gspread_array){
   sub_title = '-'
   sub_metric_text = complete_array.length + "/" + gspread_array.length
   $('#metric_headers').append(metric_header_create(title_text,sub_title,metric_text,sub_metric_text))
-
 }
 
 percentage_complete_metric_generate(gspread_array)
