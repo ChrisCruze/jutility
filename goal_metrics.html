@@ -198,9 +198,6 @@ dt = $("#table").DataTable({
   ],
   order: [0, "desc"]
 });
-
-
-
 dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
 
 

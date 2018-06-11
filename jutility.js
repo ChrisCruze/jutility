@@ -429,6 +429,21 @@ function bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
   return simple_chart_object
 }
 
+//initiates a simple bar chart using chartjs
+function horizontal_bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
+  labels = labels||['No Data']
+  numbers_list = numbers_list||[0]
+  colors = colors||["#a3e1d4"]
+
+  simple_chart_data = {labels:labels, datasets: [{data: numbers_list, backgroundColor: colors }] };
+  simple_options = {legend: {display: false}, responsive: true, tooltips: {enabled: true}};
+
+  var ctx = document.getElementById(chart_id).getContext("2d");
+  simple_chart_object = new Chart(ctx, {type: 'horizontalBar', data: simple_chart_data, options:simple_options});
+  return simple_chart_object
+}
+
+//
 //updates bar_chart for data 
 function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_colors){
     chart_object.data.labels = new_labels // ['label a','label b']
@@ -438,8 +453,19 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 
 //datatable_functions.js
 
-//add a filter to the column header of the datatable
+//add a filter to the column header of the datatable (https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js , https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css | https://github.com/vedmack/yadcf)
 function header_filter_add_datatable(){
+
+var myTable = $('#example').DataTable();
+  
+  yadcf.init(myTable, [
+    {column_number : 0},
+    {column_number : 1, filter_type: "range_number_slider", filter_container_id: "external_filter_container"},
+    {column_number : 2, data: ["Yes", "No"], filter_default_label: "Select Yes/No"},
+    {column_number : 3, filter_type: "auto_complete", text_data_delimiter: ","},
+    {column_number : 4, column_data_type: "html", html_data_type: "text", filter_default_label: "Select tag"}]);
+
+
   table = $('#example').dataTable()
   table.yadcf([
     {column_number : 0},
@@ -1908,11 +1934,12 @@ function todoist_tasks_pull_custom_gspread(){
 
 
 
-
+  todoist_current = current_completed_tasks.filter(function(D){return D['task_type'] == 'current'})
+  todoist_completed = current_completed_tasks.filter(function(D){return D['task_type'] == 'completed'})
 
 
   array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
-  return {todoist:current_completed_tasks,gspread:gspread_array,projects:projects_dictionary,labels:labels_dictionary}
+  return {todoist_current:todoist_current,todoist_completed:todoist_completed,todoist:current_completed_tasks,gspread:gspread_array,projects:projects_dictionary,labels:labels_dictionary}
 }
 
 
