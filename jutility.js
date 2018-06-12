@@ -2060,7 +2060,7 @@ function todoist_tasks_pull_custom_gspread(){
   todoist_completed = current_completed_tasks.filter(function(D){return D['task_type'] == 'completed'})
 
 
-  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date','age'])
+  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date','age','task_date'])
   return {todoist_current:todoist_current,todoist_completed:todoist_completed,todoist:current_completed_tasks,gspread:gspread_array,projects:projects_dictionary,labels:labels_dictionary}
 }
 
