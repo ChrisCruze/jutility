@@ -2044,6 +2044,14 @@ function age_calculate_from_todoist_task(D){
     return age_days
 }
 
+
+function gspread_array_project_id_append(gspread_array_data,projects_dictionary){
+  project_dictionary_reference = {}
+  projects_dictionary.forEach(function(D){project_dictionary_reference[D['name']] = D['id']})
+  gspread_array_data.forEach(function(D){
+    D['project_id'] = project_dictionary_reference[D['Category']] || 'null'
+  })
+}
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom_gspread(){
 
@@ -2071,7 +2079,7 @@ function todoist_tasks_pull_custom_gspread(){
 
   
   gspread_array = gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks)
-
+  gspread_array_project_id_append(gspread_array,projects_dictionary)
 
 
   current_completed_tasks = completed_tasks.concat(current_tasks) //combine both arrays together into one array
@@ -2150,6 +2158,34 @@ since = since||"2018-04-28"
   return master_list
 }
 
+//firebase_snapshot.js
+
+
+
+
+function todoist_snapshot_store(){
+	var snapshot_ref = dbRef.ref('todoist_snapshots').child('gspread_recurring_tasks').child(moment().format("YYYYMMDD"))
+	snapshot_ref.set(gspread_array)
+
+	var current_snapshot_ref = dbRef.ref('todoist_snapshots').child('todoist_current_tasks').child(moment().format("YYYYMMDD"))
+	current_snapshot_ref.set(current_tasks)
+
+
+}
+
+
+function todoist_gspread_pull_firebase(){
+try{
+    todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
+}
+catch(err){
+    todoist_gspread_pull = firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/snapshot.json")
+}
+return todoist_gspread_pull
+
+
+}
+
 //timer.js
 
 //update the html of the timer
@@ -2226,7 +2262,7 @@ function percentage_complete_metric_generate(gspread_array){
   percentage_complete = (complete_array.length/gspread_array.length)*100
   title_text = 'Complete %'
   metric_text = percentage_complete.toFixed(1) + "%"
-  sub_title = '-'
+  sub_title = 'Remaining: ' + (gspread_array.length - complete_array.length)
   sub_metric_text = complete_array.length + "/" + gspread_array.length
   $('#metric_headers').append(metric_header_create(title_text,sub_title,metric_text,sub_metric_text))
 }
@@ -2240,8 +2276,11 @@ function remaining_tasks_populate(gspread_array){
     scrollY:"200px",
     columns:[
     {data:'Task',title:'Task',name:'Task'},
+    {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
     {data:'status',title:'status',name:'status',visible:false},
-    {data:'task_assigned',title:'task_assigned',name:'task_assigned',visible:false}
+    {data:'task_assigned',title:'task_assigned',name:'task_assigned',visible:false},
+    {data:'Category',title:'Category',name:'Category',visible:false},
+    {data:'project_id',title:'project_id',name:'project_id',visible:false}
     ],
     select: true,
     colReorder: true,
@@ -2258,7 +2297,7 @@ function remaining_tasks_populate(gspread_array){
           dt.columns('').search('').draw()
         }}, 
     ],
-    order: [0, "desc"]
+    order: [1, "asc"]
     });
     dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
 }

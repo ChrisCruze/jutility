@@ -395,7 +395,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 <script>
-    $.fn.dataTable.ext.type.order["number-order-pre"] = function(d) {
+$.fn.dataTable.ext.type.order["number-order-pre"] = function(d) {
       r = parseFloat(d)||0
       return r;
     };
@@ -405,13 +405,9 @@ omni_node = 'todoist_tasks'
 var FirebaseRef = dbRef.ref('omni').child(omni_node)
 var timer_instance = dbRef.ref('omni').child('timer_instance')
 var snapshot_instance = dbRef.ref('omni').child('snapshot')
+todoist_gspread_pull = todoist_gspread_pull_firebase()
 
-try{
-    todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
-}
-catch(err){
-    todoist_gspread_pull = firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/snapshot.json")
-}
+
 
 $("#sync_todoist").click(function(event) {
     todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
@@ -427,16 +423,8 @@ completed_tasks = todoist_gspread_pull.todoist_completed
 
 
 
-var snapshot_ref = dbRef.ref('todoist_snapshots').child('gspread_recurring_tasks').child(moment().format("YYYYMMDD"))
-snapshot_ref.set(gspread_array)
-
-var current_snapshot_ref = dbRef.ref('todoist_snapshots').child('todoist_current_tasks').child(moment().format("YYYYMMDD"))
-current_snapshot_ref.set(current_tasks)
-
-
+todoist_snapshot_store()
 header_metrics_create_todoist()
-
-
 percentage_complete_metric_generate(gspread_array)
 
 
@@ -461,9 +449,6 @@ function completed_tasks_callback_wrapper(callback_array){
 remaining_tasks_populate(gspread_array)
 todoist_table_create_current(current_tasks,"#current_tasks_table",current_tasks_call_back)
 todoist_table_create_complete(completed_tasks,"#completed_tasks_table",completed_tasks_callback_wrapper)
-
-
-
 
 
 

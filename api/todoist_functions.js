@@ -448,6 +448,14 @@ function age_calculate_from_todoist_task(D){
     return age_days
 }
 
+
+function gspread_array_project_id_append(gspread_array_data,projects_dictionary){
+  project_dictionary_reference = {}
+  projects_dictionary.forEach(function(D){project_dictionary_reference[D['name']] = D['id']})
+  gspread_array_data.forEach(function(D){
+    D['project_id'] = project_dictionary_reference[D['Category']] || 'null'
+  })
+}
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom_gspread(){
 
@@ -475,7 +483,7 @@ function todoist_tasks_pull_custom_gspread(){
 
   
   gspread_array = gspread_table_tasks_generate(gspread_array_data,completed_tasks,current_tasks)
-
+  gspread_array_project_id_append(gspread_array,projects_dictionary)
 
 
   current_completed_tasks = completed_tasks.concat(current_tasks) //combine both arrays together into one array
