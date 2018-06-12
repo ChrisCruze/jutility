@@ -2239,14 +2239,23 @@ function remaining_tasks_populate(gspread_array){
     scrollY:"200px",
     columns:[
     {data:'Task',title:'Task',name:'Task'},
-    {data:'status',title:'status',name:'status',visible:false}
-
+    {data:'status',title:'status',name:'status',visible:false},
+    {data:'task_assigned',title:'task_assigned',name:'task_assigned',visible:false}
     ],
     select: true,
     colReorder: true,
     buttons: [
     { extend: "excel", title: document.title },
-    { extend: "colvis", title: document.title }
+    { extend: "colvis", title: document.title },
+    {text: 'Not Assigned',name:'Not Assigned', action: function ( e, dt, node, config ) {
+          dt.columns('task_assigned:name').search('Red').draw()
+        }},
+     {text: 'Red',name:'Red', action: function ( e, dt, node, config ) {
+          dt.columns('status:name').search('Red').draw()
+        }},
+     {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+          dt.columns('').search('').draw()
+        }}, 
     ],
     order: [0, "desc"]
     });
