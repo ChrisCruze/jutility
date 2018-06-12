@@ -119,6 +119,11 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
         </div>
             <ul class="nav navbar-top-links navbar-right">
                 <li>
+                    <a id='input_start'>
+                        <i class="fa fa-tasks"></i> Start
+                    </a>
+                </li>
+                <li>
                     <a id='input_create'>
                         <i class="fa fa-tasks"></i> Create
                     </a>
@@ -479,7 +484,6 @@ $("#input_create").click(function(event) {
     project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
     content = $("#input_text").val()
     start_time = moment().format()
-
   function create_task_promise(input) {
     return new Promise(function(resolve, reject) {
       result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
@@ -499,6 +503,30 @@ $("#input_create").click(function(event) {
   });
 });
 
+
+$("#current_tasks_table").on("click", "tbody td", function(e) {
+  var table = $("#current_tasks_table").DataTable();
+  row_data = table.row(this).data();
+  $("#input_text").val(row_data.content)
+  $("#input_text").attr('task_id',row_data.id)
+  $("#input_text").attr('project_id',row_data.project_id)
+});
+
+
+//task_create_todoist('test',2159934072)
+$("#input_start").click(function(event) {
+    content = $("#input_text").val()
+    project_id = $("#input_text").attr('project_id')
+    task_id = $("#input_text").attr('task_id')
+    upload_dictionary = {
+        start_time: moment().format(),
+        id: task_id,
+        task_id: task_id,
+        content:content,
+        project_id:project_id
+    }
+    timer_instance.set(upload_dictionary)
+});
 
 
 create_project_dropdown_list(projects_dictionary)
