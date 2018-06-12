@@ -1339,6 +1339,15 @@ function dates_between_dates_moment(startDate, stopDate) {
 
 
 
+//toastr_functions.js
+
+
+//message notification once something is done
+function toastr_notification(message){
+	toastr.options.closeButton = true;
+	toastr.options.onclick = function() { console.log('clicked'); }
+	toastr.info(message)
+}
 //typewriter_functions.js
 
 
