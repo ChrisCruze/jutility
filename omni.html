@@ -431,7 +431,7 @@ var snapshot_instance = dbRef.ref('omni').child('snapshot')
 try{
     todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
 }
-catch {
+catch(err){
     todoist_gspread_pull = firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/snapshot.json")
 }
 
