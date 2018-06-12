@@ -97,14 +97,48 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <div class="row border-bottom">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
-            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-            <form role="search" class="navbar-form-custom" action="search_results.html">
+
+
+
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="timer_text" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
+
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="favicon_select_button" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
+            <ul class="dropdown-menu" id="favicon_dropdown_menu">
+                <li><small id='task_content'></small></li>
+            </ul>   
+
+
+
+
+            <form role="search" class="navbar-form-custom" action="search_results.html" style="width: 400px;">
+
                 <div class="form-group">
-                    <input placeholder="Create, Start, Update, Complete Task Here" class="form-control" name="top-search" id="top-search" type="text">
+                    <input size="80" placeholder="Task" class="form-control" name="top-search" id="input_text" type="text">
                 </div>
             </form>
         </div>
             <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <a id='input_create'>
+                        <i class="fa fa-tasks"></i> Create
+                    </a>
+                </li>
+                <li>
+                    <a id='input_update'>
+                        <i class="fa fa-tasks"></i> Update
+                    </a>
+                </li>
+                <li>
+                    <a id='input_complete'>
+                        <i class="fa fa-tasks"></i> Complete
+                    </a>
+                </li>
+                <li>
+                    <a id='input_delete'>
+                        <i class="fa fa-tasks"></i> Delete
+                    </a>
+                </li>
+
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell"></i> Filters 
@@ -120,6 +154,8 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                         </li>
                     </ul>
                 </li>
+
+
                 <li>
                     <a class="right-sidebar-toggle">
                         <i class="fa fa-tasks"></i>
@@ -134,58 +170,6 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <div id='main_content'>
 <div class="container">
         <div class="row" id="metric_headers">
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-success pull-right"></span>
-                        <h5>Complete %</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">-</h1>
-                        <div class="stat-percent font-bold text-success"></div>
-                        <small>Assigned Percentage: </small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right"></span>
-                        <h5>Tasks Completed</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">-</h1>
-                        <div class="stat-percent font-bold text-info"></div>
-                        <small>Goal within Time Range</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right"></span>
-                        <h5>Number of Tasks</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">-</h1>
-                        <div class="stat-percent font-bold text-info"></div>
-                        <small>Goal within Time Range</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right"></span>
-                        <h5>Average Age</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">-</h1>
-                        <div class="stat-percent font-bold text-info"></div>
-                        <small>Goal within Time Range</small>
-                    </div>
-                </div>
-            </div>
 
 
         </div>
@@ -424,185 +408,100 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 <script>
 todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
+projects_dictionary = todoist_gspread_pull.projects
 gspread_array = todoist_gspread_pull.gspread
 current_tasks = todoist_gspread_pull.todoist_current
 completed_tasks = todoist_gspread_pull.todoist_completed
 
 var dbRef = dbRef||firebase.database();
-    omni_node = 'todoist_tasks'
+omni_node = 'todoist_tasks'
 var FirebaseRef = dbRef.ref('omni').child(omni_node)
+var timer_instance = dbRef.ref('omni').child('timer_instance')
 
-function percentage_complete_metric_generate(gspread_array){
-  complete_array = gspread_array.filter(function(D){return D.status == 'Green'})
-  percentage_complete = (complete_array.length/gspread_array.length)*100
-  title_text = 'Complete %'
-  metric_text = percentage_complete.toFixed(1) + "%"
-  sub_title = '-'
-  sub_metric_text = complete_array.length + "/" + gspread_array.length
-  $('#metric_headers').append(metric_header_create(title_text,sub_title,metric_text,sub_metric_text))
-}
+
+header_metrics_create_todoist()
+
 
 percentage_complete_metric_generate(gspread_array)
 
-function metric_headers_update_list(callback_array,l){
+
+
+
+
+bar_chart_object = bar_chart_initiate_render_chartjs("barChart")
+function completed_tasks_callback_wrapper(callback_array){
+    metric_func = null
+    color_func = null
+    function date_func(i){return moment(i).format("MM/DD")}
+
+
+    bar_chart_update_time_scale_calculate_function(bar_chart_object,callback_array,'completed_date',metric_func)
+
+    return completed_tasks_call_back(callback_array)
 }
-
-function todoist_table_create(array,table_id){
-    $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
-      r = moment(d).utc();
-      return r;
-    };
-
-
-    function array_dictionary_customize(item, index) {
-      item["DT_RowId"] = item.id;
-    }
-
-    array.forEach(array_dictionary_customize);
-    array = firebase_array_integrate(array,"https://shippy-ac235.firebaseio.com/omni/"+omni_node+".json","DT_RowId",['status','notes'])
-
-    editor = new $.fn.dataTable.Editor({
-      table: table_id,
-      fields: [{ label: "status:", name: "status" },{ label: "notes:", name: "notes" }]
-    });
-
-    editor.on("postSubmit", function(e, json, data, action, xhr) {
-      json_array = json.data;
-      json_array.forEach(function(D) {
-        record_id = D["DT_RowId"];
-        D["timestamp"] = moment().format();
-        FirebaseRef.child(record_id).set(D);
-      });
-    });
-
-    //based on filter from table , update a funciton
-    function callback_function() {
-      var api = this.api();
-      callback_array = api.rows({ page: "current" }).data();
-      metric_headers_update_list(callback_array)
-    }
-
-    $(table_id).DataTable({
-      paging: false,
-      dom: '<"html5buttons"B>lTfgitp',
-      data: array,
-      columns: [
-        {
-          data: "content",
-          title: "content",
-          visible: true,
-          name: "content"
-        },
-        {
-          data: "duration",
-          title: "duration",
-          visible: true,
-          name: "duration"
-        },
-        {
-          data: "sub_project",
-          title: "sub_project",
-          visible: true,
-          name: "sub_project"
-        },
-        {
-          data: "status",
-          title: "status",
-          visible: true,
-          name: "status"
-        },
-        {
-          data: "notes",
-          title: "notes",
-          visible: true,
-          name: "notes"
-        },
-        {
-          data: "task_date",
-          title: "task_date",
-          visible: true,
-          name: "task_date",
-          createdCell: date_format_with_day,
-          type: "date-format-moment"
-        },
-        {
-          data: "task_date_range",
-          title: "task_date_range",
-          visible: false,
-          name: "task_date_range"
-        },
-         {
-          data: "task_type",
-          title: "task_type",
-          visible: false,
-          name: "task_type"
-        }
-      ],
-      select: true,
-      colReorder: true,
-      drawCallback: callback_function,
-      buttons: [
-        { extend: "excel", title: document.title },
-        { extend: "colvis", title: document.title },
-        { extend: "edit", editor: editor },
-        {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
-          dt.columns('').search('').draw()
-        }},
-         {text: 'Current',name:'Current', action: function ( e, dt, node, config ) {
-          dt.columns('task_type:name').search('current').draw()
-        }},
-          {text: 'Complete',name:'Complete', action: function ( e, dt, node, config ) {
-          dt.columns('task_type:name').search('complete').draw()
-        }},
-        {text: 'Today',name:'Today', action: function ( e, dt, node, config ) {
-          dt.columns('task_date_range:name').search('today').draw()
-        }},
-        {text: 'This Week',name:'This Week', action: function ( e, dt, node, config ) {
-          dt.columns('task_date_range:name').search('this_week').draw()
-        }},
-         {text: 'This Month',name:'This Month', action: function ( e, dt, node, config ) {
-          dt.columns('task_date_range:name').search('this_month').draw()
-        }},
-        {text: 'This Year',name:'This Year', action: function ( e, dt, node, config ) {
-          dt.columns('task_date_range:name').search('this_year').draw()
-        }}
-      ],
-      order: [3, "desc"]
-    });
-}
-
-
-function remaining_tasks_populate(gspread_array){
-    dt = $("#remaining_tasks_table").DataTable({
-    paging: false,
-    dom: '<"html5buttons"B>lTfgitp',
-    data: gspread_array,
-    columns:[
-    {data:'Task',title:'Task',name:'Task'},
-    {data:'status',title:'status',name:'status',visible:false}
-
-    ],
-    select: true,
-    colReorder: true,
-    buttons: [
-    { extend: "excel", title: document.title },
-    { extend: "colvis", title: document.title }
-    ],
-    order: [0, "desc"]
-    });
-    dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
-}
-
-remaining_tasks_populate(gspread_array)
-todoist_table_create(current_tasks,"#current_tasks_table")
-todoist_table_create(completed_tasks,"#completed_tasks_table")
-
-bar_chart_initiate_render_chartjs("barChart")
 horizontal_bar_chart_initiate_render_chartjs("horizontalbarChart")
 
 
 
+remaining_tasks_populate(gspread_array)
+todoist_table_create_current(current_tasks,"#current_tasks_table",current_tasks_call_back)
+todoist_table_create_complete(completed_tasks,"#completed_tasks_table",completed_tasks_callback_wrapper)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+timer_instance.on('value', function(snapshot) {
+    timer_instance_dictionary = snapshot.val()
+    if (timer_instance_dictionary != null){
+        console.log(timer_instance_dictionary)
+        timer_instance_exists_process(timer_instance_dictionary,timer_instance)
+    }
+      else {
+    }
+});
+
+//task_create_todoist('test',2159934072)
+$("#input_create").click(function(event) {
+    event.preventDefault()
+    project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
+    content = $("#input_text").val()
+    start_time = moment().format()
+
+  function create_task_promise(input) {
+    return new Promise(function(resolve, reject) {
+      result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
+      resolve(result)
+    });}
+
+  create_task_promise({"content": content, "project_id": project_id}).then(function(r) {
+    task_id = Object.values(r.temp_id_mapping)[0]
+    upload_dictionary = {
+        start_time: moment().format(),
+        id: task_id,
+        task_id: task_id,
+        content:content,
+        project_id:project_id
+    }
+    timer_instance.set(upload_dictionary)
+  });
+});
+
+
+
+create_project_dropdown_list(projects_dictionary)
 
 
 </script>

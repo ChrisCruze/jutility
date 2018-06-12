@@ -68,6 +68,12 @@ function date_within_range_string_create(input_date){
   if (moment(input_date).isSame(Date.now(), 'year')){
     date_string = date_string + "this_year"
   }
+  if (moment(input_date) >= moment(Date.now())){
+    date_string = date_string + "future"
+  }
+  if (moment(input_date) <= moment(Date.now())){
+    date_string = date_string + "past"
+  }
   return date_string
 }
 

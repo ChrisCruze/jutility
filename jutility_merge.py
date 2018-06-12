@@ -79,7 +79,7 @@ def readme_file_write(function_array):
 
 
 
-folders = ['function','library','api']
+folders = ['function','library','api','app']
 directories = [os.path.join(os.getcwd(),i) for i in folders]
 #['/Users/chriscruz/Dropbox/Github/jutility/api', '/Users/chriscruz/Dropbox/Github/jutility/function', '/Users/chriscruz/Dropbox/Github/jutility/library']
 

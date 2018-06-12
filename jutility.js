@@ -200,6 +200,9 @@ function date_is_today(input_date){
 }
 
 
+
+
+
 //file_functions.js
 
 //read directly from a text file
@@ -257,13 +260,34 @@ function papa_parse_array(file,delimter){
 //html_functions.js
 
 //add dropdown item to list of items. used in create_task_v2
-function add_dropdown_item(title_text){
+function add_dropdown_item(title_text,id,item_class,parent_identifier){
     title_text = title_text||"hello_world 2"
+    id = id||"id"
+    item_class = item_class||"favicon_select"
+    parent_identifier = parent_identifier||"#favicon_dropdown_menu"
     var outer_div = $("<li>", {});
-    var link_elem = $("<a>", {"href": "#","target":"_blank"}).text(title_text)
+    var link_elem = $("<a>", {"href": "#","target":"_blank","id":id,"class":item_class}).text(title_text)
     var final_div = outer_div.append(link_elem)
-    $("#favicon_dropdown_menu").append(final_div)
+    $(parent_identifier).append(final_div)
     return final_div
+}
+
+
+
+//array input to formulate dropdown list
+function add_dropdown_item_from_array(projects_dictionary){
+    title_text = title_text||"hello_world 2"
+    id = id||"id"
+    item_class = item_class||"favicon_select"
+    parent_identifier = parent_identifier||"#favicon_dropdown_menu"
+
+    projects_dictionary.forEach(function(D){
+        add_dropdown_item(title_text,id,item_class,parent_identifier)
+    })  
+
+    $(item_class).on('click', function (e) {
+        $("#favicon_select_button").html($(this))
+    })
 }
 
 
@@ -308,13 +332,14 @@ function append_image_div(div_id,title_text,url,image_url){
 }
 
 //creates a metric div and adds it to the div
-function metric_header_create(title_text,sub_title,metric_text,sub_metric_text){
+function metric_header_create(title_text,sub_title,metric_text,sub_metric_text,id){
     title_text = title_text||"TITLE"
     metric_text = metric_text||"metric_text"
     sub_metric_text = sub_metric_text||"sub_metric_text"
     sub_title = sub_title||"sub_title"
+    id = id||"null"
 
-    var outer_div_one = $("<div>", {"class": "col-md-2 "+title_text});
+    var outer_div_one = $("<div>", {"class": "col-md-2 "+title_text,"id":id});
     var outer_div_two = $("<div>", {"class": "ibox float-e-margins"});
     var inner_div_one = $("<div>", {"class": "ibox-title"});
     var elem_one = $("<span>", {"class": "label label-success pull-right"});
@@ -429,6 +454,7 @@ function bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
   return simple_chart_object
 }
 
+
 //initiates a simple bar chart using chartjs
 function horizontal_bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
   labels = labels||['No Data']
@@ -449,7 +475,39 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
     chart_object.data.labels = new_labels // ['label a','label b']
     chart_object.data.datasets[0].data = new_data_points//[1,2]
     chart_object.data.datasets[0].backgroundColor = new_colors//["#a3e1d4","#dedede"]
+    chart_object.update()
 }
+
+//update based on days
+function bar_chart_update_time_scale_calculate_function(chart_object,array,date_field,metric_func,date_strf,color_func){
+  //date_func = date_func || function(D){return D.date_field}
+  metric_func = metric_func || function(l){return l.length}
+  date_strf = date_strf ||"MM/DD"
+
+
+  grouped_array_dictionary = _.groupBy(array,function(D){return moment(D[date_field]).format(date_strf)})
+  color_func = color_func || function(key_name,index,grouped_array){return "#a3e1d4"}
+  console.log(grouped_array_dictionary)
+  labels = []
+  vals = []
+  colors = []
+  dates = Object.keys(grouped_array_dictionary)
+
+  dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
+  dates.forEach(function(key_name,i){
+    val = metric_func(grouped_array_dictionary[key_name])
+    color = color_func(key_name,i,grouped_array_dictionary)
+    labels.push(key_name)
+    vals.push(val)
+    colors.push(color)
+  })
+  bar_chart_update_chartjs(chart_object,labels,vals,colors)
+
+
+}
+
+
+
 
 //datatable_functions.js
 
@@ -510,6 +568,19 @@ function parse_float_datatable_format(td, cellData, rowData, row, col) {
   $(td).html(r)
 }
 
+//used by cleaners.html to format check in
+function date_format_check_in(td, cellData, rowData, row, col){
+  date_format = moment(cellData).format("MM/DD/YY (dd)")
+  $(td).html(date_format)
+
+}
+
+//used by cleaners.html and others to create guest url 
+function guest_url_create(data, type, row, meta){
+    url = "https://app.guesty.com/reservations/"+row._id+"/inbox"
+    data = '<a target="_blank"  href="' + url + '">' + data + '</a>';
+    return data;
+  }
 
 //format the datatables date with the date and time
 function date_time_datatable_format(td, cellData, rowData, row, col) {
@@ -1086,6 +1157,12 @@ function date_within_range_string_create(input_date){
   if (moment(input_date).isSame(Date.now(), 'year')){
     date_string = date_string + "this_year"
   }
+  if (moment(input_date) >= moment(Date.now())){
+    date_string = date_string + "future"
+  }
+  if (moment(input_date) <= moment(Date.now())){
+    date_string = date_string + "past"
+  }
   return date_string
 }
 
@@ -1292,6 +1369,11 @@ function sum_float_convert_from_array_underscore(arr,key_name) {
     return r 
   }, 0); 
 }
+
+//group by an array
+function group_by_underscore(gspread_array_data){
+	_.groupBy(gspread_array_data,'status')['Red']||[]
+}
 //gspread_functions.js
 
 //query google spreadsheets
@@ -1391,6 +1473,10 @@ function guest_reservation_dictionary_customize(item,index){
     item['state'] = guest_state_determine(item)
     item['DT_RowId'] = item._id
 
+    item["check_out_date_range"] = date_within_range_string_create(item.checkOut);
+    item["check_in_date_range"] = date_within_range_string_create(item.checkIn);
+
+
     is_3009 = item['listing']['nickname'].indexOf("2608") != -1
     is_401 = item['listing']['nickname'].indexOf("401") != -1
     is_1806 = item['listing']['nickname'].indexOf("1806") != -1
@@ -1472,6 +1558,24 @@ function guest_airbnb_url_create(data, type, row, meta) {
 }
 
 //todoist_functions.js
+
+//toodoist custom functions 
+function current_task_average_age_from_array(array){
+  //https://momentjs.com/docs/
+  age_sum = 0
+  array.forEach(function(D,index){
+    date_added = D.date_added
+    a = new moment()
+    b = new moment(date_added)
+    age_days = a.diff(b,'days')
+
+    age_sum = age_sum + age_days
+    //ages.push(age_days)
+  })
+  denom = array.length 
+  avg = age_sum/denom 
+  return avg 
+}
 
 
 //complete_task
@@ -1895,7 +1999,14 @@ function todoist_tasks_pull_custom(){
   return current_completed_tasks 
 }
 
-
+//calculate age from todoist
+function age_calculate_from_todoist_task(D){
+    date_added = D.date_added
+    a = new moment()
+    b = new moment(date_added)
+    age_days = a.diff(b,'days')
+    return age_days
+}
 
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom_gspread(){
@@ -1910,6 +2021,8 @@ function todoist_tasks_pull_custom_gspread(){
 
   current_tasks.forEach(function(D){D['task_type']='current'})
   current_tasks.forEach(function(D){D['task_date']=D['due_date_utc']})
+  current_tasks.forEach(function(D){D['age']=age_calculate_from_todoist_task(D)})
+
   completed_tasks.forEach(function(D){D['task_type']='completed'})
   completed_tasks.forEach(function(D){D['task_date']=D['completed_date']})
 
@@ -1938,7 +2051,7 @@ function todoist_tasks_pull_custom_gspread(){
   todoist_completed = current_completed_tasks.filter(function(D){return D['task_type'] == 'completed'})
 
 
-  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
+  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date','age'])
   return {todoist_current:todoist_current,todoist_completed:todoist_completed,todoist:current_completed_tasks,gspread:gspread_array,projects:projects_dictionary,labels:labels_dictionary}
 }
 
@@ -1999,4 +2112,387 @@ since = since||"2018-04-28"
     iterator += 1; //this will be 1 in the first loop, 2 in the second loop, etc. 
   }
   return master_list
+}
+
+//timer.js
+
+//update the html of the timer
+function html_timer_update_from_jquery(timer_instance_dictionary){
+    time_text = time_since_start_time_moment(timer_instance_dictionary.start_time)
+    $("#timer_text").html(time_text)
+    $("#task_content").html(html_link_from_todoist_task(task_content,timer_instance_dictionary.id))
+    document.title = time_text
+}
+
+
+//ispecific to todoist on updating page for omni.html
+function timer_instance_page_initiate(timer_instance_dictionary){
+    $("#input_text").attr('task_id',timer_instance_dictionary.id)
+    $("#input_text").val(timer_instance_dictionary.content)
+    return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+}
+
+//if timer instances exists, add certain tactions to the timer
+function timer_instance_exists_process(timer_instance_dictionary,timer_instance){
+    $("#input_text").attr('task_id',timer_instance_dictionary.id)
+    $("#input_text").val(timer_instance_dictionary.content)
+    var my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
+        $("#input_update").click(function(event) {
+            event.preventDefault()
+            html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+            todoist_update_task(timer_instance_dictionary.id,$("#input_text").val() + html_timer)
+            timer_instance_dictionary['content'] = $("#input_text").val() 
+            timer_instance.set(timer_instance_dictionary)
+        })
+        $("#input_complete").click(function(event) {
+            $("#input_update").click();
+            event.preventDefault()
+            todoist_complete_task(String(timer_instance_dictionary.id))
+            timer_instance.set({})
+            $("#input_text").val("") 
+            clearInterval(my_interval_timer)
+        })
+
+        $("#input_delete").click(function(event) {
+            event.preventDefault()
+            todoist_delete_task(timer_instance_dictionary.id)
+            timer_instance.set({})
+            clearInterval(my_interval_timer)
+        })
+}
+
+//creates timer for omni.html
+function add_dropdown_item_todoist_app(title_text,id){
+    title_text = title_text||"hello_world 2"
+    var outer_div = $("<li>", {});
+    var link_elem = $("<a>", {"href": "#","id":id,"class":"favicon_select"}).text(title_text)
+    var final_div = outer_div.append(link_elem)
+    $("#favicon_dropdown_menu").append(final_div)
+    return final_div
+}
+
+//for omni.html 
+function create_project_dropdown_list(projects_dictionary){
+    projects_dictionary.forEach(function(D){
+        add_dropdown_item_todoist_app(D['name'],D['id'])
+    })  
+    $('.favicon_select').on('click', function (e) {
+    $("#favicon_select_button").html($(this))
+})
+
+}
+
+//todoist_gspread_table.js
+
+function percentage_complete_metric_generate(gspread_array){
+  complete_array = gspread_array.filter(function(D){return D.status == 'Green'})
+  percentage_complete = (complete_array.length/gspread_array.length)*100
+  title_text = 'Complete %'
+  metric_text = percentage_complete.toFixed(1) + "%"
+  sub_title = '-'
+  sub_metric_text = complete_array.length + "/" + gspread_array.length
+  $('#metric_headers').append(metric_header_create(title_text,sub_title,metric_text,sub_metric_text))
+}
+
+//remaining tasks populate
+function remaining_tasks_populate(gspread_array){
+    dt = $("#remaining_tasks_table").DataTable({
+    paging: false,
+    dom: '<"html5buttons"B>lTfgitp',
+    data: gspread_array,
+    columns:[
+    {data:'Task',title:'Task',name:'Task'},
+    {data:'status',title:'status',name:'status',visible:false}
+
+    ],
+    select: true,
+    colReorder: true,
+    buttons: [
+    { extend: "excel", title: document.title },
+    { extend: "colvis", title: document.title }
+    ],
+    order: [0, "desc"]
+    });
+    dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
+}
+//todoist_table.js
+
+
+
+function header_metrics_create_todoist(){
+  sub_title = '-'
+  metric_text = '-'
+  sub_metric_text = '-'
+  id = 'null'
+  $('#metric_headers').append(metric_header_create('Tasks Completed',sub_title,metric_text,sub_metric_text,'tasks_completed_number'))
+  $('#metric_headers').append(metric_header_create('Tasks Number',sub_title,metric_text,sub_metric_text,'tasks_current_number'))
+  $('#metric_headers').append(metric_header_create('Average',sub_title,metric_text,sub_metric_text,'tasks_age'))
+}
+
+
+function current_tasks_call_back(callback_array){
+  $('#tasks_current_number').find(".metric_text").html(callback_array.length)
+  $('#tasks_age').find(".metric_text").html((sum_float_convert_from_array_underscore(callback_array,'age')/callback_array.length).toFixed(1) )
+
+
+
+  // var sum_total = sum_float_convert_from_array_underscore(callback_array,'duration')
+  // $("."+'Total').find(".metric_text").html(sum_total)
+}
+
+function completed_tasks_call_back(callback_array){
+  $('#tasks_completed_number').find(".metric_text").html(callback_array.length)
+  // var sum_total = sum_float_convert_from_array_underscore(callback_array,'duration')
+  // $("."+'Total').find(".metric_text").html(sum_total)
+}
+
+function todoist_table_create_current(array,table_id,metric_headers_update_list){
+    $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
+      r = moment(d).utc();
+      return r;
+    };
+
+
+    function array_dictionary_customize(item, index) {
+      item["DT_RowId"] = item.id;
+    }
+
+    array.forEach(array_dictionary_customize);
+    array = firebase_array_integrate(array,"https://shippy-ac235.firebaseio.com/omni/"+omni_node+".json","DT_RowId",['status','notes'])
+
+    editor = new $.fn.dataTable.Editor({
+      table: table_id,
+      fields: [{ label: "status:", name: "status" },{ label: "notes:", name: "notes" }]
+    });
+
+    editor.on("postSubmit", function(e, json, data, action, xhr) {
+      json_array = json.data;
+      json_array.forEach(function(D) {
+        record_id = D["DT_RowId"];
+        D["timestamp"] = moment().format();
+        FirebaseRef.child(record_id).set(D);
+      });
+    });
+
+    //based on filter from table , update a funciton
+    function callback_function() {
+      var api = this.api();
+      callback_array = api.rows({ page: "current" }).data();
+      metric_headers_update_list(callback_array)
+    }
+
+    $(table_id).DataTable({
+      paging: false,
+      dom: '<"html5buttons"B>lTfgitp',
+      data: array,
+      columns: [
+        {
+          data: "content",
+          title: "content",
+          visible: true,
+          name: "content"
+        },
+        {
+          data: "duration",
+          title: "duration",
+          visible: true,
+          name: "duration"
+        },
+        {
+          data: "sub_project",
+          title: "sub_project",
+          visible: true,
+          name: "sub_project"
+        },
+        {
+          data: "status",
+          title: "status",
+          visible: true,
+          name: "status"
+        },
+        {
+          data: "notes",
+          title: "notes",
+          visible: true,
+          name: "notes"
+        },
+        {
+          data: "task_date",
+          title: "task_date",
+          visible: true,
+          name: "task_date",
+          createdCell: date_format_with_day,
+          type: "date-format-moment"
+        },
+        {
+          data: "task_date_range",
+          title: "task_date_range",
+          visible: false,
+          name: "task_date_range"
+        },
+         {
+          data: "task_type",
+          title: "task_type",
+          visible: false,
+          name: "task_type"
+        }
+      ],
+      select: true,
+      colReorder: true,
+      drawCallback: callback_function,
+      buttons: [
+        { extend: "excel", title: document.title },
+        { extend: "colvis", title: document.title },
+        { extend: "edit", editor: editor },
+        {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+          dt.columns('').search('').draw()
+        }},
+         {text: 'Current',name:'Current', action: function ( e, dt, node, config ) {
+          dt.columns('task_type:name').search('current').draw()
+        }},
+          {text: 'Complete',name:'Complete', action: function ( e, dt, node, config ) {
+          dt.columns('task_type:name').search('complete').draw()
+        }},
+        {text: 'Today',name:'Today', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('today').draw()
+        }},
+        {text: 'This Week',name:'This Week', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('this_week').draw()
+        }},
+         {text: 'This Month',name:'This Month', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('this_month').draw()
+        }},
+        {text: 'This Year',name:'This Year', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('this_year').draw()
+        }}
+      ],
+      order: [3, "desc"]
+    });
+}
+
+
+
+function todoist_table_create_complete(array,table_id,metric_headers_update_list){
+    $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
+      r = moment(d).utc();
+      return r;
+    };
+
+
+    function array_dictionary_customize(item, index) {
+      item["DT_RowId"] = item.id;
+    }
+
+    array.forEach(array_dictionary_customize);
+    array = firebase_array_integrate(array,"https://shippy-ac235.firebaseio.com/omni/"+omni_node+".json","DT_RowId",['status','notes'])
+
+    editor = new $.fn.dataTable.Editor({
+      table: table_id,
+      fields: [{ label: "status:", name: "status" },{ label: "notes:", name: "notes" }]
+    });
+
+    editor.on("postSubmit", function(e, json, data, action, xhr) {
+      json_array = json.data;
+      json_array.forEach(function(D) {
+        record_id = D["DT_RowId"];
+        D["timestamp"] = moment().format();
+        FirebaseRef.child(record_id).set(D);
+      });
+    });
+
+    //based on filter from table , update a funciton
+    function callback_function() {
+      var api = this.api();
+      callback_array = api.rows({ page: "current" }).data();
+      metric_headers_update_list(callback_array)
+    }
+
+    $(table_id).DataTable({
+      paging: false,
+      dom: '<"html5buttons"B>lTfgitp',
+      data: array,
+      columns: [
+        {
+          data: "content",
+          title: "content",
+          visible: true,
+          name: "content"
+        },
+        {
+          data: "duration",
+          title: "duration",
+          visible: true,
+          name: "duration"
+        },
+        {
+          data: "sub_project",
+          title: "sub_project",
+          visible: true,
+          name: "sub_project"
+        },
+        {
+          data: "status",
+          title: "status",
+          visible: true,
+          name: "status"
+        },
+        {
+          data: "notes",
+          title: "notes",
+          visible: true,
+          name: "notes"
+        },
+        {
+          data: "task_date",
+          title: "task_date",
+          visible: true,
+          name: "task_date",
+          createdCell: date_format_with_day,
+          type: "date-format-moment"
+        },
+        {
+          data: "task_date_range",
+          title: "task_date_range",
+          visible: false,
+          name: "task_date_range"
+        },
+         {
+          data: "task_type",
+          title: "task_type",
+          visible: false,
+          name: "task_type"
+        }
+      ],
+      select: true,
+      colReorder: true,
+      drawCallback: callback_function,
+      buttons: [
+        { extend: "excel", title: document.title },
+        { extend: "colvis", title: document.title },
+        { extend: "edit", editor: editor },
+        {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+          dt.columns('').search('').draw()
+        }},
+         {text: 'Current',name:'Current', action: function ( e, dt, node, config ) {
+          dt.columns('task_type:name').search('current').draw()
+        }},
+          {text: 'Complete',name:'Complete', action: function ( e, dt, node, config ) {
+          dt.columns('task_type:name').search('complete').draw()
+        }},
+        {text: 'Today',name:'Today', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('today').draw()
+        }},
+        {text: 'This Week',name:'This Week', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('this_week').draw()
+        }},
+         {text: 'This Month',name:'This Month', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('this_month').draw()
+        }},
+        {text: 'This Year',name:'This Year', action: function ( e, dt, node, config ) {
+          dt.columns('task_date_range:name').search('this_year').draw()
+        }}
+      ],
+      order: [3, "desc"]
+    });
 }

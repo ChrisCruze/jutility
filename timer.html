@@ -190,28 +190,21 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 function html_timer_update_from_jquery(timer_instance_dictionary){
     time_text = time_since_start_time_moment(timer_instance_dictionary.start_time)
     $("#timer_text").html(time_text)
-    task_content = $("#input_text").val() + time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
     $("#task_content").html(html_link_from_todoist_task(task_content,timer_instance_dictionary.id))
-
     document.title = time_text
 }
 
-
-
-
-//if complete, delete timer instance dictioary, update task, and done
-function timer_instance_dictionary_process(timer_instance_dictionary){
+//ispecific to todoist on updating page for omni.html
+function timer_instance_page_initiate(timer_instance_dictionary){
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
     return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
-
-
 }
 
 timer_instance.on('value', function(snapshot) {
     timer_instance_dictionary = snapshot.val()
     if (timer_instance_dictionary != null){
-        timer_instance_interval = timer_instance_dictionary_process(timer_instance_dictionary)
+        timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
         $("#input_update").click(function(event) {
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
@@ -233,12 +226,12 @@ timer_instance.on('value', function(snapshot) {
             todoist_delete_task(timer_instance_dictionary.id)
             timer_instance.set({})
             clearInterval(timer_instance_interval)
-
-
         })
 
     }
       else {
+
+
     }
 });
 
@@ -292,12 +285,7 @@ $("#input_create").click(function(event) {
         project_id:project_id
     }
     timer_instance.set(upload_dictionary)
-
-
   });
-
-
-
 });
 
 

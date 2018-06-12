@@ -32,3 +32,6 @@ function date_is_today(input_date){
     return inputDate.setHours(0,0,0,0) == todaysDate.setHours(0,0,0,0)
 }
 
+
+
+

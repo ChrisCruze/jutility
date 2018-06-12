@@ -1,3 +1,21 @@
+//toodoist custom functions 
+function current_task_average_age_from_array(array){
+  //https://momentjs.com/docs/
+  age_sum = 0
+  array.forEach(function(D,index){
+    date_added = D.date_added
+    a = new moment()
+    b = new moment(date_added)
+    age_days = a.diff(b,'days')
+
+    age_sum = age_sum + age_days
+    //ages.push(age_days)
+  })
+  denom = array.length 
+  avg = age_sum/denom 
+  return avg 
+}
+
 
 //complete_task
 function todoist_complete_task(task_id,todoist_api_token){
@@ -420,7 +438,14 @@ function todoist_tasks_pull_custom(){
   return current_completed_tasks 
 }
 
-
+//calculate age from todoist
+function age_calculate_from_todoist_task(D){
+    date_added = D.date_added
+    a = new moment()
+    b = new moment(date_added)
+    age_days = a.diff(b,'days')
+    return age_days
+}
 
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom_gspread(){
@@ -435,6 +460,8 @@ function todoist_tasks_pull_custom_gspread(){
 
   current_tasks.forEach(function(D){D['task_type']='current'})
   current_tasks.forEach(function(D){D['task_date']=D['due_date_utc']})
+  current_tasks.forEach(function(D){D['age']=age_calculate_from_todoist_task(D)})
+
   completed_tasks.forEach(function(D){D['task_type']='completed'})
   completed_tasks.forEach(function(D){D['task_date']=D['completed_date']})
 
@@ -463,7 +490,7 @@ function todoist_tasks_pull_custom_gspread(){
   todoist_completed = current_completed_tasks.filter(function(D){return D['task_type'] == 'completed'})
 
 
-  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date'])
+  array_check_keys(current_completed_tasks,['due_date_utc','priority','date_added','completed_date','age'])
   return {todoist_current:todoist_current,todoist_completed:todoist_completed,todoist:current_completed_tasks,gspread:gspread_array,projects:projects_dictionary,labels:labels_dictionary}
 }
 

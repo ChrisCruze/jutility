@@ -1,11 +1,32 @@
 //add dropdown item to list of items. used in create_task_v2
-function add_dropdown_item(title_text){
+function add_dropdown_item(title_text,id,item_class,parent_identifier){
     title_text = title_text||"hello_world 2"
+    id = id||"id"
+    item_class = item_class||"favicon_select"
+    parent_identifier = parent_identifier||"#favicon_dropdown_menu"
     var outer_div = $("<li>", {});
-    var link_elem = $("<a>", {"href": "#","target":"_blank"}).text(title_text)
+    var link_elem = $("<a>", {"href": "#","target":"_blank","id":id,"class":item_class}).text(title_text)
     var final_div = outer_div.append(link_elem)
-    $("#favicon_dropdown_menu").append(final_div)
+    $(parent_identifier).append(final_div)
     return final_div
+}
+
+
+
+//array input to formulate dropdown list
+function add_dropdown_item_from_array(projects_dictionary){
+    title_text = title_text||"hello_world 2"
+    id = id||"id"
+    item_class = item_class||"favicon_select"
+    parent_identifier = parent_identifier||"#favicon_dropdown_menu"
+
+    projects_dictionary.forEach(function(D){
+        add_dropdown_item(title_text,id,item_class,parent_identifier)
+    })  
+
+    $(item_class).on('click', function (e) {
+        $("#favicon_select_button").html($(this))
+    })
 }
 
 
@@ -50,13 +71,14 @@ function append_image_div(div_id,title_text,url,image_url){
 }
 
 //creates a metric div and adds it to the div
-function metric_header_create(title_text,sub_title,metric_text,sub_metric_text){
+function metric_header_create(title_text,sub_title,metric_text,sub_metric_text,id){
     title_text = title_text||"TITLE"
     metric_text = metric_text||"metric_text"
     sub_metric_text = sub_metric_text||"sub_metric_text"
     sub_title = sub_title||"sub_title"
+    id = id||"null"
 
-    var outer_div_one = $("<div>", {"class": "col-md-2 "+title_text});
+    var outer_div_one = $("<div>", {"class": "col-md-2 "+title_text,"id":id});
     var outer_div_two = $("<div>", {"class": "ibox float-e-margins"});
     var inner_div_one = $("<div>", {"class": "ibox-title"});
     var elem_one = $("<span>", {"class": "label label-success pull-right"});

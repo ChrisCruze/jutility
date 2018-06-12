@@ -46,6 +46,10 @@ function guest_reservation_dictionary_customize(item,index){
     item['state'] = guest_state_determine(item)
     item['DT_RowId'] = item._id
 
+    item["check_out_date_range"] = date_within_range_string_create(item.checkOut);
+    item["check_in_date_range"] = date_within_range_string_create(item.checkIn);
+
+
     is_3009 = item['listing']['nickname'].indexOf("2608") != -1
     is_401 = item['listing']['nickname'].indexOf("401") != -1
     is_1806 = item['listing']['nickname'].indexOf("1806") != -1

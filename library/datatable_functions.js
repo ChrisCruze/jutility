@@ -55,6 +55,19 @@ function parse_float_datatable_format(td, cellData, rowData, row, col) {
   $(td).html(r)
 }
 
+//used by cleaners.html to format check in
+function date_format_check_in(td, cellData, rowData, row, col){
+  date_format = moment(cellData).format("MM/DD/YY (dd)")
+  $(td).html(date_format)
+
+}
+
+//used by cleaners.html and others to create guest url 
+function guest_url_create(data, type, row, meta){
+    url = "https://app.guesty.com/reservations/"+row._id+"/inbox"
+    data = '<a target="_blank"  href="' + url + '">' + data + '</a>';
+    return data;
+  }
 
 //format the datatables date with the date and time
 function date_time_datatable_format(td, cellData, rowData, row, col) {

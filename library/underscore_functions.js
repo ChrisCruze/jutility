@@ -6,3 +6,8 @@ function sum_float_convert_from_array_underscore(arr,key_name) {
     return r 
   }, 0); 
 }
+
+//group by an array
+function group_by_underscore(gspread_array_data){
+	_.groupBy(gspread_array_data,'status')['Red']||[]
+}
