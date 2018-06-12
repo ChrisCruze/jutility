@@ -444,6 +444,7 @@ function age_calculate_from_todoist_task(D){
     a = new moment()
     b = new moment(date_added)
     age_days = a.diff(b,'days')
+    age_days = age_days || 0
     return age_days
 }
 

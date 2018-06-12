@@ -77,30 +77,38 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
           data: "duration",
           title: "duration",
           visible: true,
-          name: "duration"
+          name: "duration",
+          type:"number-order"
+        },
+        {
+          data: "age",
+          title: "age",
+          visible: true,
+          name: "age",
+          type: "number-order"
         },
         {
           data: "sub_project",
           title: "sub_project",
-          visible: true,
+          visible: false,
           name: "sub_project"
         },
         {
           data: "status",
           title: "status",
-          visible: true,
+          visible: false,
           name: "status"
         },
         {
           data: "notes",
           title: "notes",
-          visible: true,
+          visible: false,
           name: "notes"
         },
         {
           data: "task_date",
           title: "task_date",
-          visible: true,
+          visible: false,
           name: "task_date",
           createdCell: date_format_with_day,
           type: "date-format-moment"
