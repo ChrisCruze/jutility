@@ -424,6 +424,10 @@ completed_tasks = todoist_gspread_pull.todoist_completed
 
 
 
+var snapshot_ref = dbRef.ref('todoist_snapshots').child('gspread_recurring_tasks').child(moment().format("YYYYMMDD"))
+snapshot_ref.set(gspread_array)
+
+
 header_metrics_create_todoist()
 
 
