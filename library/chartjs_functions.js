@@ -38,6 +38,32 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 }
 
 //update based on days
+function bar_chart_update_category_calculate_function(chart_object,array,date_field,metric_func,date_strf,color_func){
+  //date_func = date_func || function(D){return D.date_field}
+  metric_func = metric_func || function(l){return l.length}
+  date_strf = date_strf ||"MM/DD"
+
+  grouped_array_dictionary = _.groupBy(array,date_field)
+  color_func = color_func || function(key_name,index,grouped_array){return "#a3e1d4"}
+  labels = []
+  vals = []
+  colors = []
+  dates = Object.keys(grouped_array_dictionary)
+
+  //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
+  dates.forEach(function(key_name,i){
+    val = metric_func(grouped_array_dictionary[key_name])
+    color = color_func(key_name,i,grouped_array_dictionary)
+    labels.push(key_name)
+    vals.push(val)
+    colors.push(color)
+  })
+  bar_chart_update_chartjs(chart_object,labels,vals,colors)
+
+
+}
+
+//update based on days
 function bar_chart_update_time_scale_calculate_function(chart_object,array,date_field,metric_func,date_strf,color_func){
   //date_func = date_func || function(D){return D.date_field}
   metric_func = metric_func || function(l){return l.length}

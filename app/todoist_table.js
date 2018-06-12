@@ -188,7 +188,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
       metric_headers_update_list(callback_array)
     }
 
-    $(table_id).DataTable({
+    table = $(table_id).DataTable({
       paging: false,
       dom: '<"html5buttons"B>lTfgitp',
       data: array,
@@ -275,4 +275,6 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
       ],
       order: [3, "desc"]
     });
+
+    table.columns('task_date_range:name').search('today').draw()
 }

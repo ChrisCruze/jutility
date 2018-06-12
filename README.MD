@@ -42,135 +42,136 @@
 | 40 | [bar_chart_initiate_render_chartjs](http://cruzco.site44.com/streak.html) | chartjs_functions.js | initiates a simple bar chart using chartjs|
 | 41 | [horizontal_bar_chart_initiate_render_chartjs](http://cruzco.site44.com/streak.html) | chartjs_functions.js | initiates a simple bar chart using chartjs|
 | 42 | [bar_chart_update_chartjs](http://cruzco.site44.com/streak.html) | chartjs_functions.js | updates bar_chart for data |
-| 43 | [bar_chart_update_time_scale_calculate_function](http://cruzco.site44.com/streak.html) | chartjs_functions.js | update based on days|
-| 44 | [header_filter_add_datatable](http://cruzco.site44.com/streak.html) | datatable_functions.js | add a filter to the column header of the datatable (https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js , https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css | https://github.com/vedmack/yadcf)|
-| 45 | [datatables_search_negate](http://cruzco.site44.com/streak.html) | datatable_functions.js | |
-| 46 | [datatables_search](http://cruzco.site44.com/streak.html) | datatable_functions.js | how to search with datatables|
-| 47 | [row_add_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | add a record to datatables |
-| 48 | [airbnb_url_create_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | update label of status of rag (created: 5/28/18)|
-| 49 | [datatables_data_get_from_api](http://cruzco.site44.com/streak.html) | datatable_functions.js | get the data from the api |
-| 50 | [parse_float_datatable_format](http://cruzco.site44.com/streak.html) | datatable_functions.js | parse the float to two decimals|
-| 51 | [date_format_check_in](http://cruzco.site44.com/streak.html) | datatable_functions.js | used by cleaners.html to format check in|
-| 52 | [guest_url_create](http://cruzco.site44.com/streak.html) | datatable_functions.js | used by cleaners.html and others to create guest url |
-| 53 | [date_time_datatable_format](http://cruzco.site44.com/streak.html) | datatable_functions.js | format the datatables date with the date and time|
-| 54 | [data_table_simple](http://cruzco.site44.com/streak.html) | datatable_functions.js | simple datatable from array |
-| 55 | [clickable_change_value](http://cruzco.site44.com/streak.html) | datatable_functions.js | when you click on row, it changes the value|
-| 56 | [status_format_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | update label of status of rag (created: 5/28/18)|
-| 57 | [editor_fields_array_from_custom_fields](http://cruzco.site44.com/streak.html) | datatable_functions.js | convenience function for custom fields|
-| 58 | [sort_by_unix_datatabes](http://cruzco.site44.com/streak.html) | datatable_functions.js | this should go at top of datatables|
-| 59 | [callback_function_sum_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | based on filter from table , update a funciton|
-| 60 | [date_format_with_day](http://cruzco.site44.com/streak.html) | datatable_functions.js | format the datatables date with the date|
-| 61 | [date_format_created_moment_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | format the date as its created|
-| 62 | [editor_initiate](http://cruzco.site44.com/streak.html) | datatable_functions.js | |
-| 63 | [editor_post_submit_function_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | process the response from the psot submit|
-| 64 | [datatables_initiate_render](http://cruzco.site44.com/streak.html) | datatable_functions.js | |
-| 65 | [create_excel_object](http://cruzco.site44.com/streak.html) | excel_functions.js |  Create an Excel with system default font|
-| 66 | [create_excel_object_with_formatting](http://cruzco.site44.com/streak.html) | excel_functions.js |  Create an Excel with Arial 10 Font|
-| 67 | [generate_excel_download_file](http://cruzco.site44.com/streak.html) | excel_functions.js | Create an excel file to download|
-| 68 | [excel_add_style](http://cruzco.site44.com/streak.html) | excel_functions.js | is used to register styles in the Excel document. It requires a style definition object which is made of up to 5 properties:|
-| 69 | [excel_define_cell](http://cruzco.site44.com/streak.html) | excel_functions.js | define cell style and add cell value|
-| 70 | [excel_define_sheet_name](http://cruzco.site44.com/streak.html) | excel_functions.js | defines the name of the sheet|
-| 71 | [firebase_signin](http://cruzco.site44.com/streak.html) | firebase_functions.js | sign in using firebase|
-| 72 | [account_sign_in_status](http://cruzco.site44.com/streak.html) | firebase_functions.js | |
-| 73 | [initApp](http://cruzco.site44.com/streak.html) | firebase_functions.js | nction account_sign_in_status(){|
-| 74 | [ref_attain_from_firebase](http://cruzco.site44.com/streak.html) | firebase_functions.js | pull ref from firebase|
-| 75 | [data_push_to_firebase](http://cruzco.site44.com/streak.html) | firebase_functions.js | push data to firebase|
-| 76 | [query_elements_array_firebase](http://cruzco.site44.com/streak.html) | firebase_functions.js | query the contacts ref and run the process_func on the results|
-| 77 | [firebase_json_pull](http://cruzco.site44.com/streak.html) | firebase_functions.js | pulls straight json if the firebase is open|
-| 78 | [dictionary_cross_check_apply_key](http://cruzco.site44.com/streak.html) | firebase_functions.js | purpose is to check one dictionary against another and update it |
-| 79 | [firebase_array_integrate](http://cruzco.site44.com/streak.html) | firebase_functions.js | purpose is to sync firebase array with regular array across keys|
-| 80 | [firebase_initialize](http://cruzco.site44.com/streak.html) | firebase_functions.js |  initialize the firebase instance|
-| 81 | [firebase_auth_user_process](http://cruzco.site44.com/streak.html) | firebase_functions.js | authenticate the user that has been authed|
-| 82 | [sort_divs_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | |
-| 83 | [table_jquery_objects_to_array](http://cruzco.site44.com/streak.html) | jquery_functions.js | get the td jquery objects from a table based on a table id|
-| 84 | [style_change_upon_hover](http://cruzco.site44.com/streak.html) | jquery_functions.js | upon hovering over change the css|
-| 85 | [style_change_upon_mouse_over](http://cruzco.site44.com/streak.html) | jquery_functions.js | change text upon mouse over |
-| 86 | [tooltip_add_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | add tooltip to element|
-| 87 | [div_click_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | click on a button|
-| 88 | [enter_press_down_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | press enter when clicked|
-| 89 | [update_from_click_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | function that uses jquery to run a function from a click|
-| 90 | [table_jquery_objects](http://cruzco.site44.com/streak.html) | jquery_functions.js | get the td jquery objects from a table based on a table id|
-| 91 | [time_interval_string_format_from_start_time](http://cruzco.site44.com/streak.html) | moment_functions.js | create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time|
-| 92 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | moment_functions.js | update the html of the timer|
-| 93 | [timer_jquery_html_update_from_start_time_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | update from jquery identifier the time |
-| 94 | [time_since_start_time_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | used in create_task_v2 to keep track of time|
-| 95 | [moment_time_ago](http://cruzco.site44.com/streak.html) | moment_functions.js | tells us how long ago |
-| 96 | [check_if_date_is_current_range](http://cruzco.site44.com/streak.html) | moment_functions.js | check if the day is today, 'year, month, week, minute'|
-| 97 | [date_within_range_string_create](http://cruzco.site44.com/streak.html) | moment_functions.js | creates a string that indicates whether its in the day,week,month,year|
-| 98 | [get_hour_from_time](http://cruzco.site44.com/streak.html) | moment_functions.js | get hour from time|
-| 99 | [attain_now_from_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | get the current time from moment|
-| 100 | [unix_now_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | return unix now moment|
-| 101 | [hour_format_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | return hour-minute format using moment|
-| 102 | [date_range_filter_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | filter a certain date for current time range such as today, this month etc.|
-| 103 | [set_date_time_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | set the hour from a given day|
-| 104 | [date_difference_from_today_days_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | |
-| 105 | [dates_within_this_month](http://cruzco.site44.com/streak.html) | moment_functions.js | dates that are within this month|
-| 106 | [number_of_days_ahead_calculate](http://cruzco.site44.com/streak.html) | moment_functions.js | return a list of days in the future |
-| 107 | [number_of_days_ahead_calculate_array](http://cruzco.site44.com/streak.html) | moment_functions.js | return a list of days in the future. This returns an array |
-| 108 | [dates_past_n_days](http://cruzco.site44.com/streak.html) | moment_functions.js | return list of days in the past|
-| 109 | [dates_past_n_days_formatted](http://cruzco.site44.com/streak.html) | moment_functions.js | return list of days in the past but strf formatted|
-| 110 | [dates_past_n_days_formatted_array](http://cruzco.site44.com/streak.html) | moment_functions.js | return list of days in the past but strf formatted. This is as an array.|
-| 111 | [dates_between_dates_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | pulls the dates between two dates|
-| 112 | [toastr_notification](http://cruzco.site44.com/streak.html) | toastr_functions.js | message notification once something is done|
-| 113 | [typewriter_element_create](http://cruzco.site44.com/streak.html) | typewriter_functions.js | create a typewritter effect using typewritter library (https://safi.me.uk/typewriterjs/)|
-| 114 | [sum_float_convert_from_array_underscore](http://cruzco.site44.com/streak.html) | underscore_functions.js |  get sum from array with key|
-| 115 | [group_by_underscore](http://cruzco.site44.com/streak.html) | underscore_functions.js | group by an array|
-| 116 | [gspread_query](http://cruzco.site44.com/streak.html) | gspread_functions.js | query google spreadsheets|
-| 117 | [gspread_array_pull](http://cruzco.site44.com/streak.html) | gspread_functions.js | pulls from gspread in different format|
-| 118 | [array_pull_from_gspread](http://cruzco.site44.com/streak.html) | gspread_functions.js | query from gspread directly using api key|
-| 119 | [guesty_reservation_data_pull_custom](http://cruzco.site44.com/streak.html) | guesty_functions.js | |
-| 120 | [guest_state_determine](http://cruzco.site44.com/streak.html) | guesty_functions.js | determine state if reservation is current|
-| 121 | [guest_reservation_dictionary_customize](http://cruzco.site44.com/streak.html) | guesty_functions.js | using the information from guesty we are able to dictionary items|
-| 122 | [guesty_reservation_data_pull](http://cruzco.site44.com/streak.html) | guesty_functions.js |  The below function pulls the data from the guesty|
-| 123 | [guesty_listing_data_pull](http://cruzco.site44.com/streak.html) | guesty_functions.js | |
-| 124 | [guesty_integration_data_pull](http://cruzco.site44.com/streak.html) | guesty_functions.js | |
-| 125 | [guesty_reservations_inbox_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create url for reservation for datatables functions|
-| 126 | [guest_airbnb_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create user airbnb url for data tables|
-| 127 | [current_task_average_age_from_array](http://cruzco.site44.com/streak.html) | todoist_functions.js | toodoist custom functions |
-| 128 | [todoist_complete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | complete_task|
-| 129 | [html_link_from_todoist_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | url create of todoist task from title and task id|
-| 130 | [task_complete_todoist](http://cruzco.site44.com/streak.html) | todoist_functions.js | complete task in todoist|
-| 131 | [task_update_todoist](http://cruzco.site44.com/streak.html) | todoist_functions.js | update task in todoist|
-| 132 | [task_create_todoist](http://cruzco.site44.com/streak.html) | todoist_functions.js | create task in todoist|
-| 133 | [gspread_table_tasks_generate](http://cruzco.site44.com/streak.html) | todoist_functions.js | |
-| 134 | [task_filter_from_text](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text|
-| 135 | [task_filter_text_calculate_count](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text and return length|
-| 136 | [task_filter_text_calculate_sum](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text and add the sum to a div|
-| 137 | [task_cost_calculation](http://cruzco.site44.com/streak.html) | todoist_functions.js | calculate the cost of the task at 15 dollar per rate|
-| 138 | [sub_project_from_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | return the sub project by parsing it out from the colon|
-| 139 | [duration_from_task_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | return duration from the task name|
-| 140 | [tasks_array_customize_item](http://cruzco.site44.com/streak.html) | todoist_functions.js | customize each dictionary of todoist task for additional attributes|
-| 141 | [todoist_add_tasks_ajax](http://cruzco.site44.com/streak.html) | todoist_functions.js | https://stackoverflow.com/questions/49394588/how-to-create-todoist-task-using-todoist-api-v7|
-| 142 | [todoist_tasks_to_commands](http://cruzco.site44.com/streak.html) | todoist_functions.js | commands to to doist, item_update,item_add, item_complete, item_delete|
-| 143 | [todoist_current_tasks_pull](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks |
-| 144 | [todoist_current_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks customized with project name and label name|
-| 145 | [todoist_update_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | update tasks|
-| 146 | [todoist_complete_task_v7](http://cruzco.site44.com/streak.html) | todoist_functions.js | completes todoist task|
-| 147 | [todoist_delete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | deletes todoist task|
-| 148 | [todoist_completed_tasks_with_offset](http://cruzco.site44.com/streak.html) | todoist_functions.js | child function of todoist_completed_tasks_all|
-| 149 | [todoist_completed_tasks_all](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all of todoist tasks |
-| 150 | [todoist_completed_tasks_all_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all the todoist tasks and customizes each item|
-| 151 | [labels_add_from_labels_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | converts minute labels to minutes|
-| 152 | [project_name_append](http://cruzco.site44.com/streak.html) | todoist_functions.js | |
-| 153 | [todoist_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get dictionary of current_tasks and completed_tasks|
-| 154 | [age_calculate_from_todoist_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | calculate age from todoist|
-| 155 | [todoist_tasks_pull_custom_gspread](http://cruzco.site44.com/streak.html) | todoist_functions.js | get dictionary of current_tasks and completed_tasks|
-| 156 | [toggl_data_pull_custom](http://cruzco.site44.com/streak.html) | toggl_functions.js | pulls from toggl with custom fields|
-| 157 | [toggl_data_pull_iterate](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
-| 158 | [toggl_data_pull](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
-| 159 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | timer.js | update the html of the timer|
-| 160 | [timer_instance_page_initiate](http://cruzco.site44.com/streak.html) | timer.js | ispecific to todoist on updating page for omni.html|
-| 161 | [timer_instance_exists_process](http://cruzco.site44.com/streak.html) | timer.js | if timer instances exists, add certain tactions to the timer|
-| 162 | [add_dropdown_item_todoist_app](http://cruzco.site44.com/streak.html) | timer.js | creates timer for omni.html|
-| 163 | [create_project_dropdown_list](http://cruzco.site44.com/streak.html) | timer.js | for omni.html |
-| 164 | [percentage_complete_metric_generate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | |
-| 165 | [remaining_tasks_populate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | remaining tasks populate|
-| 166 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 167 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 168 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 169 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 170 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 171 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
-| 172 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 173 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 174 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 43 | [bar_chart_update_category_calculate_function](http://cruzco.site44.com/streak.html) | chartjs_functions.js | update based on days|
+| 44 | [bar_chart_update_time_scale_calculate_function](http://cruzco.site44.com/streak.html) | chartjs_functions.js | update based on days|
+| 45 | [header_filter_add_datatable](http://cruzco.site44.com/streak.html) | datatable_functions.js | add a filter to the column header of the datatable (https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js , https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css | https://github.com/vedmack/yadcf)|
+| 46 | [datatables_search_negate](http://cruzco.site44.com/streak.html) | datatable_functions.js | |
+| 47 | [datatables_search](http://cruzco.site44.com/streak.html) | datatable_functions.js | how to search with datatables|
+| 48 | [row_add_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | add a record to datatables |
+| 49 | [airbnb_url_create_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | update label of status of rag (created: 5/28/18)|
+| 50 | [datatables_data_get_from_api](http://cruzco.site44.com/streak.html) | datatable_functions.js | get the data from the api |
+| 51 | [parse_float_datatable_format](http://cruzco.site44.com/streak.html) | datatable_functions.js | parse the float to two decimals|
+| 52 | [date_format_check_in](http://cruzco.site44.com/streak.html) | datatable_functions.js | used by cleaners.html to format check in|
+| 53 | [guest_url_create](http://cruzco.site44.com/streak.html) | datatable_functions.js | used by cleaners.html and others to create guest url |
+| 54 | [date_time_datatable_format](http://cruzco.site44.com/streak.html) | datatable_functions.js | format the datatables date with the date and time|
+| 55 | [data_table_simple](http://cruzco.site44.com/streak.html) | datatable_functions.js | simple datatable from array |
+| 56 | [clickable_change_value](http://cruzco.site44.com/streak.html) | datatable_functions.js | when you click on row, it changes the value|
+| 57 | [status_format_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | update label of status of rag (created: 5/28/18)|
+| 58 | [editor_fields_array_from_custom_fields](http://cruzco.site44.com/streak.html) | datatable_functions.js | convenience function for custom fields|
+| 59 | [sort_by_unix_datatabes](http://cruzco.site44.com/streak.html) | datatable_functions.js | this should go at top of datatables|
+| 60 | [callback_function_sum_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | based on filter from table , update a funciton|
+| 61 | [date_format_with_day](http://cruzco.site44.com/streak.html) | datatable_functions.js | format the datatables date with the date|
+| 62 | [date_format_created_moment_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | format the date as its created|
+| 63 | [editor_initiate](http://cruzco.site44.com/streak.html) | datatable_functions.js | |
+| 64 | [editor_post_submit_function_datatables](http://cruzco.site44.com/streak.html) | datatable_functions.js | process the response from the psot submit|
+| 65 | [datatables_initiate_render](http://cruzco.site44.com/streak.html) | datatable_functions.js | |
+| 66 | [create_excel_object](http://cruzco.site44.com/streak.html) | excel_functions.js |  Create an Excel with system default font|
+| 67 | [create_excel_object_with_formatting](http://cruzco.site44.com/streak.html) | excel_functions.js |  Create an Excel with Arial 10 Font|
+| 68 | [generate_excel_download_file](http://cruzco.site44.com/streak.html) | excel_functions.js | Create an excel file to download|
+| 69 | [excel_add_style](http://cruzco.site44.com/streak.html) | excel_functions.js | is used to register styles in the Excel document. It requires a style definition object which is made of up to 5 properties:|
+| 70 | [excel_define_cell](http://cruzco.site44.com/streak.html) | excel_functions.js | define cell style and add cell value|
+| 71 | [excel_define_sheet_name](http://cruzco.site44.com/streak.html) | excel_functions.js | defines the name of the sheet|
+| 72 | [firebase_signin](http://cruzco.site44.com/streak.html) | firebase_functions.js | sign in using firebase|
+| 73 | [account_sign_in_status](http://cruzco.site44.com/streak.html) | firebase_functions.js | |
+| 74 | [initApp](http://cruzco.site44.com/streak.html) | firebase_functions.js | nction account_sign_in_status(){|
+| 75 | [ref_attain_from_firebase](http://cruzco.site44.com/streak.html) | firebase_functions.js | pull ref from firebase|
+| 76 | [data_push_to_firebase](http://cruzco.site44.com/streak.html) | firebase_functions.js | push data to firebase|
+| 77 | [query_elements_array_firebase](http://cruzco.site44.com/streak.html) | firebase_functions.js | query the contacts ref and run the process_func on the results|
+| 78 | [firebase_json_pull](http://cruzco.site44.com/streak.html) | firebase_functions.js | pulls straight json if the firebase is open|
+| 79 | [dictionary_cross_check_apply_key](http://cruzco.site44.com/streak.html) | firebase_functions.js | purpose is to check one dictionary against another and update it |
+| 80 | [firebase_array_integrate](http://cruzco.site44.com/streak.html) | firebase_functions.js | purpose is to sync firebase array with regular array across keys|
+| 81 | [firebase_initialize](http://cruzco.site44.com/streak.html) | firebase_functions.js |  initialize the firebase instance|
+| 82 | [firebase_auth_user_process](http://cruzco.site44.com/streak.html) | firebase_functions.js | authenticate the user that has been authed|
+| 83 | [sort_divs_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | |
+| 84 | [table_jquery_objects_to_array](http://cruzco.site44.com/streak.html) | jquery_functions.js | get the td jquery objects from a table based on a table id|
+| 85 | [style_change_upon_hover](http://cruzco.site44.com/streak.html) | jquery_functions.js | upon hovering over change the css|
+| 86 | [style_change_upon_mouse_over](http://cruzco.site44.com/streak.html) | jquery_functions.js | change text upon mouse over |
+| 87 | [tooltip_add_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | add tooltip to element|
+| 88 | [div_click_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | click on a button|
+| 89 | [enter_press_down_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | press enter when clicked|
+| 90 | [update_from_click_jquery](http://cruzco.site44.com/streak.html) | jquery_functions.js | function that uses jquery to run a function from a click|
+| 91 | [table_jquery_objects](http://cruzco.site44.com/streak.html) | jquery_functions.js | get the td jquery objects from a table based on a table id|
+| 92 | [time_interval_string_format_from_start_time](http://cruzco.site44.com/streak.html) | moment_functions.js | create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time|
+| 93 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | moment_functions.js | update the html of the timer|
+| 94 | [timer_jquery_html_update_from_start_time_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | update from jquery identifier the time |
+| 95 | [time_since_start_time_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | used in create_task_v2 to keep track of time|
+| 96 | [moment_time_ago](http://cruzco.site44.com/streak.html) | moment_functions.js | tells us how long ago |
+| 97 | [check_if_date_is_current_range](http://cruzco.site44.com/streak.html) | moment_functions.js | check if the day is today, 'year, month, week, minute'|
+| 98 | [date_within_range_string_create](http://cruzco.site44.com/streak.html) | moment_functions.js | creates a string that indicates whether its in the day,week,month,year|
+| 99 | [get_hour_from_time](http://cruzco.site44.com/streak.html) | moment_functions.js | get hour from time|
+| 100 | [attain_now_from_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | get the current time from moment|
+| 101 | [unix_now_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | return unix now moment|
+| 102 | [hour_format_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | return hour-minute format using moment|
+| 103 | [date_range_filter_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | filter a certain date for current time range such as today, this month etc.|
+| 104 | [set_date_time_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | set the hour from a given day|
+| 105 | [date_difference_from_today_days_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | |
+| 106 | [dates_within_this_month](http://cruzco.site44.com/streak.html) | moment_functions.js | dates that are within this month|
+| 107 | [number_of_days_ahead_calculate](http://cruzco.site44.com/streak.html) | moment_functions.js | return a list of days in the future |
+| 108 | [number_of_days_ahead_calculate_array](http://cruzco.site44.com/streak.html) | moment_functions.js | return a list of days in the future. This returns an array |
+| 109 | [dates_past_n_days](http://cruzco.site44.com/streak.html) | moment_functions.js | return list of days in the past|
+| 110 | [dates_past_n_days_formatted](http://cruzco.site44.com/streak.html) | moment_functions.js | return list of days in the past but strf formatted|
+| 111 | [dates_past_n_days_formatted_array](http://cruzco.site44.com/streak.html) | moment_functions.js | return list of days in the past but strf formatted. This is as an array.|
+| 112 | [dates_between_dates_moment](http://cruzco.site44.com/streak.html) | moment_functions.js | pulls the dates between two dates|
+| 113 | [toastr_notification](http://cruzco.site44.com/streak.html) | toastr_functions.js | message notification once something is done|
+| 114 | [typewriter_element_create](http://cruzco.site44.com/streak.html) | typewriter_functions.js | create a typewritter effect using typewritter library (https://safi.me.uk/typewriterjs/)|
+| 115 | [sum_float_convert_from_array_underscore](http://cruzco.site44.com/streak.html) | underscore_functions.js |  get sum from array with key|
+| 116 | [group_by_underscore](http://cruzco.site44.com/streak.html) | underscore_functions.js | group by an array|
+| 117 | [gspread_query](http://cruzco.site44.com/streak.html) | gspread_functions.js | query google spreadsheets|
+| 118 | [gspread_array_pull](http://cruzco.site44.com/streak.html) | gspread_functions.js | pulls from gspread in different format|
+| 119 | [array_pull_from_gspread](http://cruzco.site44.com/streak.html) | gspread_functions.js | query from gspread directly using api key|
+| 120 | [guesty_reservation_data_pull_custom](http://cruzco.site44.com/streak.html) | guesty_functions.js | |
+| 121 | [guest_state_determine](http://cruzco.site44.com/streak.html) | guesty_functions.js | determine state if reservation is current|
+| 122 | [guest_reservation_dictionary_customize](http://cruzco.site44.com/streak.html) | guesty_functions.js | using the information from guesty we are able to dictionary items|
+| 123 | [guesty_reservation_data_pull](http://cruzco.site44.com/streak.html) | guesty_functions.js |  The below function pulls the data from the guesty|
+| 124 | [guesty_listing_data_pull](http://cruzco.site44.com/streak.html) | guesty_functions.js | |
+| 125 | [guesty_integration_data_pull](http://cruzco.site44.com/streak.html) | guesty_functions.js | |
+| 126 | [guesty_reservations_inbox_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create url for reservation for datatables functions|
+| 127 | [guest_airbnb_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create user airbnb url for data tables|
+| 128 | [current_task_average_age_from_array](http://cruzco.site44.com/streak.html) | todoist_functions.js | toodoist custom functions |
+| 129 | [todoist_complete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | complete_task|
+| 130 | [html_link_from_todoist_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | url create of todoist task from title and task id|
+| 131 | [task_complete_todoist](http://cruzco.site44.com/streak.html) | todoist_functions.js | complete task in todoist|
+| 132 | [task_update_todoist](http://cruzco.site44.com/streak.html) | todoist_functions.js | update task in todoist|
+| 133 | [task_create_todoist](http://cruzco.site44.com/streak.html) | todoist_functions.js | create task in todoist|
+| 134 | [gspread_table_tasks_generate](http://cruzco.site44.com/streak.html) | todoist_functions.js | |
+| 135 | [task_filter_from_text](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text|
+| 136 | [task_filter_text_calculate_count](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text and return length|
+| 137 | [task_filter_text_calculate_sum](http://cruzco.site44.com/streak.html) | todoist_functions.js | filter tasks for text and add the sum to a div|
+| 138 | [task_cost_calculation](http://cruzco.site44.com/streak.html) | todoist_functions.js | calculate the cost of the task at 15 dollar per rate|
+| 139 | [sub_project_from_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | return the sub project by parsing it out from the colon|
+| 140 | [duration_from_task_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | return duration from the task name|
+| 141 | [tasks_array_customize_item](http://cruzco.site44.com/streak.html) | todoist_functions.js | customize each dictionary of todoist task for additional attributes|
+| 142 | [todoist_add_tasks_ajax](http://cruzco.site44.com/streak.html) | todoist_functions.js | https://stackoverflow.com/questions/49394588/how-to-create-todoist-task-using-todoist-api-v7|
+| 143 | [todoist_tasks_to_commands](http://cruzco.site44.com/streak.html) | todoist_functions.js | commands to to doist, item_update,item_add, item_complete, item_delete|
+| 144 | [todoist_current_tasks_pull](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks |
+| 145 | [todoist_current_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get current tasks customized with project name and label name|
+| 146 | [todoist_update_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | update tasks|
+| 147 | [todoist_complete_task_v7](http://cruzco.site44.com/streak.html) | todoist_functions.js | completes todoist task|
+| 148 | [todoist_delete_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | deletes todoist task|
+| 149 | [todoist_completed_tasks_with_offset](http://cruzco.site44.com/streak.html) | todoist_functions.js | child function of todoist_completed_tasks_all|
+| 150 | [todoist_completed_tasks_all](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all of todoist tasks |
+| 151 | [todoist_completed_tasks_all_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | pulls all the todoist tasks and customizes each item|
+| 152 | [labels_add_from_labels_dictionary](http://cruzco.site44.com/streak.html) | todoist_functions.js | converts minute labels to minutes|
+| 153 | [project_name_append](http://cruzco.site44.com/streak.html) | todoist_functions.js | |
+| 154 | [todoist_tasks_pull_custom](http://cruzco.site44.com/streak.html) | todoist_functions.js | get dictionary of current_tasks and completed_tasks|
+| 155 | [age_calculate_from_todoist_task](http://cruzco.site44.com/streak.html) | todoist_functions.js | calculate age from todoist|
+| 156 | [todoist_tasks_pull_custom_gspread](http://cruzco.site44.com/streak.html) | todoist_functions.js | get dictionary of current_tasks and completed_tasks|
+| 157 | [toggl_data_pull_custom](http://cruzco.site44.com/streak.html) | toggl_functions.js | pulls from toggl with custom fields|
+| 158 | [toggl_data_pull_iterate](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
+| 159 | [toggl_data_pull](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
+| 160 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | timer.js | update the html of the timer|
+| 161 | [timer_instance_page_initiate](http://cruzco.site44.com/streak.html) | timer.js | ispecific to todoist on updating page for omni.html|
+| 162 | [timer_instance_exists_process](http://cruzco.site44.com/streak.html) | timer.js | if timer instances exists, add certain tactions to the timer|
+| 163 | [add_dropdown_item_todoist_app](http://cruzco.site44.com/streak.html) | timer.js | creates timer for omni.html|
+| 164 | [create_project_dropdown_list](http://cruzco.site44.com/streak.html) | timer.js | for omni.html |
+| 165 | [percentage_complete_metric_generate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | |
+| 166 | [remaining_tasks_populate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | remaining tasks populate|
+| 167 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 168 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 169 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 170 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 171 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 172 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 173 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 174 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 175 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|

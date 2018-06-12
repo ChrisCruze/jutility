@@ -252,31 +252,6 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                             </div>
 
 
-                            <div class="col-lg-4">
-                                <div class="ibox float-e-margins">
-                                    <div class="ibox-title">
-                                        <h5>Remaining Tasks To Be Completed</h5>
-                                        <div class="ibox-tools">
-                                            <a class="collapse-link">
-                                                <i class="fa fa-chevron-up"></i>
-                                            </a>
-                                            <a class="close-link">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="ibox-content">
-                                        <ul class="todo-list m-t small-list">
-                                            <li>
-                                                <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                                <span class="m-l-xs todo-completed">Buy a milk</span>
-
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
 
 
@@ -455,6 +430,7 @@ header_metrics_create_todoist()
 percentage_complete_metric_generate(gspread_array)
 
 
+horizontal_bar_chart_object = horizontal_bar_chart_initiate_render_chartjs("horizontalbarChart")
 
 
 
@@ -463,13 +439,12 @@ function completed_tasks_callback_wrapper(callback_array){
     metric_func = null
     color_func = null
     function date_func(i){return moment(i).format("MM/DD")}
-
-
     bar_chart_update_time_scale_calculate_function(bar_chart_object,callback_array,'completed_date',metric_func)
+    bar_chart_update_category_calculate_function(horizontal_bar_chart_object,callback_array,'project_name',metric_func)
+
 
     return completed_tasks_call_back(callback_array)
 }
-horizontal_bar_chart_initiate_render_chartjs("horizontalbarChart")
 
 
 

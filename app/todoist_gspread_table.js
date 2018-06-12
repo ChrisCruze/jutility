@@ -14,6 +14,7 @@ function remaining_tasks_populate(gspread_array){
     paging: false,
     dom: '<"html5buttons"B>lTfgitp',
     data: gspread_array,
+    scrollY:"200px",
     columns:[
     {data:'Task',title:'Task',name:'Task'},
     {data:'status',title:'status',name:'status',visible:false}

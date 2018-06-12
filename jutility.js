@@ -479,6 +479,32 @@ function bar_chart_update_chartjs(chart_object,new_labels,new_data_points,new_co
 }
 
 //update based on days
+function bar_chart_update_category_calculate_function(chart_object,array,date_field,metric_func,date_strf,color_func){
+  //date_func = date_func || function(D){return D.date_field}
+  metric_func = metric_func || function(l){return l.length}
+  date_strf = date_strf ||"MM/DD"
+
+  grouped_array_dictionary = _.groupBy(array,date_field)
+  color_func = color_func || function(key_name,index,grouped_array){return "#a3e1d4"}
+  labels = []
+  vals = []
+  colors = []
+  dates = Object.keys(grouped_array_dictionary)
+
+  //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
+  dates.forEach(function(key_name,i){
+    val = metric_func(grouped_array_dictionary[key_name])
+    color = color_func(key_name,i,grouped_array_dictionary)
+    labels.push(key_name)
+    vals.push(val)
+    colors.push(color)
+  })
+  bar_chart_update_chartjs(chart_object,labels,vals,colors)
+
+
+}
+
+//update based on days
 function bar_chart_update_time_scale_calculate_function(chart_object,array,date_field,metric_func,date_strf,color_func){
   //date_func = date_func || function(D){return D.date_field}
   metric_func = metric_func || function(l){return l.length}
@@ -2210,6 +2236,7 @@ function remaining_tasks_populate(gspread_array){
     paging: false,
     dom: '<"html5buttons"B>lTfgitp',
     data: gspread_array,
+    scrollY:"200px",
     columns:[
     {data:'Task',title:'Task',name:'Task'},
     {data:'status',title:'status',name:'status',visible:false}
@@ -2417,7 +2444,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
       metric_headers_update_list(callback_array)
     }
 
-    $(table_id).DataTable({
+    table = $(table_id).DataTable({
       paging: false,
       dom: '<"html5buttons"B>lTfgitp',
       data: array,
@@ -2504,4 +2531,6 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
       ],
       order: [3, "desc"]
     });
+
+    table.columns('task_date_range:name').search('today').draw()
 }
