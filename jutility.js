@@ -2,6 +2,13 @@
 //array_functions.js
 
 
+//array from number
+function array_generate_from_number(number_of_rows){
+  for(var i=0; i < number_of_rows ; i++){
+    console.log(i)
+  }
+}
+
 //array filter tasks for text
 function array_filter_from_text(array,text,key_name){
   key_name = key_name || "content"
@@ -536,6 +543,17 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
 
 
 //datatable_functions.js
+
+//add filterable column headers for datatables
+function column_header_filterable_autocomplete_apply(table_object,number_of_columns){
+  l = []
+  for(var i=0; i < number_of_columns ; i++){
+    l.push({column_number : i, filter_type: "auto_complete", text_data_delimiter: ","})
+  }
+  yadcf.init(table_object, l)
+
+}
+
 
 //add a filter to the column header of the datatable (https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js , https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css | https://github.com/vedmack/yadcf)
 function header_filter_add_datatable(){
@@ -2332,6 +2350,7 @@ function completed_tasks_call_back(callback_array){
   // $("."+'Total').find(".metric_text").html(sum_total)
 }
 
+
 function todoist_table_create_current(array,table_id,metric_headers_update_list){
     $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
       r = moment(d).utc();
@@ -2414,17 +2433,18 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
       callback_array = api.rows({ page: "current" }).data();
       metric_headers_update_list(callback_array)
     }
-
-    $(table_id).DataTable({
-      paging: false,
-      dom: '<"html5buttons"B>lTfgitp',
-      data: array,
-      columns: [
+    columns = [
         {
           data: "content",
           title: "content",
           visible: true,
           name: "content"
+        },
+        {
+          data: "project_name",
+          title: "project_name",
+          visible: true,
+          name: "project_name"
         },
         {
           data: "duration",
@@ -2478,7 +2498,12 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
           visible: false,
           name: "task_type"
         }
-      ],
+      ]
+    table = $(table_id).DataTable({
+      paging: false,
+      dom: '<"html5buttons"B>lTfgitp',
+      data: array,
+      columns: columns,
       select: true,
       colReorder: true,
       drawCallback: callback_function,
@@ -2511,6 +2536,8 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
       ],
       order: [3, "desc"]
     });
+    column_header_filterable_autocomplete_apply(table,columns.length)
+    return table 
 }
 
 

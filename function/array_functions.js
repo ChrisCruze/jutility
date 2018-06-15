@@ -1,4 +1,11 @@
 
+//array from number
+function array_generate_from_number(number_of_rows){
+  for(var i=0; i < number_of_rows ; i++){
+    console.log(i)
+  }
+}
+
 //array filter tasks for text
 function array_filter_from_text(array,text,key_name){
   key_name = key_name || "content"

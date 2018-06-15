@@ -27,6 +27,7 @@ function completed_tasks_call_back(callback_array){
   // $("."+'Total').find(".metric_text").html(sum_total)
 }
 
+
 function todoist_table_create_current(array,table_id,metric_headers_update_list){
     $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
       r = moment(d).utc();
@@ -109,17 +110,18 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
       callback_array = api.rows({ page: "current" }).data();
       metric_headers_update_list(callback_array)
     }
-
-    $(table_id).DataTable({
-      paging: false,
-      dom: '<"html5buttons"B>lTfgitp',
-      data: array,
-      columns: [
+    columns = [
         {
           data: "content",
           title: "content",
           visible: true,
           name: "content"
+        },
+        {
+          data: "project_name",
+          title: "project_name",
+          visible: true,
+          name: "project_name"
         },
         {
           data: "duration",
@@ -173,7 +175,12 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
           visible: false,
           name: "task_type"
         }
-      ],
+      ]
+    table = $(table_id).DataTable({
+      paging: false,
+      dom: '<"html5buttons"B>lTfgitp',
+      data: array,
+      columns: columns,
       select: true,
       colReorder: true,
       drawCallback: callback_function,
@@ -206,6 +213,8 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
       ],
       order: [3, "desc"]
     });
+    column_header_filterable_autocomplete_apply(table,columns.length)
+    return table 
 }
 
 

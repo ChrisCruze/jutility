@@ -1,3 +1,14 @@
+//add filterable column headers for datatables
+function column_header_filterable_autocomplete_apply(table_object,number_of_columns){
+  l = []
+  for(var i=0; i < number_of_columns ; i++){
+    l.push({column_number : i, filter_type: "auto_complete", text_data_delimiter: ","})
+  }
+  yadcf.init(table_object, l)
+
+}
+
+
 //add a filter to the column header of the datatable (https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js , https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css | https://github.com/vedmack/yadcf)
 function header_filter_add_datatable(){
 
