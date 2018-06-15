@@ -2352,12 +2352,60 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
     });
 
     editor.on("postSubmit", function(e, json, data, action, xhr) {
-      json_array = json.data;
-      json_array.forEach(function(D) {
-        record_id = D["DT_RowId"];
-        D["timestamp"] = moment().format();
-        FirebaseRef.child(record_id).set(D);
-      });
+      if (action == 'remove'){
+        items_to_delete = Object.values(data.data)
+        items_to_delete.forEach(function(todoist_dictionary){
+              todoist_delete_task(todoist_dictionary.id)
+
+          //   {
+          //     "day_order": -1,
+          //     "assigned_by_uid": 14054638,
+          //     "is_archived": 0,
+          //     "labels": [],
+          //     "sync_id": 2686100363,
+          //     "date_completed": null,
+          //     "all_day": false,
+          //     "in_history": 0,
+          //     "date_added": "Sat 09 Jun 2018 23:51:25 +0000",
+          //     "indent": 1,
+          //     "date_lang": null,
+          //     "id": 2686100363,
+          //     "priority": 1,
+          //     "checked": 0,
+          //     "user_id": 14054638,
+          //     "due_date_utc": "null",
+          //     "content": "test3",
+          //     "parent_id": null,
+          //     "item_order": 44,
+          //     "is_deleted": 0,
+          //     "responsible_uid": null,
+          //     "project_id": 2159935681,
+          //     "collapsed": 0,
+          //     "date_string": null,
+          //     "task_type": "current",
+          //     "task_date": "null",
+          //     "age": 5,
+          //     "sub_project": "test3",
+          //     "duration": 0,
+          //     "cost": 0,
+          //     "DT_RowId": 2686100363,
+          //     "project_name": "Bnb",
+          //     "task_date_range": "",
+          //     "completed_date": "null",
+          //     "status": "null",
+          //     "notes": "null"
+          // }
+
+        })
+      }
+      else {
+        json_array = json.data;
+        json_array.forEach(function(D) {
+          record_id = D["DT_RowId"];
+          D["timestamp"] = moment().format();
+          FirebaseRef.child(record_id).set(D);
+        });
+      }
     });
 
     //based on filter from table , update a funciton
@@ -2438,6 +2486,7 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
         { extend: "excel", title: document.title },
         { extend: "colvis", title: document.title },
         { extend: "edit", editor: editor },
+        { extend: "remove", editor: editor },
         {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
           dt.columns('').search('').draw()
         }},
