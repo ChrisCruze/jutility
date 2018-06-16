@@ -22,14 +22,21 @@ function current_tasks_call_back(callback_array){
 }
 
 function completed_tasks_call_back(callback_array){
-  $('#tasks_completed_number').find(".metric_text").html(callback_array.length)
+  total_tasks = callback_array.length
+  $('#tasks_completed_number').find(".metric_text").html(total_tasks)
+
+
+  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
+
+  $('#tasks_completed_number').find(".sub_title").html(task_dates + " Days")
+
+  average_tasks = (total_tasks/task_dates).toFixed(1)
+  $('#tasks_completed_number').find(".sub_metric_text").html(average_tasks + " Avg")
+
   // var sum_total = sum_float_convert_from_array_underscore(callback_array,'duration')
   // $("."+'Total').find(".metric_text").html(sum_total)
 }
 
-function bar_create_datatable_cell(td, cellData, rowData, row, col) {
-  $(td).html(list_progress_bar_list_element_thick());
-}
 
 
 
@@ -133,9 +140,7 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
           title: "duration",
           visible: true,
           name: "duration",
-          type:"number-order",
-          createdCell: bar_create_datatable_cell,
-
+          type:"number-order"
         },
         {
           data: "age",

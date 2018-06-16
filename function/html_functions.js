@@ -146,7 +146,7 @@ function metric_header_create(title_text,sub_title,metric_text,sub_metric_text,i
     var inner_div_two = $("<div>", {"class": "ibox-content"});
     var elem_three = $("<h1>", {"class": "no-margins metric_text"}).text(metric_text)
     var elem_four = $("<div>", {"class": "stat-percent font-bold text-success sub_metric_text"}).text(sub_metric_text)
-    var elem_five = $("<small>").text(sub_title)
+    var elem_five = $("<small>",{"class":"sub_title"}).text(sub_title)
 
 
     inner_div_one = inner_div_one.append(elem_one).append(elem_two)

@@ -431,15 +431,16 @@ percentage_complete_metric_generate(gspread_array)
 
 
 horizontal_bar_chart_object = horizontal_bar_chart_initiate_render_chartjs("horizontalbarChart")
-
-
-
 bar_chart_object = bar_chart_initiate_render_chartjs("barChart")
+
+
 function completed_tasks_callback_wrapper(callback_array){
     metric_func = null
     color_func = null
     function date_func(i){return moment(i).format("MM/DD")}
     bar_chart_update_time_scale_calculate_function(bar_chart_object,callback_array,'completed_date',metric_func)
+
+    metric_func = function(l){return sum_float_convert_from_array_underscore(l,'duration')}
     bar_chart_update_category_calculate_function(horizontal_bar_chart_object,callback_array,'project_name',metric_func)
 
 
