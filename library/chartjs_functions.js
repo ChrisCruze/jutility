@@ -6,7 +6,23 @@ function bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
   colors = colors||["#a3e1d4"]
 
   simple_chart_data = {labels:labels, datasets: [{data: numbers_list, backgroundColor: colors }] };
-  simple_options = {legend: {display: false}, responsive: true, tooltips: {enabled: true}};
+  simple_options = {legend: {display: false},        scales: {
+          yAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+
+        }, responsive: true, tooltips: {enabled: true}};
+
+
 
   var ctx = document.getElementById(chart_id).getContext("2d");
   simple_chart_object = new Chart(ctx, {type: 'bar', data: simple_chart_data, options:simple_options});
@@ -21,7 +37,21 @@ function horizontal_bar_chart_initiate_render_chartjs(chart_id,labels,numbers_li
   colors = colors||["#a3e1d4"]
 
   simple_chart_data = {labels:labels, datasets: [{data: numbers_list, backgroundColor: colors }] };
-  simple_options = {legend: {display: false}, responsive: true, tooltips: {enabled: true}};
+  simple_options = {legend: {display: false},        scales: {
+          yAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+
+        }, responsive: true, tooltips: {enabled: true}};
 
   var ctx = document.getElementById(chart_id).getContext("2d");
   simple_chart_object = new Chart(ctx, {type: 'horizontalBar', data: simple_chart_data, options:simple_options});
@@ -66,7 +96,14 @@ function bar_chart_update_category_calculate_function(chart_object,array,date_fi
 //update based on days
 function bar_chart_update_time_scale_calculate_function(chart_object,array,date_field,metric_func,date_strf,color_func){
   //date_func = date_func || function(D){return D.date_field}
-  metric_func = metric_func || function(l){return l.length}
+  metric_func = metric_func || function(l){ 
+    if (l == undefined){
+      return 0
+    }
+    else {
+      return l.length
+    }
+    }
   date_strf = date_strf ||"MM/DD"
 
 
@@ -77,9 +114,15 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
   vals = []
   colors = []
   dates = Object.keys(grouped_array_dictionary)
-
-  dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
+  console.log(dates)
+  min_date =_.min(dates, function(num){return moment(num,date_strf).unix()})
+  console.log(min_date)
+  dates = dates_between_dates_moment(moment(min_date,date_strf),moment())
+  console.log(dates)
+  //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
   dates.forEach(function(key_name,i){
+    key_name = key_name.format(date_strf)
+    //console.log(key_name)
     val = metric_func(grouped_array_dictionary[key_name])
     color = color_func(key_name,i,grouped_array_dictionary)
     labels.push(key_name)

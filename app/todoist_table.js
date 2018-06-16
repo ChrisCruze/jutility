@@ -22,11 +22,42 @@ function current_tasks_call_back(callback_array){
 }
 
 function completed_tasks_call_back(callback_array){
+  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
+
+  try {
+  console.log(progress_table)
+  if (progress_table.rows().length > 0){
+
+  $("td.progress_metric_measure").each(function(e) {
+      row_data = progress_table.row(this).data();
+
+      multiplier = parseFloat(row_data.multiplier)||0
+      duration = array_filter_from_text_sum(callback_array,row_data["name"],"content","duration")
+      denom = (task_dates * multiplier)
+      percentage = (duration/denom) * 100
+      percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
+
+      $(this).find(".percentage_text").html(percentage_text)
+      $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
+
+  })
+
+
+
+  }
+
+  }
+  catch(err){
+    console.log(err)
+  }
+
+
+
+
   total_tasks = callback_array.length
   $('#tasks_completed_number').find(".metric_text").html(total_tasks)
 
 
-  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
   $('#tasks_completed_number').find(".sub_title").html(task_dates + " Days")
 

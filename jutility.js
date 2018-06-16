@@ -12,7 +12,7 @@ function array_generate_from_number(number_of_rows){
 //array filter tasks for text
 function array_filter_from_text(array,text,key_name){
   key_name = key_name || "content"
-  array = array.filter(function(D){return D['key_name'].toLowerCase().indexOf(text.toLowerCase()) !== -1 })
+  array = array.filter(function(D){return D[key_name].toLowerCase().indexOf(text.toLowerCase()) !== -1 })
   return array 
 }
 
@@ -270,7 +270,7 @@ function papa_parse_array(file,delimter){
 
 
 //created progress bar div
-function list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color){
+function list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color,metric_text){
     percentage = percentage||"48"
     title_text = title_text||"title_text"
     id = id||"id"
@@ -282,7 +282,7 @@ function list_progress_bar_list_element_thick(title_text,id,percentage,parent_id
     var outer_div = $("<div>", {"id":id})
 
     var title_text_div = $("<span>", {}).text(title_text)
-    var metric_text_div = $("<small>", {'class':'pull-right'}).text(metric_text)
+    var metric_text_div = $("<small>", {'class':'pull-right percentage_text'}).text(metric_text)
 
 
 
@@ -513,7 +513,23 @@ function bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
   colors = colors||["#a3e1d4"]
 
   simple_chart_data = {labels:labels, datasets: [{data: numbers_list, backgroundColor: colors }] };
-  simple_options = {legend: {display: false}, responsive: true, tooltips: {enabled: true}};
+  simple_options = {legend: {display: false},        scales: {
+          yAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+
+        }, responsive: true, tooltips: {enabled: true}};
+
+
 
   var ctx = document.getElementById(chart_id).getContext("2d");
   simple_chart_object = new Chart(ctx, {type: 'bar', data: simple_chart_data, options:simple_options});
@@ -528,7 +544,21 @@ function horizontal_bar_chart_initiate_render_chartjs(chart_id,labels,numbers_li
   colors = colors||["#a3e1d4"]
 
   simple_chart_data = {labels:labels, datasets: [{data: numbers_list, backgroundColor: colors }] };
-  simple_options = {legend: {display: false}, responsive: true, tooltips: {enabled: true}};
+  simple_options = {legend: {display: false},        scales: {
+          yAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            stacked: true,
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+
+        }, responsive: true, tooltips: {enabled: true}};
 
   var ctx = document.getElementById(chart_id).getContext("2d");
   simple_chart_object = new Chart(ctx, {type: 'horizontalBar', data: simple_chart_data, options:simple_options});
@@ -573,7 +603,14 @@ function bar_chart_update_category_calculate_function(chart_object,array,date_fi
 //update based on days
 function bar_chart_update_time_scale_calculate_function(chart_object,array,date_field,metric_func,date_strf,color_func){
   //date_func = date_func || function(D){return D.date_field}
-  metric_func = metric_func || function(l){return l.length}
+  metric_func = metric_func || function(l){ 
+    if (l == undefined){
+      return 0
+    }
+    else {
+      return l.length
+    }
+    }
   date_strf = date_strf ||"MM/DD"
 
 
@@ -584,9 +621,15 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
   vals = []
   colors = []
   dates = Object.keys(grouped_array_dictionary)
-
-  dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
+  console.log(dates)
+  min_date =_.min(dates, function(num){return moment(num,date_strf).unix()})
+  console.log(min_date)
+  dates = dates_between_dates_moment(moment(min_date,date_strf),moment())
+  console.log(dates)
+  //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
   dates.forEach(function(key_name,i){
+    key_name = key_name.format(date_strf)
+    //console.log(key_name)
     val = metric_func(grouped_array_dictionary[key_name])
     color = color_func(key_name,i,grouped_array_dictionary)
     labels.push(key_name)
@@ -605,7 +648,14 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
 
 //add bar chart within the cell
 function bar_create_datatable_cell(td, cellData, rowData, row, col) {
-  $(td).html(list_progress_bar_list_element_thick());
+
+  title_text = cellData
+  id = cellData
+  percentage = rowData['percentage']||50
+  color = 'danger'
+  parent_identifier = null
+  metric_text = percentage + "%"
+  $(td).html(list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color,metric_text));
 }
 
 
@@ -2438,7 +2488,74 @@ function remaining_tasks_populate(gspread_array){
 
 
 
+function progress_bar_table_formulate(table_id){
+	var firebaseRef = dbRef.ref('cruz_control').child('progress');
+	fields = ['name','multiplier','description','percentage']
+	table_id =  table_id||"#progress_table"
 
+	editor = new $.fn.dataTable.Editor({
+	  table:table_id,
+	  idSrc:  'DT_RowId',
+	  fields: editor_fields_array_from_custom_fields(fields)
+	});
+
+	editor.on("postSubmit", function(e, json, data, action, xhr) {
+
+
+		if (action == 'edit'){
+		  json_array = json.data;
+		  json_array.forEach(function(D) {
+		    record_id = D["DT_RowId"];
+		    D["time_stamp"] = moment().format();
+		    firebaseRef.child(record_id).set(D);
+		  });	
+		}
+		else {
+
+			items_to_add = Object.values(data.data)
+			items_to_add.forEach(function(item){
+				item['time_stamp'] = moment().format()
+				r = firebaseRef.push(item)
+				//console.log(r)
+			})
+
+	}});
+
+
+	table = $(table_id).DataTable({
+            paging:false,
+            dom: '<"html5buttons"B>lTfgitp',
+            data: [],
+            columns: [
+                {data:'name',title:'name',visible:true,name:'name',createdCell: bar_create_datatable_cell,className:'progress_metric_measure'},
+                {data:'multiplier',title:'multiplier',visible:false,name:'multiplier'},
+                {data:'description',title:'description',visible:false,name:'description'},
+                {data:'time_stamp',title:'time_stamp',visible:false,name:'time_stamp'},
+                {data:'DT_RowId',title:'DT_RowId',visible:false,name:'DT_RowId'}
+            ],
+            select: true,
+            colReorder: true,
+            buttons: [
+                { extend: "excel", title: document.title },
+                { extend: "colvis", title: document.title },
+        		{ extend: 'create', editor: editor },
+                { extend: "edit", editor: editor },
+                {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+                  dt.columns('').search('').draw()
+                }}]
+        });
+
+
+	firebaseRef.on("child_added", function(snap) {
+	    directory_addresses = snap.getRef().path.n
+	    id = directory_addresses[directory_addresses.length-1]
+	    firebase_dictionary = snap.val()
+	    firebase_dictionary['DT_RowId'] = id
+	    table.row.add(firebase_dictionary).draw(false);
+	})
+
+
+}
 //todoist_table.js
 
 
@@ -2465,11 +2582,42 @@ function current_tasks_call_back(callback_array){
 }
 
 function completed_tasks_call_back(callback_array){
+  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
+
+  try {
+  console.log(progress_table)
+  if (progress_table.rows().length > 0){
+
+  $("td.progress_metric_measure").each(function(e) {
+      row_data = progress_table.row(this).data();
+
+      multiplier = parseFloat(row_data.multiplier)||0
+      duration = array_filter_from_text_sum(callback_array,row_data["name"],"content","duration")
+      denom = (task_dates * multiplier)
+      percentage = (duration/denom) * 100
+      percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
+
+      $(this).find(".percentage_text").html(percentage_text)
+      $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
+
+  })
+
+
+
+  }
+
+  }
+  catch(err){
+    console.log(err)
+  }
+
+
+
+
   total_tasks = callback_array.length
   $('#tasks_completed_number').find(".metric_text").html(total_tasks)
 
 
-  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
   $('#tasks_completed_number').find(".sub_title").html(task_dates + " Days")
 

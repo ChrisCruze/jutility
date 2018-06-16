@@ -9,7 +9,7 @@ function array_generate_from_number(number_of_rows){
 //array filter tasks for text
 function array_filter_from_text(array,text,key_name){
   key_name = key_name || "content"
-  array = array.filter(function(D){return D['key_name'].toLowerCase().indexOf(text.toLowerCase()) !== -1 })
+  array = array.filter(function(D){return D[key_name].toLowerCase().indexOf(text.toLowerCase()) !== -1 })
   return array 
 }
 

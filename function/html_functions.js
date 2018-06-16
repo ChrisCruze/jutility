@@ -2,7 +2,7 @@
 
 
 //created progress bar div
-function list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color){
+function list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color,metric_text){
     percentage = percentage||"48"
     title_text = title_text||"title_text"
     id = id||"id"
@@ -14,7 +14,7 @@ function list_progress_bar_list_element_thick(title_text,id,percentage,parent_id
     var outer_div = $("<div>", {"id":id})
 
     var title_text_div = $("<span>", {}).text(title_text)
-    var metric_text_div = $("<small>", {'class':'pull-right'}).text(metric_text)
+    var metric_text_div = $("<small>", {'class':'pull-right percentage_text'}).text(metric_text)
 
 
 

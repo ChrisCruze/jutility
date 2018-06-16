@@ -1,6 +1,13 @@
 //add bar chart within the cell
 function bar_create_datatable_cell(td, cellData, rowData, row, col) {
-  $(td).html(list_progress_bar_list_element_thick());
+
+  title_text = cellData
+  id = cellData
+  percentage = rowData['percentage']||50
+  color = 'danger'
+  parent_identifier = null
+  metric_text = percentage + "%"
+  $(td).html(list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color,metric_text));
 }
 
 

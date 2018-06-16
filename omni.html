@@ -72,6 +72,10 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src='https://cruzco.site44.com/lib/moment.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.min.js
+'></script>
+
+
 <script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
 <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
 <script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
@@ -253,7 +257,25 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                                 </div>
                             </div>
 
-
+                            <div class="col-lg-4">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Progress</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <table class="table table-hover no-margins" id="progress_table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -529,6 +551,9 @@ $("#input_start").click(function(event) {
 
 create_project_dropdown_list(projects_dictionary)
 
+progress_bar_table_formulate()
+
+  var progress_table = $("#progress_table").DataTable();
 
 // list_progress_bar_list_element_thick()
 // list_progress_bar_list_element_thick()

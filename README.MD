@@ -175,12 +175,13 @@
 | 173 | [create_project_dropdown_list](http://cruzco.site44.com/streak.html) | timer.js | for omni.html |
 | 174 | [percentage_complete_metric_generate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | |
 | 175 | [remaining_tasks_populate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | remaining tasks populate|
-| 176 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 177 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 178 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 179 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 180 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 181 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
-| 182 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 183 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 184 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 176 | [progress_bar_table_formulate](http://cruzco.site44.com/streak.html) | todoist_progress_bars.js | |
+| 177 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 178 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 179 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 180 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 181 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 182 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 183 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 184 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 185 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
