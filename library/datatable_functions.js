@@ -1,3 +1,58 @@
+//add bar chart within the cell
+function bar_create_datatable_cell(td, cellData, rowData, row, col) {
+  $(td).html(list_progress_bar_list_element_thick());
+}
+
+
+//This searches and filters https://datatables.net/examples/plug-ins/range_filtering.html || https://datatables.net/manual/plug-ins/search
+function datatable_search_filter(){
+
+
+
+$.fn.dataTable.ext.search.push(
+    function( settings, searchData, index, rowData, counter ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        var age = parseFloat( searchData[3] ) || 0; // using the data from the 4th column
+  
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && age <= max ) ||
+             ( min <= age   && isNaN( max ) ) ||
+             ( min <= age   && age <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+
+
+$.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        var age = parseFloat( data[3] ) || 0; // use data for the age column
+ 
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && age <= max ) ||
+             ( min <= age   && isNaN( max ) ) ||
+             ( min <= age   && age <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+    var table = $('#example').DataTable();
+
+        table.draw();
+
+
+}
+
+
+
+
 //add filterable column headers for datatables
 function column_header_filterable_autocomplete_apply(table_object,number_of_columns){
   l = []

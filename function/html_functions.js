@@ -1,3 +1,62 @@
+
+
+
+//created progress bar div
+function list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color){
+    percentage = percentage||"48"
+    title_text = title_text||"title_text"
+    id = id||"id"
+    parent_identifier = parent_identifier||"#progress_bar_list"
+    color = color||"danger"
+
+
+
+    var outer_div = $("<div>", {"id":id})
+
+    var title_text_div = $("<span>", {}).text(title_text)
+    var metric_text_div = $("<small>", {'class':'pull-right'}).text(metric_text)
+
+
+
+    var progress_bar_parent_div = $("<div>",{"class":"progress progress-small"})
+    var progress_bar_div = $("<div>",{"class":"progress-bar progress-bar-"+color,"style":"width:" + String(percentage) + "%"})
+
+
+    metric_div = $("<div>", {}).append(title_text_div).append(metric_text_div)
+
+    bar_div = progress_bar_parent_div.append(progress_bar_div)
+
+
+
+    final_element = outer_div.append(metric_div).append(bar_div)
+
+    
+    $(parent_identifier).append(final_element)
+    return final_element
+}
+
+
+//created progress bar div
+function list_progress_bar_list_element_thin(title_text,id,percentage,parent_identifier){
+    percentage = percentage||"48"
+    title_text = title_text||"title_text"
+    id = id||"id"
+    parent_identifier = parent_identifier||"#progress_bar_list"
+
+    var outer_div = $("<li>", {"id":id});
+    var header_div = $("<small>", {}).text(title_text)
+
+
+    var percent_div = $("<div>", {'class':'stat-percent'}).text(percentage + "%")
+    var progress_bar_div = $("<div>",{"class":"progress-bar","style":"width:" + String(percentage) + "%"})
+    var progress_div = $("<div>", {'class':'progress progress-mini'}).append(progress_bar_div)
+    final_div = outer_div.append(header_div).append(percent_div).append(progress_div)
+    
+    $(parent_identifier).append(final_div)
+    return final_div
+}
+
+
 //add dropdown item to list of items. used in create_task_v2
 function add_dropdown_item(title_text,id,item_class,parent_identifier){
     title_text = title_text||"hello_world 2"

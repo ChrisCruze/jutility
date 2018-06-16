@@ -266,6 +266,65 @@ function papa_parse_array(file,delimter){
 }
 //html_functions.js
 
+
+
+
+//created progress bar div
+function list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color){
+    percentage = percentage||"48"
+    title_text = title_text||"title_text"
+    id = id||"id"
+    parent_identifier = parent_identifier||"#progress_bar_list"
+    color = color||"danger"
+
+
+
+    var outer_div = $("<div>", {"id":id})
+
+    var title_text_div = $("<span>", {}).text(title_text)
+    var metric_text_div = $("<small>", {'class':'pull-right'}).text(metric_text)
+
+
+
+    var progress_bar_parent_div = $("<div>",{"class":"progress progress-small"})
+    var progress_bar_div = $("<div>",{"class":"progress-bar progress-bar-"+color,"style":"width:" + String(percentage) + "%"})
+
+
+    metric_div = $("<div>", {}).append(title_text_div).append(metric_text_div)
+
+    bar_div = progress_bar_parent_div.append(progress_bar_div)
+
+
+
+    final_element = outer_div.append(metric_div).append(bar_div)
+
+    
+    $(parent_identifier).append(final_element)
+    return final_element
+}
+
+
+//created progress bar div
+function list_progress_bar_list_element_thin(title_text,id,percentage,parent_identifier){
+    percentage = percentage||"48"
+    title_text = title_text||"title_text"
+    id = id||"id"
+    parent_identifier = parent_identifier||"#progress_bar_list"
+
+    var outer_div = $("<li>", {"id":id});
+    var header_div = $("<small>", {}).text(title_text)
+
+
+    var percent_div = $("<div>", {'class':'stat-percent'}).text(percentage + "%")
+    var progress_bar_div = $("<div>",{"class":"progress-bar","style":"width:" + String(percentage) + "%"})
+    var progress_div = $("<div>", {'class':'progress progress-mini'}).append(progress_bar_div)
+    final_div = outer_div.append(header_div).append(percent_div).append(progress_div)
+    
+    $(parent_identifier).append(final_div)
+    return final_div
+}
+
+
 //add dropdown item to list of items. used in create_task_v2
 function add_dropdown_item(title_text,id,item_class,parent_identifier){
     title_text = title_text||"hello_world 2"
@@ -543,6 +602,55 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
 
 
 //datatable_functions.js
+
+//This searches and filters https://datatables.net/examples/plug-ins/range_filtering.html || https://datatables.net/manual/plug-ins/search
+function datatable_search_filter(){
+
+
+
+$.fn.dataTable.ext.search.push(
+    function( settings, searchData, index, rowData, counter ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        var age = parseFloat( searchData[3] ) || 0; // using the data from the 4th column
+  
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && age <= max ) ||
+             ( min <= age   && isNaN( max ) ) ||
+             ( min <= age   && age <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+
+
+$.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        var age = parseFloat( data[3] ) || 0; // use data for the age column
+ 
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && age <= max ) ||
+             ( min <= age   && isNaN( max ) ) ||
+             ( min <= age   && age <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+    var table = $('#example').DataTable();
+
+        table.draw();
+
+
+}
+
+
+
 
 //add filterable column headers for datatables
 function column_header_filterable_autocomplete_apply(table_object,number_of_columns){
@@ -2319,6 +2427,12 @@ function remaining_tasks_populate(gspread_array){
     });
     dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
 }
+//todoist_progress_bars.js
+
+
+
+
+
 //todoist_table.js
 
 
@@ -2349,6 +2463,11 @@ function completed_tasks_call_back(callback_array){
   // var sum_total = sum_float_convert_from_array_underscore(callback_array,'duration')
   // $("."+'Total').find(".metric_text").html(sum_total)
 }
+
+function bar_create_datatable_cell(td, cellData, rowData, row, col) {
+  $(td).html(list_progress_bar_list_element_thick());
+}
+
 
 
 function todoist_table_create_current(array,table_id,metric_headers_update_list){
@@ -2451,7 +2570,9 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
           title: "duration",
           visible: true,
           name: "duration",
-          type:"number-order"
+          type:"number-order",
+          createdCell: bar_create_datatable_cell,
+
         },
         {
           data: "age",

@@ -127,6 +127,12 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
             </form>
         </div>
             <ul class="nav navbar-top-links navbar-right">
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks"></i>  
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
                 <li>
                     <a id='input_start'>
                         <i class="fa fa-tasks"></i> Start
@@ -157,28 +163,10 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                         <i class="fa fa-tasks"></i> Sync
                     </a>
                 </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell"></i> Filters 
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="mailbox.html">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
                     </ul>
                 </li>
 
 
-                <li>
-                    <a class="right-sidebar-toggle">
-                        <i class="fa fa-tasks"></i>
-                    </a>
-                </li>
             </ul>
 
         </nav>
@@ -232,7 +220,16 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 </div>
             </div>
 
-        </div>
+            <div class="col-lg-4">
+                    <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                    <ul class="stat-list" id="progress_bar_list">
+                    </ul>
+                </div>
+                </div>
+            </div>
+
+            </div>
 
                         <div class="row">
 
@@ -531,6 +528,9 @@ $("#input_start").click(function(event) {
 
 create_project_dropdown_list(projects_dictionary)
 
+
+// list_progress_bar_list_element_thick()
+// list_progress_bar_list_element_thick()
 
 </script>
 

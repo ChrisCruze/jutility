@@ -27,6 +27,11 @@ function completed_tasks_call_back(callback_array){
   // $("."+'Total').find(".metric_text").html(sum_total)
 }
 
+function bar_create_datatable_cell(td, cellData, rowData, row, col) {
+  $(td).html(list_progress_bar_list_element_thick());
+}
+
+
 
 function todoist_table_create_current(array,table_id,metric_headers_update_list){
     $.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
@@ -128,7 +133,9 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
           title: "duration",
           visible: true,
           name: "duration",
-          type:"number-order"
+          type:"number-order",
+          createdCell: bar_create_datatable_cell,
+
         },
         {
           data: "age",
