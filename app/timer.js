@@ -30,10 +30,21 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
         $("#input_complete").click(function(event) {
             $("#input_update").click();
             event.preventDefault()
-            todoist_complete_task(String(timer_instance_dictionary.id))
+            html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+            timer_instance_dictionary['new_task_name'] = $("#input_text").val() + html_timer
+            r = $.ajax({
+              type: "POST",
+              data:timer_instance_dictionary,
+              url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
+            })
+            console.log(r)
+
+            //todoist_complete_task(String(timer_instance_dictionary.id))
             timer_instance.set({})
             $("#input_text").val("") 
             clearInterval(my_interval_timer)
+
+
         })
 
         $("#input_delete").click(function(event) {

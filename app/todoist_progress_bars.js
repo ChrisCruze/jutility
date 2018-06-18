@@ -24,7 +24,6 @@ function progress_bar_table_formulate(table_id){
 		  });	
 		}
 		else {
-
 			items_to_add = Object.values(data.data)
 			items_to_add.forEach(function(item){
 				item['time_stamp'] = moment().format()

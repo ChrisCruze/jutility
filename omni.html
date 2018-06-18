@@ -276,6 +276,25 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-4">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>Ds</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <table class="display" cellspacing="0" width="100%" id="ds_table">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -497,6 +516,18 @@ timer_instance.on('value', function(snapshot) {
       else {
     }
 });
+//pulls straight json if the firebase is open
+function firebase_json_pull_cruz(url){
+    url = url||"https://cruz-7aa89.firebaseio.com/todoist_timer_instance.json"
+    l = $.ajax({
+      url: url,
+      method: "GET",
+      async:false,
+      headers: {"Accept":"application/json; odata=verbose"}
+    })
+    results = l.responseJSON
+    return results
+  }
 
 //task_create_todoist('test',2159934072)
 $("#input_create").click(function(event) {
@@ -504,23 +535,55 @@ $("#input_create").click(function(event) {
     project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
     content = $("#input_text").val()
     start_time = moment().format()
-  function create_task_promise(input) {
-    return new Promise(function(resolve, reject) {
-      result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
-      resolve(result)
-    });}
+    original_start_time = start_time
+    r =   $.ajax({
+      type: "POST",
+      data:{"content": content, "project_id": project_id,"start_time":start_time},
+      url: "https://hooks.zapier.com/hooks/catch/229795/w23pcd/",
+    })
 
-  create_task_promise({"content": content, "project_id": project_id}).then(function(r) {
-    task_id = Object.values(r.temp_id_mapping)[0]
-    upload_dictionary = {
-        start_time: moment().format(),
-        id: task_id,
-        task_id: task_id,
-        content:content,
-        project_id:project_id
+    new_start_time = start_time
+    console.log(original_start_time)
+    do {
+        firebase_dictionary = firebase_json_pull_cruz()
+        console.log(firebase_dictionary)
+        if (firebase_dictionary['start_time'] == original_start_time){
+            task_id = firebase_dictionary['id']
+            upload_dictionary = {
+                start_time: moment().format(),
+                id: task_id,
+                task_id: task_id,
+                content:content,
+                project_id:project_id
+            }
+            timer_instance.set(upload_dictionary)
+        }
     }
-    timer_instance.set(upload_dictionary)
-  });
+    while (firebase_dictionary['start_time'] != original_start_time);  
+
+    //console.log(r)
+
+
+    // task_id
+
+
+  // function create_task_promise(input) {
+  //   return new Promise(function(resolve, reject) {
+  //     result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
+  //     resolve(result)
+  //   });}
+
+  // create_task_promise({"content": content, "project_id": project_id}).then(function(r) {
+  //   task_id = Object.values(r.temp_id_mapping)[0]
+    // upload_dictionary = {
+    //     start_time: moment().format(),
+    //     id: task_id,
+    //     task_id: task_id,
+    //     content:content,
+    //     project_id:project_id
+    // }
+    // timer_instance.set(upload_dictionary)
+  // });
 });
 
 
@@ -557,7 +620,7 @@ progress_bar_table_formulate()
 
 // list_progress_bar_list_element_thick()
 // list_progress_bar_list_element_thick()
-
+//firebase_generate_datatable()
 </script>
 
 </body>

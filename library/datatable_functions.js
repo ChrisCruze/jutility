@@ -217,6 +217,17 @@ function status_format_datatables(td, cellData, rowData, row, col){
 }
 
 //convenience function for custom fields
+function datatable_fields_array_from_custom_fields(custom_fields){
+  l = []
+  custom_fields.forEach(function(custom_field){
+    new_dictionary = {data:custom_field, name: custom_field,title:custom_field}
+    l.push(new_dictionary)
+  })
+  return l 
+}
+
+
+//convenience function for custom fields
 function editor_fields_array_from_custom_fields(custom_fields){
   l = []
   custom_fields.forEach(function(custom_field){
@@ -275,11 +286,11 @@ function editor_post_submit_function_datatables(func){
   	});
 }
 
-function datatables_initiate_render(table_div_id,columns_list){
-	table_example = $(table_div_id).DataTable({
-    paging:false,
+function datatables_initiate_render(table_id,columns_list,editor,input_data){
+  input_data = input_data || {}
+	table_example = $(table_id).DataTable({
     dom: '<"html5buttons"B>lTfgitp',
-    data: input_data,
+    data: [],
     columns:columns_list,
     // columns: [
     //   {data:'account_name',title:'Account Name',name:'Account Name',visible:true},
@@ -295,14 +306,8 @@ function datatables_initiate_render(table_div_id,columns_list){
 
     // ],
     select: true,
-    colReorder: true,
-    drawCallback: callback_function,
-    buttons: [
-      {extend: 'excel', title: document.title},
-      {extend: 'colvis', title: document.title},
-      { extend: "create", editor: editor },
-      { extend: "edit",   editor: editor },
-      { extend: "remove", editor: editor }
-    ]
+    colReorder: true
   });
+
+  return table_example
 }
