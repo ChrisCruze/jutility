@@ -11,3 +11,16 @@ function sum_float_convert_from_array_underscore(arr,key_name) {
 function group_by_underscore(gspread_array_data){
 	_.groupBy(gspread_array_data,'status')['Red']||[]
 }
+
+
+function min_date_from_array_underscore(array,key_name){
+	key_name = key_name || 'task_date'
+	return _.mind(array,function(D){return moment(D[key_name]).valueOf() })
+
+}
+
+function max_date_from_array_underscore(array,key_name){
+	key_name = key_name || 'task_date'
+	return _.max(array,function(D){return moment(D[key_name]).valueOf() })
+
+}

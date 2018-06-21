@@ -5,11 +5,58 @@ function percentage_complete_metric_generate(gspread_array){
   metric_text = percentage_complete.toFixed(1) + "%"
   sub_title = 'Remaining: ' + (gspread_array.length - complete_array.length)
   sub_metric_text = complete_array.length + "/" + gspread_array.length
-  $('#metric_headers').append(metric_header_create(title_text,sub_title,metric_text,sub_metric_text))
+
+
+
+  percentage_to_goal = parseFloat(complete_array.length/gspread_array.length)
+  console.log(percentage_to_goal)
+  if (.4 > percentage_to_goal){
+  label_color  =  {'green':'label-primary','amber':'label-warning','red':'label-danger'}['red']
+
+  }
+  else if (.7 > percentage_to_goal){
+  label_color  =  {'green':'label-primary','amber':'label-warning','red':'label-danger'}['amber']
+
+  }
+  else if ( .9 > percentage_to_goal){
+  label_color  =  {'green':'label-primary','amber':'label-warning','red':'label-danger'}['green']
+  }
+  else {
+    label_color = 'label-default'
+  }
+
+  $('#metric_headers').append(metric_header_create_label(title_text,sub_title,metric_text,sub_metric_text,"gspread_percentage",label_color))
+
+
+
+
 }
 
 //remaining tasks populate
 function remaining_tasks_populate(gspread_array){
+    editor = new $.fn.dataTable.Editor({
+      table: "#remaining_tasks_table",
+      idSrc:  'Task',
+      fields: [{ label: "Task:", name: "Task" },{ label: "project_id:", name: "project_id" }]
+    });
+
+
+    editor.on("postSubmit", function(e, json, data, action, xhr) {
+      console.log(json)
+      console.log(action)
+      console.log(e)
+        items_to_delete = Object.values(data.data)
+        console.log(items_to_delete)
+        items_to_delete.forEach(function(todoist_dictionary){
+          console.log(todoist_dictionary)
+              task_create_todoist(todoist_dictionary.Task,todoist_dictionary.project_id)
+
+   
+
+        })
+
+    });
+
     dt = $("#remaining_tasks_table").DataTable({
     paging: false,
     dom: '<"html5buttons"B>lTfgitp',
@@ -28,6 +75,9 @@ function remaining_tasks_populate(gspread_array){
     buttons: [
     { extend: "excel", title: document.title },
     { extend: "colvis", title: document.title },
+    { extend: "edit", editor: editor },
+
+
     {text: 'Not Assigned',name:'Not Assigned', action: function ( e, dt, node, config ) {
           dt.columns('task_assigned:name').search('Red').draw()
         }},

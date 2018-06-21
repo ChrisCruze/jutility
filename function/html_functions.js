@@ -123,11 +123,63 @@ function create_image_div(title_text,url,image_url){
     return final_div
 }
 
+function add_percentage_label_html(id,percentage_to_goal){
+  id = id||'#tasks_completed_number'
+  percentage_to_goal = percentage_to_goal||.5
+  label_object = $(id).find(".sub_metric_text")
+  .4 < percentage_to_goal && add_remove_labels(label_object,'red');
+  .7 < percentage_to_goal && add_remove_labels(label_object,'amber');
+  .9 < percentage_to_goal && add_remove_labels(label_object,'green');
+
+}
 
 // appends the image div from create_image_div
 function append_image_div(div_id,title_text,url,image_url){
     $(div_id).append(create_image_div(title_text,url,image_url))
 }
+
+
+function add_remove_labels(jquery_object,color){
+    label_name = {'green':'label-primary','amber':'label-warning','red':'label-danger'}[color]
+    label_name = label_name || "label-primary"
+    jquery_object.removeClass('label-success')
+    jquery_object.removeClass('label-danger')
+    jquery_object.removeClass('label-warning')
+    jquery_object.removeClass('label-default')
+    jquery_object.addClass(label_name)
+
+}
+
+//<span class="label label-success pull-right">Monthly</span>
+//creates a metric div and adds it to the div
+function metric_header_create_label(title_text,sub_title,metric_text,sub_metric_text,id,label_color){
+    title_text = title_text||"TITLE"
+    metric_text = metric_text||"metric_text"
+    sub_metric_text = sub_metric_text||"sub_metric_text"
+    sub_title = sub_title||"sub_title"
+    id = id||"null"
+    label_color = label_color ||"label-default"
+    var outer_div_one = $("<div>", {"class": "col-md-2 "+title_text,"id":id});
+    var outer_div_two = $("<div>", {"class": "ibox float-e-margins"});
+    var inner_div_one = $("<div>", {"class": "ibox-title"});
+    var elem_one = $("<span>", {"class": "label label-success pull-right"});
+    var elem_two = $("<h5>").text(title_text)
+
+    var inner_div_two = $("<div>", {"class": "ibox-content"});
+    var elem_three = $("<h1>", {"class": "no-margins metric_text"}).text(metric_text)
+    //var elem_four = $("<div>", {"class": "stat-percent font-bold text-success sub_metric_text"}).text(sub_metric_text)
+    var elem_four = $("<span>", {"class": "label pull-right sub_metric_text " + label_color}).text(sub_metric_text)
+
+    var elem_five = $("<small>",{"class":"sub_title"}).text(sub_title)
+
+
+    inner_div_one = inner_div_one.append(elem_one).append(elem_two)
+    inner_div_two = inner_div_two.append(elem_three).append(elem_four).append(elem_five)
+    var inner_ibox_div = outer_div_two.append(inner_div_one).append(inner_div_two)
+    var final_div = outer_div_one.append(inner_ibox_div)
+    return final_div
+}
+
 
 //creates a metric div and adds it to the div
 function metric_header_create(title_text,sub_title,metric_text,sub_metric_text,id){

@@ -5,22 +5,80 @@ function header_metrics_create_todoist(){
   metric_text = '-'
   sub_metric_text = '-'
   id = 'null'
-  $('#metric_headers').append(metric_header_create('Tasks Completed',sub_title,metric_text,sub_metric_text,'tasks_completed_number'))
-  $('#metric_headers').append(metric_header_create('Tasks Number',sub_title,metric_text,sub_metric_text,'tasks_current_number'))
-  $('#metric_headers').append(metric_header_create('Average',sub_title,metric_text,sub_metric_text,'tasks_age'))
+  // $('#metric_headers').append(metric_header_create('Tasks Completed',sub_title,metric_text,sub_metric_text,'tasks_completed_number'))
+  // $('#metric_headers').append(metric_header_create('Tasks Number',sub_title,metric_text,sub_metric_text,'tasks_current_number'))
+  // $('#metric_headers').append(metric_header_create('Average',sub_title,metric_text,sub_metric_text,'tasks_age'))
+
+  $('#metric_headers').append(metric_header_create_label('Tasks Completed',sub_title,metric_text,sub_metric_text,'tasks_completed_number'))
+  $('#metric_headers').append(metric_header_create_label('Tasks Number',sub_title,metric_text,sub_metric_text,'tasks_current_number'))
+  $('#metric_headers').append(metric_header_create_label('Age',sub_title,metric_text,sub_metric_text,'tasks_age'))
+
+
+
+
 }
 
 
-function current_tasks_call_back(callback_array){
-  $('#tasks_current_number').find(".metric_text").html(callback_array.length)
-  $('#tasks_age').find(".metric_text").html((sum_float_convert_from_array_underscore(callback_array,'age')/callback_array.length).toFixed(1) )
+function percentage_sub_text(id,total_tasks,total_goal_tasks){
+  id = id || "#tasks_current_number"
+  total_tasks = total_tasks || 5
+  total_goal_tasks = total_goal_tasks || 10
 
+  percentage_to_goal = total_tasks/total_goal_tasks
+  percentage_text = (percentage_to_goal * 100).toFixed(1) + "%"
+  num_denominator = total_tasks + "/" + total_goal_tasks
+
+  $(id).find(".sub_metric_text").html(num_denominator+"|"+percentage_text)
+  add_percentage_label_html(id,percentage_to_goal)
+
+  label_object = $(id).find(".sub_metric_text")
+
+  if (percentage_to_goal <= 1){
+    add_remove_labels(label_object,'green')
+  }
+  else if (percentage_to_goal <= 5){
+    add_remove_labels(label_object,'amber')
+  }
+  else {
+    add_remove_labels(label_object,'red')
+  }
+
+}
+
+function current_tasks_call_back(callback_array){
+  total_count = callback_array.length
+
+  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
+
+  // max_date = max_date_from_array_underscore(callback_array)['task_date']
+  // min_date = min_date_from_array_underscore(callback_array)['task_date']
+  // dates_between = dates_between_dates_moment(min_date,max_date)
+  // days = dates_between.length
+  $('#tasks_current_number').find(".metric_text").html(total_count)
+  $('#tasks_current_number').find(".sub_title").html(task_dates + " Days")
+  goal_number = 20
+
+  task_age = (sum_float_convert_from_array_underscore(callback_array,'age')/callback_array.length).toFixed(1) 
+  percentage_sub_text('#tasks_age',task_age,3)
+  $('#tasks_age').find(".metric_text").html(task_age)
+
+
+  percentage_sub_text('#tasks_current_number',total_count,goal_number)
 
 
   // var sum_total = sum_float_convert_from_array_underscore(callback_array,'duration')
   // $("."+'Total').find(".metric_text").html(sum_total)
 }
 
+function add_percentage_label_html(id,percentage_to_goal){
+  id = id||'#tasks_completed_number'
+  percentage_to_goal = percentage_to_goal||.5
+  label_object = $(id).find(".sub_metric_text")
+  .4 < percentage_to_goal && add_remove_labels(label_object,'red');
+  .7 < percentage_to_goal && add_remove_labels(label_object,'amber');
+  .9 < percentage_to_goal && add_remove_labels(label_object,'green');
+
+}
 function completed_tasks_call_back(callback_array){
   task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
@@ -58,11 +116,24 @@ function completed_tasks_call_back(callback_array){
   $('#tasks_completed_number').find(".metric_text").html(total_tasks)
 
 
-
-  $('#tasks_completed_number').find(".sub_title").html(task_dates + " Days")
+  //$('#tasks_completed_number').find(".sub_title").html(task_dates + " Days")
 
   average_tasks = (total_tasks/task_dates).toFixed(1)
-  $('#tasks_completed_number').find(".sub_metric_text").html(average_tasks + " Avg")
+  goal_task_per_day = 15
+  total_goal_tasks = goal_task_per_day * task_dates
+  percentage_to_goal = total_tasks/total_goal_tasks
+
+  percentage_text = (percentage_to_goal * 100).toFixed(1) + "%"
+  num_denominator = total_tasks + "/" + total_goal_tasks
+
+  $('#tasks_completed_number').find(".sub_metric_text").html(num_denominator+"|"+percentage_text+"|"+average_tasks + " Avg")
+  // label_object = $('#tasks_completed_number').find(".sub_metric_text")
+  // .4 < percentage_to_goal && add_remove_labels(label_object,'red');
+  // .7 < percentage_to_goal && add_remove_labels(label_object,'amber');
+  // .9 < percentage_to_goal && add_remove_labels(label_object,'green');
+
+  add_percentage_label_html('#tasks_completed_number',percentage_to_goal)
+
 
   // var sum_total = sum_float_convert_from_array_underscore(callback_array,'duration')
   // $("."+'Total').find(".metric_text").html(sum_total)
