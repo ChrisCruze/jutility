@@ -174,24 +174,29 @@
 | 172 | [toggl_data_pull](http://cruzco.site44.com/streak.html) | toggl_functions.js | |
 | 173 | [firebase_editor_initiate](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
 | 174 | [firebase_generate_datatable](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
-| 175 | [todoist_snapshot_store](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
-| 176 | [todoist_gspread_pull_firebase](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
-| 177 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | timer.js | update the html of the timer|
-| 178 | [timer_instance_page_initiate](http://cruzco.site44.com/streak.html) | timer.js | ispecific to todoist on updating page for omni.html|
-| 179 | [timer_instance_exists_process](http://cruzco.site44.com/streak.html) | timer.js | if timer instances exists, add certain tactions to the timer|
-| 180 | [add_dropdown_item_todoist_app](http://cruzco.site44.com/streak.html) | timer.js | creates timer for omni.html|
-| 181 | [create_project_dropdown_list](http://cruzco.site44.com/streak.html) | timer.js | for omni.html |
-| 182 | [percentage_complete_metric_generate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | |
-| 183 | [remaining_tasks_populate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | remaining tasks populate|
-| 184 | [progress_bar_table_formulate](http://cruzco.site44.com/streak.html) | todoist_progress_bars.js | |
-| 185 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 186 | [percentage_sub_text](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 187 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 188 | [add_percentage_label_html](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 189 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 190 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 191 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 192 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
-| 193 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 194 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 195 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 175 | [firebase_dataeditor_table_editor_instance_options](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 176 | [firebase_dataeditor_table_editor_instance](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 177 | [firebase_dataeditor_table_generate](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 178 | [todoist_snapshot_store](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
+| 179 | [todoist_gspread_pull_firebase](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
+| 180 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | timer.js | update the html of the timer|
+| 181 | [timer_instance_page_initiate](http://cruzco.site44.com/streak.html) | timer.js | ispecific to todoist on updating page for omni.html|
+| 182 | [timer_instance_exists_process](http://cruzco.site44.com/streak.html) | timer.js | if timer instances exists, add certain tactions to the timer|
+| 183 | [add_dropdown_item_todoist_app](http://cruzco.site44.com/streak.html) | timer.js | creates timer for omni.html|
+| 184 | [create_project_dropdown_list](http://cruzco.site44.com/streak.html) | timer.js | for omni.html |
+| 185 | [percentage_complete_metric_generate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | |
+| 186 | [remaining_tasks_populate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | remaining tasks populate|
+| 187 | [progress_bar_table_formulate](http://cruzco.site44.com/streak.html) | todoist_progress_bars.js | |
+| 188 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 189 | [percentage_sub_text](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 190 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 191 | [add_percentage_label_html](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 192 | [measure_progress_bars](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 193 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 194 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 195 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 196 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 197 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 198 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 199 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 200 | [run_refresh](http://cruzco.site44.com/streak.html) | todoist_table.js |   table.columns('task_date_range:name').search('this_month').draw()|

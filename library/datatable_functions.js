@@ -1,3 +1,8 @@
+//get table data from datatables table
+function datatables_data_get(table){
+  return table.data().toArray();
+}
+
 //add bar chart within the cell
 function bar_create_datatable_cell(td, cellData, rowData, row, col) {
 
@@ -306,7 +311,15 @@ function datatables_initiate_render(table_id,columns_list,editor,input_data){
 
     // ],
     select: true,
-    colReorder: true
+    colReorder: true,
+    buttons: [
+                { extend: "excel", title: document.title },
+                { extend: "colvis", title: document.title },
+                { extend: 'create', editor: editor },
+                { extend: "edit", editor: editor },
+                {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+                  dt.columns('').search('').draw()
+                }}]
   });
 
   return table_example

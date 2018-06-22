@@ -79,15 +79,11 @@ function add_percentage_label_html(id,percentage_to_goal){
   .9 < percentage_to_goal && add_remove_labels(label_object,'green');
 
 }
-function completed_tasks_call_back(callback_array){
-  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
-  try {
-  console.log(progress_table)
-  if (progress_table.rows().length > 0){
-
-  $("td.progress_metric_measure").each(function(e) {
+function measure_progress_bars(callback_array,progress_table){
+    $("td.progress_metric_measure").each(function(e) {
       row_data = progress_table.row(this).data();
+      task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
       duration = array_filter_from_text_sum(callback_array,row_data["name"],"content","duration")
@@ -99,7 +95,16 @@ function completed_tasks_call_back(callback_array){
       $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
 
   })
+}
+function completed_tasks_call_back(callback_array){
+  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
+  try {
+  console.log(progress_table)
+  if (progress_table.rows().length > 0){
+
+
+    measure_progress_bars(callback_array,progress_table)
 
 
   }
@@ -328,6 +333,7 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
       order: [3, "desc"]
     });
     column_header_filterable_autocomplete_apply(table,columns.length)
+
     return table 
 }
 
@@ -456,5 +462,13 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
       order: [3, "desc"]
     });
 
-    table.columns('task_date_range:name').search('today').draw()
+    table.columns('task_date_range:name').search('this_month').draw()
+    function run_refresh(){
+              measure_progress_bars(Object.values(table.rows({ page: "current" }).data()),progress_table)
+
+    }
+    setTimeout(run_refresh,5000)
+    //console.log(table)
+    //console.log(Object.values(table.rows({ page: "current" }).data()))
+
 }

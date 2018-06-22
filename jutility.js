@@ -1006,7 +1006,15 @@ function datatables_initiate_render(table_id,columns_list,editor,input_data){
 
     // ],
     select: true,
-    colReorder: true
+    colReorder: true,
+    buttons: [
+                { extend: "excel", title: document.title },
+                { extend: "colvis", title: document.title },
+                { extend: 'create', editor: editor },
+                { extend: "edit", editor: editor },
+                {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+                  dt.columns('').search('').draw()
+                }}]
   });
 
   return table_example
@@ -2431,6 +2439,9 @@ $("#drogas_submit").click(function(event) {
     $("#drogas_input").val("")
 });
 
+
+
+
 function firebase_editor_initiate(table_id,fields){
 	editor = new $.fn.dataTable.Editor({
 		table:table_id,
@@ -2439,12 +2450,12 @@ function firebase_editor_initiate(table_id,fields){
 	});
 	editor.on("postSubmit", function(e, json, data, action, xhr) {
 	if (action == 'edit'){
-		json_array = json.data;
-		json_array.forEach(function(D) {
-		record_id = D["DT_RowId"];
-		D["time_stamp"] = moment().format();
-		firebaseRef.child(record_id).set(D);
-	});	
+			json_array = json.data;
+			json_array.forEach(function(D) {
+			record_id = D["DT_RowId"];
+			D["time_stamp"] = moment().format();
+			firebaseRef.child(record_id).set(D);
+		});	
 	}
 	else {
 		items_to_add = Object.values(data.data)
@@ -2457,15 +2468,82 @@ function firebase_editor_initiate(table_id,fields){
 }
 
 
-function firebase_generate_datatable(table_id){
+function firebase_generate_datatable(table_id,fields,firebaseRef){
 	//DEFINE FIREBASE
 	//firebase.initializeApp({databaseURL: "https://shippy-ac235.firebaseio.com/"});
 	//var dbRef = firebase.database();
-	var firebaseRef = dbRef.ref('drogas');
+	var firebaseRef = firebaseRef||dbRef.ref('drogas');
 	table_id =  table_id||"#ds_table"
-	fields = ['input_text','date_time','type','within_system','DT_RowId']
+	fields = fields||['input_text','date_time','type','within_system','DT_RowId']
 
 	editor = firebase_editor_initiate(table_id,fields)
+	table = datatables_initiate_render(table_id,datatable_fields_array_from_custom_fields(fields),editor)
+
+
+	firebaseRef.on("child_added", function(snap) {
+	    directory_addresses = snap.getRef().path.n
+	    id = directory_addresses[directory_addresses.length-1]
+	    firebase_dictionary = snap.val()
+	    firebase_dictionary['DT_RowId'] = id
+	    key_check_func_dictionary(fields,firebase_dictionary)
+	    console.log(firebase_dictionary)
+	    table.row.add(firebase_dictionary).draw(false);
+	})
+
+
+}
+
+function firebase_dataeditor_table_editor_instance_options(firebaseRef,row_id){
+	
+	row_id = row_id || 'DT_RowId'
+
+	editor.on("postSubmit", function(e, json, data, action, xhr) {
+
+
+	if (action == 'edit'){
+	  json_array = json.data;
+	  json_array.forEach(function(D) {
+	    record_id = D[row_id];
+	    D["time_stamp"] = moment().format();
+	    firebaseRef.child(record_id).set(D);
+	  });	
+	}
+	else {
+		items_to_add = Object.values(data.data)
+		items_to_add.forEach(function(item){
+			item['time_stamp'] = moment().format()
+			r = firebaseRef.push(item)
+			//console.log(r)
+		})
+
+	}});
+
+}
+
+function firebase_dataeditor_table_editor_instance(table_id,fields,firebaseRef,row_id){
+	row_id = row_id || 'DT_RowId'
+	editor = new $.fn.dataTable.Editor({
+		table:table_id,
+		idSrc:  row_id,
+		fields: editor_fields_array_from_custom_fields(fields)
+	});
+
+	firebase_dataeditor_table_editor_instance_options(firebaseRef,row_id)
+	return editor 
+}
+
+
+
+function firebase_dataeditor_table_generate(table_id,fields,firebaseRef,row_id){
+	//DEFINE FIREBASE
+	//firebase.initializeApp({databaseURL: "https://shippy-ac235.firebaseio.com/"});
+	//var dbRef = firebase.database();
+	var firebaseRef = firebaseRef||dbRef.ref('drogas');
+	table_id =  table_id||"#ds_table"
+	fields = fields||['input_text','date_time','type','within_system','DT_RowId']
+	row_id = row_id || 'DT_RowId'
+
+	editor = firebase_dataeditor_table_editor_instance(table_id,fields,firebaseRef,row_id)
 	table = datatables_initiate_render(table_id,datatable_fields_array_from_custom_fields(fields),editor)
 
 
@@ -2772,7 +2850,7 @@ function header_metrics_create_todoist(){
 
   $('#metric_headers').append(metric_header_create_label('Tasks Completed',sub_title,metric_text,sub_metric_text,'tasks_completed_number'))
   $('#metric_headers').append(metric_header_create_label('Tasks Number',sub_title,metric_text,sub_metric_text,'tasks_current_number'))
-  $('#metric_headers').append(metric_header_create_label('Average',sub_title,metric_text,sub_metric_text,'tasks_age'))
+  $('#metric_headers').append(metric_header_create_label('Age',sub_title,metric_text,sub_metric_text,'tasks_age'))
 
 
 
@@ -2840,15 +2918,11 @@ function add_percentage_label_html(id,percentage_to_goal){
   .9 < percentage_to_goal && add_remove_labels(label_object,'green');
 
 }
-function completed_tasks_call_back(callback_array){
-  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
-  try {
-  console.log(progress_table)
-  if (progress_table.rows().length > 0){
-
-  $("td.progress_metric_measure").each(function(e) {
+function measure_progress_bars(callback_array,progress_table){
+    $("td.progress_metric_measure").each(function(e) {
       row_data = progress_table.row(this).data();
+      task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
       duration = array_filter_from_text_sum(callback_array,row_data["name"],"content","duration")
@@ -2860,7 +2934,16 @@ function completed_tasks_call_back(callback_array){
       $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
 
   })
+}
+function completed_tasks_call_back(callback_array){
+  task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
+  try {
+  console.log(progress_table)
+  if (progress_table.rows().length > 0){
+
+
+    measure_progress_bars(callback_array,progress_table)
 
 
   }
@@ -3089,6 +3172,7 @@ function todoist_table_create_current(array,table_id,metric_headers_update_list)
       order: [3, "desc"]
     });
     column_header_filterable_autocomplete_apply(table,columns.length)
+
     return table 
 }
 
@@ -3217,5 +3301,13 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
       order: [3, "desc"]
     });
 
-    table.columns('task_date_range:name').search('today').draw()
+    table.columns('task_date_range:name').search('this_month').draw()
+    function run_refresh(){
+              measure_progress_bars(Object.values(table.rows({ page: "current" }).data()),progress_table)
+
+    }
+    setTimeout(run_refresh,5000)
+    //console.log(table)
+    //console.log(Object.values(table.rows({ page: "current" }).data()))
+
 }
