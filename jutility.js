@@ -2,7 +2,7 @@
 //array_functions.js
 
 
-//array from number
+//array from number. iterate
 function array_generate_from_number(number_of_rows){
   for(var i=0; i < number_of_rows ; i++){
     console.log(i)
@@ -697,6 +697,11 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
 
 
 //datatable_functions.js
+
+//get table data from datatables table
+function datatables_data_get(table){
+  return table.data().toArray();
+}
 
 //add bar chart within the cell
 function bar_create_datatable_cell(td, cellData, rowData, row, col) {
@@ -1393,6 +1398,18 @@ function timer_jquery_html_update_from_start_time_moment(start_time,jquery_ident
 }
 
 
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment_to(start_time){
+    now = moment().valueOf()  //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = start_time_instance - now ;
+    time_text_value = moment(elapsed).subtract({hours: 19}); //have to subtract 19 hours for some reason
+    time_text = time_text_value.format("HH:mm:ss")
+    return time_text
+ }
+
+
+
 
 //used in create_task_v2 to keep track of time
 function time_since_start_time_moment(start_time){
@@ -1660,7 +1677,7 @@ function group_by_underscore(gspread_array_data){
 
 function min_date_from_array_underscore(array,key_name){
 	key_name = key_name || 'task_date'
-	return _.mind(array,function(D){return moment(D[key_name]).valueOf() })
+	return _.min(array,function(D){return moment(D[key_name]).valueOf() })
 
 }
 
@@ -2587,6 +2604,53 @@ return todoist_gspread_pull
 
 }
 
+//intermittent_timer.js
+
+//update the html of the timer
+function html_timer_update_from_jquery_intermittent(start_timer){
+	console.log(start_timer)
+    time_text = time_since_start_time_moment(start_timer)
+    console.log(time_text)
+    $("#intermittent_timer").find(".metric_text").html(time_text)
+
+    end_text = time_since_start_time_moment_to(moment(start_timer).add('hours',18).format())
+    $("#intermittent_timer").find(".sub_title").html(end_text)
+
+     $("#intermittent_timer").find(".metric_text").attr('title',moment(start_timer).format('YYYY-MM-DD h:mm:ssa'))
+
+
+    end_text_eight = time_since_start_time_moment_to(moment(start_timer).add('hours',8).format())
+    $("#intermittent_timer").find(".sub_metric_text").html(end_text_eight)
+
+
+
+}
+
+
+function start_intermittent_timer(){
+
+$('#metric_headers').append(metric_header_create_label('Timer',sub_title,metric_text,sub_metric_text,'intermittent_timer'))
+
+
+var firebaseRef = dbRef.ref('cruz_control').child('food2');
+l = firebase_json_pull("https://shippy-ac235.firebaseio.com/cruz_control/food2.json")
+console.log(l)
+
+max_dict = max_date_from_array_underscore(l,'time_stamp')
+console.log(max_dict)
+console.log('here')
+console.log(max_dict['time_stamp'])
+
+setInterval(html_timer_update_from_jquery_intermittent,1000,max_dict['time_stamp'])
+//html_timer_update_from_jquery_intermittent(max_dict['time_stamp'])
+
+
+
+}
+
+
+//
+//time_since_start_time_moment_to('2018-06-24T12:46:50-04:00')
 //timer.js
 
 //update the html of the timer
@@ -2619,10 +2683,12 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             timer_instance.set(timer_instance_dictionary)
         })
         $("#input_complete").click(function(event) {
-            $("#input_update").click();
+            input_text = $("#input_text").val()
+            //$("#input_update").click();
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            timer_instance_dictionary['new_task_name'] = $("#input_text").val() + html_timer
+            timer_instance_dictionary['new_task_name'] = input_text + html_timer
+            console.log(timer_instance_dictionary)
             r = $.ajax({
               type: "POST",
               data:timer_instance_dictionary,
@@ -2632,9 +2698,11 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
 
             //todoist_complete_task(String(timer_instance_dictionary.id))
             timer_instance.set({})
-            $("#input_text").val("") 
+
+
             clearInterval(my_interval_timer)
 
+            $("#input_text").val("") 
 
         })
 

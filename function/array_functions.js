@@ -1,5 +1,5 @@
 
-//array from number
+//array from number. iterate
 function array_generate_from_number(number_of_rows){
   for(var i=0; i < number_of_rows ; i++){
     console.log(i)

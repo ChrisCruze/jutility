@@ -28,10 +28,12 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             timer_instance.set(timer_instance_dictionary)
         })
         $("#input_complete").click(function(event) {
-            $("#input_update").click();
+            input_text = $("#input_text").val()
+            //$("#input_update").click();
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            timer_instance_dictionary['new_task_name'] = $("#input_text").val() + html_timer
+            timer_instance_dictionary['new_task_name'] = input_text + html_timer
+            console.log(timer_instance_dictionary)
             r = $.ajax({
               type: "POST",
               data:timer_instance_dictionary,
@@ -41,9 +43,11 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
 
             //todoist_complete_task(String(timer_instance_dictionary.id))
             timer_instance.set({})
-            $("#input_text").val("") 
+
+
             clearInterval(my_interval_timer)
 
+            $("#input_text").val("") 
 
         })
 

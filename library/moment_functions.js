@@ -31,6 +31,18 @@ function timer_jquery_html_update_from_start_time_moment(start_time,jquery_ident
 }
 
 
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment_to(start_time){
+    now = moment().valueOf()  //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = start_time_instance - now ;
+    time_text_value = moment(elapsed).subtract({hours: 19}); //have to subtract 19 hours for some reason
+    time_text = time_text_value.format("HH:mm:ss")
+    return time_text
+ }
+
+
+
 
 //used in create_task_v2 to keep track of time
 function time_since_start_time_moment(start_time){

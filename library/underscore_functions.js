@@ -15,7 +15,7 @@ function group_by_underscore(gspread_array_data){
 
 function min_date_from_array_underscore(array,key_name){
 	key_name = key_name || 'task_date'
-	return _.mind(array,function(D){return moment(D[key_name]).valueOf() })
+	return _.min(array,function(D){return moment(D[key_name]).valueOf() })
 
 }
 
