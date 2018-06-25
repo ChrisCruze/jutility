@@ -42,7 +42,17 @@ function time_since_start_time_moment_to(start_time){
  }
 
 
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment_compare(end_time,start_time){
+    now = moment(end_time).valueOf()  //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = now - start_time_instance;
+    time_text_value = moment(elapsed).subtract({hours: 19}); //have to subtract 19 hours for some reason
+    
 
+    time_text = time_text_value.format("HH:mm:ss")
+    return time_text
+ }
 
 //used in create_task_v2 to keep track of time
 function time_since_start_time_moment(start_time){

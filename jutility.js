@@ -1437,7 +1437,17 @@ function time_since_start_time_moment_to(start_time){
  }
 
 
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment_compare(end_time,start_time){
+    now = moment(end_time).valueOf()  //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = now - start_time_instance;
+    time_text_value = moment(elapsed).subtract({hours: 19}); //have to subtract 19 hours for some reason
+    
 
+    time_text = time_text_value.format("HH:mm:ss")
+    return time_text
+ }
 
 //used in create_task_v2 to keep track of time
 function time_since_start_time_moment(start_time){
@@ -2644,11 +2654,18 @@ function html_timer_update_from_jquery_intermittent(start_timer){
     end_text = time_since_start_time_moment_to(moment(start_timer).add('hours',18).format())
     $("#intermittent_timer").find(".sub_title").html(end_text)
 
+//moment(start_timer).add('hours',18).format()
+    $("#intermittent_timer").find(".sub_title").attr('title',"Fast then: "+moment(start_timer).add({'hours': 8}).format('YYYY-MM-DD h:mm:ssa'))
+
+
      $("#intermittent_timer").find(".metric_text").attr('title',moment(start_timer).format('YYYY-MM-DD h:mm:ssa'))
 
 
     end_text_eight = time_since_start_time_moment_to(moment(start_timer).add('hours',8).format())
     $("#intermittent_timer").find(".sub_metric_text").html(end_text_eight)
+
+
+    $("#intermittent_timer").find(".sub_metric_text").attr('title',"Eat Then: "+moment(start_timer).add({'hours': 16}).format('YYYY-MM-DD h:mm:ssa'))
 
 
 
