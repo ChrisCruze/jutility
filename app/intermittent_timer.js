@@ -23,17 +23,27 @@ function html_timer_update_from_jquery_intermittent(start_timer){
 
 
 
+    //https://shippy-ac235.firebaseio.com/cruz_control/food2.json
+
 }
 
 
 function start_intermittent_timer(){
 
 $('#metric_headers').append(metric_header_create_label('Timer',sub_title,metric_text,sub_metric_text,'intermittent_timer'))
+$('#metric_headers').append(metric_header_create_label('Cals',sub_title,metric_text,sub_metric_text,'calorie_counter'))
 
 
 var firebaseRef = dbRef.ref('cruz_control').child('food2');
 l = firebase_json_pull("https://shippy-ac235.firebaseio.com/cruz_control/food2.json")
 console.log(l)
+
+
+     filtered_array = Object.values(l).filter(function(D){return moment(D['time_stamp']) > moment().subtract(24, 'hours')})
+
+calories = sum_float_convert_from_array_underscore(filtered_array,'comment')
+    $("#calorie_counter").find(".metric_text").html(calories)
+
 
 max_dict = max_date_from_array_underscore(l,'time_stamp')
 console.log(max_dict)
