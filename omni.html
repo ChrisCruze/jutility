@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
 <link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
+<link rel="stylesheet" href="css/small_chat.css">
 
 
 <!-- Mainly scripts -->
@@ -100,7 +101,9 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
  -->
  <script src="jutility.js"></script>
+<style>
 
+</style>
 </head>
 <body>
 <div id="wrapper">
@@ -433,6 +436,32 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 </div>
+
+
+<!--   
+
+<div><div id="small-chat"><span class="badge badge-warning pull-right">5</span><a class="open-small-chat"><i class="fa fa-comments"></i></a></div><div class="small-chat-box fadeInRight animated"><div class="heading" draggable="true"><small class="chat-date pull-right">02.19.2015</small></div><div class="content" id="message_content"></div><div class="form-chat"><div class="input-group input-group-sm"><input class="form-control" id="message_box_text" type="text"><span class="input-group-btn"><button class="btn btn-primar" type="button">Send</button></span></div></div></div></div>
+
+<div>
+<div id="small-chat">
+    <span class="badge badge-warning pull-right">5</span>
+    <a class="open-small-chat"><i class="fa fa-comments"></i></a>
+  </div>
+  <div class="small-chat-box fadeInRight animated">
+    <div class="heading" draggable="true">
+      <small class="chat-date pull-right">02.19.2015</small> Small chat
+    </div>
+    <div id="message_content" class="content">
+    </div>
+     <div class="form-chat">
+                <div class="input-group input-group-sm">
+                    <input id="message_box_text" type="text" class="form-control">
+                    <span class="input-group-btn"> <button
+                        class="btn btn-primary" type="button">Send
+                </button> </span></div>
+      </div>
+  </div>
+  </div> -->
 </div>
 
 
@@ -621,6 +650,9 @@ start_intermittent_timer()
 // list_progress_bar_list_element_thick()
 // list_progress_bar_list_element_thick()
 //firebase_generate_datatable()
+//initiate_firebase_chat_bubbles()
+//setTimeout(initiate_firebase_chat_bubbles,3000)
+initiate_firebase_chat_bubbles()
 </script>
 
 </body>

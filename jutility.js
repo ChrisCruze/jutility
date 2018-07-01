@@ -5,7 +5,7 @@
 //array from number. iterate
 function array_generate_from_number(number_of_rows){
   for(var i=0; i < number_of_rows ; i++){
-    console.log(i)
+    //console.log(i)
   }
 }
 
@@ -267,6 +267,114 @@ function papa_parse_array(file,delimter){
 //html_functions.js
 
 
+
+
+
+
+//add floating chat box
+function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+    favicon = favicon || "fa fa-comments"
+    chat_id = chat_id || "small-chat"
+    badge_icon =  $("<a>", {"class":"open-small-chat"}).append($("<i>", {"class":favicon}))
+    badge_counter = $("<span>", {"class":"badge badge-warning pull-right"}).text('5')
+    chat_icon = $("<div>", {"id":chat_id,class:'small-chat'}).append(badge_counter).append(badge_icon)
+
+    parent_heading = $("<div>", {"class":"heading"})//,"draggable":"true"
+    chat_title = chat_title||"Small Chat"
+
+    if(!('draggable' in document.createElement('span'))) {
+      //handle old browsers                
+    } else {
+      parent_heading.attr('draggable', 'true');
+    }
+
+
+    small_chat_date = small_chat_date || "02.19.2015"
+    message_content_id = message_content_id || "message_content"
+    message_box_id = message_box_id || "message_box_text"
+    heading = parent_heading.append($("<small>", {"class":"chat-date pull-right"}).text(small_chat_date)).append($("<span>",{}).text(chat_title))
+    message_content = $("<div>", {"class":"content message_content","id":message_content_id})
+    form_chat =  $("<div>", {"class":"form-chat"}).append($("<div>", {"class":"input-group input-group-sm"}).append($("<input>", {"type":"text","class":"form-control message_box","id":message_box_id})).append($("<span>", {"class":"input-group-btn"}).append($("<button>", {"class":"btn btn-primary message_send","type":"button"}).text("Send"))))
+    chat_session = $("<div>", {"class":"small-chat-box fadeInRight animated"}).append(heading).append(message_content).append(form_chat)
+
+
+  // <div id="small-chat">
+  //   <span class="badge badge-warning pull-right">5</span>
+  //   <a class="open-small-chat"><i class="fa fa-comments"></i></a>
+  // </div>
+  // <div class="small-chat-box fadeInRight animated">
+  //   <div class="heading" draggable="true">
+  //     <small class="chat-date pull-right">02.19.2015</small> Small chat
+  //   </div>
+  //   <div id="message_content" class="content">
+  //   </div>
+  //    <div class="form-chat">
+  //               <div class="input-group input-group-sm">
+  //                   <input id="message_box_text" type="text" class="form-control">
+  //                   <span class="input-group-btn"> <button
+  //                       class="btn btn-primary" type="button">Send
+  //               </button> </span></div>
+  //     </div>
+  // </div>
+
+    final_element = $("<div>", {'class':'chat'}).append(chat_icon,chat_session)
+    return final_element
+}
+
+
+
+function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+    parent_div = parent_div|| "#wrapper"
+    chat_id = chat_id || "smallchat"
+    message_content_id = message_content_id || "message_content"
+    message_box_id = message_box_id || "message_box_text"
+    favicon = favicon || "fa fa-comments"
+    small_chat_date = small_chat_date || "02.19.2015"
+    chat_title = chat_title||"Small Chat"
+
+
+    //add_floating_chat_box_base
+    //"small-chat","message_content","message_box_text","fa fa-comments","02.19.2015","Small Chat"
+    $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title))
+    console.log(chat_id)
+
+        // Open close small chat
+    $('.open-small-chat').on('click', function () {
+        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+        //$('.small-chat-box').toggleClass('active');
+    });
+
+    // Initialize slimscroll for small chat
+    $('.small-chat-box .content').slimScroll({
+        height: '234px',
+        railOpacity: 0.4
+    });
+
+
+    // $("#"+chat_id + ' .open-small-chat').on('click', function () {
+    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+    //     $("#"+chat_id + ' .small-chat-box').toggleClass('active');
+    // });
+
+    // // Initialize slimscroll for small chat
+    // $("#"+chat_id + ' .small-chat-box .content').slimScroll({
+    //     height: '234px',
+    //     railOpacity: 0.4
+    // });
+
+
+
+    // $('#smallchat .open-small-chat').on('click', function () {
+    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+    //     $('#small-chat  .small-chat-box').toggleClass('active');
+    // });
+
+    // $('.small-chat-box .content').slimScroll({
+    //     height: '234px',
+    //     railOpacity: 0.4
+    // });
+}
 
 
 //created progress bar div
@@ -1285,6 +1393,13 @@ function firebase_auth_user_process(user_process_func){
 }
 //jquery_functions.js
 
+
+//how to find parent elements
+function find_parent_elements(this_elem){
+	$(this_elem).closest('.ibox').find(".markdown_edit_form").show()
+
+}
+
 //sort a list of divs https://stackoverflow.com/questions/32362404/javascript-jquery-reorder-divs
 
 function sort_divs_jquery(parent_identifier,sort_attribute){
@@ -2242,7 +2357,7 @@ function todoist_delete_task(task_id){
 
 //child function of todoist_completed_tasks_all
 function todoist_completed_tasks_with_offset(todoist_api_token,offset,since) {
-  since = since||'2018-05-08T10:00'//moment().subtract(60,'days').format('YYYY-MM-DD') //
+  since = since||moment().subtract(30,'days').format('YYYY-MM-DD') + "T10:00"// '2018-05-08T10:00'//moment().subtract(60,'days').format('YYYY-MM-DD') //
     results = $.ajax({
       type: "GET",
       url: 'https://en.todoist.com/api/v7/completed/get_all',
@@ -2614,6 +2729,91 @@ function firebase_dataeditor_table_generate(table_id,fields,firebaseRef,row_id){
 
 
 }
+//firebase_chat_input.js
+
+
+
+
+function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+	chatRef = chatRef ||'null'
+	parent_div = parent_div || "#wrapper"
+    chat_id = chat_id || "smallchat"
+    message_content_id = message_content_id || "message_content"
+    message_box_id = message_box_id || "message_box_text"
+    favicon = favicon || "fa fa-comments"
+    small_chat_date = small_chat_date || "02.19.2015"
+    chat_title = chat_title||"Small Chat"
+
+    add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title)
+
+	$(".message_send").click(function(event) {
+	  input_text = $(this).closest('.chat').find(".message_box").val()
+	  date_time = moment().format() //new Date()
+	  data_to_push = {
+	    'content': input_text,
+	    'timestamp': date_time
+	  }
+	chatRef.push(data_to_push)
+	$(this).closest('.chat').find(".message_box").val("")
+	$(".message_box").val("")
+	})
+
+
+	$(".message_box").keypress(function (e) {
+	 var key = e.which;
+	 if(key == 13)  // the enter key code
+	 	
+	 // {$(".message_send").click();
+	  {$(this).closest('.chat').find(".message_send").click();
+
+	    return false;  
+	  }
+	});  
+
+
+
+	chatRef.on('child_added', function(snapshot) {
+  timer_instance_dictionary = snapshot.val()
+  if (timer_instance_dictionary != null){
+      saved_content = timer_instance_dictionary.content
+      viewer= timer_instance_dictionary.viewer
+      timestamp = moment(timer_instance_dictionary.timestamp).format("hh:mmA")//MM-DD 
+        message_content = '<div class="left"> <div class="author-name"> <small class="chat-date"> '+ timestamp +'</small> </div> <div class="chat-message active">'+ saved_content + ' </div> </div>'
+        console.log(message_content)
+        //message_content = '<div class="right"> <div class="author-name"> Aesop <small class="chat-date"> '+ timestamp+'</small> </div> <div class="chat-message"> '+ saved_content+ '</div> </div>'
+        $("#"+chat_id).closest('.chat').find(".message_content").append(message_content)
+        //$("#"+message_content_id).append(message_content)
+
+    }
+});
+
+}
+
+
+function initiate_firebase_chat_bubbles(){
+	chatRef = dbRef.ref('omni').child('ideas')
+
+	//chatRef = dbRef.ref('omni').child('tasks')
+	initiate_firebase_chat_bubbles_base(chatRef)
+
+
+
+	        // Open close small chat
+    $('.open-small-chat').on('click', function () {
+        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+        //$('.small-chat-box').toggleClass('active');
+    });
+
+    // Initialize slimscroll for small chat
+    $('.small-chat-box .content').slimScroll({
+        height: '234px',
+        railOpacity: 0.4
+    });
+
+
+
+}
 //firebase_snapshot.js
 
 
@@ -2646,9 +2846,9 @@ return todoist_gspread_pull
 
 //update the html of the timer
 function html_timer_update_from_jquery_intermittent(start_timer){
-	console.log(start_timer)
+	//console.log(start_timer)
     time_text = time_since_start_time_moment(start_timer)
-    console.log(time_text)
+    //console.log(time_text)
     $("#intermittent_timer").find(".metric_text").html(time_text)
 
     end_text = time_since_start_time_moment_to(moment(start_timer).add('hours',18).format())

@@ -1,6 +1,114 @@
 
 
 
+
+
+//add floating chat box
+function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+    favicon = favicon || "fa fa-comments"
+    chat_id = chat_id || "small-chat"
+    badge_icon =  $("<a>", {"class":"open-small-chat"}).append($("<i>", {"class":favicon}))
+    badge_counter = $("<span>", {"class":"badge badge-warning pull-right"}).text('5')
+    chat_icon = $("<div>", {"id":chat_id,class:'small-chat'}).append(badge_counter).append(badge_icon)
+
+    parent_heading = $("<div>", {"class":"heading"})//,"draggable":"true"
+    chat_title = chat_title||"Small Chat"
+
+    if(!('draggable' in document.createElement('span'))) {
+      //handle old browsers                
+    } else {
+      parent_heading.attr('draggable', 'true');
+    }
+
+
+    small_chat_date = small_chat_date || "02.19.2015"
+    message_content_id = message_content_id || "message_content"
+    message_box_id = message_box_id || "message_box_text"
+    heading = parent_heading.append($("<small>", {"class":"chat-date pull-right"}).text(small_chat_date)).append($("<span>",{}).text(chat_title))
+    message_content = $("<div>", {"class":"content message_content","id":message_content_id})
+    form_chat =  $("<div>", {"class":"form-chat"}).append($("<div>", {"class":"input-group input-group-sm"}).append($("<input>", {"type":"text","class":"form-control message_box","id":message_box_id})).append($("<span>", {"class":"input-group-btn"}).append($("<button>", {"class":"btn btn-primary message_send","type":"button"}).text("Send"))))
+    chat_session = $("<div>", {"class":"small-chat-box fadeInRight animated"}).append(heading).append(message_content).append(form_chat)
+
+
+  // <div id="small-chat">
+  //   <span class="badge badge-warning pull-right">5</span>
+  //   <a class="open-small-chat"><i class="fa fa-comments"></i></a>
+  // </div>
+  // <div class="small-chat-box fadeInRight animated">
+  //   <div class="heading" draggable="true">
+  //     <small class="chat-date pull-right">02.19.2015</small> Small chat
+  //   </div>
+  //   <div id="message_content" class="content">
+  //   </div>
+  //    <div class="form-chat">
+  //               <div class="input-group input-group-sm">
+  //                   <input id="message_box_text" type="text" class="form-control">
+  //                   <span class="input-group-btn"> <button
+  //                       class="btn btn-primary" type="button">Send
+  //               </button> </span></div>
+  //     </div>
+  // </div>
+
+    final_element = $("<div>", {'class':'chat'}).append(chat_icon,chat_session)
+    return final_element
+}
+
+
+
+function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+    parent_div = parent_div|| "#wrapper"
+    chat_id = chat_id || "smallchat"
+    message_content_id = message_content_id || "message_content"
+    message_box_id = message_box_id || "message_box_text"
+    favicon = favicon || "fa fa-comments"
+    small_chat_date = small_chat_date || "02.19.2015"
+    chat_title = chat_title||"Small Chat"
+
+
+    //add_floating_chat_box_base
+    //"small-chat","message_content","message_box_text","fa fa-comments","02.19.2015","Small Chat"
+    $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title))
+    console.log(chat_id)
+
+        // Open close small chat
+    $('.open-small-chat').on('click', function () {
+        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+        //$('.small-chat-box').toggleClass('active');
+    });
+
+    // Initialize slimscroll for small chat
+    $('.small-chat-box .content').slimScroll({
+        height: '234px',
+        railOpacity: 0.4
+    });
+
+
+    // $("#"+chat_id + ' .open-small-chat').on('click', function () {
+    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+    //     $("#"+chat_id + ' .small-chat-box').toggleClass('active');
+    // });
+
+    // // Initialize slimscroll for small chat
+    // $("#"+chat_id + ' .small-chat-box .content').slimScroll({
+    //     height: '234px',
+    //     railOpacity: 0.4
+    // });
+
+
+
+    // $('#smallchat .open-small-chat').on('click', function () {
+    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+    //     $('#small-chat  .small-chat-box').toggleClass('active');
+    // });
+
+    // $('.small-chat-box .content').slimScroll({
+    //     height: '234px',
+    //     railOpacity: 0.4
+    // });
+}
+
+
 //created progress bar div
 function list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color,metric_text){
     percentage = percentage||"48"

@@ -1,8 +1,8 @@
 //update the html of the timer
 function html_timer_update_from_jquery_intermittent(start_timer){
-	console.log(start_timer)
+	//console.log(start_timer)
     time_text = time_since_start_time_moment(start_timer)
-    console.log(time_text)
+    //console.log(time_text)
     $("#intermittent_timer").find(".metric_text").html(time_text)
 
     end_text = time_since_start_time_moment_to(moment(start_timer).add('hours',18).format())

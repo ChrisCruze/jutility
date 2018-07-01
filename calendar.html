@@ -212,21 +212,14 @@ calendar_object = $('#calendar').fullCalendar({
       editable: true,
       eventLimit: true, // allow "more" link when too many events
       events: [
-        {
-          title: 'Long Event',
-          start: '2018-03-07',
-          end: '2018-03-10',
-          url: 'http://google.com/',
-        }
       ]
     });
 
 var dbRef = dbRef||firebase.database();
 firebaseRef  = dbRef.ref('omni').child('calendar');
-firebase_dataeditor_table_generate("#table",['title','start','end','url'],firebaseRef)
 
-var converter = new showdown.Converter()
-//https://editor.datatables.net/reference/field/datetime
+
+firebase_dataeditor_table_generate("#table",['title','start','end','url'],firebaseRef)
 
 
 function firebase_read(snap){
@@ -236,7 +229,7 @@ function firebase_read(snap){
         start: String(dictionary_obj['start']),
         end: String(dictionary_obj['end'])
     }
-
+    console.log(calendar_dict)
     function add_event(){
            calendar_object.fullCalendar('renderEvent', calendar_dict)
     }
@@ -246,7 +239,7 @@ function firebase_read(snap){
 
 }
 
-firebaseRef.on("child_changed", function(snap) {firebase_read(snap)})
+//firebaseRef.on("child_changed", function(snap) {firebase_read(snap)})
 firebaseRef.on("child_added", function(snap) {firebase_read(snap)})
 
 

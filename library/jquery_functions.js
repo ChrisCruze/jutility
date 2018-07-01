@@ -1,3 +1,10 @@
+
+//how to find parent elements
+function find_parent_elements(this_elem){
+	$(this_elem).closest('.ibox').find(".markdown_edit_form").show()
+
+}
+
 //sort a list of divs https://stackoverflow.com/questions/32362404/javascript-jquery-reorder-divs
 
 function sort_divs_jquery(parent_identifier,sort_attribute){
