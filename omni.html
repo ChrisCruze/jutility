@@ -521,7 +521,7 @@ function completed_tasks_callback_wrapper(callback_array){
 
 remaining_tasks_populate(gspread_array)
 todoist_table_create_current(current_tasks,"#current_tasks_table",current_tasks_call_back)
-todoist_table_create_complete(completed_tasks,"#completed_tasks_table",completed_tasks_callback_wrapper)
+todoist_table_complete = todoist_table_create_complete(completed_tasks,"#completed_tasks_table",completed_tasks_callback_wrapper)
 
 
 
@@ -653,6 +653,20 @@ start_intermittent_timer()
 //initiate_firebase_chat_bubbles()
 //setTimeout(initiate_firebase_chat_bubbles,3000)
 initiate_firebase_chat_bubbles()
+
+
+function update_progress(){
+current_completed_tasks = todoist_table_complete.rows({ page: "current" }).data().toArray();
+measure_progress_bars(current_completed_tasks,progress_table)
+
+}
+setTimeout(update_progress,7000)
+
+// table.data().toArray();
+//progress_table
+//completed_tasks
+
+// table.data().toArray();
 </script>
 
 </body>

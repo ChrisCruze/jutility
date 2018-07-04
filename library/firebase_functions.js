@@ -1,3 +1,23 @@
+function firebase_account_create(email,password){
+ firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+}
+//account_create('cruzc.09@gmail.com','sTorr955')
+
+
+function firebase_account_login(email,password){
+  return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});
+}
+
 
 //sign in using firebase
 function firebase_signin(){

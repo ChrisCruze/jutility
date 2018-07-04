@@ -2,17 +2,47 @@
 //array_functions.js
 
 
+//https://stackoverflow.com/questions/38304401/javascript-check-if-dictionary - determine object type
+function determine_object_type(a){
+  if (typeof a === "object"){
+    return 'object'
+  }
+  else if (Array.isArray(a)){
+    return 'array'
+  }
+  else {
+    return 'other'
+  }
+  
+
+
+}
+
 //array from number. iterate
 function array_generate_from_number(number_of_rows){
   for(var i=0; i < number_of_rows ; i++){
     //console.log(i)
   }
 }
+function format_standardize_from_key_name(D,key_name){
+  if (Array.isArray(key_name)){
+    l = []
+    key_name.forEach(function(i){
+      l.push(D[i])
+    })
+    r = l.join(' ')
+    //console.log(r)
+    return r.toLowerCase()
+  }
+  else {
+    return D[key_name].toLowerCase()
+  }
+}
 
 //array filter tasks for text
 function array_filter_from_text(array,text,key_name){
   key_name = key_name || "content"
-  array = array.filter(function(D){return D[key_name].toLowerCase().indexOf(text.toLowerCase()) !== -1 })
+  array = array.filter(function(D){return format_standardize_from_key_name(D,key_name).indexOf(text.toLowerCase()) !== -1 })
   return array 
 }
 
@@ -663,6 +693,22 @@ function parameter_attain_from_url(param){
 }
 
 
+function ipLookUp () {
+  $.ajax('http://ip-api.com/json')
+  .then(
+      function success(response) {
+          console.log('User\'s Location Data is ', response);
+          console.log('User\'s Country', response.country);
+
+      },
+
+      function fail(data, status) {
+          console.log('Request failed.  Returned status of',
+                      status);
+      }
+  );
+}
+
 //chartjs_functions.js
 
 
@@ -1218,6 +1264,26 @@ function excel_define_sheet_name(excel){
 
 
 //firebase_functions.js
+
+function firebase_account_create(email,password){
+ firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+}
+//account_create('cruzc.09@gmail.com','sTorr955')
+
+
+function firebase_account_login(email,password){
+  return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});
+}
 
 
 //sign in using firebase
@@ -3088,7 +3154,11 @@ function remaining_tasks_populate(gspread_array){
 }
 //todoist_progress_bars.js
 
+function update_progress(){
+current_completed_tasks = todoist_table_complete.rows({ page: "current" }).data().toArray();
+measure_progress_bars(current_completed_tasks,progress_table)
 
+}
 
 
 function progress_bar_table_formulate(table_id){
@@ -3142,6 +3212,11 @@ function progress_bar_table_formulate(table_id){
                 { extend: "colvis", title: document.title },
         		{ extend: 'create', editor: editor },
                 { extend: "edit", editor: editor },
+                {text: 'Progress',name:'Progress', action: function ( e, dt, node, config ) {
+                  update_progress()
+                }},
+
+                //update_progress
                 {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
                   dt.columns('').search('').draw()
                 }}]
@@ -3248,7 +3323,7 @@ function measure_progress_bars(callback_array,progress_table){
       task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
-      duration = array_filter_from_text_sum(callback_array,row_data["name"],"content","duration")
+      duration = array_filter_from_text_sum(callback_array,row_data["name"],["content","project_name"],"duration")
       denom = (task_dates * multiplier)
       percentage = (duration/denom) * 100
       percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
@@ -3265,8 +3340,7 @@ function completed_tasks_call_back(callback_array){
   console.log(progress_table)
   if (progress_table.rows().length > 0){
 
-
-    measure_progress_bars(callback_array,progress_table)
+      measure_progress_bars(callback_array,progress_table)
 
 
   }
@@ -3630,7 +3704,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
 
     }
     setTimeout(run_refresh,5000)
-    //console.log(table)
+    console.log(table)
     //console.log(Object.values(table.rows({ page: "current" }).data()))
-
+    return table
 }

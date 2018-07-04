@@ -86,7 +86,7 @@ function measure_progress_bars(callback_array,progress_table){
       task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
-      duration = array_filter_from_text_sum(callback_array,row_data["name"],"content","duration")
+      duration = array_filter_from_text_sum(callback_array,row_data["name"],["content","project_name"],"duration")
       denom = (task_dates * multiplier)
       percentage = (duration/denom) * 100
       percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
@@ -103,8 +103,7 @@ function completed_tasks_call_back(callback_array){
   console.log(progress_table)
   if (progress_table.rows().length > 0){
 
-
-    measure_progress_bars(callback_array,progress_table)
+      measure_progress_bars(callback_array,progress_table)
 
 
   }
@@ -468,7 +467,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
 
     }
     setTimeout(run_refresh,5000)
-    //console.log(table)
+    console.log(table)
     //console.log(Object.values(table.rows({ page: "current" }).data()))
-
+    return table
 }

@@ -1,15 +1,45 @@
 
+//https://stackoverflow.com/questions/38304401/javascript-check-if-dictionary - determine object type
+function determine_object_type(a){
+  if (typeof a === "object"){
+    return 'object'
+  }
+  else if (Array.isArray(a)){
+    return 'array'
+  }
+  else {
+    return 'other'
+  }
+  
+
+
+}
+
 //array from number. iterate
 function array_generate_from_number(number_of_rows){
   for(var i=0; i < number_of_rows ; i++){
     //console.log(i)
   }
 }
+function format_standardize_from_key_name(D,key_name){
+  if (Array.isArray(key_name)){
+    l = []
+    key_name.forEach(function(i){
+      l.push(D[i])
+    })
+    r = l.join(' ')
+    //console.log(r)
+    return r.toLowerCase()
+  }
+  else {
+    return D[key_name].toLowerCase()
+  }
+}
 
 //array filter tasks for text
 function array_filter_from_text(array,text,key_name){
   key_name = key_name || "content"
-  array = array.filter(function(D){return D[key_name].toLowerCase().indexOf(text.toLowerCase()) !== -1 })
+  array = array.filter(function(D){return format_standardize_from_key_name(D,key_name).indexOf(text.toLowerCase()) !== -1 })
   return array 
 }
 

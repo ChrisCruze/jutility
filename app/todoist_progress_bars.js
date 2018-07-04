@@ -1,4 +1,8 @@
+function update_progress(){
+current_completed_tasks = todoist_table_complete.rows({ page: "current" }).data().toArray();
+measure_progress_bars(current_completed_tasks,progress_table)
 
+}
 
 
 function progress_bar_table_formulate(table_id){
@@ -52,6 +56,11 @@ function progress_bar_table_formulate(table_id){
                 { extend: "colvis", title: document.title },
         		{ extend: 'create', editor: editor },
                 { extend: "edit", editor: editor },
+                {text: 'Progress',name:'Progress', action: function ( e, dt, node, config ) {
+                  update_progress()
+                }},
+
+                //update_progress
                 {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
                   dt.columns('').search('').draw()
                 }}]
