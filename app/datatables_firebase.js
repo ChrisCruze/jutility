@@ -111,6 +111,7 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
         table.row.add(firebase_dictionary).draw(false);
     })
 
+    return table
 }
 
 
@@ -118,7 +119,8 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
 function datatables_firebase_table_generate(params){
     table_selector = params.table_selector||"#table"
     table_row_id = params.table_row_id||'DT_RowId'
-
     var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
-    firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id)
+    return firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id)
 }
+
+
