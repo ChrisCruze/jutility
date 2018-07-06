@@ -1,7 +1,7 @@
 
 
-function datatables_column_add_formatting_from_type(){
-    if (new_dictionary.type == 'date'){
+function datatables_column_add_formatting_from_type(new_dictionary){
+    if (new_dictionary.format == 'date'){
         new_dictionary.createdCell = date_time_datatable_format
     }
 

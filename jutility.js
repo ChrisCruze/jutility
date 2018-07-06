@@ -885,6 +885,10 @@ function datatables_data_get(table){
   return table.data().toArray();
 }
 
+function vote_created_cell(td, cellData, rowData, row, col) {
+  $(td).html( '<div class="vote-actions"> <a href="#"> <i class="fa fa-chevron-up"> </i> </a> <div>32</div> <a href="#"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
+} 
+
 //add bar chart within the cell
 function bar_create_datatable_cell(td, cellData, rowData, row, col) {
 
@@ -2658,8 +2662,8 @@ since = since||"2018-04-28"
 
 
 
-function datatables_column_add_formatting_from_type(){
-    if (new_dictionary.type == 'date'){
+function datatables_column_add_formatting_from_type(new_dictionary){
+    if (new_dictionary.format == 'date'){
         new_dictionary.createdCell = date_time_datatable_format
     }
 

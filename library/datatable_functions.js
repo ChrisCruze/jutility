@@ -3,6 +3,10 @@ function datatables_data_get(table){
   return table.data().toArray();
 }
 
+function vote_created_cell(td, cellData, rowData, row, col) {
+  $(td).html( '<div class="vote-actions"> <a href="#"> <i class="fa fa-chevron-up"> </i> </a> <div>32</div> <a href="#"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
+} 
+
 //add bar chart within the cell
 function bar_create_datatable_cell(td, cellData, rowData, row, col) {
 
