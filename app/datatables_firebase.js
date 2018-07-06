@@ -83,6 +83,8 @@ function datatable_generate(table_id,columns_list,editor,input_data){
     { extend: "edit", editor: editor },
     {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
         dt.columns('').search('').draw()
+        $.fn.dataTable.ext.search = []
+        dt.draw()
     }}]
     });
     return table_example
