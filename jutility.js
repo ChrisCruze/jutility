@@ -2657,15 +2657,22 @@ since = since||"2018-04-28"
 //datatables_firebase.js
 
 
+
+function datatables_column_add_formatting_from_type(){
+    if (new_dictionary.type == 'date'){
+        new_dictionary.createdCell = date_time_datatable_format
+    }
+
+}
+
 function datatable_column_fields_generate(custom_fields){
     l = []
     custom_fields.forEach(function(custom_field){
         if (typeof custom_field === "object"){
-            console.log(custom_field)
             custom_field_name = custom_field['data']
             custom_dictionary = {data:custom_field_name, name: custom_field_name,title:custom_field_name,label: custom_field_name}
             new_dictionary = combine_dicts(custom_dictionary,custom_field)
-            console.log(new_dictionary)
+            datatables_column_add_formatting_from_type(new_dictionary)
         }
         else {
             new_dictionary = {data:custom_field, name: custom_field,title:custom_field,label:custom_field}
