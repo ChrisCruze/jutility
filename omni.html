@@ -189,6 +189,26 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
         <div class="row">
             <div class="col-lg-8">
                 <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" onClick="drogas_chart_update()">Ds</a>
+                                </li>
+                                <li><a href="#"  onClick="run_chart_update()">Run</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
                     <div class="ibox-content">
                         <div>
                                         <span class="pull-right text-right">
@@ -652,7 +672,8 @@ start_intermittent_timer()
 //firebase_generate_datatable()
 //initiate_firebase_chat_bubbles()
 //setTimeout(initiate_firebase_chat_bubbles,3000)
-initiate_firebase_chat_bubbles()
+initiate_firebase_chat_bubbles({firebase_reference:dbRef.ref('omni').child('ideas')})
+//initiate_firebase_chat_bubbles({box_style:'right: 1000px',bubble_style:'right: 1000px',firebase_reference:dbRef.ref('omni').child('ideas2')})
 
 
 function update_progress(){
@@ -661,6 +682,32 @@ measure_progress_bars(current_completed_tasks,progress_table)
 
 }
 setTimeout(update_progress,7000)
+
+
+function drogas_chart_update(){
+    firebase_chart_update({
+        chart_object:bar_chart_object,
+        firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json",
+        filter_function:function(D){return D.type == 'count'},
+        calculation_function:function(l){return sum_float_convert_from_array_underscore(l,'input_text')},
+        date_key:'date_time',
+        dates:dates_past_n_days(30)
+    })
+}
+
+function run_chart_update(){
+    firebase_chart_update({
+        chart_object:bar_chart_object,
+        firebase_url:"https://shippy-ac235.firebaseio.com/run_log.json",
+        filter_function:function(D){return true},
+        calculation_function:function(l){return sum_float_convert_from_array_underscore(l,'miles')},
+        date_key:'time_stamp',
+        dates:dates_past_n_days(30)
+    })
+
+}
+
+
 
 // table.data().toArray();
 //progress_table

@@ -4,16 +4,17 @@
 
 
 //add floating chat box
-function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style){
     favicon = favicon || "fa fa-comments"
     chat_id = chat_id || "small-chat"
+    small_chat_style = small_chat_style||""
     badge_icon =  $("<a>", {"class":"open-small-chat"}).append($("<i>", {"class":favicon}))
     badge_counter = $("<span>", {"class":"badge badge-warning pull-right"}).text('5')
-    chat_icon = $("<div>", {"id":chat_id,class:'small-chat'}).append(badge_counter).append(badge_icon)
+    chat_icon = $("<div>", {"id":chat_id,class:'small-chat',"style":small_chat_style}).append(badge_counter).append(badge_icon)
 
     parent_heading = $("<div>", {"class":"heading"})//,"draggable":"true"
     chat_title = chat_title||"Small Chat"
-
+    small_chat_box_style = small_chat_box_style || ""
     if(!('draggable' in document.createElement('span'))) {
       //handle old browsers                
     } else {
@@ -27,7 +28,7 @@ function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,fa
     heading = parent_heading.append($("<small>", {"class":"chat-date pull-right"}).text(small_chat_date)).append($("<span>",{}).text(chat_title))
     message_content = $("<div>", {"class":"content message_content","id":message_content_id})
     form_chat =  $("<div>", {"class":"form-chat"}).append($("<div>", {"class":"input-group input-group-sm"}).append($("<input>", {"type":"text","class":"form-control message_box","id":message_box_id})).append($("<span>", {"class":"input-group-btn"}).append($("<button>", {"class":"btn btn-primary message_send","type":"button"}).text("Send"))))
-    chat_session = $("<div>", {"class":"small-chat-box fadeInRight animated"}).append(heading).append(message_content).append(form_chat)
+    chat_session = $("<div>", {"class":"small-chat-box fadeInRight animated","style":small_chat_box_style}).append(heading).append(message_content).append(form_chat)
 
 
   // <div id="small-chat">
@@ -55,7 +56,7 @@ function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,fa
 
 
 
-function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style){
     parent_div = parent_div|| "#wrapper"
     chat_id = chat_id || "smallchat"
     message_content_id = message_content_id || "message_content"
@@ -63,25 +64,27 @@ function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box
     favicon = favicon || "fa fa-comments"
     small_chat_date = small_chat_date || "02.19.2015"
     chat_title = chat_title||"Small Chat"
+    small_chat_style = small_chat_style||""
+    small_chat_box_style = small_chat_box_style || ""
 
 
     //add_floating_chat_box_base
     //"small-chat","message_content","message_box_text","fa fa-comments","02.19.2015","Small Chat"
-    $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title))
+    $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style))
     console.log(chat_id)
 
         // Open close small chat
-    $('.open-small-chat').on('click', function () {
-        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
-        //$('.small-chat-box').toggleClass('active');
-    });
+    // $('.open-small-chat').on('click', function () {
+    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+    //     $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+    //     //$('.small-chat-box').toggleClass('active');
+    // });
 
-    // Initialize slimscroll for small chat
-    $('.small-chat-box .content').slimScroll({
-        height: '234px',
-        railOpacity: 0.4
-    });
+    // // Initialize slimscroll for small chat
+    // $('.small-chat-box .content').slimScroll({
+    //     height: '234px',
+    //     railOpacity: 0.4
+    // });
 
 
     // $("#"+chat_id + ' .open-small-chat').on('click', function () {

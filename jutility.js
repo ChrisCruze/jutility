@@ -302,16 +302,17 @@ function papa_parse_array(file,delimter){
 
 
 //add floating chat box
-function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style){
     favicon = favicon || "fa fa-comments"
     chat_id = chat_id || "small-chat"
+    small_chat_style = small_chat_style||""
     badge_icon =  $("<a>", {"class":"open-small-chat"}).append($("<i>", {"class":favicon}))
     badge_counter = $("<span>", {"class":"badge badge-warning pull-right"}).text('5')
-    chat_icon = $("<div>", {"id":chat_id,class:'small-chat'}).append(badge_counter).append(badge_icon)
+    chat_icon = $("<div>", {"id":chat_id,class:'small-chat',"style":small_chat_style}).append(badge_counter).append(badge_icon)
 
     parent_heading = $("<div>", {"class":"heading"})//,"draggable":"true"
     chat_title = chat_title||"Small Chat"
-
+    small_chat_box_style = small_chat_box_style || ""
     if(!('draggable' in document.createElement('span'))) {
       //handle old browsers                
     } else {
@@ -325,7 +326,7 @@ function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,fa
     heading = parent_heading.append($("<small>", {"class":"chat-date pull-right"}).text(small_chat_date)).append($("<span>",{}).text(chat_title))
     message_content = $("<div>", {"class":"content message_content","id":message_content_id})
     form_chat =  $("<div>", {"class":"form-chat"}).append($("<div>", {"class":"input-group input-group-sm"}).append($("<input>", {"type":"text","class":"form-control message_box","id":message_box_id})).append($("<span>", {"class":"input-group-btn"}).append($("<button>", {"class":"btn btn-primary message_send","type":"button"}).text("Send"))))
-    chat_session = $("<div>", {"class":"small-chat-box fadeInRight animated"}).append(heading).append(message_content).append(form_chat)
+    chat_session = $("<div>", {"class":"small-chat-box fadeInRight animated","style":small_chat_box_style}).append(heading).append(message_content).append(form_chat)
 
 
   // <div id="small-chat">
@@ -353,7 +354,7 @@ function add_floating_chat_box_base(chat_id,message_content_id,message_box_id,fa
 
 
 
-function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style){
     parent_div = parent_div|| "#wrapper"
     chat_id = chat_id || "smallchat"
     message_content_id = message_content_id || "message_content"
@@ -361,25 +362,27 @@ function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box
     favicon = favicon || "fa fa-comments"
     small_chat_date = small_chat_date || "02.19.2015"
     chat_title = chat_title||"Small Chat"
+    small_chat_style = small_chat_style||""
+    small_chat_box_style = small_chat_box_style || ""
 
 
     //add_floating_chat_box_base
     //"small-chat","message_content","message_box_text","fa fa-comments","02.19.2015","Small Chat"
-    $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title))
+    $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style))
     console.log(chat_id)
 
         // Open close small chat
-    $('.open-small-chat').on('click', function () {
-        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
-        //$('.small-chat-box').toggleClass('active');
-    });
+    // $('.open-small-chat').on('click', function () {
+    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+    //     $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+    //     //$('.small-chat-box').toggleClass('active');
+    // });
 
-    // Initialize slimscroll for small chat
-    $('.small-chat-box .content').slimScroll({
-        height: '234px',
-        railOpacity: 0.4
-    });
+    // // Initialize slimscroll for small chat
+    // $('.small-chat-box .content').slimScroll({
+    //     height: '234px',
+    //     railOpacity: 0.4
+    // });
 
 
     // $("#"+chat_id + ' .open-small-chat').on('click', function () {
@@ -2937,12 +2940,77 @@ function firebase_dataeditor_table_generate(table_id,fields,firebaseRef,row_id){
 
 
 }
+//firebase_chart_update.js
+
+function chart_update_from_params(completed_tasks_array,chart_object,calculation_func,dates_this_month,date_key,bar_chart_name,line_chart_name){
+  //dates_this_month =  dates_past_thirty_days()
+  bar_chart_name = bar_chart_name || 'Tasks Completed by Day'
+  line_chart_name = line_chart_name ||'Rolling Total'
+  function length_func(l){return l.length}
+  calculation_func = calculation_func || length_func
+
+  y_axis_values = []
+  y_axis_values_secondary = []
+  x_axis_labels = []
+  running_total = 0
+  counter_of_day_i_did_it = 0
+  dates_this_month.forEach(function(item,index){
+    item.add(1, 'day')
+    filtered_array = completed_tasks_array.filter(function(D){return moment(D[date_key]).format("YYYY-MM-DD") == item.format("YYYY-MM-DD")})
+    if (filtered_array.length >0){
+      counter_of_day_i_did_it = 1 + counter_of_day_i_did_it
+    }
+    //console.log(filtered_array)
+    y_axis_value = calculation_func(filtered_array)//.length
+    //console.log(y_axis_value)
+    y_axis_values.push(y_axis_value)
+    running_total = running_total + y_axis_value
+    y_axis_values_secondary.push(running_total)
+    x_axis_labels.push(item.format("MM-DD (ddd)"))
+  })
+
+
+  chart_object.data.datasets[0].data = y_axis_values
+  chart_object.data.datasets[0].label = bar_chart_name
+  //chart_object.data.datasets[1].data = y_axis_values_secondary
+  //chart_object.data.datasets[1].label = line_chart_name
+  chart_object.data.labels= x_axis_labels
+  chart_object.update()
+  //console.log(counter_of_day_i_did_it,dates_this_month.length)
+  //console.log(dates_this_month)
+  ds_percentage = String(parseFloat((counter_of_day_i_did_it / dates_this_month.length)*100).toFixed()) + "%"
+  //$("#ds_percentage").html(ds_percentage)
+
+
+  average_per_d_time = (running_total/counter_of_day_i_did_it).toFixed(2)
+  console.log(average_per_d_time)
+  //$("#average_per_d_time").html(average_per_d_time)
+ 
+   
+
+  return chart_object
+}
+
+function firebase_chart_update(params){
+	chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
+
+	firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
+	filter_function = params.filter_function||function(D){return D.type == 'count'}
+  	dates = params.dates||dates_past_n_days(30)
+
+  	array = Object.values(firebase_json_pull(firebase_url))
+  	array = array.filter(filter_function)
+	calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
+	date_key = params.date_key||'date_time'
+	chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
+
+}
 //firebase_chat_input.js
 
 
 
 
-function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style){
 	chatRef = chatRef ||'null'
 	parent_div = parent_div || "#wrapper"
     chat_id = chat_id || "smallchat"
@@ -2951,8 +3019,11 @@ function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_
     favicon = favicon || "fa fa-comments"
     small_chat_date = small_chat_date || "02.19.2015"
     chat_title = chat_title||"Small Chat"
+    small_chat_box_style = small_chat_box_style || ""
+    small_chat_style = small_chat_style||""
 
-    add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title)
+
+    add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style)
 
 	$(".message_send").click(function(event) {
 	  input_text = $(this).closest('.chat').find(".message_box").val()
@@ -2980,7 +3051,7 @@ function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_
 
 
 
-	chatRef.on('child_added', function(snapshot) {
+chatRef.on('child_added', function(snapshot) {
   timer_instance_dictionary = snapshot.val()
   if (timer_instance_dictionary != null){
       saved_content = timer_instance_dictionary.content
@@ -2998,17 +3069,28 @@ function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_
 }
 
 
-function initiate_firebase_chat_bubbles(){
-	chatRef = dbRef.ref('omni').child('ideas')
+function initiate_firebase_chat_bubbles(params){
+
+	chatRef = params.firebase_reference||dbRef.ref('omni').child('ideas')
+    parent_div = params.parent_div || "#wrapper"
+    chat_id = params.chat_id || "smallchat"
+    message_content_id = params.message_content_id || "message_content"
+    message_box_id = params.message_box_id || "message_box_text"
+    favicon = params.favicon || "fa fa-comments"
+    small_chat_date = params.small_chat_date || "02.19.2015"
+    chat_title = params.chat_title||"Small Chat"
+    small_chat_box_style = params.box_style || "right: 75px"
+    small_chat_style = params.bubble_style||"right: 20px"
 
 	//chatRef = dbRef.ref('omni').child('tasks')
-	initiate_firebase_chat_bubbles_base(chatRef)
+	initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style)
 
 
 
-	        // Open close small chat
+	// Open close small chat
     $('.open-small-chat').on('click', function () {
         $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        console.log(this)
         $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
         //$('.small-chat-box').toggleClass('active');
     });

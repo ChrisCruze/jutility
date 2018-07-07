@@ -1,7 +1,7 @@
 
 
 
-function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title){
+function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style){
 	chatRef = chatRef ||'null'
 	parent_div = parent_div || "#wrapper"
     chat_id = chat_id || "smallchat"
@@ -10,8 +10,11 @@ function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_
     favicon = favicon || "fa fa-comments"
     small_chat_date = small_chat_date || "02.19.2015"
     chat_title = chat_title||"Small Chat"
+    small_chat_box_style = small_chat_box_style || ""
+    small_chat_style = small_chat_style||""
 
-    add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title)
+
+    add_floating_chat_box(parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style)
 
 	$(".message_send").click(function(event) {
 	  input_text = $(this).closest('.chat').find(".message_box").val()
@@ -39,7 +42,7 @@ function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_
 
 
 
-	chatRef.on('child_added', function(snapshot) {
+chatRef.on('child_added', function(snapshot) {
   timer_instance_dictionary = snapshot.val()
   if (timer_instance_dictionary != null){
       saved_content = timer_instance_dictionary.content
@@ -57,17 +60,28 @@ function initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_
 }
 
 
-function initiate_firebase_chat_bubbles(){
-	chatRef = dbRef.ref('omni').child('ideas')
+function initiate_firebase_chat_bubbles(params){
+
+	chatRef = params.firebase_reference||dbRef.ref('omni').child('ideas')
+    parent_div = params.parent_div || "#wrapper"
+    chat_id = params.chat_id || "smallchat"
+    message_content_id = params.message_content_id || "message_content"
+    message_box_id = params.message_box_id || "message_box_text"
+    favicon = params.favicon || "fa fa-comments"
+    small_chat_date = params.small_chat_date || "02.19.2015"
+    chat_title = params.chat_title||"Small Chat"
+    small_chat_box_style = params.box_style || "right: 75px"
+    small_chat_style = params.bubble_style||"right: 20px"
 
 	//chatRef = dbRef.ref('omni').child('tasks')
-	initiate_firebase_chat_bubbles_base(chatRef)
+	initiate_firebase_chat_bubbles_base(chatRef,parent_div,chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style)
 
 
 
-	        // Open close small chat
+	// Open close small chat
     $('.open-small-chat').on('click', function () {
         $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        console.log(this)
         $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
         //$('.small-chat-box').toggleClass('active');
     });
