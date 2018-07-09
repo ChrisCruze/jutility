@@ -201,46 +201,54 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 <script>
-calendar_object = $('#calendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay,listWeek'
-      },
-      defaultDate: '2018-06-12',
-      navLinks: true, // can click day/week names to navigate views
-      editable: true,
-      eventLimit: true, // allow "more" link when too many events
-      events: [
-      ]
-    });
-
-var dbRef = dbRef||firebase.database();
-firebaseRef  = dbRef.ref('omni').child('calendar');
-
-
-firebase_dataeditor_table_generate("#table",['title','start','end','url'],firebaseRef)
-
-
-function firebase_read(snap){
-    dictionary_obj = snap.val()
-    calendar_dict = {
-        title: String(dictionary_obj['title']),
-        start: String(dictionary_obj['start']),
-        end: String(dictionary_obj['end'])
-    }
-    console.log(calendar_dict)
-    function add_event(){
-           calendar_object.fullCalendar('renderEvent', calendar_dict)
-    }
-
-    setTimeout(add_event,1000)
-    //$("#"+dictionary_obj['id']).html(converter.makeHtml(dictionary_obj['content']))
-
+//var dbRef = dbRef||firebase.database();
+params = {
+    table_selector:"#table",
+    firebase_reference:firebase.database().ref('omni').child('calendar'),
+    columns:['start','end','title']
 }
 
-//firebaseRef.on("child_changed", function(snap) {firebase_read(snap)})
-firebaseRef.on("child_added", function(snap) {firebase_read(snap)})
+// full_calendar_generate(params)
+// calendar_object = $('#calendar').fullCalendar({
+//       header: {
+//         left: 'prev,next today',
+//         center: 'title',
+//         right: 'month,agendaWeek,agendaDay,listWeek'
+//       },
+//       defaultDate: '2018-06-12',
+//       navLinks: true, // can click day/week names to navigate views
+//       editable: true,
+//       eventLimit: true, // allow "more" link when too many events
+//       events: [
+//       ]
+//     });
+
+// var dbRef = dbRef||firebase.database();
+// firebaseRef  = dbRef.ref('omni').child('calendar');
+
+
+// firebase_dataeditor_table_generate("#table",['title','start','end','url'],firebaseRef)
+
+
+// function firebase_read(snap){
+//     dictionary_obj = snap.val()
+//     calendar_dict = {
+//         title: String(dictionary_obj['title']),
+//         start: String(dictionary_obj['start']),
+//         end: String(dictionary_obj['end'])
+//     }
+//     console.log(calendar_dict)
+//     function add_event(){
+//            calendar_object.fullCalendar('renderEvent', calendar_dict)
+//     }
+
+//     setTimeout(add_event,1000)
+//     //$("#"+dictionary_obj['id']).html(converter.makeHtml(dictionary_obj['content']))
+
+// }
+
+// //firebaseRef.on("child_changed", function(snap) {firebase_read(snap)})
+// firebaseRef.on("child_added", function(snap) {firebase_read(snap)})
 
 
 //https://fullcalendar.io/docs/event-object

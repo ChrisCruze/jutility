@@ -371,18 +371,18 @@ function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box
     $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style))
     console.log(chat_id)
 
-        // Open close small chat
-    // $('.open-small-chat').on('click', function () {
-    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-    //     $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
-    //     //$('.small-chat-box').toggleClass('active');
-    // });
+        //Open close small chat
+    $('.open-small-chat').on('click', function () {
+        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+        //$('.small-chat-box').toggleClass('active');
+    });
 
-    // // Initialize slimscroll for small chat
-    // $('.small-chat-box .content').slimScroll({
-    //     height: '234px',
-    //     railOpacity: 0.4
-    // });
+    // Initialize slimscroll for small chat
+    $('.small-chat-box .content').slimScroll({
+        height: '234px',
+        railOpacity: 0.4
+    });
 
 
     // $("#"+chat_id + ' .open-small-chat').on('click', function () {
@@ -2661,6 +2661,109 @@ since = since||"2018-04-28"
   return master_list
 }
 
+//calendar_datatables_firebase.js
+
+
+function full_calendar_generate(params){
+    
+
+    calendar_selector = params.calendar_selector||'#calendar'
+    calendar_date = params.calendar_date||moment().format('YYYY-MM-DD')
+
+
+    // $(calendar_selector).fullCalendar({
+    //   header: {
+    //     left: 'prev,next today',
+    //     center: 'title',
+    //     right: 'month,agendaWeek,agendaDay,listWeek'
+    //   },
+    //   defaultDate: calendar_date,
+    //   navLinks: true, // can click day/week names to navigate views
+    //   editable: true,
+    //   eventLimit: true, // allow "more" link when too many events
+    //   events: datatables_firebase_table_generate(params).data().toArray()
+    // });
+
+    table = datatables_firebase_table_generate(params)
+
+
+console.log(table.data().toArray())
+function array_from_datatables_pull() {
+  // Simulate async response
+  return new Promise(function(resolve, reject) {
+      while (true) {
+        setTimeout(function(){console.log(table.data().toArray())},1000)
+        if ( table.data().toArray().length > 0){
+          console.log(table.data().toArray())
+          resolve(table.data().toArray());
+
+          break
+        }
+        }
+
+        console.log('here')
+
+  })
+}
+
+function calendar_create_from_array() {
+  console.log('Calling function and waiting for result for 5secs....')
+  let getResult = array_from_datatables_pull();
+  console.log('Got result after 5secs', getResult)
+
+}
+   getResult = array_from_datatables_pull();
+
+//calendar_create_from_array()
+
+
+// function calendar_create_from_array() {
+//     array_from_datatables_pull().then(function(response) {
+//         console.log(response);
+//     $(calendar_selector).fullCalendar({
+//       header: {
+//         left: 'prev,next today',
+//         center: 'title',
+//         right: 'month,agendaWeek,agendaDay,listWeek'
+//       },
+//       defaultDate: calendar_date,
+//       navLinks: true, // can click day/week names to navigate views
+//       editable: true,
+//       eventLimit: true, // allow "more" link when too many events
+//       events: response
+//     });
+
+//       })
+// }
+
+calendar_create_from_array();
+
+
+  // function create_task_promise(params) {
+  //   return new Promise(function(resolve, reject) {
+
+  //     //table = datatables_firebase_table_generate(params)
+  //     if (datatables_firebase_table_generate(params).length != 0){
+  //       resolve(table.data().toArray())
+  //     }
+  //   });}
+
+  //create_task_promise(params).then(function(calendar_events) {
+ //   console.log(calendar_events)
+    // console.log(table.data().toArray())
+
+
+    // calendar_events = table.data().toArray()
+
+
+
+ // });
+
+
+}
+
+
+
 //datatables_firebase.js
 
 
@@ -2789,7 +2892,7 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
 }
 
 
-
+//{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']}
 function datatables_firebase_table_generate(params){
     table_selector = params.table_selector||"#table"
     table_row_id = params.table_row_id||'DT_RowId'
@@ -2940,6 +3043,77 @@ function firebase_dataeditor_table_generate(table_id,fields,firebaseRef,row_id){
 
 
 }
+//firebase_blog.js
+
+
+function timer_instance_dictionary_load(timer_instance_dictionary,blog_selector,converter){
+	if (timer_instance_dictionary != null){
+		saved_content = timer_instance_dictionary.content
+		timestamp = moment(timer_instance_dictionary.timestamp).format("MM-DD HH:mm")
+		$(timer_instance_dictionary.id).find(".timestamp").html(timestamp)
+		//instance_blog.find(".markdown_area").html(saved_content)
+		$(timer_instance_dictionary.id).find(".markdown_area").html(saved_content)
+
+		$(timer_instance_dictionary.id).find(".text_content").html(converter.makeHtml(saved_content))
+		//instance_blog.find(".text_content").html(converter.makeHtml(saved_content))
+	}
+	else {
+		saved_content = '-'
+		$(blog_selector).find(".markdown_area").html(saved_content)
+		$(blog_selector).find(".text_content").html(converter.makeHtml(saved_content))
+	}
+
+}
+
+function timer_instance_markdown_generate(blog_selector,firebase_reference,converter){
+    instance_blog = $(blog_selector)
+
+    function set_timer_instance(input_content){
+      firebase_reference.set({content:input_content,timestamp:moment().format(),id:blog_selector})
+    }
+    
+   $(blog_selector).find(".markdown_area").markdown({
+	    savable:true,
+	    onShow: function(e){
+	        instance_blog.find(".text_content").html(converter.makeHtml(e.getContent()))
+	    },
+	    onPreview: function(e) {
+	        var originalContent = e.getContent()
+	        instance_blog.find(".text_content").html(converter.makeHtml(e.getContent()))
+	        instance_blog.find(".text_content").html(e.parseContent())
+	        return e
+	    },
+	    onSave: function(e) {
+	        $(this).closest('.ibox').find(".text_content").html(converter.makeHtml(e.getContent()))
+	        set_timer_instance(e.getContent())
+	    },
+	    onChange: function(e){},
+	    onFocus: function(e) {},
+	    onBlur: function(e) {}
+    })
+
+
+   instance_blog.find(".edit_content").click(function(){
+        console.log($(this))
+        $(this).closest('.ibox').find(".markdown_edit_form").show()
+    }); 
+
+
+}
+function load_firebase_blog(params){
+    firebase_reference = params.firebase_reference||dbRef.ref('omni').child('omni_blog')
+    blog_selector = params.blog_selector || "#morning_review"
+    var converter = params.converter||new showdown.Converter()
+
+    firebase_reference.on('value', function(snapshot) {
+		timer_instance_dictionary = snapshot.val()
+		timer_instance_dictionary_load(timer_instance_dictionary,blog_selector,converter)
+    })
+    timer_instance_markdown_generate(blog_selector,firebase_reference,converter)
+}
+
+
+//$(blog_selector).find('.date_picker_calendar').daterangepicker({singleDatePicker: true,showDropdowns: true}, function(start, end, label) {load_blog('end_of_day_review',moment(start).format("YYYY-MM-DD"))})
 //firebase_chart_update.js
 
 function chart_update_from_params(completed_tasks_array,chart_object,calculation_func,dates_this_month,date_key,bar_chart_name,line_chart_name){

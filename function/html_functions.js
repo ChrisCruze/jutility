@@ -73,18 +73,18 @@ function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box
     $(parent_div).append(add_floating_chat_box_base(chat_id,message_content_id,message_box_id,favicon,small_chat_date,chat_title,small_chat_box_style,small_chat_style))
     console.log(chat_id)
 
-        // Open close small chat
-    // $('.open-small-chat').on('click', function () {
-    //     $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-    //     $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
-    //     //$('.small-chat-box').toggleClass('active');
-    // });
+        //Open close small chat
+    $('.open-small-chat').on('click', function () {
+        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+        //$('.small-chat-box').toggleClass('active');
+    });
 
-    // // Initialize slimscroll for small chat
-    // $('.small-chat-box .content').slimScroll({
-    //     height: '234px',
-    //     railOpacity: 0.4
-    // });
+    // Initialize slimscroll for small chat
+    $('.small-chat-box .content').slimScroll({
+        height: '234px',
+        railOpacity: 0.4
+    });
 
 
     // $("#"+chat_id + ' .open-small-chat').on('click', function () {

@@ -124,7 +124,7 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
 }
 
 
-
+//{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']}
 function datatables_firebase_table_generate(params){
     table_selector = params.table_selector||"#table"
     table_row_id = params.table_row_id||'DT_RowId'
