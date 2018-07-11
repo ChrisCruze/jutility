@@ -3526,7 +3526,9 @@ function datatables_column_add_formatting_from_type(new_dictionary){
     if (new_dictionary.format == 'date'){
         new_dictionary.createdCell = date_time_datatable_format
     }
-
+    if (new_dictionary.format == 'number'){
+        new_dictionary.type = "number-order"
+    }
 }
 
 function datatable_column_fields_generate(custom_fields){
