@@ -81,6 +81,7 @@ function datatable_generate(table_id,columns_list,editor,input_data){
     // ],
     select: true,
     paging:false,
+    scrollX: true,
     colReorder: true,
     buttons: [
     { extend: "excel", title: document.title },
