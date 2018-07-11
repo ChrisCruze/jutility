@@ -1,0 +1,455 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cruz Control</title>
+  <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+  <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
+  <link href=https://rawgit.com/vderm9/jutility/master/style.css rel="stylesheet">
+  <link href='https://cruzco.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
+  <link href='https://cruzco.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+  <link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
+
+<link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
+<link href="https://cruz.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+  <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+
+    <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
+
+
+  <!-- Mainly scripts -->
+  <script src="https://cruz.site44.com/js/jquery-3.1.1.min.js"></script>
+  <script src="https://cruz.site44.com/js/bootstrap.min.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+  <!-- Flot -->
+  <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.spline.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.resize.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.pie.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.symbol.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/flot/curvedLines.js"></script>
+
+  <!-- Peity -->
+  <script src="https://cruz.site44.com/js/plugins/peity/jquery.peity.min.js"></script>
+  <script src="https://cruz.site44.com/js/demo/peity-demo.js"></script>
+
+  <!-- Custom and plugin javascript -->
+  <script src="https://cruz.site44.com/js/inspinia.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/pace/pace.min.js"></script>
+
+  <!-- jQuery UI -->
+  <script src="https://cruz.site44.com/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src='https://cruzco.site44.com/lib/moment.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.min.js
+'></script>
+  <!-- Jvectormap -->
+  <script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+  <script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+
+
+
+
+  <!-- Sparkline -->
+  <script src="https://cruz.site44.com/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+  <!-- ChartJS-->
+  <script src="https://cruz.site44.com/js/plugins/chartJs/Chart.min.js"></script>
+
+  <!-- CodeMirror-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
+
+  <!-- FirebaseJS-->
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+    <script>
+      firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authDomain: "shippy-ac235.firebaseapp.com", databaseURL: "https://shippy-ac235.firebaseio.com"});
+    </script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
+    <!-- Bootstrap markdown -->
+    <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/markdown.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js'></script>
+
+<script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+<script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
+<script src="https://cruzco.site44.com/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/vderm9/jutility/master/js/dataTables.editor.min.js"></script>
+
+  <!-- Underscore-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src='https://cruzco.site44.com/lib/moment.min.js'></script>
+      <script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
+
+    <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
+
+
+    <script src='https://rawgit.com/vderm9/jutility/master/jutility.js'></script>
+
+
+<script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
+    <!-- Mainly scripts -->
+
+
+
+</head>
+<body>
+<div id="wrapper">
+<div id='navigation_side'></div>
+
+<div id="page-wrapper2" class="gray-bg">
+<div id='navigation_top'></div>
+
+<div class="wrapper wrapper-content">
+<div id='main_content'>
+<div class="container">
+
+
+
+
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="pull-right">
+                                <button class="btn btn-white btn-xs" id='edit_content' type="button">edit</button>
+                            </div>
+                            <div class="text-center article-title">
+                            <span class="text-muted" id="timestamp"><i class="fa fa-clock-o"></i> </span>
+
+                                <h1 id="blog_title">
+                                    Title
+                                </h1>
+                            </div>
+               
+
+
+
+                            <span id='text_content'></span>
+                 
+
+
+
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                        <h5>Tags:</h5>
+                                        <button class="btn btn-primary btn-xs" type="button">Model</button>
+                                        <button class="btn btn-white btn-xs" type="button">Publishing</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="small text-right">
+                                        <h5>Stats:</h5>
+                                        <div> <i class="fa fa-comments-o"> </i> <span id="word_count"></span> Words</div>
+                                        <i class="fa fa-eye"> </i> <span id="line_count"></span> Lines
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="pull-right">
+                                <button class="btn btn-white btn-xs" id='load_table' type="button">Load</button>
+                            </div>
+                            <div class="text-center article-title">
+                            <span class="text-muted" id=""><i class="fa fa-clock-o"></i> </span>
+
+                                <h1 id="">
+                                </h1>
+                            </div>
+               
+
+
+
+                            <table class="table table-hover no-margins" id="table">
+                                        </table>                 
+
+
+
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                        <h5>Tags:</h5>
+                                        <button class="btn btn-primary btn-xs" type="button">Model</button>
+                                        <button class="btn btn-white btn-xs" type="button">Publishing</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="small text-right">
+                                        <h5>Stats:</h5>
+                                        <div> <i class="fa fa-comments-o"> </i> <span id=""></span> Words</div>
+                                        <i class="fa fa-eye"> </i> <span id=""></span> Lines
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="pull-right">
+                                <button class="btn btn-white btn-xs" id='load_table' type="button"></button>
+                            </div>
+                            <div class="text-center article-title">
+                            <span class="text-muted" id=""><i class="fa fa-clock-o"></i> </span>
+
+                                <h1 id="">
+                                </h1>
+                            </div>
+               
+
+
+
+                            <table class="table table-hover no-margins" id="main_table">
+                                        </table>                 
+
+
+
+
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                        <h5>Tags:</h5>
+                                        <button class="btn btn-primary btn-xs" type="button">Model</button>
+                                        <button class="btn btn-white btn-xs" type="button">Publishing</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="small text-right">
+                                        <h5>Stats:</h5>
+                                        <div> <i class="fa fa-comments-o"> </i> <span id=""></span> Words</div>
+                                        <i class="fa fa-eye"> </i> <span id=""></span> Lines
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+</div>
+</div>
+</div>
+
+
+<div class="ibox-content" style='display:none' id='markdown_edit_form'>
+
+<textarea style="resize: none;" id='markdown_area' class="md-input" name="content" data-provide="markdown" rows="10">
+</textarea><div class="md-fullscreen-controls"><a href="#" class="exit-fullscreen" title="Exit fullscreen">
+
+<span class="glyphicon glyphicon-fullscreen"></span></a></div>
+
+</div>
+</div>
+</div>
+<script>
+
+
+// function import_files(){
+//     var link = document.querySelector('link[href="navigation_side_bar.html"]');
+//     var content = link.import;
+//     var el = content.querySelector('#navigation_side_bar');
+//     document.querySelector('#navigation_side').appendChild(el.cloneNode(true));
+
+
+//     var link = document.querySelector('link[href="navigation_top_bar.html"]');
+//     var content = link.import;
+//     var el = content.querySelector('#navigation_top_bar');
+//     document.querySelector('#navigation_top').appendChild(el.cloneNode(true));
+
+// }
+// window.addEventListener('WebComponentsReady', import_files);
+
+
+
+  function load_table(params){
+    data_table = datatables_firebase_table_generate({
+      table_selector:"#main_table",
+      firebase_reference:params.data_firebase,
+      columns:params.fields_table.data().toArray()
+    })
+  }
+
+function table_app_generate(params){
+  parent_firebase = params.firebase_reference
+  fields_firebase = parent_firebase.child('fields')
+  data_firebase = parent_firebase.child('data')
+
+  function load_initial_fields(){
+  fields_table = datatables_firebase_table_generate({table_selector:"#table",firebase_reference:fields_firebase,columns:['data','title','format']})
+  return fields_table
+
+  }
+
+  
+  fields_table = load_initial_fields()
+  console.log(fields_table)
+  function load_table_initiate(){load_table({data_firebase:data_firebase,fields_table:fields_table})}
+  $("#load_table").on('click', function (e) { 
+    load_table_initiate()
+  })
+  
+  if (fields_table.data().toArray().length > 0){
+      setTimeout(load_table_initiate,2000)
+  }
+
+
+// function load_initial_fields_promise() {
+//   return new Promise(
+//     function(resolve) {
+//         return resolve(load_initial_fields())
+//     },
+//     function(reject) {})
+// }
+
+
+//     load_initial_fields_promise().then(function(resp) {
+//       load_table({data_firebase:data_firebase,fields_table:resp})
+//     }
+//   )
+
+
+//onClick="drogas_chart_update()"
+
+
+}
+
+
+
+function todoist_app_generate(user){
+
+  user_id = 'test_user'
+  var url = new URL(window.location.href );
+  var hash = url.searchParams.get("id")||'intro'
+  document.title = hash
+
+  var dbRef = firebase.database();
+  var contactsRef = dbRef.ref('blogs').child(user_id)
+  var timer_instance = contactsRef.child('current_blog').child(hash)
+
+  var table_instance = contactsRef.child('data').child(hash)
+
+  table_app_generate({firebase_reference:table_instance})
+
+
+
+  var converter = new showdown.Converter()
+
+
+  $("#blog_title").html(hash)
+  function set_timer_instance(input_content){
+    timer_instance.set({content:input_content,timestamp:moment().format(),id:hash})
+  }
+
+timer_instance.on('value', function(snapshot) {
+    timer_instance_dictionary = snapshot.val()
+    console.log(timer_instance_dictionary)
+    if (timer_instance_dictionary != null){
+        saved_content = timer_instance_dictionary.content
+        timestamp = moment(timer_instance_dictionary.timestamp).format("MM-DD HH:mm")
+        $("#timestamp").html(timestamp)
+        console.log(saved_content)
+        $("#markdown_area").html(saved_content)
+        $("#text_content").html(converter.makeHtml(saved_content))
+    }
+      else {
+        saved_content = '-'
+        $("#markdown_area").html(saved_content)
+        $("#text_content").html(converter.makeHtml(saved_content))
+    }
+    });
+
+
+$("#markdown_area").markdown({
+  savable:true,
+  onShow: function(e){
+    $("#text_content").html(converter.makeHtml(e.getContent()))
+    function word_count_initiate(){
+    $("#word_count").html(String(e.getContent()).split(' ').length)
+    $("#line_count").html(String(e.getContent()).split('\n').length)    
+    }
+    setTimeout(word_count_initiate,3000)
+  },
+  onPreview: function(e) {
+
+      var originalContent = e.getContent()
+      $("#text_content").html(converter.makeHtml(e.getContent()))
+
+      //$("#markdown_edit_form").hide();
+      $("#text_content").html(e.parseContent())
+      return e
+  },
+  onSave: function(e) {
+    //alert("Saving '"+e.getContent()+"'...")
+    $("#text_content").html(converter.makeHtml(e.getContent()))
+    set_timer_instance(e.getContent())
+  },
+  onChange: function(e){
+    $("#text_content").html(converter.makeHtml(e.getContent()))
+    console.log(e)
+    $("#word_count").html(String(e.getContent()).split(' ').length)
+    $("#line_count").html(String(e.getContent()).split('\n').length)
+
+  },
+  onFocus: function(e) {
+  },
+  onBlur: function(e) {
+  }
+})
+
+  $("#hide").click(function(){$("p").hide();});
+  $("#edit_content").click(function(){
+  $("#markdown_edit_form").show();}); 
+
+
+}
+
+todoist_app_generate()
+
+</script>
+
+</body>
+</html>

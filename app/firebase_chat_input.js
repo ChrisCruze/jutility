@@ -49,7 +49,7 @@ chatRef.on('child_added', function(snapshot) {
       viewer= timer_instance_dictionary.viewer
       timestamp = moment(timer_instance_dictionary.timestamp).format("hh:mmA")//MM-DD 
         message_content = '<div class="left"> <div class="author-name"> <small class="chat-date"> '+ timestamp +'</small> </div> <div class="chat-message active">'+ saved_content + ' </div> </div>'
-        console.log(message_content)
+        //console.log(message_content)
         //message_content = '<div class="right"> <div class="author-name"> Aesop <small class="chat-date"> '+ timestamp+'</small> </div> <div class="chat-message"> '+ saved_content+ '</div> </div>'
         $("#"+chat_id).closest('.chat').find(".message_content").append(message_content)
         //$("#"+message_content_id).append(message_content)
@@ -81,7 +81,7 @@ function initiate_firebase_chat_bubbles(params){
 	// Open close small chat
     $('.open-small-chat').on('click', function () {
         $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-        console.log(this)
+        //console.log(this)
         $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
         //$('.small-chat-box').toggleClass('active');
     });

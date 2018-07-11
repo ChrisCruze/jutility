@@ -167,6 +167,12 @@ function data_table_simple(array,div_id){
     columns_list.push({data:i,title:i,name:i})
   })
   div_id = div_id || "#table"
+  array.forEach(function(D){
+          key_check_func_dictionary(key_names,D)
+
+    
+  })
+
   return $(div_id).DataTable({
   paging: false,
   dom: '<"html5buttons"B>lTfgitp',

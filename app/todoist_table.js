@@ -99,19 +99,19 @@ function measure_progress_bars(callback_array,progress_table){
 function completed_tasks_call_back(callback_array){
   task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
-  try {
-  console.log(progress_table)
-  if (progress_table.rows().length > 0){
+  // try {
+  // console.log(progress_table)
+  // if (progress_table.rows().length > 0){
 
-      measure_progress_bars(callback_array,progress_table)
+  //     measure_progress_bars(callback_array,progress_table)
 
 
-  }
+  // }
 
-  }
-  catch(err){
-    console.log(err)
-  }
+  // }
+  // catch(err){
+  //   console.log(err)
+  // }
 
 
 

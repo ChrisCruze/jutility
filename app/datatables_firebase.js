@@ -98,38 +98,115 @@ function datatable_generate(table_id,columns_list,editor,input_data){
 }
 
 
-function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row_id){
+function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row_id,params){
 
     var firebaseRef = firebaseRef||dbRef.ref('drogas');
     table_id = table_id||"#ds_table"
     fields = fields||['input_text','date_time','type','within_system','DT_RowId']
+
     row_id = row_id || 'DT_RowId'
 
     new_fields = datatable_column_fields_generate(fields)
     
+
+
     editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id)
     table = datatable_generate(table_id,new_fields,editor)
 
     firebaseRef.on("child_added", function(snap) {
+
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
         firebase_dictionary = snap.val()
+        console.log(firebase_dictionary)
         firebase_dictionary['DT_RowId'] = id
         fields_to_check = _.map(new_fields,function(D){return D['data']})
         key_check_func_dictionary(fields_to_check,firebase_dictionary)
         table.row.add(firebase_dictionary).draw(false);
     })
 
+
     return table
 }
 
 
-//{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']}
+//datatables_firebase_table_generate({table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 function datatables_firebase_table_generate(params){
     table_selector = params.table_selector||"#table"
     table_row_id = params.table_row_id||'DT_RowId'
     var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
     return firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id)
 }
+
+function firebase_json_pull_promise_original() {
+  return new Promise(
+    function(resolve) {
+      setTimeout(function() {
+        return resolve(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
+      }, 4000)
+    },
+    function(reject) {})
+}
+
+
+function firebase_json_pull_promise() {
+  return new Promise(
+    function(resolve) {
+        return resolve(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
+    },
+    function(reject) {})
+}
+
+
+function firebase_json_pull_promise_pull(array,params) {
+    //array = firebase_json_pull(params['firebase_url'])
+    params = params||{}
+    key_names = Object.keys(array[0])
+        columns_list = []
+        key_names.forEach(function(i){
+        columns_list.push({data:i,title:i,name:i})
+    })
+    params.columns = params.columns||key_names
+    params['table_selector'] = "#ds_table"
+    console.log(params)
+    console.log('AQUI AQUI')
+    return datatables_firebase_table_generate(params)
+}
+
+function firebase_json_pull_promise_pull_simple(){
+    firebase_json_pull_promise().then(function(resp) {
+        console.log(resp)
+        resp2 = Object.values(resp)
+        console.log(resp2)
+  console.log(firebase_json_pull_promise_pull(resp2))
+}
+  )
+}
+
+
+function datatables_firebase_table_generate_simple(params){
+    //params['firebase_reference'] = firebase.database().ref('drogas')
+    params['firebase_url'] = params['firebase_url'] ||"https://shippy-ac235.firebaseio.com/drogas.json"
+    array = firebase_json_pull(params['firebase_url'])
+    key_names = Object.keys(array[0])
+        columns_list = []
+        key_names.forEach(function(i){
+        columns_list.push({data:i,title:i,name:i})
+    })
+    params.columns = params.columns||key_names
+    return datatables_firebase_table_generate(params)
+}
+
+//datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
+function datatables_firebase(params){
+    table = datatables_firebase_table_generate_simple(params)
+    params.table = table
+    return params
+}
+
+
+
+
+
 
 

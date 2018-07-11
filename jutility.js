@@ -881,6 +881,164 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
 
 
 
+//crossfilter_functions.js
+
+
+
+        function print_filter(filter){
+            var f=eval(filter);
+            if (typeof(f.length) != "undefined") {}else{}
+            if (typeof(f.top) != "undefined") {f=f.top(Infinity);}else{}
+            if (typeof(f.dimension) != "undefined") {f=f.dimension(function(d) { return "";}).top(Infinity);}else{}
+            console.log(filter+"("+f.length+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
+        };
+
+
+
+
+        function getMonthName(v) {
+        var n = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        return n[v]
+        };
+
+
+
+        function num_format(){
+         var numFormat = d3.format(".3s")
+
+
+        }
+
+
+
+        function generateYearMonth(lst){
+            // Author: Koba
+            // Generates an array of full year concatenated woth a month number. 
+            // Ex.g., generateYearMonth(['20140','20142') will give ['20140','20141','20142']
+            var nlst = []
+            nlst.push(lst[0])
+            var counter = 0
+            var year = parseInt(nlst[counter].substring(0,4))
+            var month = parseInt(nlst[counter].substring(4,6))
+            
+            while (nlst[nlst.length-1] != lst[lst.length-1]){    
+                month += 1
+                
+                if(month % 12 === 0){
+                    year += 1
+                    month = 0
+                }
+                
+                nlst.push(String(year) + String(month))
+                counter += 1
+            }
+            return nlst
+        }
+
+        function filtered_group(group, bins) {
+            return {
+            all:function () {
+            return group.all().filter(function(d) {
+            return bins.indexOf(d.key) != -1;
+            })
+            }
+            }
+        };
+
+
+
+        function crossfilter_array_format(params){
+        	lst = params.data
+        var Strings = params.strings ||['Name','Type','StageName','Red_Account_Notes__c','OTF__c','Status_Notes__c','Account.Name','LeadSource','Industry__c','Success_Manager__c','Market_Developer__c','Product_Names__c'];
+        var Dates = params.dates||['CloseDate','Contract_Start_Date__c','Contract_End_Date__c'];
+        var Integers = params.numbers||['Amount','MRR__c','Probability','Account.Days_Since_Original_Close_Date__c'];
+
+        lst.forEach(function (d) {
+
+        Strings.forEach(function(key){d[key] = String(d[key]) || "None";});
+        Dates.forEach(function(key){d.key = d.key || "9/30/10";});
+        Dates.forEach(function(key){d[key] = new Date(d[key] + ' EST');});
+        Dates.forEach(function(key){d[key + "Formatted"] = d3.time.format("%m/%d/%y")(d[key])});
+        Dates.forEach(function(key){d[key + "YearString"] = d3.time.format("%y")(d[key])});
+        Dates.forEach(function(key){d[key + "DayNumber"] = d3.time.format("%d")(d[key])});
+        Dates.forEach(function(key){d[key + "Week"] = d[key].getWeek(1)});
+        Dates.forEach(function(key){d[key + "MonthName"] = getMonthName(d[key].getMonth())});
+        Dates.forEach(function(key){d[key + "YearMonth"] = String(d[key].getFullYear()) + String(d[key].getMonth())});
+        Dates.forEach(function(key){d[key + "Quarter"] = String(d[key].getFullYear()) + String(Math.floor((d[key].getMonth() + 3) / 3))});
+        Dates.forEach(function(key){d[key + "WeekDay"] = d[key].getDay()+"."+["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][d[key].getDay()]});
+        Dates.forEach(function(key){d[key + "Year"] = d[key].getFullYear('EST')});
+        Dates.forEach(function(key){d[key + "MonthNumber"] = d[key].getMonth()}); 
+        Dates.forEach(function(key){d[key + "Month"] = d3.time.month(d[key])}); 
+        Integers.forEach(function(key){d[key]=d[key]||"0";});
+        Integers.forEach(function(key){d[key] = parseInt(d[key], 10)});
+        Integers.forEach(function(key){d[key + "Formatted"] =   d3.format(",.0f")(d[key])}); 
+
+        });
+
+        return lst
+
+
+        }
+
+
+
+
+        function crossfilter_generate(params){
+        	lst = crossfilter_array_format(params)
+        	var ndx = crossfilter(lst);
+
+
+        function pie_chart_crossfilter(params,D,N,S) {
+        	ndx = params.ndx||ndx
+        	D = params.dimension||D
+        	N = params.metric||N
+        	S = params.chart_selector ||S
+            var D1 = ndx.dimension(function (d) {return d[D];})
+            var Chart = dc.pieChart(S)
+            var Sum = ndx.groupAll().reduceSum(function (d) {return d[N];})
+
+            Chart
+            .width(370).height(200).radius(90).innerRadius(40)
+            .dimension(D1)
+            .group(D1.group().reduceSum(function (d) {return d[N];}))
+            .label(function (d) {return d.key + " (" + (d.value / Sum.value() * 100).toFixed(2) + "%" + ")";})
+            .legend(dc.legend().x(290).y(10).itemHeight(13).gap(4))
+            .renderLabel(true);
+
+        }
+
+         	pie_chart_crossfilter({},'Cup','Top Sizes','#chart');
+         	//pie_chart_crossfilter({},'Dress','Top Sizes','#chart2');
+
+        	dc.renderAll();
+
+        }
+
+
+
+        function crossfilter_filter(params){
+        	ndx = params.ndx
+        var D = params.dimension||"CloseDateYearString"
+        var CloseDateYearFilter = ndx.dimension(function (d) {return d[D];})
+        var types = params.types||['14','15']
+        CloseDateYearFilter.filter(function(d) {return types.indexOf(d) > -1});
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //datatable_functions.js
 
 //get table data from datatables table
@@ -1052,6 +1210,12 @@ function data_table_simple(array,div_id){
     columns_list.push({data:i,title:i,name:i})
   })
   div_id = div_id || "#table"
+  array.forEach(function(D){
+          key_check_func_dictionary(key_names,D)
+
+    
+  })
+
   return $(div_id).DataTable({
   paging: false,
   dom: '<"html5buttons"B>lTfgitp',
@@ -1466,6 +1630,11 @@ function firebase_auth_user_process(user_process_func){
 }
 //jquery_functions.js
 
+//https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up/21067431
+function updateScroll(){
+    var element = document.getElementById("yourDivID");
+    element.scrollTop = element.scrollHeight;
+}
 
 //how to find parent elements
 function find_parent_elements(this_elem){
@@ -1930,6 +2099,25 @@ function gspread_query(range,spreadsheet_id,api_key){
   });
 
 }
+
+//pulls from gspread in different format
+function gspread_pull(params,sheet_name,spreadsheet_id,api_key,key_names){
+        api_key = paramsapi_key||"AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+        spreadsheet_id = params.spreadsheet_id||"1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+        sheet_name = params.sheet_name||"Checklists"
+        sheet_range = params.sheet_range||"A:Z"
+        range = params.sheet_name_range||sheet_name + "!"+ sheet_range //"!A:Z"
+        lol = gspread_query(range,spreadsheet_id,api_key).responseJSON.values
+        key_names = lol[0]||key_names
+        array = list_of_lists_to_array(lol,key_names)
+        array.shift()
+        return array
+    }
+
+  // sheet_name = 'Tasks'
+  // spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
+  // gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
+
 
 //pulls from gspread in different format
 function gspread_array_pull(sheet_name,spreadsheet_id,api_key,key_names){
@@ -2555,6 +2743,572 @@ function gspread_array_project_id_append(gspread_array_data,projects_dictionary)
     D['project_id'] = project_dictionary_reference[D['Category']] || 'null'
   })
 }
+
+function gspread_array_manual_pull(){
+  return [
+    {
+        "Category": "Bnb",
+        "Description": "Pay 401 and Murano via Wells Fargo and 1806 via PayPal",
+        "Estimated Duration": "5",
+        "Max Age": "30",
+        "Sprint": "Recurring",
+        "Task": "Pay Rent",
+        "Type": "Recurring",
+        "completed_count": 1,
+        "days_since_last_completed": 4,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/04 04:00 PM",
+        "project_id": 2159935681,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Entrepreneurship",
+        "Description": "-",
+        "Estimated Duration": "90",
+        "Max Age": "3",
+        "Sprint": "Intense",
+        "Task": "Aesop",
+        "Type": "Goal",
+        "completed_count": 134,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 08:56 PM",
+        "project_id": 2159934063,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Entrepreneurship",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "7",
+        "Sprint": "Phone - Quick",
+        "Task": "Ideate",
+        "Type": "Habit",
+        "completed_count": 4,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 07:57 PM",
+        "project_id": 2159934063,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Entrepreneurship",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "1",
+        "Sprint": "Phone - Messages",
+        "Task": "Check Aesop Email",
+        "Type": "Recurring",
+        "completed_count": 17,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 08:00 PM",
+        "project_id": 2159934063,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Fitness",
+        "Description": "-",
+        "Estimated Duration": "90",
+        "Max Age": "3",
+        "Sprint": "Intense",
+        "Task": "Exercise",
+        "Type": "Goal",
+        "completed_count": 10,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 11:56 PM",
+        "project_id": 2159936401,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Finance",
+        "Description": "Capital One, Chase, Amex, Barclays Uber",
+        "Estimated Duration": "5",
+        "Max Age": "5",
+        "Sprint": "Phone - Quick",
+        "Task": "Pay Credit Cards",
+        "Type": "Recurring",
+        "completed_count": 6,
+        "days_since_last_completed": 2,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/06 09:19 PM",
+        "project_id": 2168189199,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "14",
+        "Sprint": "Errand",
+        "Task": "Check Mail",
+        "Type": "Recurring",
+        "completed_count": 1,
+        "days_since_last_completed": 16,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "06/23 08:16 AM",
+        "project_id": 2159896039,
+        "status": "Red",
+        "task_assigned": "Amber"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "7",
+        "Sprint": "Errand",
+        "Task": "Clean Laptop",
+        "Type": "Recurring",
+        "completed_count": 4,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 09:02 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "25",
+        "Max Age": "21",
+        "Sprint": "Errand",
+        "Task": "Laundry",
+        "Type": "Recurring",
+        "completed_count": 2,
+        "days_since_last_completed": 6,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/02 07:07 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "3",
+        "Sprint": "Other",
+        "Task": "Meditate",
+        "Type": "Habit/Goal",
+        "completed_count": 6,
+        "days_since_last_completed": 1,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/07 06:26 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "14",
+        "Sprint": "Other",
+        "Task": "Wardrobe Search",
+        "Type": "Recurring",
+        "completed_count": 2,
+        "days_since_last_completed": 14,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "06/24 07:32 PM",
+        "project_id": 2159896039,
+        "status": "Red",
+        "task_assigned": "Amber"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "25",
+        "Max Age": "5",
+        "Sprint": "Other",
+        "Task": "Clean Room",
+        "Type": "Recurring",
+        "completed_count": 6,
+        "days_since_last_completed": 2,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/06 09:40 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "2",
+        "Max Age": "1",
+        "Sprint": "Phone - Messages",
+        "Task": "Check Email",
+        "Type": "Recurring",
+        "completed_count": 15,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 07:40 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "2",
+        "Max Age": "3",
+        "Sprint": "Phone - Messages",
+        "Task": "Update LinkedIn",
+        "Type": "Recurring",
+        "completed_count": 4,
+        "days_since_last_completed": 2,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/06 09:12 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "14",
+        "Sprint": "Phone - Quick",
+        "Task": "Order Food and Beverages",
+        "Type": "Recurring",
+        "completed_count": 2,
+        "days_since_last_completed": 13,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "06/25 07:32 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "2",
+        "Max Age": "29",
+        "Sprint": "Recurring",
+        "Task": "Prescription Request",
+        "Type": "Recurring",
+        "completed_count": 1,
+        "days_since_last_completed": 14,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "06/24 07:20 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "45",
+        "Sprint": "Recurring",
+        "Task": "Order Contacts",
+        "Type": "Recurring",
+        "completed_count": 1,
+        "days_since_last_completed": 8,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "06/30 08:50 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "2",
+        "Max Age": "90",
+        "Sprint": "Recurring",
+        "Task": "Get Haircut",
+        "Type": "Recurring",
+        "completed_count": 1,
+        "days_since_last_completed": 14,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "06/24 07:23 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "JP",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "30",
+        "Sprint": "Overdone",
+        "Task": "Zeus",
+        "Type": "Limit",
+        "completed_count": 13,
+        "days_since_last_completed": 3,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/05 02:30 PM",
+        "project_id": 2159934072,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "JP",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "30",
+        "Sprint": "Overdone",
+        "Task": "Testing Results",
+        "Type": "Limit",
+        "completed_count": 10,
+        "days_since_last_completed": 5,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/03 07:31 PM",
+        "project_id": 2159934072,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "JP",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "7",
+        "Sprint": "Remember",
+        "Task": "Clarity",
+        "Type": "Recurring",
+        "completed_count": 4,
+        "days_since_last_completed": 6,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/02 07:29 PM",
+        "project_id": 2159934072,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "JP",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "7",
+        "Sprint": "Remember",
+        "Task": "Beeline",
+        "Type": "Recurring",
+        "completed_count": 4,
+        "days_since_last_completed": 6,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/02 07:29 PM",
+        "project_id": 2159934072,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Life Engineering",
+        "Description": "-",
+        "Estimated Duration": "20",
+        "Max Age": "21",
+        "Sprint": "Overdone",
+        "Task": "Cruz Control",
+        "Type": "Limit",
+        "completed_count": 37,
+        "days_since_last_completed": 2,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/07 03:53 AM",
+        "project_id": 2160096908,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Life Engineering",
+        "Description": "-",
+        "Estimated Duration": "25",
+        "Max Age": "3",
+        "Sprint": "Transit",
+        "Task": "Reading",
+        "Type": "Habit/Goal",
+        "completed_count": 3,
+        "days_since_last_completed": 7,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/01 04:47 PM",
+        "project_id": 2160096908,
+        "status": "Red",
+        "task_assigned": "Amber"
+    },
+    {
+        "Category": "Social",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "1",
+        "Sprint": "Phone - Messages",
+        "Task": "Respond to Missed Text Messages",
+        "Type": "Recurring",
+        "completed_count": 11,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 08:02 PM",
+        "project_id": 2159934103,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Social",
+        "Description": "-",
+        "Estimated Duration": "10",
+        "Max Age": "7",
+        "Sprint": "Phone - Messages",
+        "Task": "Friends Connect",
+        "Type": "Habit",
+        "completed_count": 2,
+        "days_since_last_completed": 6,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/02 09:26 AM",
+        "project_id": 2159934103,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Social",
+        "Description": "-",
+        "Estimated Duration": "3",
+        "Max Age": "3",
+        "Sprint": "Phone - Messages",
+        "Task": "Gs Reach Out",
+        "Type": "Habit",
+        "completed_count": 6,
+        "days_since_last_completed": 2,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/06 04:45 PM",
+        "project_id": 2159934103,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Social",
+        "Description": "Check UWishuKnu, Meetup, and GroupMe",
+        "Estimated Duration": "5",
+        "Max Age": "3",
+        "Sprint": "Phone - Plan",
+        "Task": "Plan Social Events",
+        "Type": "Habit",
+        "completed_count": 3,
+        "days_since_last_completed": 1,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/07 03:05 PM",
+        "project_id": 2159934103,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Social",
+        "Description": "-",
+        "Estimated Duration": "2",
+        "Max Age": "30",
+        "Sprint": "Unimportant",
+        "Task": "Choice Purchase",
+        "Type": "Recurring",
+        "completed_count": 1,
+        "days_since_last_completed": 14,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "06/24 07:34 PM",
+        "project_id": 2159934103,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Bnb",
+        "Description": "Learn about the laws as it applies to 401 and 2116 and follow-up",
+        "Estimated Duration": "15",
+        "Max Age": "5",
+        "Sprint": "Procastinate",
+        "Task": "Landlord Legal",
+        "Type": "Procastinating Project",
+        "completed_count": 5,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 10:25 PM",
+        "project_id": 2159935681,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "Prioritize/Tag/Clean Tasks and Ensure Tasks have task assigned",
+        "Estimated Duration": "3",
+        "Max Age": "1",
+        "Sprint": "Phone - Plan",
+        "Task": "Clean Todoist",
+        "Type": "Recurring",
+        "completed_count": 13,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 07:42 PM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Life Engineering",
+        "Description": "Schedule Day Out",
+        "Estimated Duration": "3",
+        "Max Age": "2",
+        "Sprint": "Phone - Plan",
+        "Task": "Morning Review",
+        "Type": "Habit",
+        "completed_count": 8,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 07:47 PM",
+        "project_id": 2160096908,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
+        "Category": "Homeostasis",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "2",
+        "Sprint": "Phone - Plan",
+        "Task": "Plan Intake",
+        "Type": "Goal",
+        "completed_count": 2,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/09 01:08 AM",
+        "project_id": 2159896039,
+        "status": "Green",
+        "task_assigned": "Green"
+    }
+]
+}
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom_gspread(){
 
@@ -2576,7 +3330,7 @@ function todoist_tasks_pull_custom_gspread(){
 
   sheet_name = 'Tasks'
   spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
-  gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
+  gspread_array_data = gspread_array_manual_pull()//gspread_array_pull(sheet_name,spreadsheet_id)
 
 
 
@@ -2866,39 +3620,116 @@ function datatable_generate(table_id,columns_list,editor,input_data){
 }
 
 
-function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row_id){
+function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row_id,params){
 
     var firebaseRef = firebaseRef||dbRef.ref('drogas');
     table_id = table_id||"#ds_table"
     fields = fields||['input_text','date_time','type','within_system','DT_RowId']
+
     row_id = row_id || 'DT_RowId'
 
     new_fields = datatable_column_fields_generate(fields)
     
+
+
     editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id)
     table = datatable_generate(table_id,new_fields,editor)
 
     firebaseRef.on("child_added", function(snap) {
+
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
         firebase_dictionary = snap.val()
+        console.log(firebase_dictionary)
         firebase_dictionary['DT_RowId'] = id
         fields_to_check = _.map(new_fields,function(D){return D['data']})
         key_check_func_dictionary(fields_to_check,firebase_dictionary)
         table.row.add(firebase_dictionary).draw(false);
     })
 
+
     return table
 }
 
 
-//{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']}
+//datatables_firebase_table_generate({table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 function datatables_firebase_table_generate(params){
     table_selector = params.table_selector||"#table"
     table_row_id = params.table_row_id||'DT_RowId'
     var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
     return firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id)
 }
+
+function firebase_json_pull_promise_original() {
+  return new Promise(
+    function(resolve) {
+      setTimeout(function() {
+        return resolve(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
+      }, 4000)
+    },
+    function(reject) {})
+}
+
+
+function firebase_json_pull_promise() {
+  return new Promise(
+    function(resolve) {
+        return resolve(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
+    },
+    function(reject) {})
+}
+
+
+function firebase_json_pull_promise_pull(array,params) {
+    //array = firebase_json_pull(params['firebase_url'])
+    params = params||{}
+    key_names = Object.keys(array[0])
+        columns_list = []
+        key_names.forEach(function(i){
+        columns_list.push({data:i,title:i,name:i})
+    })
+    params.columns = params.columns||key_names
+    params['table_selector'] = "#ds_table"
+    console.log(params)
+    console.log('AQUI AQUI')
+    return datatables_firebase_table_generate(params)
+}
+
+function firebase_json_pull_promise_pull_simple(){
+    firebase_json_pull_promise().then(function(resp) {
+        console.log(resp)
+        resp2 = Object.values(resp)
+        console.log(resp2)
+  console.log(firebase_json_pull_promise_pull(resp2))
+}
+  )
+}
+
+
+function datatables_firebase_table_generate_simple(params){
+    //params['firebase_reference'] = firebase.database().ref('drogas')
+    params['firebase_url'] = params['firebase_url'] ||"https://shippy-ac235.firebaseio.com/drogas.json"
+    array = firebase_json_pull(params['firebase_url'])
+    key_names = Object.keys(array[0])
+        columns_list = []
+        key_names.forEach(function(i){
+        columns_list.push({data:i,title:i,name:i})
+    })
+    params.columns = params.columns||key_names
+    return datatables_firebase_table_generate(params)
+}
+
+//datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
+function datatables_firebase(params){
+    table = datatables_firebase_table_generate_simple(params)
+    params.table = table
+    return params
+}
+
+
+
+
+
 
 
 
@@ -3232,7 +4063,7 @@ chatRef.on('child_added', function(snapshot) {
       viewer= timer_instance_dictionary.viewer
       timestamp = moment(timer_instance_dictionary.timestamp).format("hh:mmA")//MM-DD 
         message_content = '<div class="left"> <div class="author-name"> <small class="chat-date"> '+ timestamp +'</small> </div> <div class="chat-message active">'+ saved_content + ' </div> </div>'
-        console.log(message_content)
+        //console.log(message_content)
         //message_content = '<div class="right"> <div class="author-name"> Aesop <small class="chat-date"> '+ timestamp+'</small> </div> <div class="chat-message"> '+ saved_content+ '</div> </div>'
         $("#"+chat_id).closest('.chat').find(".message_content").append(message_content)
         //$("#"+message_content_id).append(message_content)
@@ -3264,7 +4095,7 @@ function initiate_firebase_chat_bubbles(params){
 	// Open close small chat
     $('.open-small-chat').on('click', function () {
         $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-        console.log(this)
+        //console.log(this)
         $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
         //$('.small-chat-box').toggleClass('active');
     });
@@ -3734,19 +4565,19 @@ function measure_progress_bars(callback_array,progress_table){
 function completed_tasks_call_back(callback_array){
   task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
-  try {
-  console.log(progress_table)
-  if (progress_table.rows().length > 0){
+  // try {
+  // console.log(progress_table)
+  // if (progress_table.rows().length > 0){
 
-      measure_progress_bars(callback_array,progress_table)
+  //     measure_progress_bars(callback_array,progress_table)
 
 
-  }
+  // }
 
-  }
-  catch(err){
-    console.log(err)
-  }
+  // }
+  // catch(err){
+  //   console.log(err)
+  // }
 
 
 

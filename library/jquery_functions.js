@@ -1,3 +1,8 @@
+//https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up/21067431
+function updateScroll(){
+    var element = document.getElementById("yourDivID");
+    element.scrollTop = element.scrollHeight;
+}
 
 //how to find parent elements
 function find_parent_elements(this_elem){
