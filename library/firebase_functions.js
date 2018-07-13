@@ -4,7 +4,7 @@
 //This function checks whether the user is logged in. If the user is logged in, then it runs the app_start function
 //{application_function:func,login_url:func}
 function firebase_check_login_initiate(params) {
-        firebase.auth().onAuthStateChanged(function(user) {
+        return firebase.auth().onAuthStateChanged(function(user) {
               if (user) {
                 user.getIdToken().then(function(accessToken) {
                   params.application_function(user)
