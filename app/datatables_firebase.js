@@ -29,7 +29,7 @@ function datatable_column_fields_generate(custom_fields){
 }
 
 
-function dataeditor_firebase_instance_generate_options(firebaseRef,row_id){
+function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params){
 
     row_id = row_id || 'DT_RowId'
     editor.on("postSubmit", function(e, json, data, action, xhr) {
@@ -38,7 +38,12 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id){
         json_array = json.data;
         json_array.forEach(function(D) {
         record_id = D[row_id];
+
         D["time_stamp"] = moment().format();
+
+        edit_attributes = params.submit_attributes||params.edit_attributes
+        D = combine_dicts(D,edit_attributes)
+
         firebaseRef.child(record_id).set(D);
     });
     }
@@ -52,9 +57,15 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id){
 
     }
     else {
+
         items_to_add = Object.values(data.data)
         items_to_add.forEach(function(item){
         item['time_stamp'] = moment().format()
+
+
+        submit_attributes = params.submit_attributes||{}
+        item = combine_dicts(item,submit_attributes)
+
         r = firebaseRef.push(item)
         //console.log(r)
     })
@@ -113,7 +124,7 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
     
 
 
-    editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id)
+    editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id,params)
     table = datatable_generate(table_id,new_fields,editor)
 
     firebaseRef.on("child_added", function(snap) {
@@ -138,7 +149,7 @@ function datatables_firebase_table_generate(params){
     table_selector = params.table_selector||"#table"
     table_row_id = params.table_row_id||'DT_RowId'
     var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
-    return firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id)
+    return firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id,params)
 }
 
 function firebase_json_pull_promise_original() {
@@ -202,7 +213,8 @@ function datatables_firebase_table_generate_simple(params){
 
 //datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
 function datatables_firebase(params){
-    table = datatables_firebase_table_generate_simple(params)
+    table = datatables_firebase_table_generate(params)
+    //table = datatables_firebase_table_generate_simple(params)
     params.table = table
     return params
 }
