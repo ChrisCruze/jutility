@@ -982,10 +982,70 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
 
 
 
-
-        function crossfilter_generate(params){
+function crossfilter_generate(params){
         	lst = crossfilter_array_format(params)
-        	var ndx = crossfilter(lst);
+        	var ndx = params.ndx||crossfilter(lst);
+            params.ndx = ndx
+        var numFormat = d3.format(".3s")
+
+
+        function row_bar_chart_cross_filter(params) {
+
+            D = params.dimension
+            N = params.metric
+            S = params.chart_identifier 
+            T = params.calculation 
+
+
+            var D1 = ndx.dimension(function(d) {return d[D]})
+
+            var RowBarChart1 = dc.rowChart(S)
+            RowBarChart1
+            .width(180).height(500)
+            .margins({top: 20, left: 15, right: 10, bottom: 20})
+            .dimension(D1)
+            .valueAccessor(function (d) { // must use valueAccessor
+                return d.value[T];
+                })
+                .group(D1.group().reduce(
+                function reduceAdd(p, d) {
+                ++p.count;
+                p.sum += d[N]
+                if (d[N] in p.IDs) p.IDs[d[N]]++;
+                else {
+                p.IDs[d[N]] = 1;
+                p.unique++;
+                }
+                p.avg = p.sum/p.count;
+                return p;
+                },
+                function reduceRemove(p, d) {
+                --p.count;
+                p.sum -= d[N];
+                p.IDs[d[N]]--;
+                if (p.IDs[d[N]] === 0) {
+                delete p.IDs[d[N]];
+                p.unique--;
+                }
+                p.avg = p.sum/p.count;
+                return p;
+                },
+                function reduceInitial() {
+                return {
+                count:0,
+                sum:0,
+                unique: 0,
+                avg : 0,
+                IDs: {}
+                };}
+                ))
+            .elasticX(true)
+            .label(function (d) {return d.key + "  " + numFormat(d.value[T]);})
+            .ordering(function(d) { return -d.value[T] })
+            .xAxis().tickFormat(function(v){return v}).ticks(3);
+
+        }
+
 
 
         function pie_chart_crossfilter(params,D,N,S) {
@@ -1007,11 +1067,32 @@ function bar_chart_update_time_scale_calculate_function(chart_object,array,date_
 
         }
 
-         	pie_chart_crossfilter({},'Cup','Top Sizes','#chart');
+
+
+        if (params.charts){
+            params.charts.forEach(function(chart_dict){
+                if (chart_dict.type == 'pie'){
+                    pie_chart_crossfilter({},chart_dict.dimension,chart_dict.metric,chart_dict.chart_identifier);
+                }
+
+                if (chart_dict.type == 'row'){
+                    row_bar_chart_cross_filter(chart_dict);
+                }
+
+
+
+            })
+
+        }
+
+
          	//pie_chart_crossfilter({},'Dress','Top Sizes','#chart2');
 
-        	dc.renderAll();
+        	
 
+
+            dc.renderAll();
+            return params
         }
 
 
