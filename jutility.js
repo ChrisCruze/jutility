@@ -712,6 +712,35 @@ function ipLookUp () {
   );
 }
 
+//calendar_functions.js
+
+
+
+
+function calendar_initiate_base(params){
+	calendar_selector = params.calendar_selector||'#calendar'
+	events = params.events
+	calendar_object = $(calendar_selector).fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay,listWeek'
+      },
+      defaultDate: moment().format('YYYY-MM-DD'),//'2018-06-12',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: events
+    });
+}
+
+
+function calendar_initiate(params){
+	calendar_initiate_base(params)
+	//setTimeout(calendar_initiate_base,2000,params)
+
+}
+
 //chartjs_functions.js
 
 
@@ -3840,6 +3869,9 @@ function datatables_firebase_table_generate_simple(params){
     return datatables_firebase_table_generate(params)
 }
 
+
+//datatables_firebase
+//{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 //datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
 function datatables_firebase(params){
     table = datatables_firebase_table_generate(params)

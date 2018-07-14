@@ -201,27 +201,32 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 <script>
+
+
+events = firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json")
+
+calendar_initiate({events:firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json")})
+
 //var dbRef = dbRef||firebase.database();
-params = {
-    table_selector:"#table",
-    firebase_reference:firebase.database().ref('omni').child('calendar'),
-    columns:['start','end','title']
-}
+// params = {
+//     table_selector:"#table",
+//     firebase_reference:firebase.database().ref('omni').child('calendar'),
+//     columns:['start','end','title']
+// }
 
 // full_calendar_generate(params)
-// calendar_object = $('#calendar').fullCalendar({
-//       header: {
-//         left: 'prev,next today',
-//         center: 'title',
-//         right: 'month,agendaWeek,agendaDay,listWeek'
-//       },
-//       defaultDate: '2018-06-12',
-//       navLinks: true, // can click day/week names to navigate views
-//       editable: true,
-//       eventLimit: true, // allow "more" link when too many events
-//       events: [
-//       ]
-//     });
+calendar_object = $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay,listWeek'
+      },
+      defaultDate: '2018-06-12',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: events
+    });
 
 // var dbRef = dbRef||firebase.database();
 // firebaseRef  = dbRef.ref('omni').child('calendar');

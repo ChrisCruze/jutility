@@ -211,6 +211,9 @@ function datatables_firebase_table_generate_simple(params){
     return datatables_firebase_table_generate(params)
 }
 
+
+//datatables_firebase
+//{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 //datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
 function datatables_firebase(params){
     table = datatables_firebase_table_generate(params)

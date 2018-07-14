@@ -268,6 +268,32 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 <div class="col-lg-4">
                 <div id='morning_review'>
                     <div class="ibox">
+
+
+                    <div class="ibox-title">
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" onClick='load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})'>Load Blog</a>
+                                </li>
+
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+
+
+
+
                         <div class="ibox-content">
                             <div class="text-center article-title">
                                 <h3 id="blog_title">
@@ -345,19 +371,41 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                             <div class="col-lg-4">
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">
-                                        <h5>Ds</h5>
-                                        <div class="ibox-tools">
-                                            <a class="collapse-link">
-                                                <i class="fa fa-chevron-up"></i>
-                                            </a>
-                                            <a class="close-link">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </div>
+                                        <h5>Checklist</h5>
+
+
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" onClick="initiate_check_list_datatable('checklist')">Initiate</a></li>
+                                <li><a href="#" onClick='datatables_firebase({table_selector:"#checklist_table", firebase_reference:dbRef.ref("omni").child("calendar"), columns:["title","start","end"] })'>Calendar</a></li>
+
+                             <li><a href="#" onClick='calendar_initiate({events:Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))})'>Calendar object</a></li>
+
+
+
+
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+
+
                                     </div>
                                     <div class="ibox-content">
-                                        <table class="display" cellspacing="0" width="100%" id="ds_table">
-                                        </table>
+                                    <div id="calendar"></div>
+                                    
+
+                                        <table class="display" cellspacing="0" width="100%" id="checklist_table">
+                                        </table>                            
+<!--                                         <table class="display" cellspacing="0" width="100%" id="ds_table">
+                                        </table> -->
                                     </div>
                                 </div>
                             </div>
@@ -749,7 +797,18 @@ function run_chart_update(){
 
 }
 
-load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref('omni').child('omni_blog')})
+
+
+
+
+
+function initiate_check_list_datatable(table_node){
+    datatables_firebase({
+        table_selector:"#checklist_table",
+        firebase_reference:dbRef.ref('omni').child(table_node),
+        columns:['text','date']
+    })
+}
 
 
 // var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
