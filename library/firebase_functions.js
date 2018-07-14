@@ -7,6 +7,7 @@ function firebase_check_login_initiate(params) {
         return firebase.auth().onAuthStateChanged(function(user) {
               if (user) {
                 user.getIdToken().then(function(accessToken) {
+                  console.log(user)
                   params.application_function(user)
                 });
               } else {

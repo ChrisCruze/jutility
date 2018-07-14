@@ -1311,6 +1311,7 @@ function callback_function_sum_datatables(variable_name){
   variable_name = api.column(variable_name+":name", {page:'current'} ).data().sum()
   return api 
 }
+
 //format the datatables date with the date
 function date_format_with_day(td, cellData, rowData, row, col) {
   date_format = moment(cellData).format("MM/DD/YY (dd)");
@@ -1445,6 +1446,7 @@ function firebase_check_login_initiate(params) {
         return firebase.auth().onAuthStateChanged(function(user) {
               if (user) {
                 user.getIdToken().then(function(accessToken) {
+                  console.log(user)
                   params.application_function(user)
                 });
               } else {
@@ -3618,14 +3620,14 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
 
 }})}
 
-function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_id){
+function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_id,params){
     row_id = row_id || 'DT_RowId'
     editor = new $.fn.dataTable.Editor({
         table:table_id,
         idSrc: row_id,
         fields: fields
     });
-    dataeditor_firebase_instance_generate_options(firebaseRef,row_id)
+    dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params)
     return editor
 }
 

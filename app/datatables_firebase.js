@@ -72,14 +72,14 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
 
 }})}
 
-function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_id){
+function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_id,params){
     row_id = row_id || 'DT_RowId'
     editor = new $.fn.dataTable.Editor({
         table:table_id,
         idSrc: row_id,
         fields: fields
     });
-    dataeditor_firebase_instance_generate_options(firebaseRef,row_id)
+    dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params)
     return editor
 }
 

@@ -113,7 +113,9 @@
     <script src='https://rawgit.com/vderm9/jutility/master/jutility.js'></script>
 
 
-<script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+<!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+ --><script src="jutility.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
     <!-- Mainly scripts -->
 
@@ -183,7 +185,18 @@
             <div class="row">
                 <div class="col-lg-10 col-lg-offset-1">
                     <div class="ibox">
-                        <div class="ibox-content">
+                                    <div class="ibox-title">
+                                        <h5></h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link" id='collapse_link'>
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                        <div class="ibox-content" style="display:none">
                             <div class="pull-right">
                                 <button class="btn btn-white btn-xs" id='load_table' type="button">Load</button>
                             </div>
@@ -196,8 +209,10 @@
                
 
 
+<!--       <table id="table" class="table table-striped table-bordered table-hover dataTables-example">
+ -->
 
-                            <table class="table table-hover no-margins" id="table">
+<table  id="table" class="display" style="width:100%">
                                         </table>                 
 
 
@@ -227,46 +242,23 @@
 
 
             <div class="row">
-                <div class="col-lg-10 col-lg-offset-1">
+                            <div class="col-lg-10 col-lg-offset-1">
+
+                <div class="">
                     <div class="ibox">
                         <div class="ibox-content">
-                            <div class="pull-right">
-                                <button class="btn btn-white btn-xs" id='load_table' type="button"></button>
-                            </div>
-                            <div class="text-center article-title">
-                            <span class="text-muted" id=""><i class="fa fa-clock-o"></i> </span>
-
-                                <h1 id="">
-                                </h1>
-                            </div>
-               
 
 
 
-                            <table class="table table-hover no-margins" id="main_table">
-                                        </table>                 
+      <table id="main_table" class="display nowrap" style="width:100%"></table>  
 
 
 
 
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-6">
-                                        <h5>Tags:</h5>
-                                        <button class="btn btn-primary btn-xs" type="button">Model</button>
-                                        <button class="btn btn-white btn-xs" type="button">Publishing</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="small text-right">
-                                        <h5>Stats:</h5>
-                                        <div> <i class="fa fa-comments-o"> </i> <span id=""></span> Words</div>
-                                        <i class="fa fa-eye"> </i> <span id=""></span> Lines
-                                    </div>
-                                </div>
-                            </div>
 
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
 
@@ -319,7 +311,7 @@ function table_app_generate(params){
   data_firebase = parent_firebase.child('data')
 
   function load_initial_fields(){
-  fields_table = datatables_firebase_table_generate({table_selector:"#table",firebase_reference:fields_firebase,columns:['data','title','format']})
+  fields_table = datatables_firebase_table_generate({table_selector:"#table",firebase_reference:fields_firebase,columns:['data','title','format','visible']})
   return fields_table
 
   }
@@ -332,10 +324,14 @@ function table_app_generate(params){
     load_table_initiate()
   })
   
+  function check_to_load(){
   if (fields_table.data().toArray().length > 0){
       setTimeout(load_table_initiate,2000)
   }
 
+
+  }
+setTimeout(check_to_load,1000)
 
 // function load_initial_fields_promise() {
 //   return new Promise(
@@ -448,7 +444,7 @@ $("#markdown_area").markdown({
 }
 
 todoist_app_generate()
-
+$("#collapse_link").click()
 </script>
 
 </body>

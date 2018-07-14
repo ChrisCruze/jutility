@@ -107,7 +107,10 @@ CSVFunctions().write(array,filename)
 
 readme_file_write(array)
 
+def save_file(directory=os.path.join(os.getcwd(),'jutility.js')):
+    f = open(directory, 'w+')
+    f.write(str(s))
+    f.close()
+save_file()
 
-f = open(os.path.join(os.getcwd(),'jutility.js'), 'w+')
-f.write(str(s))
-f.close()
+save_file(directory="/Users/chriscruz/Dropbox/Github/Taskr/js/jutility.js")
