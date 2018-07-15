@@ -381,7 +381,8 @@ function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box
     // Initialize slimscroll for small chat
     $('.small-chat-box .content').slimScroll({
         height: '234px',
-        railOpacity: 0.4
+        railOpacity: 0.4,
+        start: 'bottom'
     });
 
 
@@ -1767,8 +1768,8 @@ function firebase_auth_user_process(user_process_func){
 //jquery_functions.js
 
 //https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up/21067431
-function updateScroll(){
-    var element = document.getElementById("yourDivID");
+function updateScroll(yourDivID){
+    var element = document.getElementById(yourDivID);
     element.scrollTop = element.scrollHeight;
 }
 
@@ -2160,6 +2161,23 @@ function dates_between_dates_moment(startDate, stopDate) {
 
 
 
+//stock_functions.js
+
+//https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5
+
+
+
+function stock_pull(url){
+    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5"
+    l = $.ajax({
+      url: url,
+      method: "GET",
+      async:false,
+      headers: {"Accept":"application/json; odata=verbose"}
+    })
+    results = l.responseJSON
+    return results
+  }
 //toastr_functions.js
 
 
@@ -2189,6 +2207,28 @@ function typewriter_element_create(div_id,input_text){
 
 }
 
+
+function typewriter_multiple_questions_create(div_id) {
+      div_id = div_id || 'app'
+      questions = $("#" + div_id).attr("questions").split("|")
+
+        
+      var app = document.getElementById(div_id);
+      var typewriter = new Typewriter(app, {
+        loop: true
+      });
+        
+    questions.forEach(function(i){
+      typewriter.typeString(String(i))
+      .pauseFor(1000)
+      .deleteAll()
+        
+    })
+
+        
+          
+   typewriter.start();
+}
 //underscore_functions.js
 
 // get sum from array with key
@@ -2419,6 +2459,37 @@ function guest_airbnb_url_create(data, type, row, meta) {
   return data;
 }
 
+//iextrading_functions.js
+
+//https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5
+//https://iextrading.com/developer/docs/#batch-requests
+
+
+function stock_pull(url){
+    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5"
+    l = $.ajax({
+      url: url,
+      method: "GET",
+      async:false,
+      headers: {"Accept":"application/json; odata=verbose"}
+    })
+    results = l.responseJSON
+    return results
+  }
+//ip_functions.js
+
+function ipLookUp () {
+  $.ajax('http://ip-api.com/json').then(
+      function success(response) {
+        session_dictionary['ip_data'] = response
+        update_firebase_session_dictionary(response,'ip_data')
+        console.log('User\'s Location Data is ', response);
+      },
+      function fail(data, status) {
+          console.log('Request failed.  Returned status of',status);
+      }
+  );
+}
 //todoist_functions.js
 
 //toodoist custom functions 
@@ -2951,6 +3022,23 @@ function gspread_array_manual_pull(){
         "task_assigned": "Green"
     },
     {
+        "Category": "Entrepreneurship",
+        "Description": "-",
+        "Estimated Duration": "5",
+        "Max Age": "2",
+        "Sprint": "Phone - Messages",
+        "Task": "Aesop: Correspond on Slack",
+        "Type": "Recurring",
+        "completed_count": 17,
+        "days_since_last_completed": 0,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/08 08:00 PM",
+        "project_id": 2159934063,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
         "Category": "Fitness",
         "Description": "-",
         "Estimated Duration": "90",
@@ -3345,7 +3433,7 @@ function gspread_array_manual_pull(){
         "Category": "Social",
         "Description": "Check UWishuKnu, Meetup, and GroupMe",
         "Estimated Duration": "5",
-        "Max Age": "7",
+        "Max Age": "14",
         "Sprint": "Phone - Plan",
         "Task": "Plan Social Events",
         "Type": "Habit",
@@ -3379,7 +3467,7 @@ function gspread_array_manual_pull(){
         "Category": "Bnb",
         "Description": "Learn about the laws as it applies to 401 and 2116 and follow-up",
         "Estimated Duration": "15",
-        "Max Age": "5",
+        "Max Age": "10",
         "Sprint": "Procastinate",
         "Task": "Landlord Legal",
         "Type": "Procastinating Project",
@@ -4257,7 +4345,8 @@ function initiate_firebase_chat_bubbles(params){
     // Initialize slimscroll for small chat
     $('.small-chat-box .content').slimScroll({
         height: '234px',
-        railOpacity: 0.4
+        railOpacity: 0.4,
+        start:'bottom'
     });
 
 
@@ -4378,6 +4467,7 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
     var my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+    console.log(my_interval_timer)
 	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
         $("#input_update").click(function(event) {
             event.preventDefault()
@@ -4391,22 +4481,27 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             //$("#input_update").click();
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            timer_instance_dictionary['new_task_name'] = input_text + html_timer
-            console.log(timer_instance_dictionary)
-            r = $.ajax({
-              type: "POST",
-              data:timer_instance_dictionary,
-              url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
-            })
-            console.log(r)
+            
+            if (input_text != '' && input_text != undefined){
+                timer_instance_dictionary['new_task_name'] = input_text + html_timer
+                console.log(timer_instance_dictionary)
+                r = $.ajax({
+                  type: "POST",
+                  data:timer_instance_dictionary,
+                  url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
+                })
+                console.log(r)      
+            }
+            else {
+                alert('input text is blank')
+            }
+
 
             //todoist_complete_task(String(timer_instance_dictionary.id))
             timer_instance.set({})
-
-
             clearInterval(my_interval_timer)
-
-            $("#input_text").val("") 
+            $("#input_text").val("")
+            
 
         })
 

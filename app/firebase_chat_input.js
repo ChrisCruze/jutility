@@ -89,7 +89,8 @@ function initiate_firebase_chat_bubbles(params){
     // Initialize slimscroll for small chat
     $('.small-chat-box .content').slimScroll({
         height: '234px',
-        railOpacity: 0.4
+        railOpacity: 0.4,
+        start:'bottom'
     });
 
 

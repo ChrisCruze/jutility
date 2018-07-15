@@ -9,7 +9,7 @@
 <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
 <link href="https://cruz.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
 
-<link href=https://rawgit.com/vderm9/jutility/master/style.css rel="stylesheet">
+<link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
 <link href='https://cruzco.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
 <link href='https://cruzco.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
 <link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
@@ -125,9 +125,9 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
         <div class="navbar-header">
 
 
-
+        <span id='timer_text_container'>
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="timer_text" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
-
+        </span>
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="favicon_select_button" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
             <ul class="dropdown-menu" id="favicon_dropdown_menu">
                 <li><small id='task_content'></small></li>
@@ -136,7 +136,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 
-            <form role="search" class="navbar-form-custom" action="search_results.html" style="width: 400px;">
+            <form  class="navbar-form-custom" style="width: 400px; z-index: -1;">
 
                 <div class="form-group">
                     <input size="80" placeholder="Task" class="form-control" name="top-search" id="input_text" type="text">
@@ -362,7 +362,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="ibox-content">
+                                    <div class="ibox-content" style="max-height: 450px;overflow-y: scroll;">
                                         <table class="table table-hover no-margins" id="progress_table">
                                         </table>
                                     </div>

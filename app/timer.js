@@ -19,6 +19,7 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
     var my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+    console.log(my_interval_timer)
 	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
         $("#input_update").click(function(event) {
             event.preventDefault()
@@ -32,22 +33,27 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             //$("#input_update").click();
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            timer_instance_dictionary['new_task_name'] = input_text + html_timer
-            console.log(timer_instance_dictionary)
-            r = $.ajax({
-              type: "POST",
-              data:timer_instance_dictionary,
-              url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
-            })
-            console.log(r)
+            
+            if (input_text != '' && input_text != undefined){
+                timer_instance_dictionary['new_task_name'] = input_text + html_timer
+                console.log(timer_instance_dictionary)
+                r = $.ajax({
+                  type: "POST",
+                  data:timer_instance_dictionary,
+                  url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
+                })
+                console.log(r)      
+            }
+            else {
+                alert('input text is blank')
+            }
+
 
             //todoist_complete_task(String(timer_instance_dictionary.id))
             timer_instance.set({})
-
-
             clearInterval(my_interval_timer)
-
-            $("#input_text").val("") 
+            $("#input_text").val("")
+            
 
         })
 

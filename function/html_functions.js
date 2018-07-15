@@ -83,7 +83,8 @@ function add_floating_chat_box(parent_div,chat_id,message_content_id,message_box
     // Initialize slimscroll for small chat
     $('.small-chat-box .content').slimScroll({
         height: '234px',
-        railOpacity: 0.4
+        railOpacity: 0.4,
+        start: 'bottom'
     });
 
 

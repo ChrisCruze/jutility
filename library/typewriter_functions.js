@@ -15,3 +15,26 @@ function typewriter_element_create(div_id,input_text){
 	    .start();
 
 }
+
+
+function typewriter_multiple_questions_create(div_id) {
+      div_id = div_id || 'app'
+      questions = $("#" + div_id).attr("questions").split("|")
+
+        
+      var app = document.getElementById(div_id);
+      var typewriter = new Typewriter(app, {
+        loop: true
+      });
+        
+    questions.forEach(function(i){
+      typewriter.typeString(String(i))
+      .pauseFor(1000)
+      .deleteAll()
+        
+    })
+
+        
+          
+   typewriter.start();
+}
