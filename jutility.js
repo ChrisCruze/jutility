@@ -3090,6 +3090,23 @@ function gspread_array_manual_pull(){
         "task_assigned": "Green"
     },
     {
+        "Category": "Finance",
+        "Description": "",
+        "Estimated Duration": "5",
+        "Max Age": "2",
+        "Sprint": "Phone - Quick",
+        "Task": "Check Balances",
+        "Type": "Recurring",
+        "completed_count": 6,
+        "days_since_last_completed": 2,
+        "duration": 0,
+        "duration_today": 0,
+        "last_completed": "07/06 09:19 PM",
+        "project_id": 2168189199,
+        "status": "Green",
+        "task_assigned": "Green"
+    },
+    {
         "Category": "Homeostasis",
         "Description": "-",
         "Estimated Duration": "5",
