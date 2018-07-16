@@ -648,6 +648,7 @@ todoist_table_complete = todoist_table_create_complete(completed_tasks,"#complet
 
 timer_instance.on('value', function(snapshot) {
     timer_instance_dictionary = snapshot.val()
+    console.log(timer_instance_dictionary)
     if (timer_instance_dictionary != null){
         console.log(timer_instance_dictionary)
         timer_instance_exists_process(timer_instance_dictionary,timer_instance)

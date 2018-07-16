@@ -4,7 +4,18 @@ function datatables_data_get(table){
 }
 
 function vote_created_cell(td, cellData, rowData, row, col) {
-  $(td).html( '<div class="vote-actions"> <a href="#"> <i class="fa fa-chevron-up"> </i> </a> <div>32</div> <a href="#"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
+
+  $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
+  $('.vote_up').on('click', function (e) { 
+    console.log('up')
+    console.log(rowData)
+    console.log($(this))
+  })
+  $('.vote_down').on('click', function (e) { 
+    console.log('down')
+    console.log(rowData)
+    console.log($(this))
+  })
 } 
 
 //add bar chart within the cell
@@ -113,6 +124,12 @@ function datatables_search(dt){
 //add a record to datatables 
 function row_add_datatables(table,dictionary_obj){
     table.row.add(dictionary_obj).draw( false );
+}
+
+//update label of status of rag (created: 5/28/18)
+function url_create_datatables(td, cellData, rowData, row, col){
+  title = rowData.name||rowData.title
+  return $(td).html("<a target='_blank' href='"+cellData+"'>" +title + "</a>")
 }
 
 //update label of status of rag (created: 5/28/18)
