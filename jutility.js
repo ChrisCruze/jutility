@@ -562,7 +562,7 @@ function add_remove_labels(jquery_object,color){
 
 //<span class="label label-success pull-right">Monthly</span>
 //creates a metric div and adds it to the div
-function metric_header_create_label(title_text,sub_title,metric_text,sub_metric_text,id,label_color){
+function metric_header_create_label(title_text,sub_title,metric_text,sub_metric_text,id,label_color,params){
     title_text = title_text||"TITLE"
     metric_text = metric_text||"metric_text"
     sub_metric_text = sub_metric_text||"sub_metric_text"
@@ -576,7 +576,7 @@ function metric_header_create_label(title_text,sub_title,metric_text,sub_metric_
     var elem_two = $("<h5>").text(title_text)
 
     var inner_div_two = $("<div>", {"class": "ibox-content"});
-    var elem_three = $("<h1>", {"class": "no-margins metric_text"}).text(metric_text)
+    var elem_three = $("<h1>", {"class": "no-margins metric_text kpi"}).text(metric_text)
     //var elem_four = $("<div>", {"class": "stat-percent font-bold text-success sub_metric_text"}).text(sub_metric_text)
     var elem_four = $("<span>", {"class": "label pull-right sub_metric_text " + label_color}).text(sub_metric_text)
 
@@ -2493,6 +2493,19 @@ function stock_pull(url){
     results = l.responseJSON
     return results
   }
+
+
+  function stock_pull(url){
+    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=PZZA&types=quote,news,chart&range=1m&last=5"
+    l = $.ajax({
+      url: url,
+      method: "GET",
+      async:false,
+      headers: {"Accept":"application/json; odata=verbose"}
+    })
+    results = l.responseJSON
+    return results
+  }
 //ip_functions.js
 
 function ipLookUp () {
@@ -2584,6 +2597,12 @@ function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current
         gspread_dict['days_since_last_completed'] = days_since_completed
         gspread_dict['last_completed'] = moment(last_completed).format("MM/DD hh:mm A");
         is_good = parseFloat(gspread_dict['Max Age']) > days_since_completed
+        days_to_incomplete = days_since_completed/parseFloat(gspread_dict['Max Age']) 
+
+        gspread_dict['days_to_incomplete'] = days_to_incomplete
+
+
+
         if (is_good){
           gspread_dict['status'] = 'Green'
           gspread_dict['task_assigned'] = 'Green'
@@ -2597,6 +2616,7 @@ function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current
         gspread_dict['last_completed'] = ''
         gspread_dict['days_since_last_completed'] = ''
         gspread_dict['status'] = 'N/A'
+        gspread_dict['days_to_incomplete'] = ''
 
       }
       if (gspread_dict['status'] != 'Green'){
@@ -4413,7 +4433,35 @@ function initiate_firebase_chat_bubbles(params){
 //firebase_snapshot.js
 
 
+function key_metrics_save(){
+	metrics_array = []
+	$(".metric_snapshot").each(function(row_number) {
+		metrics_array.push({number:row_number,html:$(this).html(),text:$(this).text(),class:$(this).attr('class')})
+	})
+	var current_snapshot_ref = dbRef.ref('todoist_snapshots').child('metrics').child(moment().format("YYYYMMDD"))
+	current_snapshot_ref.set(metrics_dict)
 
+}
+
+function key_metrics_save_minute(params){
+	//selector = params.selector||
+	metrics_array = []
+	// $('.kpi').each(function(row_number) {
+	// 	metrics_array.push({number:row_number,html:$(this).html(),text:$(this).text(),class:$(this).attr('class'),name:$(this).attr('name')||'null'})
+	// })
+	// console.log(metrics_array)
+
+	metric_dict = {tasks_age:$("#tasks_age").find('.metric_text').text(),
+	tasks_current_number: $("#tasks_current_number").find('.metric_text').text(),
+	gspread_percentage:$("#gspread_percentage").find('.metric_text').text(),
+	gspread_percentage_sub_metric_text: $("#gspread_percentage").find('.sub_metric_text').text(),
+	time_stamp: moment().format()
+	}
+
+	dbRef.ref('todoist_snapshots').child('kpis').push(metric_dict)
+	dbRef.ref('todoist_snapshots').child('metric_hours').child(moment().format("YYYYMMDD_HH")).set(metric_dict)
+
+}
 
 function todoist_snapshot_store(){
 	var snapshot_ref = dbRef.ref('todoist_snapshots').child('gspread_recurring_tasks').child(moment().format("YYYYMMDD"))
@@ -4424,6 +4472,9 @@ function todoist_snapshot_store(){
 
 
 }
+
+
+
 
 
 function todoist_gspread_pull_firebase(){
@@ -4662,6 +4713,10 @@ function remaining_tasks_populate(gspread_array){
     {data:'Task',title:'Task',name:'Task'},
     {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
     {data:'status',title:'status',name:'status',visible:false},
+    {data:'days_to_incomplete',title:'days_to_incomplete',name:'days_to_incomplete',visible:false},
+
+
+    
     {data:'task_assigned',title:'task_assigned',name:'task_assigned',visible:false},
     {data:'Category',title:'Category',name:'Category',visible:false},
     {data:'project_id',title:'project_id',name:'project_id',visible:false}
@@ -4738,6 +4793,8 @@ function progress_bar_table_formulate(table_id){
                 {data:'name',title:'name',visible:true,name:'name',createdCell: bar_create_datatable_cell,className:'progress_metric_measure'},
                 {data:'multiplier',title:'multiplier',visible:false,name:'multiplier'},
                 {data:'description',title:'description',visible:false,name:'description'},
+                {data:'percentage',title:'percentage',visible:false,name:'percentage'},
+
                 {data:'time_stamp',title:'time_stamp',visible:false,name:'time_stamp'},
                 {data:'DT_RowId',title:'DT_RowId',visible:false,name:'DT_RowId'}
             ],
@@ -4764,6 +4821,7 @@ function progress_bar_table_formulate(table_id){
 	    id = directory_addresses[directory_addresses.length-1]
 	    firebase_dictionary = snap.val()
 	    firebase_dictionary['DT_RowId'] = id
+	    firebase_dictionary['percentage'] = ''
 	    table.row.add(firebase_dictionary).draw(false);
 	})
 
@@ -4854,8 +4912,14 @@ function add_percentage_label_html(id,percentage_to_goal){
 }
 
 function measure_progress_bars(callback_array,progress_table){
-    $("td.progress_metric_measure").each(function(e) {
+    $("td.progress_metric_measure").each(function(e,i) {
+      console.log('progress')
+      console.log(e)
+      console.log(i)
+      table_data = progress_table.data().toArray();
       row_data = progress_table.row(this).data();
+
+
       task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
@@ -4866,6 +4930,19 @@ function measure_progress_bars(callback_array,progress_table){
 
       $(this).find(".percentage_text").html(percentage_text)
       $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
+
+
+
+
+    row_data['percentage'] = percentage
+    table_data.forEach(function(D,row_number){D['row_number'] = row_number})
+    table_data_dict = _.groupBy(table_data,'DT_RowId')
+    selected_dict = table_data_dict[row_data['DT_RowId']]
+    row_number = selected_dict[0]['row_number']
+    progress_table.row(row_number).data(row_data).draw( false )
+
+      //progress_table.row(e).data(row_data).draw(false)
+
 
   })
 }

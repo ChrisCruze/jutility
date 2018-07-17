@@ -264,7 +264,7 @@ function add_remove_labels(jquery_object,color){
 
 //<span class="label label-success pull-right">Monthly</span>
 //creates a metric div and adds it to the div
-function metric_header_create_label(title_text,sub_title,metric_text,sub_metric_text,id,label_color){
+function metric_header_create_label(title_text,sub_title,metric_text,sub_metric_text,id,label_color,params){
     title_text = title_text||"TITLE"
     metric_text = metric_text||"metric_text"
     sub_metric_text = sub_metric_text||"sub_metric_text"
@@ -278,7 +278,7 @@ function metric_header_create_label(title_text,sub_title,metric_text,sub_metric_
     var elem_two = $("<h5>").text(title_text)
 
     var inner_div_two = $("<div>", {"class": "ibox-content"});
-    var elem_three = $("<h1>", {"class": "no-margins metric_text"}).text(metric_text)
+    var elem_three = $("<h1>", {"class": "no-margins metric_text kpi"}).text(metric_text)
     //var elem_four = $("<div>", {"class": "stat-percent font-bold text-success sub_metric_text"}).text(sub_metric_text)
     var elem_four = $("<span>", {"class": "label pull-right sub_metric_text " + label_color}).text(sub_metric_text)
 

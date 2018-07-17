@@ -81,8 +81,14 @@ function add_percentage_label_html(id,percentage_to_goal){
 }
 
 function measure_progress_bars(callback_array,progress_table){
-    $("td.progress_metric_measure").each(function(e) {
+    $("td.progress_metric_measure").each(function(e,i) {
+      console.log('progress')
+      console.log(e)
+      console.log(i)
+      table_data = progress_table.data().toArray();
       row_data = progress_table.row(this).data();
+
+
       task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
@@ -93,6 +99,19 @@ function measure_progress_bars(callback_array,progress_table){
 
       $(this).find(".percentage_text").html(percentage_text)
       $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
+
+
+
+
+    row_data['percentage'] = percentage
+    table_data.forEach(function(D,row_number){D['row_number'] = row_number})
+    table_data_dict = _.groupBy(table_data,'DT_RowId')
+    selected_dict = table_data_dict[row_data['DT_RowId']]
+    row_number = selected_dict[0]['row_number']
+    progress_table.row(row_number).data(row_data).draw( false )
+
+      //progress_table.row(e).data(row_data).draw(false)
+
 
   })
 }

@@ -73,6 +73,12 @@ function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current
         gspread_dict['days_since_last_completed'] = days_since_completed
         gspread_dict['last_completed'] = moment(last_completed).format("MM/DD hh:mm A");
         is_good = parseFloat(gspread_dict['Max Age']) > days_since_completed
+        days_to_incomplete = days_since_completed/parseFloat(gspread_dict['Max Age']) 
+
+        gspread_dict['days_to_incomplete'] = days_to_incomplete
+
+
+
         if (is_good){
           gspread_dict['status'] = 'Green'
           gspread_dict['task_assigned'] = 'Green'
@@ -86,6 +92,7 @@ function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current
         gspread_dict['last_completed'] = ''
         gspread_dict['days_since_last_completed'] = ''
         gspread_dict['status'] = 'N/A'
+        gspread_dict['days_to_incomplete'] = ''
 
       }
       if (gspread_dict['status'] != 'Green'){

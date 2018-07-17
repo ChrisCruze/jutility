@@ -66,6 +66,10 @@ function remaining_tasks_populate(gspread_array){
     {data:'Task',title:'Task',name:'Task'},
     {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
     {data:'status',title:'status',name:'status',visible:false},
+    {data:'days_to_incomplete',title:'days_to_incomplete',name:'days_to_incomplete',visible:false},
+
+
+    
     {data:'task_assigned',title:'task_assigned',name:'task_assigned',visible:false},
     {data:'Category',title:'Category',name:'Category',visible:false},
     {data:'project_id',title:'project_id',name:'project_id',visible:false}

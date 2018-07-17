@@ -46,6 +46,8 @@ function progress_bar_table_formulate(table_id){
                 {data:'name',title:'name',visible:true,name:'name',createdCell: bar_create_datatable_cell,className:'progress_metric_measure'},
                 {data:'multiplier',title:'multiplier',visible:false,name:'multiplier'},
                 {data:'description',title:'description',visible:false,name:'description'},
+                {data:'percentage',title:'percentage',visible:false,name:'percentage'},
+
                 {data:'time_stamp',title:'time_stamp',visible:false,name:'time_stamp'},
                 {data:'DT_RowId',title:'DT_RowId',visible:false,name:'DT_RowId'}
             ],
@@ -72,6 +74,7 @@ function progress_bar_table_formulate(table_id){
 	    id = directory_addresses[directory_addresses.length-1]
 	    firebase_dictionary = snap.val()
 	    firebase_dictionary['DT_RowId'] = id
+	    firebase_dictionary['percentage'] = ''
 	    table.row.add(firebase_dictionary).draw(false);
 	})
 
