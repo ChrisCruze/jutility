@@ -16,9 +16,11 @@ function timer_instance_page_initiate(timer_instance_dictionary){
 
 //if timer instances exists, add certain tactions to the timer
 function timer_instance_exists_process(timer_instance_dictionary,timer_instance){
+
+    empty_timer_html = $("#timer_text_container").html()
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
-    var my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+    my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
     console.log(my_interval_timer)
 	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
         $("#input_update").click(function(event) {
@@ -43,6 +45,14 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
                   url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
                 })
                 console.log(r)      
+            
+                timer_instance.set({})
+            //clearInterval(my_interval_timer)
+            //$("#input_text").val("")
+            //$("#timer_text_container").html(empty_timer_html)
+            //document.title = 'Omni'
+
+
             }
             else {
                 alert('input text is blank')
@@ -50,10 +60,7 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
 
 
             //todoist_complete_task(String(timer_instance_dictionary.id))
-            timer_instance.set({})
-            clearInterval(my_interval_timer)
-            $("#input_text").val("")
-            
+
 
         })
 
@@ -61,8 +68,12 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             event.preventDefault()
             todoist_delete_task(timer_instance_dictionary.id)
             timer_instance.set({})
-            clearInterval(my_interval_timer)
+            //clearInterval(my_interval_timer)
+            //$("#timer_text_container").html(empty_timer_html)
+            //document.title = 'Omni'
+
         })
+    return my_interval_timer
 }
 
 //creates timer for omni.html

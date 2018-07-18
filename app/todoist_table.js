@@ -97,18 +97,24 @@ function measure_progress_bars(callback_array,progress_table){
       percentage = (duration/denom) * 100
       percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
 
-      $(this).find(".percentage_text").html(percentage_text)
-      $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
+
+    //row_data.name = list_progress_bar_list_element_thick('Test',row_data.DT_RowId,percentage,null,'danger',percentage_text).html()
 
 
-
-
+      console.log(row_data)
     row_data['percentage'] = percentage
     table_data.forEach(function(D,row_number){D['row_number'] = row_number})
     table_data_dict = _.groupBy(table_data,'DT_RowId')
     selected_dict = table_data_dict[row_data['DT_RowId']]
     row_number = selected_dict[0]['row_number']
-    progress_table.row(row_number).data(row_data).draw( false )
+    //progress_table.row(row_number).data(row_data).draw( false )
+progress_table.cell({row:row_number, column:3}).data(percentage).draw( false )
+      //  progress_table.row(row_number).data(row_data).draw( false )
+
+
+
+     $(this).find(".percentage_text").html(percentage_text)
+     $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
 
       //progress_table.row(e).data(row_data).draw(false)
 
@@ -118,19 +124,19 @@ function measure_progress_bars(callback_array,progress_table){
 function completed_tasks_call_back(callback_array){
   task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
-  // try {
-  // console.log(progress_table)
-  // if (progress_table.rows().length > 0){
+  try {
+  console.log(progress_table)
+  if (progress_table.rows().length > 0){
 
-  //     measure_progress_bars(callback_array,progress_table)
+      measure_progress_bars(callback_array,progress_table)
 
 
-  // }
+  }
 
-  // }
-  // catch(err){
-  //   console.log(err)
-  // }
+  }
+  catch(err){
+    console.log(err)
+  }
 
 
 
@@ -418,13 +424,13 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
         {
           data: "status",
           title: "status",
-          visible: true,
+          visible: false,
           name: "status"
         },
         {
           data: "notes",
           title: "notes",
-          visible: true,
+          visible: false,
           name: "notes"
         },
         {
@@ -432,7 +438,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
           title: "task_date",
           visible: true,
           name: "task_date",
-          createdCell: date_format_with_day,
+          createdCell: date_time_datatable_format,
           type: "date-format-moment"
         },
         {
@@ -477,7 +483,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
           dt.columns('task_date_range:name').search('this_year').draw()
         }}
       ],
-      order: [3, "desc"]
+      order: [5, "desc"]
     });
 
     table.columns('task_date_range:name').search('this_month').draw()

@@ -1157,12 +1157,28 @@ function datatables_data_get(table){
   return table.data().toArray();
 }
 
-function vote_created_cell(td, cellData, rowData, row, col) {
+function vote_created_cell_editor(editor){
+
+
+function vote_created_cell_core(td, cellData, rowData, row, col) {
 
   $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
   $('.vote_up').on('click', function (e) { 
     console.log('up')
+    console.log(cellData)
+    console.log(td)
     console.log(rowData)
+    console.log(row)
+    console.log(col)
+
+
+
+    editor
+    .edit(this, false)
+    .set("vote", change_value)
+    .submit();
+
+
     console.log($(this))
   })
   $('.vote_down').on('click', function (e) { 
@@ -1170,6 +1186,38 @@ function vote_created_cell(td, cellData, rowData, row, col) {
     console.log(rowData)
     console.log($(this))
   })
+
+
+
+
+} 
+return vote_created_cell_core
+
+}
+function vote_created_cell(td, cellData, rowData, row, col) {
+
+  $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
+  $('.vote_up').on('click', function (e) { 
+    console.log('up')
+    console.log(cellData)
+    console.log(td)
+    console.log(rowData)
+    console.log(row)
+    console.log(col)
+    console.log($(this))
+  })
+  $('.vote_down').on('click', function (e) { 
+    console.log('down')
+    console.log(rowData)
+    console.log($(this))
+  })
+
+
+
+    // editor
+    // .edit(this, false)
+    // .set("status", change_value)
+    // .submit();
 } 
 
 //add bar chart within the cell
@@ -3814,7 +3862,7 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.visible = false
     }
     if (new_dictionary.format == 'vote'){
-        new_dictionary.createdCell = vote_created_cell
+        new_dictionary.createdCell = vote_created_cell //vote_created_cell_editor(editor) //vote_created_cell
     }
 
 }
@@ -4573,9 +4621,11 @@ function timer_instance_page_initiate(timer_instance_dictionary){
 
 //if timer instances exists, add certain tactions to the timer
 function timer_instance_exists_process(timer_instance_dictionary,timer_instance){
+
+    empty_timer_html = $("#timer_text_container").html()
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
-    var my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+    my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
     console.log(my_interval_timer)
 	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
         $("#input_update").click(function(event) {
@@ -4610,7 +4660,8 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             timer_instance.set({})
             clearInterval(my_interval_timer)
             $("#input_text").val("")
-            
+            $("#timer_text_container").html(empty_timer_html)
+            document.title = 'Omni'
 
         })
 
@@ -4619,7 +4670,11 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             todoist_delete_task(timer_instance_dictionary.id)
             timer_instance.set({})
             clearInterval(my_interval_timer)
+            $("#timer_text_container").html(empty_timer_html)
+            document.title = 'Omni'
+
         })
+    return my_interval_timer
 }
 
 //creates timer for omni.html
@@ -4928,18 +4983,24 @@ function measure_progress_bars(callback_array,progress_table){
       percentage = (duration/denom) * 100
       percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
 
-      $(this).find(".percentage_text").html(percentage_text)
-      $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
+
+    //row_data.name = list_progress_bar_list_element_thick('Test',row_data.DT_RowId,percentage,null,'danger',percentage_text).html()
 
 
-
-
+      console.log(row_data)
     row_data['percentage'] = percentage
     table_data.forEach(function(D,row_number){D['row_number'] = row_number})
     table_data_dict = _.groupBy(table_data,'DT_RowId')
     selected_dict = table_data_dict[row_data['DT_RowId']]
     row_number = selected_dict[0]['row_number']
-    progress_table.row(row_number).data(row_data).draw( false )
+    //progress_table.row(row_number).data(row_data).draw( false )
+progress_table.cell({row:row_number, column:3}).data(percentage).draw( false )
+      //  progress_table.row(row_number).data(row_data).draw( false )
+
+
+
+     $(this).find(".percentage_text").html(percentage_text)
+     $(this).find(".progress-bar").attr("style","width:" + String(percentage) + "%")
 
       //progress_table.row(e).data(row_data).draw(false)
 
@@ -4949,19 +5010,19 @@ function measure_progress_bars(callback_array,progress_table){
 function completed_tasks_call_back(callback_array){
   task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
-  // try {
-  // console.log(progress_table)
-  // if (progress_table.rows().length > 0){
+  try {
+  console.log(progress_table)
+  if (progress_table.rows().length > 0){
 
-  //     measure_progress_bars(callback_array,progress_table)
+      measure_progress_bars(callback_array,progress_table)
 
 
-  // }
+  }
 
-  // }
-  // catch(err){
-  //   console.log(err)
-  // }
+  }
+  catch(err){
+    console.log(err)
+  }
 
 
 
@@ -5249,13 +5310,13 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
         {
           data: "status",
           title: "status",
-          visible: true,
+          visible: false,
           name: "status"
         },
         {
           data: "notes",
           title: "notes",
-          visible: true,
+          visible: false,
           name: "notes"
         },
         {
@@ -5263,7 +5324,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
           title: "task_date",
           visible: true,
           name: "task_date",
-          createdCell: date_format_with_day,
+          createdCell: date_time_datatable_format,
           type: "date-format-moment"
         },
         {
@@ -5308,7 +5369,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
           dt.columns('task_date_range:name').search('this_year').draw()
         }}
       ],
-      order: [3, "desc"]
+      order: [5, "desc"]
     });
 
     table.columns('task_date_range:name').search('this_month').draw()

@@ -14,7 +14,7 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.visible = false
     }
     if (new_dictionary.format == 'vote'){
-        new_dictionary.createdCell = vote_created_cell
+        new_dictionary.createdCell = vote_created_cell //vote_created_cell_editor(editor) //vote_created_cell
     }
 
 }

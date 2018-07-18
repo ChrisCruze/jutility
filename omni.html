@@ -265,7 +265,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 </div>
                 </div>
             </div>
-                <div class="col-lg-4">
+            <div class="col-lg-4">
                 <div id='morning_review'>
                     <div class="ibox">
 
@@ -279,7 +279,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                                 <i class="fa fa-wrench"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" onClick='load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})'>Load Blog</a>
+                                <li><a href="#" onClick='load_firebase_blog_instance()'>Load Blog</a>
                                 </li>
 
                             </ul>
@@ -294,14 +294,14 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 
-                        <div class="ibox-content">
+                        <div class="ibox-content" style="max-height: 300px;overflow-y: scroll;">
                             <div class="text-center article-title">
                                 <h3 id="blog_title">
                                     Goals/Priorities
                                 </h3>
                                 <div class="small m-b-xs">Grateful for, Excited for, Affirmation, Focus, Exercise, Priorities, Schedule
                                 </div>
-                                <span class='text_content'></span>
+                                <span class='text_content' ></span>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -643,17 +643,23 @@ todoist_table_complete = todoist_table_create_complete(completed_tasks,"#complet
 
 
 
-
-
-
+var my_interval_timer;
+empty_timer_html = $("#timer_text_container").html()
 timer_instance.on('value', function(snapshot) {
+    console.log(snapshot)
     timer_instance_dictionary = snapshot.val()
     console.log(timer_instance_dictionary)
     if (timer_instance_dictionary != null){
         console.log(timer_instance_dictionary)
-        timer_instance_exists_process(timer_instance_dictionary,timer_instance)
+        my_interval_timer = timer_instance_exists_process(timer_instance_dictionary,timer_instance)
     }
       else {
+        clearInterval(my_interval_timer)
+        $("#timer_text_container").html(empty_timer_html)
+        document.title = 'Omni'
+        $("#input_text").val("")
+
+
     }
 });
 //pulls straight json if the firebase is open
@@ -810,6 +816,13 @@ function initiate_check_list_datatable(table_node){
         columns:['text','date']
     })
 }
+
+
+function load_firebase_blog_instance(){
+    load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})
+}
+    load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})
+
 
 setTimeout(key_metrics_save_minute,5000)
 // var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
