@@ -4650,6 +4650,14 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
                   url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
                 })
                 console.log(r)      
+            
+                timer_instance.set({})
+            //clearInterval(my_interval_timer)
+            //$("#input_text").val("")
+            //$("#timer_text_container").html(empty_timer_html)
+            //document.title = 'Omni'
+
+
             }
             else {
                 alert('input text is blank')
@@ -4657,11 +4665,7 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
 
 
             //todoist_complete_task(String(timer_instance_dictionary.id))
-            timer_instance.set({})
-            clearInterval(my_interval_timer)
-            $("#input_text").val("")
-            $("#timer_text_container").html(empty_timer_html)
-            document.title = 'Omni'
+
 
         })
 
@@ -4669,9 +4673,9 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             event.preventDefault()
             todoist_delete_task(timer_instance_dictionary.id)
             timer_instance.set({})
-            clearInterval(my_interval_timer)
-            $("#timer_text_container").html(empty_timer_html)
-            document.title = 'Omni'
+            //clearInterval(my_interval_timer)
+            //$("#timer_text_container").html(empty_timer_html)
+            //document.title = 'Omni'
 
         })
     return my_interval_timer
