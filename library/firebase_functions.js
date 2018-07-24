@@ -1,4 +1,60 @@
 
+function firebase_signin_prompt_params(){
+  params = params||{
+    firebase_auth_container:'#firebaseui-auth-container',
+    signInSuccessUrl:'https://chriscruze.github.io/Taskr/index.html'
+  }
+      var uiConfig = {
+        callbacks: {
+          signInSuccess: function(currentUser, credential, redirectUrl) {
+            return true;
+          },
+          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+            console.log(authResult)
+            return true;
+          },
+            signInFailure: function(error) {
+            return console.log(error);
+          },
+          uiShown: function() {
+          }
+        },
+        credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
+        queryParameterForWidgetMode: 'mode',
+        queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
+        signInFlow: 'popup',
+        signInSuccessUrl: params.signInSuccessUrl,
+        signInOptions: [
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ]
+      };
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      ui.start(params.firebase_auth_container, uiConfig);
+}
+
+
+function firebase_login_configuration(params) {
+  params = params||{
+    firebase_auth_container:'#firebaseui-auth-container',
+    signInSuccessUrl:'https://chriscruze.github.io/Taskr/index.html',
+    // application_function: function(user){console.log(user)},
+    
+  }
+        return firebase.auth().onAuthStateChanged(function(user) {
+              if (user) {
+                user.getIdToken().then(function(accessToken) {
+                  console.log(user)
+                  params.application_function(user)
+                });
+              } else {
+                  firebase_signin_prompt_params(params)
+                  // window.location.href = params.login_url||'https://chriscruze.github.io/Taskr/index.html';
+              }
+            }, function(error) {
+                console.log(error);
+            });
+    };
+
 
 
 //This function checks whether the user is logged in. If the user is logged in, then it runs the app_start function

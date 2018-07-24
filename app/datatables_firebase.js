@@ -13,7 +13,7 @@ function datatables_column_add_formatting_from_type(new_dictionary){
     if (new_dictionary.visible == 'false'){
         new_dictionary.visible = false
     }
-    if (new_dictionary.format == 'vote'){
+    if (new_dictionary.format == 'vote'||new_dictionary.format == 'rank'){
         new_dictionary.createdCell = vote_created_cell //vote_created_cell_editor(editor) //vote_created_cell
     }
 
@@ -34,7 +34,7 @@ function datatable_column_fields_generate(custom_fields){
         }
         l.push(new_dictionary)
     })
-    console.log(l)
+    //console.log(l)
     return l
 }
 
@@ -44,8 +44,8 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
     row_id = row_id || 'DT_RowId'
     editor.on("preSubmit", function(e, data, action) {
     if (action == 'create'){
-        console.log(data)
-        console.log(action)
+        //console.log(data)
+        //console.log(action)
         items_to_add = Object.values(data.data)
         items_to_add.forEach(function(item){
         item['time_stamp'] = moment().format()
@@ -83,16 +83,16 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         items_to_delete.forEach(function(D){
             record_id = D[row_id];
             r = firebaseRef.child(record_id).remove();
-            console.log(r)
+            //console.log(r)
         })
 
     }
     else {
         return false 
-        // console.log(e)
-        // console.log(json)
-        // console.log(data)
-        // console.log(action)
+        // //console.log(e)
+        // //console.log(json)
+        // //console.log(data)
+        // //console.log(action)
 
 
 
@@ -126,7 +126,7 @@ function datatable_generate(table_id,columns_list,editor,input_data){
     { extend: "excel", title: document.title },
     { extend: "colvis", title: document.title },
     { extend: 'create', editor: editor,text:'Create'},
-    // { editor: editor,text:'Add',action:function () {console.log(this)} },
+    // { editor: editor,text:'Add',action:function () {//console.log(this)} },
     { extend: 'remove', editor: editor },
     { extend: "edit", editor: editor },
     {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
@@ -136,6 +136,20 @@ function datatable_generate(table_id,columns_list,editor,input_data){
     }}]
     });
     return table_example
+}
+
+function editor_rank_apply(table,table_id,){
+
+    $(table_id).on("click", "tbody .vote_up", function(e) {
+        var table = $(table_id).DataTable();
+        cell_data = table.cell($(this).closest('td')).data();
+        row_data = table.row($(this).closest('td')).data();
+        col_num_selector = $(this).closest('td')
+        var col = $(col_num_selector).parent().children().index($(col_num_selector));
+
+    });
+
+
 }
 
 
@@ -148,6 +162,7 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
 
 
     new_fields = datatable_column_fields_generate(fields)
+
     editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id,params)
     table = datatable_generate(table_id,new_fields,editor)
 
@@ -156,8 +171,14 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
         firebase_dictionary = snap.val()
-        console.log(firebase_dictionary)
+        ////console.log(firebase_dictionary)
         firebase_dictionary['DT_RowId'] = id
+
+
+        if (params.process_function != undefined){
+            firebase_dictionary = params.process_function(firebase_dictionary)
+        }
+        
         fields_to_check = _.map(new_fields,function(D){return D['data']})
         key_check_func_dictionary(fields_to_check,firebase_dictionary)
         table.row.add(firebase_dictionary).draw(false);
@@ -206,17 +227,17 @@ function firebase_json_pull_promise_pull(array,params) {
     })
     params.columns = params.columns||key_names
     params['table_selector'] = "#ds_table"
-    console.log(params)
-    console.log('AQUI AQUI')
+    //console.log(params)
+    //console.log('AQUI AQUI')
     return datatables_firebase_table_generate(params)
 }
 
 function firebase_json_pull_promise_pull_simple(){
     firebase_json_pull_promise().then(function(resp) {
-        console.log(resp)
+        //console.log(resp)
         resp2 = Object.values(resp)
-        console.log(resp2)
-  console.log(firebase_json_pull_promise_pull(resp2))
+        //console.log(resp2)
+  //console.log(firebase_json_pull_promise_pull(resp2))
 }
   )
 }
@@ -236,13 +257,38 @@ function datatables_firebase_table_generate_simple(params){
 }
 
 
+function datatables_firebase_columns_define(params){
+    ref = params.firebase_reference
+    function firebase_pull_json() {
+      return new Promise(function(resolve, reject){
+        ref.limitToLast(1).on("child_added", function(snapshot) {
+            resolve(snapshot.val())
+        })  
+      })};
+    var p1 = firebase_pull_json();
+    p1.then(function(array){
+      col_names = Object.keys(array)
+      if (params.columns != undefined){
+        col_names = col_names.concat(params.columns)
+      }
+      params.columns = col_names 
+      datatables_firebase_table_generate(params)
+    });
+
+}
+
 //datatables_firebase
 //{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 //datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
 function datatables_firebase(params){
+if (params.columns == undefined||params.columns_generate == true){
+    datatables_firebase_columns_define(params)
+}
+else {
     table = datatables_firebase_table_generate(params)
-    //table = datatables_firebase_table_generate_simple(params)
     params.table = table
+}
+    //table = datatables_firebase_table_generate_simple(params)
     return params
 }
 

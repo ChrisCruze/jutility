@@ -23,20 +23,25 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
     my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
     console.log(my_interval_timer)
 	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
-        $("#input_update").click(function(event) {
+    $("#input_update").click(function(event) {
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
             todoist_update_task(timer_instance_dictionary.id,$("#input_text").val() + html_timer)
             timer_instance_dictionary['content'] = $("#input_text").val() 
             timer_instance.set(timer_instance_dictionary)
-        })
-        $("#input_complete").click(function(event) {
+    })
+    $("#input_complete").click(function(event) {
+            console.log(timer_instance_dictionary)
+            console.log($("#input_text"))
+            console.log($("#input_text").val())
+
             input_text = $("#input_text").val()
             //$("#input_update").click();
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
             
             if (input_text != '' && input_text != undefined){
+                console.log(input_text)
                 timer_instance_dictionary['new_task_name'] = input_text + html_timer
                 console.log(timer_instance_dictionary)
                 r = $.ajax({
@@ -44,9 +49,16 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
                   data:timer_instance_dictionary,
                   url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
                 })
+                console.log(timer_instance_dictionary)
                 console.log(r)      
-            
-                timer_instance.set({})
+                console.log('set')
+
+                if (r.readyState == 1){
+                    timer_instance.set({})
+                }
+
+                console.log(timer_instance)
+
             //clearInterval(my_interval_timer)
             //$("#input_text").val("")
             //$("#timer_text_container").html(empty_timer_html)
@@ -55,6 +67,7 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
 
             }
             else {
+                //timer_instance_dictionary.content
                 alert('input text is blank')
             }
 

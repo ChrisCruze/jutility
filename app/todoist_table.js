@@ -82,9 +82,9 @@ function add_percentage_label_html(id,percentage_to_goal){
 
 function measure_progress_bars(callback_array,progress_table){
     $("td.progress_metric_measure").each(function(e,i) {
-      console.log('progress')
-      console.log(e)
-      console.log(i)
+      // console.log('progress')
+      // console.log(e)
+      // console.log(i)
       table_data = progress_table.data().toArray();
       row_data = progress_table.row(this).data();
 
@@ -92,7 +92,11 @@ function measure_progress_bars(callback_array,progress_table){
       task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
-      duration = array_filter_from_text_sum(callback_array,row_data["name"],["content","project_name"],"duration")
+
+      duration = array_filter_from_text_sum(callback_array,row_data["name"],["content","project_name","notes"],"duration")
+
+
+
       denom = (task_dates * multiplier)
       percentage = (duration/denom) * 100
       percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
@@ -101,7 +105,7 @@ function measure_progress_bars(callback_array,progress_table){
     //row_data.name = list_progress_bar_list_element_thick('Test',row_data.DT_RowId,percentage,null,'danger',percentage_text).html()
 
 
-      console.log(row_data)
+    //  console.log(row_data)
     row_data['percentage'] = percentage
     table_data.forEach(function(D,row_number){D['row_number'] = row_number})
     table_data_dict = _.groupBy(table_data,'DT_RowId')
@@ -492,7 +496,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
 
     }
     setTimeout(run_refresh,5000)
-    console.log(table)
+   // console.log(table)
     //console.log(Object.values(table.rows({ page: "current" }).data()))
     return table
 }

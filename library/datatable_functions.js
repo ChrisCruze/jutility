@@ -10,27 +10,24 @@ function vote_created_cell_core(td, cellData, rowData, row, col) {
 
   $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
   $('.vote_up').on('click', function (e) { 
-    console.log('up')
-    console.log(cellData)
-    console.log(td)
-    console.log(rowData)
-    console.log(row)
-    console.log(col)
+    // console.log('up')
+    // console.log(cellData)
+    // console.log(td)
+    // console.log(rowData)
+    // console.log(row)
+    // console.log(col)
+    // editor
+    // .edit(this, false)
+    // .set("vote", change_value)
+    // .submit();
 
 
-
-    editor
-    .edit(this, false)
-    .set("vote", change_value)
-    .submit();
-
-
-    console.log($(this))
+    //console.log($(this))
   })
   $('.vote_down').on('click', function (e) { 
-    console.log('down')
-    console.log(rowData)
-    console.log($(this))
+    // console.log('down')
+    // console.log(rowData)
+    // console.log($(this))
   })
 
 
@@ -40,6 +37,34 @@ function vote_created_cell_core(td, cellData, rowData, row, col) {
 return vote_created_cell_core
 
 }
+
+
+function option_select_dropdown_datatables_from_options(params){
+  function option_select_dropdown_datatables(td, cellData, rowData, row, col) {
+    select_div = $('<select class="selectpicker form-control" data-size="5" data-header="Select a stage" data-actions-box="true"> </select> ')
+    params.options.forEach(function(option){
+      is_selected = cellData == option
+      select_div.append($("<option>", {"id":option,"selected":is_selected}).text(option))
+    })
+    //console.log(select_div)
+    //select_div.selectpicker()
+    master_div = $('<div class="form-group"> </div>')
+    master_div.append(select_div)
+    $(td).html(master_div)
+
+   // $("#"+cellData).attr('selected',true)
+
+
+    //$(td).append(master_div)
+        //$('.selectpicker').selectpicker()
+
+  }
+
+
+
+  return option_select_dropdown_datatables
+}
+
 function vote_created_cell(td, cellData, rowData, row, col) {
 
   $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 

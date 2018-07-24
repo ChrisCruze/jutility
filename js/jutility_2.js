@@ -1164,24 +1164,27 @@ function vote_created_cell_core(td, cellData, rowData, row, col) {
 
   $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
   $('.vote_up').on('click', function (e) { 
-    // console.log('up')
-    // console.log(cellData)
-    // console.log(td)
-    // console.log(rowData)
-    // console.log(row)
-    // console.log(col)
-    // editor
-    // .edit(this, false)
-    // .set("vote", change_value)
-    // .submit();
+    console.log('up')
+    console.log(cellData)
+    console.log(td)
+    console.log(rowData)
+    console.log(row)
+    console.log(col)
 
 
-    //console.log($(this))
+
+    editor
+    .edit(this, false)
+    .set("vote", change_value)
+    .submit();
+
+
+    console.log($(this))
   })
   $('.vote_down').on('click', function (e) { 
-    // console.log('down')
-    // console.log(rowData)
-    // console.log($(this))
+    console.log('down')
+    console.log(rowData)
+    console.log($(this))
   })
 
 
@@ -1191,34 +1194,6 @@ function vote_created_cell_core(td, cellData, rowData, row, col) {
 return vote_created_cell_core
 
 }
-
-
-function option_select_dropdown_datatables_from_options(params){
-  function option_select_dropdown_datatables(td, cellData, rowData, row, col) {
-    select_div = $('<select class="selectpicker form-control" data-size="5" data-header="Select a stage" data-actions-box="true"> </select> ')
-    params.options.forEach(function(option){
-      is_selected = cellData == option
-      select_div.append($("<option>", {"id":option,"selected":is_selected}).text(option))
-    })
-    //console.log(select_div)
-    //select_div.selectpicker()
-    master_div = $('<div class="form-group"> </div>')
-    master_div.append(select_div)
-    $(td).html(master_div)
-
-   // $("#"+cellData).attr('selected',true)
-
-
-    //$(td).append(master_div)
-        //$('.selectpicker').selectpicker()
-
-  }
-
-
-
-  return option_select_dropdown_datatables
-}
-
 function vote_created_cell(td, cellData, rowData, row, col) {
 
   $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
@@ -1638,62 +1613,6 @@ function excel_define_sheet_name(excel){
 
 //firebase_functions.js
 
-
-function firebase_signin_prompt_params(){
-  params = params||{
-    firebase_auth_container:'#firebaseui-auth-container',
-    signInSuccessUrl:'https://chriscruze.github.io/Taskr/index.html'
-  }
-      var uiConfig = {
-        callbacks: {
-          signInSuccess: function(currentUser, credential, redirectUrl) {
-            return true;
-          },
-          signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-            console.log(authResult)
-            return true;
-          },
-            signInFailure: function(error) {
-            return console.log(error);
-          },
-          uiShown: function() {
-          }
-        },
-        credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
-        queryParameterForWidgetMode: 'mode',
-        queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
-        signInFlow: 'popup',
-        signInSuccessUrl: params.signInSuccessUrl,
-        signInOptions: [
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID
-        ]
-      };
-      var ui = new firebaseui.auth.AuthUI(firebase.auth());
-      ui.start(params.firebase_auth_container, uiConfig);
-}
-
-
-function firebase_login_configuration(params) {
-  params = params||{
-    firebase_auth_container:'#firebaseui-auth-container',
-    signInSuccessUrl:'https://chriscruze.github.io/Taskr/index.html',
-    // application_function: function(user){console.log(user)},
-    
-  }
-        return firebase.auth().onAuthStateChanged(function(user) {
-              if (user) {
-                user.getIdToken().then(function(accessToken) {
-                  console.log(user)
-                  params.application_function(user)
-                });
-              } else {
-                  firebase_signin_prompt_params(params)
-                  // window.location.href = params.login_url||'https://chriscruze.github.io/Taskr/index.html';
-              }
-            }, function(error) {
-                console.log(error);
-            });
-    };
 
 
 
@@ -3942,7 +3861,7 @@ function datatables_column_add_formatting_from_type(new_dictionary){
     if (new_dictionary.visible == 'false'){
         new_dictionary.visible = false
     }
-    if (new_dictionary.format == 'vote'||new_dictionary.format == 'rank'){
+    if (new_dictionary.format == 'vote'){
         new_dictionary.createdCell = vote_created_cell //vote_created_cell_editor(editor) //vote_created_cell
     }
 
@@ -3963,7 +3882,7 @@ function datatable_column_fields_generate(custom_fields){
         }
         l.push(new_dictionary)
     })
-    //console.log(l)
+    console.log(l)
     return l
 }
 
@@ -3973,8 +3892,8 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
     row_id = row_id || 'DT_RowId'
     editor.on("preSubmit", function(e, data, action) {
     if (action == 'create'){
-        //console.log(data)
-        //console.log(action)
+        console.log(data)
+        console.log(action)
         items_to_add = Object.values(data.data)
         items_to_add.forEach(function(item){
         item['time_stamp'] = moment().format()
@@ -4012,16 +3931,16 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         items_to_delete.forEach(function(D){
             record_id = D[row_id];
             r = firebaseRef.child(record_id).remove();
-            //console.log(r)
+            console.log(r)
         })
 
     }
     else {
         return false 
-        // //console.log(e)
-        // //console.log(json)
-        // //console.log(data)
-        // //console.log(action)
+        // console.log(e)
+        // console.log(json)
+        // console.log(data)
+        // console.log(action)
 
 
 
@@ -4055,7 +3974,7 @@ function datatable_generate(table_id,columns_list,editor,input_data){
     { extend: "excel", title: document.title },
     { extend: "colvis", title: document.title },
     { extend: 'create', editor: editor,text:'Create'},
-    // { editor: editor,text:'Add',action:function () {//console.log(this)} },
+    // { editor: editor,text:'Add',action:function () {console.log(this)} },
     { extend: 'remove', editor: editor },
     { extend: "edit", editor: editor },
     {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
@@ -4065,20 +3984,6 @@ function datatable_generate(table_id,columns_list,editor,input_data){
     }}]
     });
     return table_example
-}
-
-function editor_rank_apply(table,table_id,){
-
-    $(table_id).on("click", "tbody .vote_up", function(e) {
-        var table = $(table_id).DataTable();
-        cell_data = table.cell($(this).closest('td')).data();
-        row_data = table.row($(this).closest('td')).data();
-        col_num_selector = $(this).closest('td')
-        var col = $(col_num_selector).parent().children().index($(col_num_selector));
-
-    });
-
-
 }
 
 
@@ -4091,7 +3996,6 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
 
 
     new_fields = datatable_column_fields_generate(fields)
-
     editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id,params)
     table = datatable_generate(table_id,new_fields,editor)
 
@@ -4100,14 +4004,8 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
         firebase_dictionary = snap.val()
-        ////console.log(firebase_dictionary)
+        console.log(firebase_dictionary)
         firebase_dictionary['DT_RowId'] = id
-
-
-        if (params.process_function != undefined){
-            firebase_dictionary = params.process_function(firebase_dictionary)
-        }
-        
         fields_to_check = _.map(new_fields,function(D){return D['data']})
         key_check_func_dictionary(fields_to_check,firebase_dictionary)
         table.row.add(firebase_dictionary).draw(false);
@@ -4156,17 +4054,17 @@ function firebase_json_pull_promise_pull(array,params) {
     })
     params.columns = params.columns||key_names
     params['table_selector'] = "#ds_table"
-    //console.log(params)
-    //console.log('AQUI AQUI')
+    console.log(params)
+    console.log('AQUI AQUI')
     return datatables_firebase_table_generate(params)
 }
 
 function firebase_json_pull_promise_pull_simple(){
     firebase_json_pull_promise().then(function(resp) {
-        //console.log(resp)
+        console.log(resp)
         resp2 = Object.values(resp)
-        //console.log(resp2)
-  //console.log(firebase_json_pull_promise_pull(resp2))
+        console.log(resp2)
+  console.log(firebase_json_pull_promise_pull(resp2))
 }
   )
 }
@@ -4186,38 +4084,13 @@ function datatables_firebase_table_generate_simple(params){
 }
 
 
-function datatables_firebase_columns_define(params){
-    ref = params.firebase_reference
-    function firebase_pull_json() {
-      return new Promise(function(resolve, reject){
-        ref.limitToLast(1).on("child_added", function(snapshot) {
-            resolve(snapshot.val())
-        })  
-      })};
-    var p1 = firebase_pull_json();
-    p1.then(function(array){
-      col_names = Object.keys(array)
-      if (params.columns != undefined){
-        col_names = col_names.concat(params.columns)
-      }
-      params.columns = col_names 
-      datatables_firebase_table_generate(params)
-    });
-
-}
-
 //datatables_firebase
 //{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 //datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
 function datatables_firebase(params){
-if (params.columns == undefined||params.columns_generate == true){
-    datatables_firebase_columns_define(params)
-}
-else {
     table = datatables_firebase_table_generate(params)
-    params.table = table
-}
     //table = datatables_firebase_table_generate_simple(params)
+    params.table = table
     return params
 }
 
@@ -4755,25 +4628,20 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
     my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
     console.log(my_interval_timer)
 	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
-    $("#input_update").click(function(event) {
+        $("#input_update").click(function(event) {
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
             todoist_update_task(timer_instance_dictionary.id,$("#input_text").val() + html_timer)
             timer_instance_dictionary['content'] = $("#input_text").val() 
             timer_instance.set(timer_instance_dictionary)
-    })
-    $("#input_complete").click(function(event) {
-            console.log(timer_instance_dictionary)
-            console.log($("#input_text"))
-            console.log($("#input_text").val())
-
+        })
+        $("#input_complete").click(function(event) {
             input_text = $("#input_text").val()
             //$("#input_update").click();
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
             
             if (input_text != '' && input_text != undefined){
-                console.log(input_text)
                 timer_instance_dictionary['new_task_name'] = input_text + html_timer
                 console.log(timer_instance_dictionary)
                 r = $.ajax({
@@ -4781,16 +4649,9 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
                   data:timer_instance_dictionary,
                   url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
                 })
-                console.log(timer_instance_dictionary)
                 console.log(r)      
-                console.log('set')
-
-                if (r.readyState == 1){
-                    timer_instance.set({})
-                }
-
-                console.log(timer_instance)
-
+            
+                timer_instance.set({})
             //clearInterval(my_interval_timer)
             //$("#input_text").val("")
             //$("#timer_text_container").html(empty_timer_html)
@@ -4799,7 +4660,6 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
 
             }
             else {
-                //timer_instance_dictionary.content
                 alert('input text is blank')
             }
 
@@ -4953,7 +4813,7 @@ measure_progress_bars(current_completed_tasks,progress_table)
 
 function progress_bar_table_formulate(table_id){
 	var firebaseRef = dbRef.ref('cruz_control').child('progress');
-	fields = ['name','multiplier','description','percentage','priority']
+	fields = ['name','multiplier','description','percentage']
 	table_id =  table_id||"#progress_table"
 
 	editor = new $.fn.dataTable.Editor({
@@ -4992,8 +4852,8 @@ function progress_bar_table_formulate(table_id){
                 {data:'name',title:'name',visible:true,name:'name',createdCell: bar_create_datatable_cell,className:'progress_metric_measure'},
                 {data:'multiplier',title:'multiplier',visible:false,name:'multiplier'},
                 {data:'description',title:'description',visible:false,name:'description'},
-                {data:'percentage',title:'percentage',visible:false,name:'percentage',type:'num'},
-                {data:'priority',title:'priority',visible:false,name:'priority'},
+                {data:'percentage',title:'percentage',visible:false,name:'percentage'},
+
                 {data:'time_stamp',title:'time_stamp',visible:false,name:'time_stamp'},
                 {data:'DT_RowId',title:'DT_RowId',visible:false,name:'DT_RowId'}
             ],
@@ -5112,9 +4972,9 @@ function add_percentage_label_html(id,percentage_to_goal){
 
 function measure_progress_bars(callback_array,progress_table){
     $("td.progress_metric_measure").each(function(e,i) {
-      // console.log('progress')
-      // console.log(e)
-      // console.log(i)
+      console.log('progress')
+      console.log(e)
+      console.log(i)
       table_data = progress_table.data().toArray();
       row_data = progress_table.row(this).data();
 
@@ -5122,11 +4982,7 @@ function measure_progress_bars(callback_array,progress_table){
       task_dates = Object.keys(_.groupBy(callback_array,function(D){return moment(D['task_date']).format("MM/DD/YY")})).length 
 
       multiplier = parseFloat(row_data.multiplier)||0
-
-      duration = array_filter_from_text_sum(callback_array,row_data["name"],["content","project_name","notes"],"duration")
-
-
-
+      duration = array_filter_from_text_sum(callback_array,row_data["name"],["content","project_name"],"duration")
       denom = (task_dates * multiplier)
       percentage = (duration/denom) * 100
       percentage_text = percentage.toFixed(2)   + "%" + " " + String(duration) + "/" + denom
@@ -5135,7 +4991,7 @@ function measure_progress_bars(callback_array,progress_table){
     //row_data.name = list_progress_bar_list_element_thick('Test',row_data.DT_RowId,percentage,null,'danger',percentage_text).html()
 
 
-    //  console.log(row_data)
+      console.log(row_data)
     row_data['percentage'] = percentage
     table_data.forEach(function(D,row_number){D['row_number'] = row_number})
     table_data_dict = _.groupBy(table_data,'DT_RowId')
@@ -5526,7 +5382,7 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
 
     }
     setTimeout(run_refresh,5000)
-   // console.log(table)
+    console.log(table)
     //console.log(Object.values(table.rows({ page: "current" }).data()))
     return table
 }
