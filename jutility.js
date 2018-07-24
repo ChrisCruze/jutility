@@ -1157,32 +1157,12 @@ function datatables_data_get(table){
   return table.data().toArray();
 }
 
-function vote_created_cell_editor(editor){
+function vote_created_cell_editor(field_name){
 
 
 function vote_created_cell_core(td, cellData, rowData, row, col) {
-
-  $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
-  $('.vote_up').on('click', function (e) { 
-    // console.log('up')
-    // console.log(cellData)
-    // console.log(td)
-    // console.log(rowData)
-    // console.log(row)
-    // console.log(col)
-    // editor
-    // .edit(this, false)
-    // .set("vote", change_value)
-    // .submit();
-
-
-    //console.log($(this))
-  })
-  $('.vote_down').on('click', function (e) { 
-    // console.log('down')
-    // console.log(rowData)
-    // console.log($(this))
-  })
+  cellData = parseFloat(cellData)||0
+  $(td).html( '<div class="vote-actions"> <a href="#" class="rank up" iterator="1" field="'+field_name+'"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="rank down" iterator="-1" field="'+field_name+'"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
 
 
 
@@ -3943,7 +3923,17 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.visible = false
     }
     if (new_dictionary.format == 'vote'||new_dictionary.format == 'rank'){
-        new_dictionary.createdCell = vote_created_cell //vote_created_cell_editor(editor) //vote_created_cell
+        new_dictionary.render = function(data,type,row,meta){
+              cellData = parseFloat(data)||0
+              field_name = new_dictionary.name
+              return '<div class="vote-actions"> <a href="#" class="rank up" iterator="1" field="'+field_name+'"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="rank down" iterator="-1" field="'+field_name+'"> <i class="fa fa-chevron-down"> </i> </a> </div>'
+
+
+
+            //vote_created_cell_editor(new_dictionary.name)()
+        }
+
+        //new_dictionary.createdCell = vote_created_cell_editor(new_dictionary.name)   //vote_created_cell //vote_created_cell_editor(editor) //vote_created_cell
     }
 
 }
@@ -3971,6 +3961,9 @@ function datatable_column_fields_generate(custom_fields){
 function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params){
 
     row_id = row_id || 'DT_RowId'
+
+
+
     editor.on("preSubmit", function(e, data, action) {
     if (action == 'create'){
         //console.log(data)
@@ -3982,12 +3975,19 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         submit_attributes = params.submit_attributes||{}
         item = combine_dicts(item,submit_attributes)
         r = firebaseRef.push(item)
-        return false
+
+
 
     })
 
 
+
+        editor.close()
+        return false
+
     }
+
+
     })
 
 
@@ -4067,14 +4067,40 @@ function datatable_generate(table_id,columns_list,editor,input_data){
     return table_example
 }
 
-function editor_rank_apply(table,table_id,){
+function editor_rank_apply(editor,table_id){
 
-    $(table_id).on("click", "tbody .vote_up", function(e) {
+    $(table_id).on("click", "tbody .rank", function(e) {
+        e.preventDefault()
         var table = $(table_id).DataTable();
-        cell_data = table.cell($(this).closest('td')).data();
+        //cell_data = parseFloat(table.cell($(this).closest('td')).data())
         row_data = table.row($(this).closest('td')).data();
+        console.log(row_data)
+        iterator = parseFloat($(this).attr('iterator'))
+        field = $(this).attr('field')
+        cell_data = parseFloat(row_data[field])||0
+
+        change_value = cell_data + iterator
+        // console.log(iterator)
+        // console.log('field')
+
+        // console.log(field)
+        // console.log('cell_data')
+
+        // console.log(cell_data)
+        // console.log('change_value')
+
+        // console.log(change_value)
+
         col_num_selector = $(this).closest('td')
-        var col = $(col_num_selector).parent().children().index($(col_num_selector));
+        //var col = $(col_num_selector).parent().children().index($(col_num_selector));
+        // console.log(col_num_selector)
+        // console.log(editor)
+
+    editor
+    .edit(col_num_selector, false)
+    .set(field, change_value)
+    .submit();
+
 
     });
 
@@ -4114,6 +4140,7 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
     })
 
 
+    editor_rank_apply(editor,table_id)
     return table
 }
 

@@ -3,32 +3,12 @@ function datatables_data_get(table){
   return table.data().toArray();
 }
 
-function vote_created_cell_editor(editor){
+function vote_created_cell_editor(field_name){
 
 
 function vote_created_cell_core(td, cellData, rowData, row, col) {
-
-  $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
-  $('.vote_up').on('click', function (e) { 
-    // console.log('up')
-    // console.log(cellData)
-    // console.log(td)
-    // console.log(rowData)
-    // console.log(row)
-    // console.log(col)
-    // editor
-    // .edit(this, false)
-    // .set("vote", change_value)
-    // .submit();
-
-
-    //console.log($(this))
-  })
-  $('.vote_down').on('click', function (e) { 
-    // console.log('down')
-    // console.log(rowData)
-    // console.log($(this))
-  })
+  cellData = parseFloat(cellData)||0
+  $(td).html( '<div class="vote-actions"> <a href="#" class="rank up" iterator="1" field="'+field_name+'"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="rank down" iterator="-1" field="'+field_name+'"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
 
 
 

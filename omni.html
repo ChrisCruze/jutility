@@ -833,7 +833,7 @@ function initiate_check_list_datatable(table_node){
     datatables_firebase({
         table_selector:"#checklist_table",
         firebase_reference:dbRef.ref('omni').child(table_node),
-        columns:['text','date']
+        columns:['text','date',{'data':'rank','format':'rank'}]
     })
 }
 
