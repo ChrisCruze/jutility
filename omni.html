@@ -109,6 +109,9 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
 <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
  -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.10/sass.min.js"></script>
+
  <script src="jutility.js"></script>
 <style>
 
@@ -397,14 +400,9 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
                                     </div>
-                                    <div class="ibox-content">
-                                    <div id="calendar"></div>
-                                    
-
-                                        <table class="display" cellspacing="0" width="100%" id="checklist_table">
-                                        </table>                            
-<!--                                         <table class="display" cellspacing="0" width="100%" id="ds_table">
-                                        </table> -->
+                                    <div class="ibox-content" style="max-height: 450px;overflow-y: scroll;">
+                                        <table class="display" cellspacing="0" width="100%" id="checklist_table"></table> 
+                                        <!-- <table class="display" cellspacing="0" width="100%" id="ds_table"></table> -->
                                     </div>
                                 </div>
                             </div>
@@ -515,6 +513,13 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab-1" data-toggle="tab">Current Tasks</a></li>
                     <li class=""><a href="#tab-2" data-toggle="tab">Completed Tasks</a></li>
+                    <li class=""><a href="#tab-3" data-toggle="tab" onClick=''>Calendar</a></li>
+
+
+                    <li class=""><a href="#tab-4" data-toggle="tab" onClick=''>Calendar Table</a></li>
+
+
+
                 </ul>
 
                 <div class="tab-content">
@@ -525,6 +530,16 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                         <table id="completed_tasks_table" class="display" cellspacing="0" width="100%"></table>
 
                     </div>
+                    <div class="tab-pane" id="tab-3">
+                                    <div id="calendar"></div>
+
+                    </div>
+                    <div class="tab-pane" id="tab-4">
+                        <table id="calendar_table" class="display" cellspacing="0" width="100%"></table>
+
+                    </div>
+
+
                 </div>
 
 
@@ -848,6 +863,14 @@ setTimeout(key_metrics_save_minute,5000)
 
 setTimeout(initiate_check_list_datatable,5000,'checklist')
 
+
+
+function initate_calendar(){
+calendar_initiate({events:Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))})
+datatables_firebase({firebase_reference:firebase.database().ref('omni').child('calendar'), table_selector:"#calendar_table"})
+}
+
+initate_calendar()
 //('checklist')
 //initiate_check_list_datatable('checklist')
 // var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');

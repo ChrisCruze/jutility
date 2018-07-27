@@ -8,6 +8,15 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.type = "number-order"
     }
     if (new_dictionary.format == 'url'){
+                new_dictionary.render = function(data,type,row,meta){
+
+
+
+                      title = row.name||row.title
+                      return "<a target='_blank' href='"+data+"'>" +title + "</a>"
+
+
+                }
         new_dictionary.createdCell = url_create_datatables
     }
     if (new_dictionary.visible == 'false'){
