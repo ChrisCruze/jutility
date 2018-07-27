@@ -160,25 +160,30 @@ var ref = firebase.database().ref('blogs').child('test_user').child('data').chil
 
 function update_stock_data(){
     table_data = $("#table").DataTable().data().toArray()
-    stock_symbols = _.map(table_data,function(D){return D['symbol']})
+    stock_symbols = _.map(table_data,function(D){return D['symbol'].toUpperCase()})
     live_stock_data = stocks_batch_pull(stock_symbols)
+    console.log(live_stock_data)
     combined_stock_data = _.map(table_data,function(D){
 
-        live_stock_dict = live_stock_data[D['symbol']]
+        live_stock_dict = live_stock_data[D['symbol'].toUpperCase()]
         if (live_stock_dict != undefined){
-        live_stock_dict_formatted = combine_dicts(live_stock_dict.stats,live_stock_dict.quote)
-        live_stock_dict_formatted = combine_dicts(live_stock_dict_formatted,live_stock_dict.news[0])
-        return combine_dicts(D,live_stock_dict_formatted)
-
+            live_stock_dict_formatted = combine_dicts(live_stock_dict.stats,live_stock_dict.quote)
+            live_stock_dict_formatted = combine_dicts(live_stock_dict_formatted,live_stock_dict.news[0])
+            return combine_dicts(D,live_stock_dict_formatted)
+        }
+        else {
+            console.log('ERROR')
+            console.log(D)
         }
 
     })
+    console.log(combined_stock_data)
     combined_stock_data.forEach(function(D){
         if (D != undefined){
-        D.last_update = moment().format()
-        console.log(D)
+            D.last_update = moment().format()
+         console.log(D)
         ref.child(D['DT_RowId']).set(D)
-            
+
         }
 
     })
