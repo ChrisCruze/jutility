@@ -3914,6 +3914,17 @@ calendar_create_from_array();
 //datatables_firebase.js
 
 
+function datatables_firebase_params(){
+    params = {
+        columns:[],
+        table_selector:'#table',
+        firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json",
+        process_function:undefined,//process firebase dictionary as its created
+        table_row_id:undefined,
+        columns_generate:true
+    }
+}
+
 
 function datatables_column_add_formatting_from_type(new_dictionary){
     if (new_dictionary.format == 'date'){
@@ -3923,6 +3934,15 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.type = "number-order"
     }
     if (new_dictionary.format == 'url'){
+                new_dictionary.render = function(data,type,row,meta){
+
+
+
+                      title = row.name||row.title
+                      return "<a target='_blank' href='"+data+"'>" +title + "</a>"
+
+
+                }
         new_dictionary.createdCell = url_create_datatables
     }
     if (new_dictionary.visible == 'false'){
@@ -4127,49 +4147,114 @@ function editor_rank_apply(editor,table_id){
 }
 
 
-function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row_id,params){
+// function firebase_dataeditor_table_generate_core(table_selector,columns,firebaseRef,row_id,params){
 
-    var firebaseRef = firebaseRef||dbRef.ref('drogas');
-    table_id = table_id||"#ds_table"
-    fields = fields||['input_text','date_time','type','within_system','DT_RowId']
-    row_id = row_id || 'DT_RowId'
+//     var firebaseRef = firebaseRef||dbRef.ref('drogas');
+//     table_selector = table_selector||//"#ds_table"
+//     columns = fields||['input_text','date_time','type','within_system','DT_RowId']
+//     row_id = row_id || 'DT_RowId'
 
 
-    new_fields = datatable_column_fields_generate(fields,params)
+//     new_fields = datatable_column_fields_generate(columns,params)
+//     editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebaseRef,row_id,params)
+//     table = datatable_generate(table_selector,new_fields,editor,params)
 
-    editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id,params)
-    table = datatable_generate(table_id,new_fields,editor,params)
+//     firebaseRef.on("child_added", function(snap) {
 
-    firebaseRef.on("child_added", function(snap) {
+//         directory_addresses = snap.getRef().path.n
+//         id = directory_addresses[directory_addresses.length-1]
+//         firebase_dictionary = snap.val()
+//         ////console.log(firebase_dictionary)
+//         firebase_dictionary['DT_RowId'] = id
 
+
+//         if (params.process_function != undefined){
+//             firebase_dictionary = params.process_function(firebase_dictionary)
+//         }
+        
+//         fields_to_check = _.map(new_fields,function(D){return D['data']})
+//         key_check_func_dictionary(fields_to_check,firebase_dictionary)
+//         table.row.add(firebase_dictionary).draw(false);
+//     })
+
+//     if (params.live == true){
+
+//         firebaseRef.on("child_changed", function(snap) {
+//             data = table.data().toArray();
+//             data.forEach(function(D,row_number){D['row_number'] = row_number})
+//             data_dict = _.groupBy(data,'DT_RowId')
+//             dictionary_obj = snap.val()
+//             selected_dict = data_dict[String(dictionary_obj['DT_RowId'])]
+//             row_number = selected_dict[0]['row_number']
+//             //dictionary_obj = dictionary_reformat(dictionary_obj)
+//             table.row(row_number).data(dictionary_obj).draw( false )
+//         })
+
+//     }
+
+//     editor_rank_apply(editor,table_id)
+//     return table
+// }
+
+
+
+//columns
+//table_selector
+//firebase_reference
+//process_function - process firebase dictionary as its created
+//table_row_id
+function firebase_dataeditor_table_generate_core(params){
+
+    firebase_reference = params.firebase_reference//||//dbRef.ref('drogas');
+    table_selector = params.table_selector||"#table"
+    columns = params.columns
+    table_row_id = params.table_row_id||'DT_RowId'
+
+
+    new_fields = datatable_column_fields_generate(columns,params)
+    editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebase_reference,table_row_id,params)
+    table = datatable_generate(table_selector,new_fields,editor,params)
+
+
+    firebase_reference.on("child_added", function(snap) {
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
         firebase_dictionary = snap.val()
-        ////console.log(firebase_dictionary)
         firebase_dictionary['DT_RowId'] = id
-
-
         if (params.process_function != undefined){
             firebase_dictionary = params.process_function(firebase_dictionary)
         }
-        
         fields_to_check = _.map(new_fields,function(D){return D['data']})
         key_check_func_dictionary(fields_to_check,firebase_dictionary)
         table.row.add(firebase_dictionary).draw(false);
     })
 
 
-    editor_rank_apply(editor,table_id)
+    firebase_reference.on("child_changed", function(snap) {
+        data = table.data().toArray();
+        data.forEach(function(D,row_number){D['row_number'] = row_number})
+        data_dict = _.groupBy(data,'DT_RowId')
+        dictionary_obj = snap.val()
+        selected_dict = data_dict[String(dictionary_obj['DT_RowId'])]
+        row_number = selected_dict[0]['row_number']
+        //dictionary_obj = dictionary_reformat(dictionary_obj)
+        table.row(row_number).data(dictionary_obj).draw( false )
+    })
+
+
+    editor_rank_apply(editor,table_selector)
+    params.table = table
+    console.log(params)
     return table
 }
 
 
 //datatables_firebase_table_generate({table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 function datatables_firebase_table_generate(params){
-    table_selector = params.table_selector||"#table"
-    table_row_id = params.table_row_id||'DT_RowId'
-    var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
-    return firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id,params)
+    params.table_selector = params.table_selector||"#table"
+    params.table_row_id = params.table_row_id||'DT_RowId'
+    params.firebase_reference = params.firebase_reference||firebase.database().ref('bug_features');
+    return firebase_dataeditor_table_generate_core(params)
 }
 
 function firebase_json_pull_promise_original() {
@@ -4244,35 +4329,29 @@ function datatables_firebase_columns_define(params){
     p1.then(function(array){
       col_names = Object.keys(array)
       if (params.columns != undefined){
-        console.log(params.columns)
-
-        console.log(col_names)
         col_names_to_add = _.difference(col_names,_.map(params.columns,function(D){return D.data||D}))
-        console.log(col_names_to_add)
         col_names = params.columns.concat(col_names_to_add)
-        console.log(col_names)
-        //col_names = Object.keys(_.groupBy(col_names))
       }
-      //console.log(col_names)
       params.columns = col_names 
-      datatables_firebase_table_generate(params)
+      console.log(params)
+      firebase_dataeditor_table_generate_core(params)
     });
-
 }
+
+
+
 
 //datatables_firebase
 //{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 //datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
 function datatables_firebase(params){
-if (params.columns == undefined||params.columns_generate == true){
-    datatables_firebase_columns_define(params)
-}
-else {
-    table = datatables_firebase_table_generate(params)
-    params.table = table
-}
-    //table = datatables_firebase_table_generate_simple(params)
-    return params
+    if (params.columns == undefined||params.columns_generate == true){
+        datatables_firebase_columns_define(params)
+    }
+    else {
+        table = firebase_dataeditor_table_generate_core(params)
+    }
+        return params
 }
 
 
@@ -4800,15 +4879,97 @@ function timer_instance_page_initiate(timer_instance_dictionary){
     return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
 }
 
-//if timer instances exists, add certain tactions to the timer
-function timer_instance_exists_process(timer_instance_dictionary,timer_instance){
 
-    empty_timer_html = $("#timer_text_container").html()
+
+function datatables_firebase_columns_define(params){
+    ref = params.firebase_reference
+    function firebase_pull_json() {
+      return new Promise(function(resolve, reject){
+        ref.limitToLast(1).on("child_added", function(snapshot) {
+            resolve(snapshot.val())
+        })  
+      })};
+    var p1 = firebase_pull_json();
+    p1.then(function(array){
+      col_names = Object.keys(array)
+      if (params.columns != undefined){
+        col_names_to_add = _.difference(col_names,_.map(params.columns,function(D){return D.data||D}))
+        col_names = params.columns.concat(col_names_to_add)
+      }
+      params.columns = col_names 
+      console.log(params)
+      firebase_dataeditor_table_generate_core(params)
+    });
+}
+
+
+function task_complete_todoist_promise_generate(timer_instance_dictionary,timer_instance){
+    function complete_task_via_zapier(){
+      return new Promise(function(resolve, reject){
+        r = $.ajax({
+              type: "POST",
+              data:timer_instance_dictionary,
+              url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/"
+          })
+        console.log(r)
+        if (r.readyState == 1){ resolve(r)}
+      })}
+    complete_task_via_zapier().then(function(r){
+        console.log(r)
+        if (r.status == 'success'){
+            timer_instance.set({})
+            document.title = 'Omni'
+            $("#input_text").val("")
+        }
+    })
+}
+
+
+function task_complete_todoist(timer_instance_dictionary,timer_instance,timer_instance_archive){
+    input_text = $("#input_text").val()
+    html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+    new_task_name = input_text + html_timer
+    timer_instance_dictionary['new_task_name'] = new_task_name
+    console.log(timer_instance_dictionary)
+    timer_instance_archive.set(timer_instance_dictionary)
+
+
+swal({
+  title: 'Are you sure?',
+  text: new_task_name,
+  type: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then(function(result){
+  if (result) {
+        task_complete_todoist_promise_generate(timer_instance_dictionary,timer_instance)
+    swal(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    )
+  }
+}
+)
+
+
+
+}
+
+function page_update_from_timer(timer_instance_dictionary){
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
+}
+//if timer instances exists, add certain tactions to the timer
+function timer_instance_exists_process(timer_instance_dictionary,timer_instance,timer_instance_archive){
+
+    empty_timer_html = $("#timer_text_container").html()
+    page_update_from_timer(timer_instance_dictionary)
     my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
-    console.log(my_interval_timer)
-	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
+
+
     $("#input_update").click(function(event) {
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
@@ -4816,61 +4977,16 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             timer_instance_dictionary['content'] = $("#input_text").val() 
             timer_instance.set(timer_instance_dictionary)
     })
+
     $("#input_complete").click(function(event) {
-            console.log(timer_instance_dictionary)
-            console.log($("#input_text"))
-            console.log($("#input_text").val())
-
-            input_text = $("#input_text").val()
-            //$("#input_update").click();
             event.preventDefault()
-            html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            
-            if (input_text != '' && input_text != undefined){
-                console.log(input_text)
-                timer_instance_dictionary['new_task_name'] = input_text + html_timer
-                console.log(timer_instance_dictionary)
-                r = $.ajax({
-                  type: "POST",
-                  data:timer_instance_dictionary,
-                  url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
-                })
-                console.log(timer_instance_dictionary)
-                console.log(r)      
-                console.log('set')
-
-                if (r.readyState == 1){
-                    timer_instance.set({})
-                }
-
-                console.log(timer_instance)
-
-            //clearInterval(my_interval_timer)
-            //$("#input_text").val("")
-            //$("#timer_text_container").html(empty_timer_html)
-            //document.title = 'Omni'
-
-
-            }
-            else {
-                //timer_instance_dictionary.content
-                alert('input text is blank')
-            }
-
-
-            //todoist_complete_task(String(timer_instance_dictionary.id))
-
-
+            task_complete_todoist(timer_instance_dictionary,timer_instance,timer_instance_archive)
         })
 
         $("#input_delete").click(function(event) {
             event.preventDefault()
             todoist_delete_task(timer_instance_dictionary.id)
             timer_instance.set({})
-            //clearInterval(my_interval_timer)
-            //$("#timer_text_container").html(empty_timer_html)
-            //document.title = 'Omni'
-
         })
     return my_interval_timer
 }

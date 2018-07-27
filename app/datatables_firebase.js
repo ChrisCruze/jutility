@@ -1,4 +1,15 @@
 
+function datatables_firebase_params(){
+    params = {
+        columns:[],
+        table_selector:'#table',
+        firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json",
+        process_function:undefined,//process firebase dictionary as its created
+        table_row_id:undefined,
+        columns_generate:true
+    }
+}
+
 
 function datatables_column_add_formatting_from_type(new_dictionary){
     if (new_dictionary.format == 'date'){
@@ -221,49 +232,114 @@ function editor_rank_apply(editor,table_id){
 }
 
 
-function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row_id,params){
+// function firebase_dataeditor_table_generate_core(table_selector,columns,firebaseRef,row_id,params){
 
-    var firebaseRef = firebaseRef||dbRef.ref('drogas');
-    table_id = table_id||"#ds_table"
-    fields = fields||['input_text','date_time','type','within_system','DT_RowId']
-    row_id = row_id || 'DT_RowId'
+//     var firebaseRef = firebaseRef||dbRef.ref('drogas');
+//     table_selector = table_selector||//"#ds_table"
+//     columns = fields||['input_text','date_time','type','within_system','DT_RowId']
+//     row_id = row_id || 'DT_RowId'
 
 
-    new_fields = datatable_column_fields_generate(fields,params)
+//     new_fields = datatable_column_fields_generate(columns,params)
+//     editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebaseRef,row_id,params)
+//     table = datatable_generate(table_selector,new_fields,editor,params)
 
-    editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id,params)
-    table = datatable_generate(table_id,new_fields,editor,params)
+//     firebaseRef.on("child_added", function(snap) {
 
-    firebaseRef.on("child_added", function(snap) {
+//         directory_addresses = snap.getRef().path.n
+//         id = directory_addresses[directory_addresses.length-1]
+//         firebase_dictionary = snap.val()
+//         ////console.log(firebase_dictionary)
+//         firebase_dictionary['DT_RowId'] = id
 
+
+//         if (params.process_function != undefined){
+//             firebase_dictionary = params.process_function(firebase_dictionary)
+//         }
+        
+//         fields_to_check = _.map(new_fields,function(D){return D['data']})
+//         key_check_func_dictionary(fields_to_check,firebase_dictionary)
+//         table.row.add(firebase_dictionary).draw(false);
+//     })
+
+//     if (params.live == true){
+
+//         firebaseRef.on("child_changed", function(snap) {
+//             data = table.data().toArray();
+//             data.forEach(function(D,row_number){D['row_number'] = row_number})
+//             data_dict = _.groupBy(data,'DT_RowId')
+//             dictionary_obj = snap.val()
+//             selected_dict = data_dict[String(dictionary_obj['DT_RowId'])]
+//             row_number = selected_dict[0]['row_number']
+//             //dictionary_obj = dictionary_reformat(dictionary_obj)
+//             table.row(row_number).data(dictionary_obj).draw( false )
+//         })
+
+//     }
+
+//     editor_rank_apply(editor,table_id)
+//     return table
+// }
+
+
+
+//columns
+//table_selector
+//firebase_reference
+//process_function - process firebase dictionary as its created
+//table_row_id
+function firebase_dataeditor_table_generate_core(params){
+
+    firebase_reference = params.firebase_reference//||//dbRef.ref('drogas');
+    table_selector = params.table_selector||"#table"
+    columns = params.columns
+    table_row_id = params.table_row_id||'DT_RowId'
+
+
+    new_fields = datatable_column_fields_generate(columns,params)
+    editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebase_reference,table_row_id,params)
+    table = datatable_generate(table_selector,new_fields,editor,params)
+
+
+    firebase_reference.on("child_added", function(snap) {
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
         firebase_dictionary = snap.val()
-        ////console.log(firebase_dictionary)
         firebase_dictionary['DT_RowId'] = id
-
-
         if (params.process_function != undefined){
             firebase_dictionary = params.process_function(firebase_dictionary)
         }
-        
         fields_to_check = _.map(new_fields,function(D){return D['data']})
         key_check_func_dictionary(fields_to_check,firebase_dictionary)
         table.row.add(firebase_dictionary).draw(false);
     })
 
 
-    editor_rank_apply(editor,table_id)
+    firebase_reference.on("child_changed", function(snap) {
+        data = table.data().toArray();
+        data.forEach(function(D,row_number){D['row_number'] = row_number})
+        data_dict = _.groupBy(data,'DT_RowId')
+        dictionary_obj = snap.val()
+        selected_dict = data_dict[String(dictionary_obj['DT_RowId'])]
+        row_number = selected_dict[0]['row_number']
+        //dictionary_obj = dictionary_reformat(dictionary_obj)
+        table.row(row_number).data(dictionary_obj).draw( false )
+    })
+
+
+    editor_rank_apply(editor,table_selector)
+    params.table = table
+    console.log(params)
     return table
 }
 
 
 //datatables_firebase_table_generate({table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 function datatables_firebase_table_generate(params){
-    table_selector = params.table_selector||"#table"
-    table_row_id = params.table_row_id||'DT_RowId'
-    var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
-    return firebase_dataeditor_table_generate_core(table_selector,params.columns,firebaseRef,table_row_id,params)
+    params.table_selector = params.table_selector||"#table"
+    params.table_row_id = params.table_row_id||'DT_RowId'
+    params.firebase_reference = params.firebase_reference||firebase.database().ref('bug_features');
+    return firebase_dataeditor_table_generate_core(params)
 }
 
 function firebase_json_pull_promise_original() {
@@ -338,35 +414,29 @@ function datatables_firebase_columns_define(params){
     p1.then(function(array){
       col_names = Object.keys(array)
       if (params.columns != undefined){
-        console.log(params.columns)
-
-        console.log(col_names)
         col_names_to_add = _.difference(col_names,_.map(params.columns,function(D){return D.data||D}))
-        console.log(col_names_to_add)
         col_names = params.columns.concat(col_names_to_add)
-        console.log(col_names)
-        //col_names = Object.keys(_.groupBy(col_names))
       }
-      //console.log(col_names)
       params.columns = col_names 
-      datatables_firebase_table_generate(params)
+      console.log(params)
+      firebase_dataeditor_table_generate_core(params)
     });
-
 }
+
+
+
 
 //datatables_firebase
 //{table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 //datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})
 function datatables_firebase(params){
-if (params.columns == undefined||params.columns_generate == true){
-    datatables_firebase_columns_define(params)
-}
-else {
-    table = datatables_firebase_table_generate(params)
-    params.table = table
-}
-    //table = datatables_firebase_table_generate_simple(params)
-    return params
+    if (params.columns == undefined||params.columns_generate == true){
+        datatables_firebase_columns_define(params)
+    }
+    else {
+        table = firebase_dataeditor_table_generate_core(params)
+    }
+        return params
 }
 
 

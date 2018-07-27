@@ -109,9 +109,10 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
 <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.10/sass.min.js"></script>
-
+<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.10/sass.min.js"></script>
+ -->
  <script src="jutility.js"></script>
 <style>
 
@@ -601,6 +602,8 @@ var dbRef = dbRef||firebase.database();
 omni_node = 'todoist_tasks'
 var FirebaseRef = dbRef.ref('omni').child(omni_node)
 var timer_instance = dbRef.ref('omni').child('timer_instance')
+var timer_instance_archive = dbRef.ref('omni').child('timer_instance_archive')
+
 var snapshot_instance = dbRef.ref('omni').child('snapshot')
 todoist_gspread_pull = todoist_gspread_pull_firebase()
 
@@ -656,7 +659,6 @@ todoist_table_complete = todoist_table_create_complete(completed_tasks,"#complet
 
 
 
-
 var my_interval_timer;
 empty_timer_html = $("#timer_text_container").html()
 timer_instance.on('value', function(snapshot) {
@@ -664,21 +666,13 @@ timer_instance.on('value', function(snapshot) {
     timer_instance_dictionary = snapshot.val()
     //console.log(timer_instance_dictionary)
     if (timer_instance_dictionary != null){
-        task_content = timer_instance_dictionary.content 
-        my_interval_timer = timer_instance_exists_process(timer_instance_dictionary,timer_instance)
-
-
-
-
-
-
-
+        my_interval_timer = timer_instance_exists_process(timer_instance_dictionary,timer_instance,timer_instance_archive)
     }
     else {
+        document.title = 'Omni'
+        $("#input_text").val("") 
         clearInterval(my_interval_timer)
         $("#timer_text_container").html(empty_timer_html)
-        document.title = 'Omni'
-        $("#input_text").val("")
     }
 });
 
@@ -871,6 +865,21 @@ datatables_firebase({firebase_reference:firebase.database().ref('omni').child('c
 }
 
 initate_calendar()
+
+
+////dbRef.ref('omni').child('todoist_gspread_checklist').set(gspread_array)
+function checklist_gspread(){
+    datatables_firebase({
+        table_selector:"#remaining_tasks_table",
+        firebase_reference:dbRef.ref('omni').child('todoist_gspread_checklist')
+    })
+}
+//remaining_tasks_populate(gspread_array)
+
+
+
+
+//gspread_array
 //('checklist')
 //initiate_check_list_datatable('checklist')
 // var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');

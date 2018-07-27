@@ -223,6 +223,7 @@ function application_function(user){
             'liability','debt','net_current_assets','deficit','last_year_earnings','net_tangible_assets','annual_report','multiplier_of_record_earnings','management_efficiency','stakeholder_recognition','competitors'],
         columns_generate:true,
         default_visible:false,
+        live:true,
         additional_buttons: [{text: 'Update',name:'Update', action: function ( e, dt, node, config ) {
             update_stock_data()
         }}]

@@ -14,15 +14,96 @@ function timer_instance_page_initiate(timer_instance_dictionary){
     return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
 }
 
-//if timer instances exists, add certain tactions to the timer
-function timer_instance_exists_process(timer_instance_dictionary,timer_instance){
 
-    empty_timer_html = $("#timer_text_container").html()
+
+function datatables_firebase_columns_define(params){
+    ref = params.firebase_reference
+    function firebase_pull_json() {
+      return new Promise(function(resolve, reject){
+        ref.limitToLast(1).on("child_added", function(snapshot) {
+            resolve(snapshot.val())
+        })  
+      })};
+    var p1 = firebase_pull_json();
+    p1.then(function(array){
+      col_names = Object.keys(array)
+      if (params.columns != undefined){
+        col_names_to_add = _.difference(col_names,_.map(params.columns,function(D){return D.data||D}))
+        col_names = params.columns.concat(col_names_to_add)
+      }
+      params.columns = col_names 
+      console.log(params)
+      firebase_dataeditor_table_generate_core(params)
+    });
+}
+
+
+function task_complete_todoist_promise_generate(timer_instance_dictionary,timer_instance){
+    function complete_task_via_zapier(){
+      return new Promise(function(resolve, reject){
+        r = $.ajax({
+              type: "POST",
+              data:timer_instance_dictionary,
+              url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/"
+          })
+        console.log(r)
+        if (r.readyState == 1){ resolve(r)}
+      })}
+    complete_task_via_zapier().then(function(r){
+        console.log(r)
+        if (r.status == 'success'){
+            timer_instance.set({})
+
+        }
+    })
+}
+
+
+function task_complete_todoist(timer_instance_dictionary,timer_instance,timer_instance_archive){
+    input_text = $("#input_text").val()
+    html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+    new_task_name = input_text + html_timer
+    timer_instance_dictionary['new_task_name'] = new_task_name
+    console.log(timer_instance_dictionary)
+    timer_instance_archive.set(timer_instance_dictionary)
+
+
+swal({
+  title: 'Are you sure?',
+  text: new_task_name,
+  type: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then(function(result){
+  if (result) {
+        task_complete_todoist_promise_generate(timer_instance_dictionary,timer_instance)
+    swal(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    )
+  }
+}
+)
+
+
+
+}
+
+function page_update_from_timer(timer_instance_dictionary){
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
+}
+//if timer instances exists, add certain tactions to the timer
+function timer_instance_exists_process(timer_instance_dictionary,timer_instance,timer_instance_archive){
+
+    empty_timer_html = $("#timer_text_container").html()
+    page_update_from_timer(timer_instance_dictionary)
     my_interval_timer = setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
-    console.log(my_interval_timer)
-	   //timer_instance_interval = timer_instance_page_initiate(timer_instance_dictionary)
+
+
     $("#input_update").click(function(event) {
             event.preventDefault()
             html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
@@ -30,62 +111,17 @@ function timer_instance_exists_process(timer_instance_dictionary,timer_instance)
             timer_instance_dictionary['content'] = $("#input_text").val() 
             timer_instance.set(timer_instance_dictionary)
     })
+
     $("#input_complete").click(function(event) {
-            console.log(timer_instance_dictionary)
-            console.log($("#input_text"))
-            console.log($("#input_text").val())
-
-            input_text = $("#input_text").val()
-            //$("#input_update").click();
             event.preventDefault()
-            html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-            
-            if (input_text != '' && input_text != undefined){
-                console.log(input_text)
-                timer_instance_dictionary['new_task_name'] = input_text + html_timer
-                console.log(timer_instance_dictionary)
-                r = $.ajax({
-                  type: "POST",
-                  data:timer_instance_dictionary,
-                  url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/",
-                })
-                console.log(timer_instance_dictionary)
-                console.log(r)      
-                console.log('set')
-
-                if (r.readyState == 1){
-                    timer_instance.set({})
-                }
-
-                console.log(timer_instance)
-
-            //clearInterval(my_interval_timer)
-            //$("#input_text").val("")
-            //$("#timer_text_container").html(empty_timer_html)
-            //document.title = 'Omni'
-
-
-            }
-            else {
-                //timer_instance_dictionary.content
-                alert('input text is blank')
-            }
-
-
-            //todoist_complete_task(String(timer_instance_dictionary.id))
-
-
+            task_complete_todoist(timer_instance_dictionary,timer_instance,timer_instance_archive)
         })
 
-        $("#input_delete").click(function(event) {
+    $("#input_delete").click(function(event) {
             event.preventDefault()
             todoist_delete_task(timer_instance_dictionary.id)
             timer_instance.set({})
-            //clearInterval(my_interval_timer)
-            //$("#timer_text_container").html(empty_timer_html)
-            //document.title = 'Omni'
-
-        })
+    })
     return my_interval_timer
 }
 
