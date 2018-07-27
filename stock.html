@@ -169,14 +169,18 @@ function update_stock_data(){
         live_stock_dict_formatted = combine_dicts(live_stock_dict.stats,live_stock_dict.quote)
         live_stock_dict_formatted = combine_dicts(live_stock_dict_formatted,live_stock_dict.news[0])
         return combine_dicts(D,live_stock_dict_formatted)
-            
+
         }
 
     })
     combined_stock_data.forEach(function(D){
+        if (D != undefined){
         D.last_update = moment().format()
         console.log(D)
         ref.child(D['DT_RowId']).set(D)
+            
+        }
+
     })
 }
 
