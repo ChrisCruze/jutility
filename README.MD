@@ -181,7 +181,7 @@
 | 179 | [guesty_reservations_inbox_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create url for reservation for datatables functions|
 | 180 | [guest_airbnb_url_create](http://cruzco.site44.com/streak.html) | guesty_functions.js | create user airbnb url for data tables|
 | 181 | [stock_pull](http://cruzco.site44.com/streak.html) | iextrading_functions.js | |
-| 182 | [stock_pull](http://cruzco.site44.com/streak.html) | iextrading_functions.js | |
+| 182 | [stocks_batch_pull](http://cruzco.site44.com/streak.html) | iextrading_functions.js | |
 | 183 | [ipLookUp ](http://cruzco.site44.com/streak.html) | ip_functions.js | |
 | 184 | [success](http://cruzco.site44.com/streak.html) | ip_functions.js | $.ajax('http://ip-api.com/json').then(|
 | 185 | [fail](http://cruzco.site44.com/streak.html) | ip_functions.js |     },|

@@ -15,8 +15,9 @@ function stock_pull(url){
   }
 
 
-  function stock_pull(url){
-    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=PZZA&types=quote,news,chart&range=1m&last=5"
+  function stocks_batch_pull(stocks){
+    stocks_string = stocks.join(",")
+    url = "https://api.iextrading.com/1.0/stock/market/batch?symbols="+stocks_string+"&types=quote,stats,news,chart&range=1m&last=5"
     l = $.ajax({
       url: url,
       method: "GET",
@@ -26,3 +27,7 @@ function stock_pull(url){
     results = l.responseJSON
     return results
   }
+
+
+  ///stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5
+  //    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=PZZA&types=quote,news,chart&range=1m&last=5"

@@ -2604,8 +2604,9 @@ function stock_pull(url){
   }
 
 
-  function stock_pull(url){
-    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=PZZA&types=quote,news,chart&range=1m&last=5"
+  function stocks_batch_pull(stocks){
+    stocks_string = stocks.join(",")
+    url = "https://api.iextrading.com/1.0/stock/market/batch?symbols="+stocks_string+"&types=quote,stats,news,chart&range=1m&last=5"
     l = $.ajax({
       url: url,
       method: "GET",
@@ -2615,6 +2616,11 @@ function stock_pull(url){
     results = l.responseJSON
     return results
   }
+
+
+  ///stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5
+  //    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=PZZA&types=quote,news,chart&range=1m&last=5"
+
 //ip_functions.js
 
 function ipLookUp () {
@@ -3938,7 +3944,7 @@ function datatables_column_add_formatting_from_type(new_dictionary){
 
 }
 
-function datatable_column_fields_generate(custom_fields){
+function datatable_column_fields_generate(custom_fields,params){
     l = []
     custom_fields.forEach(function(custom_field){
         if (typeof custom_field === "object"){
@@ -3948,7 +3954,11 @@ function datatable_column_fields_generate(custom_fields){
             datatables_column_add_formatting_from_type(new_dictionary)
         }
         else {
-            new_dictionary = {data:custom_field, name: custom_field,title:custom_field,label:custom_field}
+            default_visible = true
+            if (params.default_visible != undefined){
+                default_visible = params.default_visible
+            }
+            new_dictionary = {data:custom_field, name: custom_field,title:custom_field,label:custom_field,visible:default_visible}
 
         }
         l.push(new_dictionary)
@@ -4038,20 +4048,11 @@ function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_i
     return editor
 }
 
-function datatable_generate(table_id,columns_list,editor,input_data){
-    input_data = input_data || {}
-    table_example = $(table_id).DataTable({
-    dom: '<"html5buttons"B>lTfgitp',
-    data: [],
-    columns:columns_list,
-    // columns: [
-    // {data:'account_name',title:'Account Name',name:'Account Name',visible:true},
-    // ],
-    select: true,
-    paging:false,
-    scrollX: true,
-    colReorder: true,
-    buttons: [
+function datatable_generate(table_id,columns_list,editor,params){
+    //input_data = input_data || {}
+    params = params || {}
+
+    button_params = [
     { extend: "excel", title: document.title },
     { extend: "colvis", title: document.title },
     { extend: 'create', editor: editor,text:'Create'},
@@ -4063,6 +4064,24 @@ function datatable_generate(table_id,columns_list,editor,input_data){
         $.fn.dataTable.ext.search = []
         dt.draw()
     }}]
+
+    if (params.additional_buttons != undefined){
+        button_params = button_params.concat(params.additional_buttons)
+    }
+
+    table_example = $(table_id).DataTable({
+    dom: '<"html5buttons"B>lTfgitp',
+    data: [],
+    columns:columns_list,
+    // columns: [
+    // {data:'account_name',title:'Account Name',name:'Account Name',visible:true},
+    // ],
+    select: true,
+    paging:false,
+    scrollX: true,
+    colReorder: true,
+    autoWidth: true,
+    buttons: button_params
     });
     return table_example
 }
@@ -4116,10 +4135,10 @@ function firebase_dataeditor_table_generate_core(table_id,fields,firebaseRef,row
     row_id = row_id || 'DT_RowId'
 
 
-    new_fields = datatable_column_fields_generate(fields)
+    new_fields = datatable_column_fields_generate(fields,params)
 
     editor = dataeditor_firebase_instance_generate(table_id,new_fields,firebaseRef,row_id,params)
-    table = datatable_generate(table_id,new_fields,editor)
+    table = datatable_generate(table_id,new_fields,editor,params)
 
     firebaseRef.on("child_added", function(snap) {
 
@@ -4225,8 +4244,16 @@ function datatables_firebase_columns_define(params){
     p1.then(function(array){
       col_names = Object.keys(array)
       if (params.columns != undefined){
-        col_names = col_names.concat(params.columns)
+        console.log(params.columns)
+
+        console.log(col_names)
+        col_names_to_add = _.difference(col_names,_.map(params.columns,function(D){return D.data||D}))
+        console.log(col_names_to_add)
+        col_names = params.columns.concat(col_names_to_add)
+        console.log(col_names)
+        //col_names = Object.keys(_.groupBy(col_names))
       }
+      //console.log(col_names)
       params.columns = col_names 
       datatables_firebase_table_generate(params)
     });
