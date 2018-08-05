@@ -113,6 +113,9 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 <!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.10/sass.min.js"></script>
  -->
+
+ <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="gb3pnnrxyrysbbu"></script>
+
  <script src="jutility.js"></script>
 <style>
 
@@ -195,6 +198,11 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <div class="wrapper wrapper-content">
 <div id='main_content'>
 <div class="container">
+
+
+        <!--         <div class="row" id="dropbox_saver">
+            <a href="https://dl.dropboxusercontent.com/s/deroi5nwm6u7gdf/advice.png" class="dropbox-saver"></a>
+        </div> -->
         <div class="row" id="metric_headers">
 
 
@@ -861,7 +869,15 @@ setTimeout(initiate_check_list_datatable,5000,'checklist')
 
 function initate_calendar(){
 calendar_initiate({events:Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))})
-datatables_firebase({firebase_reference:firebase.database().ref('omni').child('calendar'), table_selector:"#calendar_table"})
+datatables_firebase({
+    firebase_reference:firebase.database().ref('omni').child('calendar'),
+    columns:[
+        {data:'start',format:'date'},
+        {data:'end',format:'date'},
+        ],
+    table_selector:"#calendar_table",
+    columns_generate:true
+})
 }
 
 initate_calendar()

@@ -6,14 +6,27 @@ function datatables_firebase_params(){
         firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json",
         process_function:undefined,//process firebase dictionary as its created
         table_row_id:undefined,
-        columns_generate:true
+        columns_generate:true,//tells it to get additional columns
+        default_visible:false
     }
 }
 
 
+
+
+
 function datatables_column_add_formatting_from_type(new_dictionary){
+    if (new_dictionary.format == 'date_seconds'){
+        new_dictionary.render = date_time_datatable_format_render_seconds
+        new_dictionary.type =  "datetime"
+    }
     if (new_dictionary.format == 'date'){
-        new_dictionary.createdCell = date_time_datatable_format
+        new_dictionary.render = date_time_datatable_format_render
+        new_dictionary.type =  "datetime"
+    }
+    if (new_dictionary.format == 'editor_date'){
+        new_dictionary.render = date_time_datatable_format_render
+        new_dictionary.type =  "datetime"
     }
     if (new_dictionary.format == 'number'){
         new_dictionary.type = "number-order"
@@ -72,7 +85,20 @@ function datatable_column_fields_generate(custom_fields,params){
     return l
 }
 
+function date_field_format_check(item,params){
+    if (params.date_fields){
+        params.date_fields.forEach(function(date_field){
+            console.log(date_field)
+            if (moment(item[date_field],'MM-DD-YYYY h:mm a').isValid()){
+                console.log(item)
+                console.log(params)
+                item[date_field] = moment(item[date_field],'MM-DD-YYYY h:mm a').format()
+            }
+            
 
+        })
+    }
+}
 function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params){
 
     row_id = row_id || 'DT_RowId'
@@ -89,19 +115,16 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         item['created_time'] = moment().format()
         submit_attributes = params.submit_attributes||{}
         item = combine_dicts(item,submit_attributes)
+        date_field_format_check(item,params)
         r = firebaseRef.push(item)
-
-
-
-    })
-
+        })
 
 
         editor.close()
         return false
 
-    }
 
+    }
 
     })
 
@@ -118,7 +141,8 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
 
         edit_attributes = params.submit_attributes||params.edit_attributes
         D = combine_dicts(D,edit_attributes)
-
+        date_field_format_check(D,params)
+        console.log(D)
         firebaseRef.child(record_id).set(D);
     });
     }
@@ -144,11 +168,25 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
 
 function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_id,params){
     row_id = row_id || 'DT_RowId'
+    date_fields = []
+    console.log(fields)
+    fields.forEach(function(D){
+
+        if (D.format == 'date' || D.format == 'MM-DD-YYYY h:mm a' ){
+            D.type = 'datetime'
+            //D.keyInput = false
+            D.format = 'MM-DD-YYYY h:mm a'
+            date_fields.push(D.data)
+        }
+    })
     editor = new $.fn.dataTable.Editor({
         table:table_id,
         idSrc: row_id,
         fields: fields
     });
+    if (date_fields.length > 0){
+        params.date_fields = date_fields
+    }
     dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params)
     return editor
 }
@@ -174,20 +212,23 @@ function datatable_generate(table_id,columns_list,editor,params){
         button_params = button_params.concat(params.additional_buttons)
     }
 
-    table_example = $(table_id).DataTable({
-    dom: '<"html5buttons"B>lTfgitp',
-    data: [],
-    columns:columns_list,
-    // columns: [
-    // {data:'account_name',title:'Account Name',name:'Account Name',visible:true},
-    // ],
-    select: true,
-    paging:false,
-    scrollX: true,
-    colReorder: true,
-    autoWidth: true,
-    buttons: button_params
-    });
+    config = {
+        dom: '<"html5buttons"B>lTfgitp',
+        data: [],
+        columns:columns_list,
+        select: true,
+        paging:false,
+        scrollX: true,
+        colReorder: true,
+        autoWidth: true,
+        buttons: button_params
+    }
+
+    if (params.sort != undefined){
+        sort_order = params.sort_order||'desc'
+        config.order = [[_.findIndex(columns_list,function(D){return D['data'] == params.sort}),'desc']]
+    }
+    table_example = $(table_id).DataTable(config);
     return table_example
 }
 
@@ -198,7 +239,7 @@ function editor_rank_apply(editor,table_id){
         var table = $(table_id).DataTable();
         //cell_data = parseFloat(table.cell($(this).closest('td')).data())
         row_data = table.row($(this).closest('td')).data();
-        console.log(row_data)
+        //console.log(row_data)
         iterator = parseFloat($(this).attr('iterator'))
         field = $(this).attr('field')
         cell_data = parseFloat(row_data[field])||0
@@ -290,18 +331,37 @@ function editor_rank_apply(editor,table_id){
 //table_row_id
 function firebase_dataeditor_table_generate_core(params){
 
+    $.fn.dataTable.ext.type.order["datetime-pre"] = function(string_variable) {
+        d = string_variable.match(/>(.*)</).pop();
+        r = -1
+        if (moment(d).isValid()){
+            r = moment(d).utc();
+        }
+        else if (moment(d,"MM/DD/YY hh:mmA (dd)").isValid()){
+            r = moment(d,"MM/DD/YY hh:mmA (dd)").utc();
+        }
+        else if (moment(d,"MM/DD/YY hh:mm:ssA (dd)").isValid()){
+            r = moment(d,"MM/DD/YY hh:mm:ssA (dd)").utc();
+        }
+      return r;
+    };
+
     firebase_reference = params.firebase_reference//||//dbRef.ref('drogas');
     table_selector = params.table_selector||"#table"
     columns = params.columns
     table_row_id = params.table_row_id||'DT_RowId'
 
-
+    params.input_columns = columns
     new_fields = datatable_column_fields_generate(columns,params)
+    params.columns = new_fields
     editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebase_reference,table_row_id,params)
     table = datatable_generate(table_selector,new_fields,editor,params)
 
+    fields_to_check = _.map(new_fields,function(D){return D['data']})
+    //console.log(fields_to_check)
 
     firebase_reference.on("child_added", function(snap) {
+       // console.log(snap)
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
         firebase_dictionary = snap.val()
@@ -309,26 +369,72 @@ function firebase_dataeditor_table_generate_core(params){
         if (params.process_function != undefined){
             firebase_dictionary = params.process_function(firebase_dictionary)
         }
-        fields_to_check = _.map(new_fields,function(D){return D['data']})
+        //fields_to_check = _.map(new_fields,function(D){return D['data']})
+        //console.log()
         key_check_func_dictionary(fields_to_check,firebase_dictionary)
         table.row.add(firebase_dictionary).draw(false);
     })
 
 
+
+    params.table = table
+    params.editor = editor
+
     firebase_reference.on("child_changed", function(snap) {
-        data = table.data().toArray();
+
+        dt_id_alternative = snap.getRef().path.n[snap.getRef().path.n.length-1]
+
+        // console.log('my table')
+        // console.log(table)
+        //console.log(params)
+        // directory_addresses = snap.getRef().path.n
+        // id = directory_addresses[directory_addresses.length-1]
+        // dictionary_obj = snap.val()
+
+        // fields_to_check = _.map(new_fields,function(D){return D['data']})
+        // key_check_func_dictionary(fields_to_check,dictionary_obj)
+        // console.log('go')
+        // console.log(table)
+        // console.log(id)
+        // console.log(dictionary_obj)
+        // table.row(id).data(dictionary_obj).draw( false )
+
+
+
+
+        data =params.table.data().toArray()
+        //$(table_selector).dataTable()
+
+       /// data = table.data().toArray();
         data.forEach(function(D,row_number){D['row_number'] = row_number})
+        
+        //console.log(data)
         data_dict = _.groupBy(data,'DT_RowId')
+
         dictionary_obj = snap.val()
-        selected_dict = data_dict[String(dictionary_obj['DT_RowId'])]
+        dictionary_obj['DT_RowId'] = dt_id_alternative
+        //console.log(dictionary_obj)
+        //console.log(dt_id_alternative)
+        selected_dict = data_dict[String(dictionary_obj['DT_RowId']||dt_id_alternative)]
+
         row_number = selected_dict[0]['row_number']
+        //console.log(row_number)
+        //console.log(selected_dict)
+
         //dictionary_obj = dictionary_reformat(dictionary_obj)
-        table.row(row_number).data(dictionary_obj).draw( false )
+        key_check_func_dictionary(_.map(params.columns,function(D){return D['data']}),dictionary_obj)
+
+        params.table.row(row_number).data(dictionary_obj).draw( false )
     })
 
+// editor.add( {
+//     type:       "date",
+//     label:      "Start date:",
+//     name:       "start_date"
+// } );
 
     editor_rank_apply(editor,table_selector)
-    params.table = table
+
     console.log(params)
     return table
 }

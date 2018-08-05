@@ -1,0 +1,2289 @@
+/*--------------
+All Contents
+--------------*/
+
+/*-----------------
+1. Reset.css
+2. Helper Classes
+3. Home page Hero Sections
+4. Pitch Section Styling
+5. Features Section Styling
+6. Review Styling
+7. Pricing section
+8. Subscribe Section
+9. All Media Queries
+------------------*/
+
+
+/*----- 1. Reset.css -----*/
+
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/* --- Common Styles ---*/
+
+h1 {
+  font-size: 16px;
+}
+
+/*----- Helper Classes -----*/
+
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/*
+::-webkit-scrollbar {
+	display: none;
+}
+*/
+h1, h2, h3, h4, h5, h6 {
+  font-family: Poppins;
+}
+
+p {
+	font-family: Roboto;
+}
+
+::-moz-selection {
+    color: #FFFFFF;
+    background: #3333CC;
+}
+
+::selection {
+    color: #FFFFFF;
+    background: #3333CC;
+}
+
+.nopadding_advent {
+	padding: 0;
+}
+
+.custompadding {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.no-margin {
+	margin-right: 0;
+	margin-left: 0;
+}
+
+
+.error-message {
+	color: #FF3333;
+	font-family: Poppins;
+	margin-top: 5px;
+}
+
+.success-message {
+	color:#009900;
+	font-family: Poppins;
+	margin-top: 5px;
+}
+
+#loading {
+   width: 100%;
+   height: 100%;
+   top: 0px;
+   left: 0px;
+   position: fixed;
+   opacity: 1;
+   background-color: #F2F2F2;
+   z-index: 9999;
+   text-align: center;
+}
+
+#loading-image {
+	display: inline;
+    top: 40%;
+    position: relative;
+  z-index: 9999;
+}
+
+.logo {
+  margin: 0 auto;
+	padding: 0px 0px;
+	z-index: 111;
+}
+
+.logo:hover, .logo:focus {
+	text-decoration: none;
+	color: #FFF;
+}
+
+
+
+/* ------ Navbar Styling Starts ----- */
+
+
+.navbar_advent {
+	font-size: 14px;
+  font-family: Poppins;
+	font-weight: 400;
+	text-transform: capitalize;
+	padding-top: 25px;
+	letter-spacing: 1px;
+	height: 80px;
+	-webkit-transition: all 0.6s;
+	-moz-transition: all 0.6s;
+	-o-transition: all 0.6s;
+	transition: all 0.6s;
+	-webkit-backface-visibility: hidden;
+}
+
+.navbar-default_advent {
+  transition: all 0.6s ease;
+	border-color: transparent;
+  background-color: transparent;
+}
+
+.navbar-default_advent .navbar-toggle_advent {
+  border-radius: 0px;
+  border-color: transparent;
+}
+
+.navbar-default_advent .navbar-toggle_advent:hover {
+  background-color: transparent;
+}
+
+.navbar-default_advent .navbar-toggle_advent:focus {
+  background-color: transparent;
+}
+
+.navbar-default_advent .navbar-toggle_advent .icon-bar_advent {
+  background-color: #111111;
+}
+
+.navbar-default_advent .navbar-brand_advent .navbar-toggle_advent .collapsed {
+    padding: 4px 6px;
+    font-size: 14px;
+    color: #111111;
+  }
+
+.navbar-default_advent .navbar-brand_advent {
+	padding-top: 5px;
+	color: #111111;
+	-webkit-transition: 200ms;
+	-moz-transition: 200ms;
+	-o-transition: 200ms;
+	transition: 200ms;
+}
+
+.navbar-default_advent .navbar-brand_advent:hover {
+  transition: 1s;
+}
+
+.navbar-default_advent .navbar-nav_advent > li > a {
+  color: #111111;
+  -webkit-transition: all 0.5s;
+	-moz-transition: all 0.5;
+  transition: all 0.5s;
+}
+
+.navbar-default_advent .navbar-nav_advent > li > a:hover {
+  color: #A1A1A1;
+}
+
+.navbar-default_advent .navbar-nav_advent > .active > a {
+  background: transparent;
+  color: #222222;
+  }
+
+
+.navbar-default_advent .navbar-nav_advent > .active > a:hover {
+    background: transparent;
+    color: #333333;
+}
+
+.navbar-default_advent .navbar-nav_advent > .active > a:focus {
+	background: transparent;
+  color: #111111;
+}
+
+.navbar-default_advent .navbar-collapse_advent {
+	border-color: transparent;
+  background-color: transparent;
+}
+
+.navbar-default_advent .navbar-nav_advent .open .dropdown-toggle {
+  color: #111111;
+}
+
+.navbar-default_advent .nav-white > li > a {
+	color: #FFFFFF;
+}
+
+.navbar-default_advent .nav-white > li > a:hover {
+	color: #999999;
+}
+
+.navbar-default_advent .navbar-brand_advent.nav-white {
+	padding-top: 15px;
+	color: #FFFFFF;
+	font-size: 21px;
+	letter-spacing: 1px;
+	-webkit-transition: 200ms;
+	-moz-transition: 200ms;
+	-o-transition: 200ms;
+	transition: 200ms;
+}
+
+/*---------- Media Queries ---------*/
+
+@media only screen and (max-width: 767px) {
+
+	.navbar_advent {
+		padding-top: 5px;
+		height: 60px;
+	}
+
+  .navbar-default_advent {
+    border: 0px;
+    background-color: transparent;
+  }
+
+	.navbar-default_advent .navbar-collapse_advent {
+		text-align: center;
+		border-color: transparent;
+	  background-color: #FFFFFF;
+	}
+
+  .navbar-default_advent .navbar-collapse_advent {
+    border: 0;
+    border-color: transparent;
+  }
+
+  .navbar-default_advent .navbar-nav_advent > li> a {
+    color: #222222;
+		margin-top: 10px;
+  }
+
+	.navbar-default_advent .navbar-nav_advent > li> a:hover {
+		color: #222222;
+	}
+
+  .navbar-default_advent .navbar-brand_advent {
+    color: #FFFFFF;
+		padding: 16px 15px !important;
+  }
+
+	.navbar-default_advent .navbar-brand_advent.nav-white {
+		color: #FFFFFF;
+	}
+
+  .navbar-default_advent .navbar-toggle_advent .icon-bar_advent {
+    background-color: #111111;
+  }
+}
+
+@media only screen and (min-width: 240px) {
+
+
+.navbar_advent.past-main {
+	font-size: 14px;
+	padding-top: 5px;
+	height: 60px;
+	background-color: rgba(255, 255, 255, 0.99);
+	-webkit-transition: all 0.6s;
+	-moz-transition: all 0.6s;
+	-o-transition: all 0.6s;
+	transition: all 0.6s;
+}
+
+.navbar-default_advent.past-main .navbar-brand_advent {
+	color: #111111;
+}
+
+.navbar-default_advent.past-main .navbar-toggle_advent .icon-bar_advent {
+	background-color: #111111;
+}
+
+.navbar-default_advent.past-main .navbar-nav_advent > li > a {
+  color: #222222;
+  -webkit-transition: color 0.5s;
+  transition: color 0.5s;
+}
+
+.navbar-default_advent.past-main .navbar-nav_advent > li > a:hover {
+  color: #111111;
+}
+
+.navbar-default_advent.past-main .navbar-nav_advent > .active > a {
+  background: transparent;
+  color: #5924EC;
+  }
+
+
+.navbar-default_advent.past-main .navbar-nav_advent > .active > a:hover {
+    background: transparent;
+    color: #222222;
+}
+
+.navbar-default_advent.past-main .navbar-nav_advent > .active > a:focus {
+	background: transparent;
+  color: #222222;
+}
+
+}
+
+.navbar-default_advent .nav-white .navbar-toggle_advent .icon-bar_advent {
+	background-color: #FFFFFF;
+}
+
+.navbar-default_advent.past-main .nav-white .navbar-toggle_advent .icon-bar_advent {
+	background-color: #111111;
+}
+
+/* ------------------------------------------------------
+-------------- Main Section Styling Starts --------------
+--------------------------------------------------------*/
+
+
+#main {
+  height: 100%;
+}
+
+
+/* ----- Hero Section Styling Starts ----- */
+
+.hero-section_advent {
+	height: 100%;
+	background: #FFFFFF;
+	padding: 150px 0 0 0;
+}
+
+.hero-content_advent {
+	padding: 100px 0 100px 0;
+	overflow: hidden;
+}
+
+.hero-content_advent h1 {
+	font-size: 34px;
+	font-weight: 400;
+	color: #262626;
+	line-height: 1.2;
+	letter-spacing: -1px;
+	margin: 0 0 20px 0;
+}
+
+.hero-content_advent p {
+	font-family: Poppins;
+	font-size: 14px;
+	color: #A1A1A1;
+	font-weight: 400;
+	line-height: 1.5;
+	margin: 0 0 25px 0;
+}
+
+
+.btn-action_advent {
+ font-family: Roboto;
+ background-color: #3333CC;
+ border: 1px solid #3333CC;
+ border-radius: 0;
+ color: #FFFFFF;
+ font-size: 13px;
+ font-weight: 400;
+ letter-spacing: 2px;
+ line-height: 1;
+ padding: 10px 21px;
+ text-transform: uppercase;
+ outline: none;
+ -webkit-transition: 200ms;
+ -moz-transition: 200ms;
+ -o-transition: 200ms;
+ transition: 200ms;
+}
+
+.btn-action_advent:hover, .btn-action_advent:focus,
+.btn-action_advent:active, .btn-action_advent:active:focus {
+ background: transparent;
+ outline: none;
+ color: #3333CC;
+ background: transparent;
+ border-color: #3333CC;
+}
+
+
+.product_advent .btn-action_advent {
+ background-color: transparent;
+ border: 1px solid #82714a;
+ color: #82714a;
+}
+
+.product_advent .btn-action_advent:hover, .product_advent  .btn-action_advent:focus {
+ background: #92714A;
+ color: #FFFFFF;
+ border-color: #82714A;
+}
+
+
+/* ----------- App Home ---------*/
+
+.software_advent .hero-section_advent {
+	padding: 100px 0 0 0;
+	background: #F9F9F9;
+}
+
+.software_advent .hero-content_advent h1 {
+	font-size: 34px;
+	font-weight: 600;
+	color: #444444;
+	margin: 0 0 20px 0;
+}
+
+
+.software_advent .btn-action_advent {
+font-family: Arial;
+ background-color: #3f51b5;
+ border: 1px solid #3f51b5;
+ border-radius: 50px;
+ color: #FFFFFF;
+ font-size: 13px;
+ font-weight: 600;
+ letter-spacing: 2px;
+ line-height: 1;
+ padding: 12px 24px;
+ text-transform: uppercase;
+ outline: none;
+ -webkit-transition: 200ms;
+ -moz-transition: 200ms;
+ -o-transition: 200ms;
+ transition: 200ms;
+}
+
+.software_advent .btn-action_advent:hover, .software_advent .btn-action_advent:focus,
+.software_advent .btn-action_advent:active, .software_advent .btn-action_advent:active:focus {
+ background: transparent;
+ outline: none;
+ color: #3f51b5;
+ background: transparent;
+ border-color: #3f51b5;
+}
+
+.software_advent .hero-section_advent img {
+	margin: 0 auto;
+}
+
+
+
+/*---------------- Form Home Styling ------------------- */
+
+.form_advent .hero-section_advent {
+	background: #F2F2F2;
+	background-size: cover;
+	padding: 150px 0 0 0;
+}
+
+.form_advent .hero-content_advent {
+	padding: 50px 0 50px 0;
+	overflow: hidden;
+}
+
+.form_advent img {
+	margin: 0 auto;
+}
+
+
+.form_advent .hero-content_advent h1 {
+	font-size: 34px;
+	font-weight: 700;
+	color: #222222;
+	line-height: 1.2;
+	letter-spacing: -1px;
+	margin: 0 0 20px 0;
+}
+
+.form_advent .hero-content_advent p {
+	font-family: Poppins;
+	font-size: 14px;
+	color: #A1A1A1;
+	font-weight: 400;
+	line-height: 1.5;
+	margin: 0 0 25px 0;
+}
+
+.form_advent .sub-form {
+	padding: 30px 0 0 0;
+	text-align: left;
+}
+
+
+.form_advent .subscribe-form .submit-button {
+  font-size: 0.9em;
+  height: 40px;
+  border: 2px solid;
+  border-radius: 0 5px 5px 0;
+  margin: 0;
+  padding: 0 25px 0 25px;
+	border-color: #FFFFFF;
+  background-color: #3333CC;
+  color: #FFFFFF;
+	box-shadow: 0 0 1px transparent;
+  outline: none;
+	-webkit-transition: 500ms;
+	-moz-transition: 500ms;
+	transition: 500ms;
+}
+
+.form_advent .subscribe-form .submit-button:hover {
+  border-color: #3333CC;
+  -webkit-transition: 500ms;
+	-moz-transition: 500ms;
+  transition: 500ms;
+}
+
+.form_advent .btn-action_advent {
+	background: #3333CC;
+	border-color: #3333CC;
+	color: #FFFFFF;
+}
+
+.form_advent .btn-action_advent:hover {
+	background: transparent;
+	border-color: #3333CC;
+	color: #3333CC;
+}
+
+
+/*-----------------------------------------------------
+-------------- Image Bg Styling Starts ----------------
+------------------------------------------------------*/
+
+
+.image-bg .hero-section_advent {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2)), url(../images/image-bg.jpg) no-repeat center center;
+	background-size: cover;
+	padding: 150px 0 100px 0;
+}
+
+.image-bg .hero-content_advent h1 {
+	font-weight: 600;
+	color: #FFFFFF;
+}
+
+.image-bg .hero-content_advent p {
+	color: #FFFFFF;
+}
+
+
+/* ------------ Signup Hero Section ------------ */
+
+.signup .hero-section_advent {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7)), url(../images/app_bg.jpg) no-repeat center center;
+	background-size: cover;
+	padding: 150px 0 100px 0;
+}
+
+.signup .hero-content_advent {
+	padding: 50px 0 100px 0;
+}
+
+.signup .hero-content_advent h1 {
+	font-size: 34px;
+	font-weight: 600;
+	color: #FFFFFF;
+	line-height: 1.2;
+	letter-spacing: 0;
+}
+
+.signup .hero-content_advent p {
+	color: #FFFFFF;
+}
+
+.signup-form {
+	padding: 25px 25px 30px 25px;
+	background: #3333CC;
+	-moz-border-radius: 0 0 4px 4px; -webkit-border-radius: 0 0 4px 4px; border-radius: 0 0 4px 4px;
+	text-align: left;
+}
+
+.signup-form h1 {
+	font-weight: 600;
+	font-size: 24px;
+	color: #FFFFFF;
+	letter-spacing: 0;
+	line-height: 1.4;
+	text-transform: capitalize;
+	text-align: center;
+	margin: 20px 0 30px 0;
+}
+
+.signup-form form textarea {
+	height: 100px;
+}
+
+.signup-form form .input-error {
+	border-color: #19b9e7;
+}
+
+.signup-form p {
+	font-family: Poppins;
+	font-size: 12px;
+	color: #DDDDDD;
+	margin: 25px 0 10px 0;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+
+.signup .btn-action_advent.btn-round {
+	background: #3333CC;
+	border-color: #3333CC;
+	color: #FFFFFF;
+	font-size: 15px;
+	padding: 12px 24px;
+	font-weight: 600;
+	text-transform: capitalize;
+	border: 2px solid #3333CC;
+	border-radius: 30px;
+}
+
+.signup .btn-action_advent.btn-round:hover, .signup .btn-action_advent.btn-round:focus {
+	background: transparent;
+	color: #3333CC;
+	border-color: #3333CC;
+}
+
+.signup .btn-action_advent {
+	background: #3333CC;
+	border-color: #3333CC;
+	color: #FFFFFF;
+}
+
+.signup .btn-action_advent:hover {
+	background: transparent;
+	border-color: #3333CC;
+	color: #3333CC;
+}
+
+
+input[type="text"],
+textarea,
+textarea.form-control {
+	height: 45px;
+    margin: 0;
+    padding: 0 20px;
+    vertical-align: middle;
+    background: #F8F8F8;
+    border: 1px solid #DDDDDD;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 50px;
+    color: #888888;
+    -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;
+    -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+    -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+
+textarea,
+textarea.form-control {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	line-height: 30px;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+textarea.form-control:focus {
+	outline: 0;
+	background: #FFFFFF;
+    border: 1px solid #111;
+    -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+}
+
+input[type="text"]:-moz-placeholder, textarea:-moz-placeholder, textarea.form-control:-moz-placeholder { color: #888; }
+input[type="text"]:-ms-input-placeholder, textarea:-ms-input-placeholder, textarea.form-control:-ms-input-placeholder { color: #888; }
+input[type="text"]::-webkit-input-placeholder, textarea::-webkit-input-placeholder, textarea.form-control::-webkit-input-placeholder { color: #888; }
+
+
+
+.signup-form button.btn_advent {
+	height: 45px;
+    margin: 0;
+    padding: 0 20px;
+    vertical-align: middle;
+    background: #111111;
+    border: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 45px;
+    color: #FFFFFF;
+		text-transform: uppercase;
+    -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+    text-shadow: none;
+    -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+    -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+
+.signup-form button.btn_advent:hover {
+	 opacity: 0.6; color: #FFFFFF;
+ }
+
+.signup-form button.btn_advent:active {
+	 outline: 0;
+	 opacity: 0.6;
+	 color: #FFFFFF;
+	 -moz-box-shadow: none;
+	 -webkit-box-shadow: none;
+	 box-shadow: none;
+ }
+
+.signup-form button.btn_advent:focus {
+	outline: 0;
+	opacity: 0.6;
+	background: #19b9e7;
+	color: #fff;
+}
+
+.signup-form button.btn_advent:active:focus, button.btn_advent.active:focus {
+	outline: 0;
+	opacity: 0.6;
+	background: #19b9e7;
+	color: #fff;
+}
+
+@media only screen and (max-width: 991px) {
+	.signup-form {
+		max-width: 500px;
+		margin: 0 auto;
+	}
+}
+
+
+/*-------------------------------------------------------
+---------------- Slider Section Styling -----------------
+--------------------------------------------------------*/
+
+.slider-pro .sp-slide {
+	background: #222222;
+}
+
+.slider-pro h2.sp-layer {
+	font-size: 44px !important;
+	color: #111111;
+	font-weight: bold;
+	letter-spacing: -1px;
+	line-height: 1.3;
+	text-align: left;
+}
+
+.slider-pro p.sp-layer {
+	font-size: 16px;
+	color: #A1A1A1;
+	line-height: 1.4;
+}
+
+.slider-pro a {
+	text-decoration: none;
+	color: #444444;
+	-webkit-transition: 0.5s !important;
+	-moz-transition: 0.5s !important;
+	transition: 0.5s !important;
+}
+
+.slider-pro .link-color {
+	text-decoration: none;
+	color: #111;
+	-webkit-transition: 0.5s !important;
+	-moz-transition: 0.5s !important;
+	transition: 0.5s !important;
+}
+
+.slider-pro a:hover {
+	color: #999999;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+
+	.slider-pro h2.sp-layer {
+		font-size: 34px !important;
+
+	}
+}
+
+
+/* -----------------------------------------------------
+--------------- App Home Styling starts ----------------
+--------------------------------------------------------*/
+
+
+.app .hero-section_advent {
+	padding: 50px 0 0 0;
+}
+
+.app .hero-content_advent {
+	padding: 100px 0 0 0;
+}
+
+.app img {
+	margin: 0 auto;
+}
+
+.app-info h1 {
+  font-size: 34px;
+  font-weight: 600;
+  color: #404040;
+  margin-top: 30px !important;
+}
+
+.app-info h4 {
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 300;
+  color:  #3C4B5D;
+	line-height: 1.4;
+  margin-top: 20px;
+}
+
+.app-info i {
+	margin-top: 15px;
+	display: inline-block;
+}
+
+.app-info span {
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 400;
+  color: #222222;
+}
+
+.app-info .ion_advent {
+  font-size: 1em;
+  color: #ff8000;
+}
+
+.download-buttons {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.download-buttons img {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+
+.app .btn-action_advent {
+	color: #FFFFFF;
+	background: #3333CC;
+	border-color: #3333CC;
+}
+
+.app .btn-action_advent:hover {
+	color: #3333CC;
+	background: transparent;
+	border-color: #3333CC;
+}
+
+
+
+/*----------------------------------------------------
+-------------- Split Home Coming Soon ----------------
+-----------------------------------------------------*/
+
+
+.cs-main .left-section {
+		background-color: #F2F2F2;
+		position: absolute;
+    left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+    width: 50%;
+		height: 100%;
+		overflow: hidden;
+    z-index: 1;
+}
+
+.cs-main .right-section {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+		padding: 0 20px 0 20px;
+		width: 50%;
+		height: 100%;
+    background: #FFFFFF;
+    z-index: 99;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.cs-main .hero-section_advent {
+	padding: 120px 0 0 0;
+	background: #FFFFFF !important;
+}
+
+.cs-main .hero-content_advent {
+	padding: 50px 0 0 0;
+}
+
+.cs-main .app-info h1 {
+	font-weight: 600;
+	font-size: 42px;
+}
+
+.cs-main .left-section {
+	background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)), url(../images/split-bg.jpg) no-repeat center center;
+	background-size: cover;
+}
+
+
+@media only screen and (max-width : 801px) {
+
+	 .cs-main .right-section{
+			position: relative;
+			width: 100%;
+	}
+
+	.cs-main .hero-section_advent {
+		padding: 50px 0 0 0;
+	}
+
+
+	 .cs-main .left-section{
+			position: relative;
+			width: 100%;
+			min-height: 100vh;
+	}
+}
+
+
+
+/*-------------------------------------------------
+----------- About Section Styling Starts ----------
+--------------------------------------------------*/
+
+.about_advent {
+	padding: 100px 0 100px 0;
+	background: #F1F1F1;
+}
+
+.about-content_advent {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.about-content_advent h2 {
+	font-family: 'Josefin Sans';
+	font-size: 24px;
+	line-height: 1.2;
+	color: #111111;
+}
+
+.about-content_advent h3 {
+	font-family: 'Josefin Sans';
+	font-size: 21px;
+	font-weight: bold;
+	line-height: 1;
+	letter-spacing: 1px;
+	text-transform: capitalize;
+	color: #111111;
+	margin: 50px 0 0 0;
+}
+
+
+
+/* ----- Client Sectiion Styling ----- */
+
+.client-section_advent {
+	background-color: #F3F3F3;
+	padding: 5px 0 0 0;
+}
+
+.clients_advent .single_advent {
+	padding: 25px 0 25px 0;
+}
+
+.clients_advent .single_advent img {
+	-webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+		opacity: 0.3;
+}
+
+
+/*----------------------------------------------------
+----------- Pitch Section Styling Starts ----------
+-----------------------------------------------------*/
+
+
+.pitch_advent {
+	padding: 100px 0 100px 0;
+	background: #FFFFFF;
+}
+
+.pitch-intro_advent {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 0 0 100px 0;
+}
+
+.pitch-intro_advent h1 {
+	font-size: 34px;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: -1px;
+	color: #454545;
+	margin: 0 0 30px 0;
+}
+
+
+.pitch-intro_advent p {
+	font-family: 'Poppins';
+	font-size: 14px;
+	line-height: 1.5;
+	color: #A1A1A1;
+	letter-spacing: 0;
+}
+
+.pitch-icon_advent {
+	margin: 0 0 10px 0;
+	background: #3333CC;
+	width: 60px;
+	height: 60px;
+	display: inline-block;
+	border-radius: 50%;
+}
+
+.pitch-icon_advent i {
+	font-size: 34px;
+	color: #FFFFFF;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 13px;
+}
+
+.pitch-content_advent {
+	padding: 10px 0 50px 0;
+}
+
+.pitch-content_advent h1 {
+	font-size: 21px;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: 0;
+	color: #454545;
+	margin: 0 0 10px 0;
+}
+
+.pitch-content_advent p {
+	font-family: 'Poppins';
+	font-size: 14px;
+	line-height: 1.5;
+	color: #A1A1A1;
+	letter-spacing: 0;
+}
+
+
+/*----------------------------------------------------
+----------- Features Icon Styling Starts -------------
+-----------------------------------------------------*/
+
+.icon-features {
+	padding: 100px 0 50px 0;
+}
+
+.icon-features-intro {
+	padding: 0 0 50px 0;
+}
+
+.icon-features-intro h1 {
+	font-size: 34px;
+	font-weight: 600;
+	letter-spacing: -1px;
+	margin: 0 0 10px 0;
+	text-align: center;
+}
+
+.icon-features-intro p {
+	font-size: 16px;
+	color: #A1A1A1;
+	text-align: center;
+	margin: 0 0 30px 0;
+}
+
+.f-single {
+	position: relative;
+	padding: 10px 0 80px 0;
+}
+
+.f-icon i {
+	font-size: 54px;
+	font-weight: bold;
+	position: absolute;
+	left: 0;
+}
+
+.f-content {
+	padding-left: 80px;
+}
+
+.f-content h2 {
+	font-size: 21px;
+	font-weight: 400;
+	margin: 0 0 10px 0;
+}
+
+.f-content p {
+	font-family: 'Roboto';
+	font-size: 14px;
+	font-weight: 300;
+	color: #4D4D4D;
+	line-height: 1.5;
+	text-align: left;
+}
+
+
+/*----------------------------------------------------
+----------- Features Section Styling Starts ----------
+-----------------------------------------------------*/
+
+
+.features_advent {
+	padding: 25px 0 25px 0;
+}
+
+.features-inner_advent {
+	width: 100%;
+}
+
+.features_advent .features-list_advent {
+	padding: 20px 0 0 0;
+	text-align: center;
+}
+
+.features_advent .features-list_advent h1 {
+	font-size: 26px;
+	font-weight: 400;
+	line-height: 1;
+	color: #222222;
+	margin: 0 0 30px 0;
+}
+
+.features_advent .features-list_advent ul {
+	list-style-type: circle;
+	padding-left: 20px;
+	text-align: center;
+}
+
+
+.features_advent .features-list_advent ul li {
+	display: block;
+	margin: 0 0 15px 0;
+	font-family: 'Josefin Sans';
+	font-size: 16px;
+	line-height: 1.2;
+	color: #A1A1A1;
+}
+
+/* ----- App Features List ----- */
+
+.software_advent .features_advent {
+	padding: 100px 0 100px 0;
+}
+
+.software_advent .features_advent .features-list_advent h1 {
+	font-size: 26px;
+	font-weight: 600;
+	letter-spacing: -1px;
+	line-height: 1.2;
+	color: #222222;
+	margin: 20px 0 20px 0;
+}
+
+.software_advent .features-list_advent p {
+	margin: 0 0 25px 0;
+	font-family: 'Josefin Sans';
+	font-size: 18px;
+	line-height: 1.2;
+	color: #A1A1A1;
+}
+
+.software_advent .features_advent .features-list_advent ul {
+	list-style-type: disc;
+	padding-left: 20px;
+}
+
+
+.software_advent .features_advent .features-list_advent ul li {
+	font-family: Poppins;
+	display: block;
+	font-size: 13px;
+	margin: 0 0 15px 0;
+	color: #A1A1A1;
+}
+
+
+/* --------------- Feature Sub ------------ */
+
+.product_advent .feature-sub_advent {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(146, 127, 84, 0.99)), url(../images/feature-bg.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	padding: 150px 0 150px 0;
+}
+
+.product_advent .sub-inner_advent {
+	max-width: 500px;
+	float: right;
+}
+
+.feature-sub_advent .sub-inner_advent h1 {
+	font-family: 'Josefin Sans';
+	font-size: 34px;
+	font-weight: 300;
+	line-height: 1;
+	color: #FFFFFF;
+	margin: 0 0 30px 0;
+}
+
+.feature-sub_advent .sub-inner_advent .btn-action_advent {
+	color: #FFFFFF;
+	background: #3333CC;
+	border-color: #3333CC;
+}
+
+.feature-sub_advent .sub-inner_advent .btn-action_advent:hover {
+	color: #3333CC;
+	background: transparent;
+	border-color: #3333CC;
+}
+
+.product_advent .feature-sub_advent .sub-inner_advent .btn-action_advent {
+	color: #FFFFFF;
+	background: #82714a;
+	border-color: #82714a;
+}
+
+.product_advent .feature-sub_advent .sub-inner_advent .btn-action_advent:hover {
+	color: #82714a;
+	background: transparent;
+	border-color: #82714a;
+}
+
+.feature-sub_advent {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6)), url(../images/image-bg.jpg);
+	padding: 150px 0 150px 0;
+}
+
+.sub-inner_advent {
+	max-width: 500px;
+	float: left;
+}
+
+/* --------- App Features Sub ------- */
+
+
+.software_advent .feature-sub_advent {
+	background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.99)), url(../images/app_bg1.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	padding: 150px 0 150px 0;
+}
+
+.software_advent .feature-sub_advent .sub-inner_advent h1 {
+	font-family: 'Josefin Sans';
+	font-size: 34px;
+	font-weight: 300;
+	line-height: 1.1;
+	color: #FFF;
+	margin: 0 0 30px 0;
+}
+
+
+/*  --------------------------------------------------
+------------- Reviews Section Styling ----------------
+-----------------------------------------------------*/
+
+.app-features_advent {
+	background: #F9F9F9;
+	padding: 100px 0 100px 0;
+}
+
+.app-features_advent h1 {
+	font-size: 34px;
+	font-weight: 600;
+	margin: 0 0 10px 0;
+}
+
+.app-features_advent p {
+	font-size: 16px;
+	font-weight: 400;
+	color: #A1A1A1;
+	line-height: 1.4;
+	margin: 10px 0 50px 0;
+}
+
+
+.app-features_advent img {
+	 margin: 0 auto;
+}
+
+.app-features_advent .features-left, .app-features_advent .features-right {
+	padding: 50px 0 0 0;
+}
+
+.app-features_advent .icon_advent {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+.app-features_advent .icon_advent i {
+	font-size: 42px;
+	color: #3333CC;
+}
+
+
+.app-features_advent .feature-single_advent {
+	margin-left: 0;
+	margin-bottom: 50px;
+}
+
+
+.app-features_advent .feature-single_advent h1 {
+	font-size: 18px;
+	font-weight: 400;
+	color: #222222;
+	margin: 0 0 10px 0;
+	letter-spacing: 1px;
+}
+
+.app-features_advent .feature-single_advent p {
+	font-family: Poppins;
+	font-size: 14px;
+	color: #A1A1A1;
+	line-height: 1.4;
+	margin: 10px 0 0 0;
+}
+
+
+/*-------------------------------------------------------
+------------- Split Features Section Styling ------------
+--------------------------------------------------------*/
+
+.split-features {
+	background: #FFFFFF;
+	padding: 50px 0 50px 0;
+	overflow: hidden;
+}
+
+.signup .split-features {
+	background: #F2F2F2;
+}
+
+.split-image img {
+	margin: 0 auto;
+}
+
+.split-content {
+	padding: 20px;
+}
+
+.split-content h1 {
+	font-size: 34px;
+	font-weight: 600;
+	letter-spacing: -1px;
+	margin: 0 0 20px 0;
+}
+
+.split-content p {
+	font-size: 16px;
+	line-height: 1.4;
+	color: #A1A1A1;
+	letter-spacing: 0;
+}
+
+.split-content ul {
+	list-style-type: disc;
+	display: inline-block;
+	margin: 30px 0 0 0;
+}
+
+.split-content ul li {
+	font-family: Roboto;
+	font-size: 16px;
+	letter-spacing: 0;
+	margin-bottom: 15px;
+	margin-left: 15px;
+	color: #A1A1A1;
+}
+
+
+
+/*  --------------------------------------------------
+------------- Reviews Section Styling ----------------
+-----------------------------------------------------*/
+
+.review-section_advent {
+	padding: 150px 0 150px 0;
+	text-align: center;
+	background: #F4F4F4;
+}
+
+
+.reviews_advent {
+  width: 100%;
+}
+
+
+.review-single_advent img {
+  width:80px;
+	height:80px;
+}
+
+.review-text_advent h3 {
+	font-family: Roboto;
+  font-size: 16px;
+	font-weight: 300;
+	letter-spacing: 0;
+	line-height: 1.5;
+  color: #000000;
+}
+
+.review-text_advent .ion_advent {
+	display: inline-block;
+	margin-top: 20px;
+  font-size: 14px;
+  color: #ff8000;
+}
+
+.review-text_advent p {
+  font-family: Poppins;
+  font-size: 14px;
+	font-weight: 300;
+  padding: 20px 10px 20px 10px;
+	letter-spacing: 1px;
+	line-height: 1.5;
+  color: #A1A1A1;
+}
+
+
+
+/*  --------------------------------------------------
+------------- Pricing Section Styling ----------------
+-----------------------------------------------------*/
+
+
+.pricing_advent {
+	padding: 50px 0 100px 0;
+}
+
+.pricing-content_advent {
+	padding: 60px 0 0 0;
+	text-align: center;
+}
+
+.pricing_advent h1 {
+	font-size: 28px;
+	font-weight: 400;
+	letter-spacing: -1px;
+	line-height: 1.2;
+}
+
+.pricing_advent h4 {
+	font-size: 14px;
+	font-weight: 400;
+	color: #A1A1A1;
+	margin: 10px 0 30px 0;
+}
+
+.pricing_advent p {
+	font-family: 'Poppins';
+	font-size: 14px;
+	font-weight: 400;
+	color: #444444;
+	line-height: 1.4;
+}
+
+.pricing_advent .btn-buy_advent {
+	padding: 40px 0 20px 0;
+}
+
+.pricing_advent .btn-buy_advent img {
+	display: inline;
+}
+
+.pricing_advent .price-tag_advent h2 {
+	font-family: 'Josefin Sans';
+	font-size: 24px;
+	font-weight: 400;
+	color: #A1A1A1;
+	margin: 0 0 20px 0;
+}
+
+
+
+/* ----- Pricing Tables Styling Starts ----- */
+
+.pricing-section_advent {
+	width: 100%;
+	height: 100%;
+	padding-top: 100px;
+	padding-bottom: 100px;
+	background: #FFFFFF;
+}
+
+.pricing-intro_advent {
+	padding-bottom: 30px;
+}
+
+.pricing-intro_advent h1 {
+	font-size: 28px;
+	color: #111111;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+
+.pricing-intro_advent p {
+	font-size: 15px;
+	color: #303030;
+	font-weight: 300;
+	line-height: 1.4;
+	letter-spacing: 1px;
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
+.pricing-section_advent .table-left, .pricing-section_advent .table-right_advent {
+	padding: 20px 20px 50px 20px;
+	margin: 0 auto;
+	margin-bottom: 30px;
+	background-color: #FFFFFF;
+	box-shadow: 0px 0px 80px 0px rgba(0,0,0,.1);
+	border: transparent;
+	max-width: 400px;
+}
+
+.table-left_advent .icon, .table-right_advent .icon_advent {
+	padding: 50px 50px 40px 50px;
+}
+
+.table-left_advent .icon_advent img, .table-right_advent .icon_advent img {
+	width: 60px;
+	height: 60px;
+	margin: 0 auto;
+}
+
+.table-left_advent .pricing-details_advent span, .table-right_advent .pricing-details_advent span {
+	display: inline-block;
+	font-family: Poppins;
+	font-size: 28px;
+	font-weight: 400;
+	color: #808080;
+	margin-bottom: 20px;
+}
+
+.table-left_advent .pricing-details_advent h2, .table-right_advent .pricing-details_advent h2 {
+	font-size: 18px;
+	font-weight: 600;
+	color: #505050;
+	margin-bottom: 30px;
+}
+
+.table-left_advent .pricing-details_advent p, .table-right_advent .pricing-details_advent p {
+	font-family: Poppins;
+	font-size: 14px;
+	font-weight: 300;
+	color: #505050;
+	letter-spacing: 1px;
+	line-height: 1.4;
+}
+
+.table-left_advent .pricing-details_advent ul, .table-right_advent .pricing-details_advent ul {
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+
+
+.table-left_advent .pricing-details_advent li, .table-right_advent .pricing-details_advent li {
+	font-family: Poppins;
+	font-size: 14px;
+	font-weight: 400;
+	color: #505050;
+	line-height: 1.4;
+	margin-bottom: 10px;
+}
+
+.pricing-section_advent .table-left_advent:hover, .pricing-section_advent .table-right_advent:hover {
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+	-webkit-transition: 0.3s;
+	-moz-transition: 0.3s;
+	-o-transition: 0.3s;
+	transition: 0.3s;
+}
+
+.pricing-section_advent .table-left, .pricing-section_advent .table-right_advent {
+	margin-top: 20px;
+}
+
+.pricing-section_advent .table-center_advent {
+	margin-top: 0;
+}
+
+/* ----- Pricing Section Styling Ends ----- */
+
+
+
+/* ----- Counter Section Styling Starts -----*/
+
+.counter-section {
+ width: 100%;
+ padding-top: 50px;
+ padding-bottom: 50px;
+ background: #F1F1F1;
+}
+
+.counter-section h3  {
+	font-size: 28px;
+	font-weight: 400;
+	color: #222222;
+}
+
+.counter-icon {
+  padding: 15px;
+}
+
+.counter-icon i {
+  font-size: 48px;
+  color: #3333CC;
+}
+
+.counter-text {
+	margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.counter-text h4 {
+  font-size: 16px;
+  font-weight: 400;
+  padding: 0.5em;
+  color: #222222;
+}
+
+/* -------- Counter Section Styling Ends --------- */
+
+
+
+/* ----- CTA Section Styling Starts ----- */
+
+
+.cta-sub_advent {
+	padding-top: 150px;
+	padding-bottom: 150px;
+	background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9)), url(../images/cta_bg.jpg) no-repeat center center;
+	background-size: cover;
+}
+
+.cta-inner_advent {
+	max-width: 500px;
+	float: none;
+}
+
+.cta-sub_advent .cta-inner_advent h1 {
+	font-size: 28px;
+	color: #FFFFFF;
+	font-weight: 400;
+	line-height: 1.2;
+	margin-top: 10px;
+	margin-bottom: 0;
+}
+
+.cta-sub_advent .cta-inner_advent p {
+	font-family: Poppins;
+	font-size: 14px;
+	color: #FFFFFF;
+	font-weight: 300;
+	line-height: 1.4;
+	margin-top: 20px;
+	margin-bottom: 40px;
+}
+
+.subscribe-form {
+	text-align: left;
+}
+/*
+.subscribe-form .mail {
+ background-color: #F9F9F9;
+ border: none;
+ border-radius: 5px 0 0 5px;
+ border-color: #FFFFFF;
+ outline: none;
+ height: 40px;
+ padding: 0 150px 0 20px;
+ box-shadow: none;
+ -webkit-box-sizing: content-box;
+ -moz-box-sizing: content-box;
+ box-sizing: content-box;
+ transition: all .3s;
+}
+
+
+.subscribe-form input {
+  color: #222222;
+  font-family: Poppins;
+  padding: 0;
+  font-size: 0.9em;
+}
+*/
+.subscribe-form .submit-button {
+  font-size: 0.9em;
+  height: 40px;
+  border: 2px solid;
+  border-radius: 0 5px 5px 0;
+  margin: 0;
+  padding: 0 25px 0 25px;
+	border-color: #FFFFFF;
+  background-color: #927f54;
+  color: #FFFFFF;
+	box-shadow: 0 0 1px transparent;
+  outline: none;
+	-webkit-transition: 500ms;
+	-moz-transition: 500ms;
+	transition: 500ms;
+}
+
+.subscribe-form .submit-button:hover {
+  border-color: #927f54;
+  -webkit-transition: 500ms;
+	-moz-transition: 500ms;
+  transition: 500ms;
+}
+
+.product_advent .subscribe-form .submit-button {
+	border-color: #FFFFFF;
+  background-color: #927f54;
+}
+
+.product_advent .subscribe-form .submit-button:hover {
+  border-color: #927f54;
+}
+
+.formee_advent {
+	position: relative;
+}
+
+
+.formee_advent .mail {
+	position: relative;
+	background-color: #F9F9F9;
+  box-shadow: none;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  transition: all .3s;
+}
+
+.formee_advent input {
+  color: #222222;
+  font-family: Poppins;
+  padding: 0;
+  font-size: 0.9em;
+	height: 49px;
+  border: 2px solid #FFF;
+  border-radius: 5px 0 0 5px;
+  border-color: #FFFFFF;
+  outline: none;
+  padding: 0 150px 0 20px;
+}
+
+.formee_advent input:focus {
+	border: 2px solid #FFF;
+  border-color: #FFFFFF;
+}
+
+.formee_advent .right_advent {
+  height: 49px;
+  border: 2px solid #FFF;
+  border-radius: 0 5px 5px 0;
+  margin: 0;
+  padding: 0 25px 0 25px;
+  background-color: #3333CC;
+  color: #FFFFFF;
+	box-shadow: 0 0 1px transparent;
+  outline: none;
+	-webkit-transition: 500ms;
+	-moz-transition: 500ms;
+	transition: 500ms;
+}
+
+#email-error {
+	position: absolute;
+	left: 0;
+	top: 150%;
+	font-family: 'Poppins';
+	font-size: 14px;
+	color: #FF0000;
+}
+
+#response {
+	color: #FFFFFF;
+	font-family: 'Poppins';
+	margin-top: 30px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.product_advent .formee_advent .right_advent {
+	background-color: #927f54;
+}
+
+/* ----- CTA Section Styling Ends ----- */
+
+
+
+/* ------- Footer Section Styling Starts ------- */
+
+
+.footer_advent {
+  background-color: #F3F3F3;
+  width: 100%;
+  height: 100%;
+	overflow: hidden;
+	padding-top: 75px;
+	padding-bottom: 20px;
+}
+
+.contact_advent {
+	text-align: left;
+}
+
+.contact_advent i {
+	font-size: 42px;
+	color: #3333CC;
+}
+
+.contact_advent h1 {
+	font-family: 'Josefin Sans';
+	font-size: 21px;
+	font-weight: 400;
+	color: #3333CC;
+	margin: 10px 0 10px 0;
+}
+
+.contact_advent p {
+	font-family: 'Josefin Sans';
+	font-size: 16px !important;
+	font-weight: 400;
+	color: #111111;
+	line-height: 1.3;
+	margin: 10px 0 20px 0 !important;
+}
+
+.contact_advent a {
+	font-family: 'Josefin Sans';
+	font-size: 18px;
+	font-weight: 400;
+	color: #3333CC;
+	text-decoration: none;
+	display: inline-block;
+}
+
+
+.footer_advent img {
+	margin-bottom: 20px;
+}
+
+.footer-menu ul {
+	list-style-type: none;
+}
+
+.footer-menu li {
+	display: inline;
+	line-height: 2;
+	font-family: Poppins;
+	font-size: 14px;
+	padding-right: 15px;
+	text-transform: capitalize;
+}
+
+.footer-menu li a {
+	color: #707570;
+	text-decoration: none;
+}
+
+.footer_advent p {
+	font-family: 'Josefin Sans';
+	font-size: 16px;
+	font-weight: 400;
+	color: #A1A1A1;
+	line-height: 1.3;
+	margin: 10px 0 30px 0;
+}
+
+.footer-text_advent p {
+	font-family: 'Josefin Sans';
+	font-size: 14px;
+	color: #3333CC;
+	font-weight: 400;
+	line-height: 1.4;
+	letter-spacing: 1px;
+	margin-top: 10px;
+}
+
+
+.product_advent .footer_advent .contact_advent h1, .product_advent .contact_advent i, .product_advent .footer_advent .contact_advent a, .product_advent .footer-text_advent p  {
+	color: #927f54;
+}
+
+
+/* -------------------------------------------------------
+----------- Bact-to-Top Styling Starts Here --------------
+---------------------------------------------------------*/
+
+
+.back-to-top_advent {
+	background: rgba(51, 51, 204, 0.5);
+	margin: 0;
+	position: fixed;
+	bottom: 30px;
+	right: 30px;
+	width: 35px;
+	height: 35px;
+	border-radius: 50%;
+	z-index: 90;
+	display: none;
+	text-decoration: none;
+	color: #0E1729;
+}
+
+.back-to-top_advent i {
+	position: relative;
+	left: 13px;
+	top: 8px;
+	font-size: 24px;
+	color: #FFFFFF;
+	-webkit-transition: 200ms;
+	-moz-transition: 200ms;
+	-o-transition: 200ms;
+	transition: 200ms;
+}
+
+.back-to-top_advent:hover {
+    background: rgba(51, 51, 204, 0.9);
+    color: #FFFFFF;
+}
+
+.back-to-top_advent:hover i {
+	top: 6px;
+}
+
+.back-to-top_advent:focus {
+    color: #FFFFFF;
+}
+
+
+.product_advent .back-to-top_advent {
+	background: rgba(146, 127, 84, 0.5);
+}
+
+.product_advent .back-to-top_advent:hover {
+	background: rgba(146, 127, 84, 0.9);
+}
+
+
+
+/*----------------------------------------------------
+------------- All ------------------------------------
+--------------------- Media --------------------------
+------------------------------- Queries --------------
+-----------------------------------------------------*/
+
+@media only screen and (min-width: 767px) {
+	.logo {
+	  position: absolute;
+	  top: 20px;
+	  left: 20px;
+	}
+
+	.hero-section_advent {
+		padding: 150px 0 100px 0;
+	}
+
+	.form_advent .hero-section_advent {
+		padding: 150px 0 50px 0;
+	}
+
+	.form_advent .hero-content_advent {
+		padding: 100px 0 100px 0;
+		overflow: hidden;
+	}
+
+	.form_advent .hero-content_advent h1 {
+		font-size: 54px;
+	}
+
+	.product_advent .hero-content_advent {
+		padding: 150px 0 100px 0;
+		text-align: left;
+	}
+
+	.hero-content_advent h1 {
+		font-size: 48px;
+		margin: 0 0 20px 0;
+	}
+
+	.hero-content_advent p {
+		font-size: 14px;
+	}
+
+	.about-content_advent h2 {
+		font-size: 38px;
+	}
+
+	.software_advent .hero-content_advent h1 {
+		font-size: 42px;
+	}
+
+	.image-bg .hero-content_advent h1 {
+		font-size: 54px;
+	}
+
+
+	.signup .hero-content_advent h1 {
+		font-size: 48px;
+	}
+
+	.features_advent .features-list_advent {
+		padding: 100px 0 0 0;
+		text-align: left;
+	}
+
+	.features_advent .features-list_advent ul li {
+		font-size: 18px;
+		display: list-item;
+		text-align: left;
+	}
+
+
+	.software_advent .features_advent {
+		padding: 100px 0 100px 0;
+	}
+
+	.software_advent .features_advent .features-list_advent h1 {
+		font-size: 34px;
+	}
+
+	.software_advent .features_advent .features-list_advent {
+		padding: 30px 0 0 0;
+	}
+
+
+	.software_advent .features_advent .features-list_advent ul li {
+		display: list-item;
+		font-size: 14px;
+		text-align: left;
+	}
+
+
+	.feature-sub_advent {
+		padding: 200px 0 200px 0;
+	}
+
+	.feature-sub_advent .sub-inner_advent h1 {
+		font-size: 42px;
+	}
+
+	.software_advent .feature-sub_advent .sub-inner_advent h1 {
+		font-size: 42px;
+	}
+
+	.split-content {
+		padding: 120px 100px 50px 10px;
+		text-align: left;
+	}
+
+	.split-content h1 {
+		font-size: 42px;
+	}
+
+
+	.pricing_advent {
+		padding: 100px 0 100px 0;
+	}
+
+	.pricing-content_advent {
+		text-align: left;
+	}
+
+	.cta-sub_advent .cta-inner_advent h1 {
+		font-size: 36px;
+	}
+
+
+	.cta-inner_advent {
+		max-width: 500px;
+		float: right;
+	}
+
+	.contact_advent {
+		text-align: center;
+	}
+
+
+	.contact_advent h1 {
+		font-size: 24px;
+	}
+
+	.contact_advent p {
+		font-size: 16px !important;
+	}
+
+	.contact_advent a {
+		font-size: 18px;
+	}
+
+}
+
+@media only screen and (min-width: 767px) and (max-width: 1024px) {
+	.features_advent .features-list_advent {
+		padding: 80px 0 0 0;
+	}
+
+	.split-content {
+		padding: 100px 100px 50px 50px;
+		text-align: left;
+	}
+}
+
+
+@media screen and (min-width: 400px) and (max-width: 600px) {
+
+ .formee_advent input {
+   padding: 0 30px 0 20px;
+   border-radius: 5px 0 0 5px;
+ }
+
+ .formee_advent .right_advent {
+   padding: 0 5px 0 5px;
+   border-radius: 0 5px 5px 0;
+ }
+}
+
+
+@media screen and (max-width: 399px) {
+
+	.cta-sub_advent {
+		text-align: center;
+	}
+
+	.subscribe-form {
+		text-align: center;
+	}
+
+ .formee_advent input {
+	 text-align: center;
+   padding: 0 0 0 0;
+   border-radius: 5px 0 0 5px;
+ }
+
+ .formee_advent .right_advent {
+   padding: 0 5px 0 5px;
+   border-radius: 0 5px 5px 0;
+	 margin-top: 15px;
+ }
+
+ .form_advent .sub-form .subscribe-form {
+ 	text-align: left;
+ }
+
+
+  .form_advent .sub-form .formee_advent input {
+ 	 text-align: center;
+    padding: 0 0 0 0;
+    border-radius: 5px 0 0 5px;
+  }
+
+  .form_advent .sub-form .formee_advent .right_advent {
+    padding: 0 5px 0 5px;
+    border-radius: 0 5px 5px 0;
+ 	 margin-top: 15px;
+  }
+
+ .back-to-top_advent {
+	right: 10px;
+}
+
+ }
+
+ @media only screen and (min-width: 991px) and (max-width: 1201px) {
+
+	 .app-features_advent .features-left, .app-features_advent .features-right {
+	 	padding: 0 0 0 0;
+	 }
+
+	 .software_advent .features_advent .features-list_advent {
+		 padding: 0 0 0 0;
+	 }
+
+ }
+
+
+/*---------------------------------------------------
+------- Media Queries for Split Layout Ends ---------
+---------------------------------------------------*/

@@ -62,7 +62,7 @@ function bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
 function horizontal_bar_chart_initiate_render_chartjs(chart_id,labels,numbers_list,colors){
   labels = labels||['No Data']
   numbers_list = numbers_list||[0]
-  colors = colors||["#a3e1d4"]
+  colors = colors||_.map(labels,function(D){return "#a3e1d4"})//["#a3e1d4"]
 
   simple_chart_data = {labels:labels, datasets: [{data: numbers_list, backgroundColor: colors }] };
   simple_options = {legend: {display: false},        scales: {

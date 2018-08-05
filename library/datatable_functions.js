@@ -222,6 +222,58 @@ function guest_url_create(data, type, row, meta){
   }
 
 //format the datatables date with the date and time
+function date_time_datatable_format_render_seconds(data,type,row,meta) {
+  if (moment(data).isValid()){
+
+    date_format = moment(data).format("MM/DD/YY hh:mm:ssA (dd)")
+    date_format_from = moment(data).fromNow()
+  }
+  else {
+    date_format = moment(data,"MM-DD-YYYY h:mm a").format("MM/DD/YY hh:mmA (dd)") 
+    date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+
+
+  }
+  return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
+  //$(td).attr('title',moment(cellData).fromNow())
+  //$(td).html(date_format);
+}
+
+
+//format the datatables date with the date and time
+function number_format_render(data,type,row,meta) {
+  num =  parseFloat(data)||'NaN'
+  if (num != 'NaN'){
+    r = num.toFixed(1)
+  }
+  else {
+    r = num 
+  }
+  return r 
+  //$(td).attr('title',moment(cellData).fromNow())
+  //
+
+}
+//format the datatables date with the date and time
+function date_time_datatable_format_render(data,type,row,meta) {
+  if (moment(data).isValid()){
+
+    date_format = moment(data).format("MM/DD/YY hh:mmA (dd)")
+    date_format_from = moment(data).fromNow()
+  }
+  else {
+    date_format = moment(data,"MM-DD-YYYY h:mm a").format("MM/DD/YY hh:mmA (dd)") 
+    date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+
+
+  }
+
+  return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
+  //$(td).attr('title',moment(cellData).fromNow())
+  //$(td).html(date_format);
+}
+
+//format the datatables date with the date and time
 function date_time_datatable_format(td, cellData, rowData, row, col) {
   date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");
   $(td).attr('title',moment(cellData).fromNow())

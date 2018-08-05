@@ -239,6 +239,7 @@ function firebase_array_integrate(array,firebase_url,identifier,keys) {
 	keys = keys||['status']
 	firebase_url = firebase_url||"https://shippy-ac235.firebaseio.com/dashbot/accounts.json"
 	identifier = identifier||"DT_RowId"
+  
   	firebase_dict = firebase_json_pull(firebase_url)||{}
   	array.forEach(function(D) {
     	firebase_defined_dict = firebase_dict[D[String(identifier)]]

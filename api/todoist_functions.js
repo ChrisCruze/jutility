@@ -72,6 +72,10 @@ function gspread_table_tasks_generate(gspread_array_data,completed_tasks,current
         days_since_completed = moment().diff(last_completed, 'days')
         gspread_dict['days_since_last_completed'] = days_since_completed
         gspread_dict['last_completed'] = moment(last_completed).format("MM/DD hh:mm A");
+        due_date = moment(last_completed).add(parseFloat(gspread_dict['Max Age']),'days').format()
+        gspread_dict['due_date'] = due_date
+        gspread_dict['days_remaining'] = (moment().diff(due_date, 'minutes')/1440)*-1
+
         is_good = parseFloat(gspread_dict['Max Age']) > days_since_completed
         days_to_incomplete = days_since_completed/parseFloat(gspread_dict['Max Age']) 
 

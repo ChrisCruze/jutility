@@ -34,6 +34,26 @@ function percentage_complete_metric_generate(gspread_array){
 
 //remaining tasks populate
 function remaining_tasks_populate(gspread_array){
+  $.fn.dataTable.ext.type.order["number-float-pre"] = function(d) {
+    r = parseFloat(d)||-1000
+    return r;
+  };
+
+  columns = [
+    {data:'Task',title:'Task',name:'Task'},
+    {data:'days_remaining',title:'days_remaining',name:'days_remaining',visible:true,type:'number-float',render:number_format_render},
+    {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
+    {data:'status',title:'status',name:'status',visible:false},
+    {data:'days_to_incomplete',title:'days_to_incomplete',name:'days_to_incomplete',visible:false},
+    {data:'days_since_last_completed',title:'days_since_last_completed',name:'days_since_last_completed',visible:false},
+    {data:'due_date',title:'due_date',name:'due_date',visible:false,createdCell:date_time_datatable_format},
+    {data:'task_assigned',title:'task_assigned',name:'task_assigned',visible:false},
+    {data:'Category',title:'Category',name:'Category',visible:false},
+    {data:'project_id',title:'project_id',name:'project_id',visible:false}
+    ]
+
+
+    array_check_keys(gspread_array,_.map(columns,function(D){return D['data']}))
     editor = new $.fn.dataTable.Editor({
       table: "#remaining_tasks_table",
       idSrc:  'Task',
@@ -62,18 +82,7 @@ function remaining_tasks_populate(gspread_array){
     dom: '<"html5buttons"B>lTfgitp',
     data: gspread_array,
     scrollY:"200px",
-    columns:[
-    {data:'Task',title:'Task',name:'Task'},
-    {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
-    {data:'status',title:'status',name:'status',visible:false},
-    {data:'days_to_incomplete',title:'days_to_incomplete',name:'days_to_incomplete',visible:false},
-
-
-    
-    {data:'task_assigned',title:'task_assigned',name:'task_assigned',visible:false},
-    {data:'Category',title:'Category',name:'Category',visible:false},
-    {data:'project_id',title:'project_id',name:'project_id',visible:false}
-    ],
+    columns:columns,
     select: true,
     colReorder: true,
     buttons: [
@@ -94,5 +103,10 @@ function remaining_tasks_populate(gspread_array){
     ],
     order: [1, "asc"]
     });
-    dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
+    //dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
 }
+
+
+
+
+
