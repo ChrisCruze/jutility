@@ -178,6 +178,6 @@ def run():
     save_file(directory="/Users/chriscruz/Dropbox/Github/Dashbot/js/jutility.js")
     save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
     save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
-
-    save_file(directory="/Users/chriscruz/Desktop/Aesop/Aesop/js/jutility.js")
+    save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
+    save_file(directory="/Users/chriscruz/Documents/Aesop_080518/Aesop/js/jutility.js")
 run()

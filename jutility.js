@@ -1388,9 +1388,18 @@ function date_time_datatable_format_render_seconds(data,type,row,meta) {
 
 
   }
-  return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
+  return '<span title="'+date_format_from+'">'+date_format+'</span>'
   //$(td).attr('title',moment(cellData).fromNow())
   //$(td).html(date_format);
+}
+
+
+//format the datatables date with the date and time
+function moment_from_now_reder(data,type,row,meta) {
+  date_format_from_now = moment(data).fromNow()
+  date_format_text = moment(data).format("MM/DD/YY hh:mmA (dd)") 
+  return '<span "title"="'+date_format_text+'">'+date_format_from_now+'</span>'
+
 }
 
 
@@ -3866,6 +3875,45 @@ since = since||"2018-04-28"
   return master_list
 }
 
+//area_row_chart.js
+
+function row_chart_create_from_array(array,table_id){
+  table_html=""
+  function html_section_create(item,index){
+      width_percentage = String(item.width)//width: 19.9476%
+      background_color = item.color//"rgb(250, 210, 50)"//item.color //background: #dd514c;
+      style_attribute = "width: "+width_percentage+"%;background: " + background_color
+      $("div[field='row_bar_color_width']").attr('style',style_attribute)
+      name_title = item.name
+      $("span[field='row_bar_title']").html(name_title)
+      table_html=table_html+$(table_id).html()
+    }
+    array.forEach(html_section_create)         
+    $(table_id).html(table_html)
+}
+
+function area_row_chart_initiate(params){
+  completed_tasks_today = params.completed_tasks
+
+chart_id = params.chart_id||"#row_bar_size_chart"
+
+completed_tasks_today_duration = sum_float_convert_from_array(completed_tasks_today,'duration')
+completed_dict_today = _.groupBy(completed_tasks_today, function(num){ return num['sub_project'] });
+completed_dict_today_keys = Object.keys(completed_dict_today)
+task_row = []
+color_list = [ '#B8860B', '#A9A9A9', '#2F4F4F', '#006400', '#BDB76B', '#8B008B', '#556B2F', '#FF8C00', '#9932CC', '#8B0000', '#E9967A', '#8FBC8F', '#483D8B', '#2F4F4F', '#2F4F4F', '#00CED1', '#9400D3', '#FF1493', '#00BFFF', '#696969', '#696969', '#1E90FF', '#B22222', '#FFFAF0', '#228B22', '#FF00FF']
+completed_dict_today_keys.forEach(function(k,i){
+  project_dur = sum_float_convert_from_array(completed_dict_today[k],'duration')
+  hours = (project_dur/60).toFixed(2)
+  task_name = k + " - " + hours
+  width = (project_dur/completed_tasks_today_duration) * 100
+  task_row.push({width:width,color: color_list[i] ,name:task_name})
+})
+
+row_chart_create_from_array(task_row,chart_id)
+
+}
+
 //calendar_datatables_firebase.js
 
 
@@ -4078,8 +4126,9 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
 
 
 
-    editor.on("preSubmit", function(e, data, action) {
+    params.editor.on("preSubmit", function(e, data, action) {
     if (action == 'create'){
+        //console.log(params)
         //console.log(data)
         //console.log(action)
         items_to_add = Object.values(data.data)
@@ -4089,11 +4138,11 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         submit_attributes = params.submit_attributes||{}
         item = combine_dicts(item,submit_attributes)
         date_field_format_check(item,params)
-        r = firebaseRef.push(item)
+        r = params.firebase_reference.push(item)
         })
 
 
-        editor.close()
+        params.editor.close()
         return false
 
 
@@ -4102,7 +4151,7 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
     })
 
 
-    editor.on("postSubmit", function(e, json, data, action, xhr) {
+    params.editor.on("postSubmit", function(e, json, data, action, xhr) {
 
     if (action == 'edit'){
         json_array = json.data;
@@ -4116,14 +4165,14 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         D = combine_dicts(D,edit_attributes)
         date_field_format_check(D,params)
         console.log(D)
-        firebaseRef.child(record_id).set(D);
+        params.firebase_reference.child(record_id).set(D);
     });
     }
     else if (action == 'remove'){
         items_to_delete = Object.values(data.data)
         items_to_delete.forEach(function(D){
             record_id = D[row_id];
-            r = firebaseRef.child(record_id).remove();
+            r = params.firebase_reference.child(record_id).remove();
             //console.log(r)
         })
 
@@ -4152,7 +4201,7 @@ function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_i
             date_fields.push(D.data)
         }
     })
-    editor = new $.fn.dataTable.Editor({
+    params.editor = new $.fn.dataTable.Editor({
         table:table_id,
         idSrc: row_id,
         fields: fields
@@ -4160,11 +4209,12 @@ function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_i
     if (date_fields.length > 0){
         params.date_fields = date_fields
     }
-    dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params)
-    return editor
+    dataeditor_firebase_instance_generate_options(params.firebase_reference,row_id,params)
+    return params.editor
 }
 
 function datatable_generate(table_id,columns_list,editor,params){
+    console.log(params)
     //input_data = input_data || {}
     params = params || {}
 
@@ -4190,6 +4240,7 @@ function datatable_generate(table_id,columns_list,editor,params){
         data: [],
         columns:columns_list,
         select: true,
+        ///drawCallback:function(){params.callback_function(this.api().rows({page:'current'}).data())} ,
         paging:false,
         scrollX: true,
         colReorder: true,
@@ -4197,11 +4248,26 @@ function datatable_generate(table_id,columns_list,editor,params){
         buttons: button_params
     }
 
+    if (params.callback_function != null){
+        config.drawCallback = function(){
+            params.callback_function(this.api().rows({page:'current'}).data())
+        }
+    }
+
+
+
+   // console.log(config)
+
     if (params.sort != undefined){
         sort_order = params.sort_order||'desc'
         config.order = [[_.findIndex(columns_list,function(D){return D['data'] == params.sort}),'desc']]
     }
+    params.config = config
+   // console.log(params)
     table_example = $(table_id).DataTable(config);
+    params.table = table_example
+   // console.log(params)
+
     return table_example
 }
 
@@ -4327,13 +4393,14 @@ function firebase_dataeditor_table_generate_core(params){
     params.input_columns = columns
     new_fields = datatable_column_fields_generate(columns,params)
     params.columns = new_fields
-    editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebase_reference,table_row_id,params)
+    editor = dataeditor_firebase_instance_generate(params.table_selector,params.columns,params.firebase_reference,table_row_id,params)
     table = datatable_generate(table_selector,new_fields,editor,params)
 
     fields_to_check = _.map(new_fields,function(D){return D['data']})
     //console.log(fields_to_check)
 
-    firebase_reference.on("child_added", function(snap) {
+    params.firebase_reference.on("child_added", function(snap) {
+
        // console.log(snap)
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
@@ -4344,8 +4411,8 @@ function firebase_dataeditor_table_generate_core(params){
         }
         //fields_to_check = _.map(new_fields,function(D){return D['data']})
         //console.log()
-        key_check_func_dictionary(fields_to_check,firebase_dictionary)
-        table.row.add(firebase_dictionary).draw(false);
+        key_check_func_dictionary(_.map(params.columns,function(D){return D['data']}),firebase_dictionary)
+        params.table.row.add(firebase_dictionary).draw(false);
     })
 
 
@@ -4788,20 +4855,44 @@ function chart_update_from_params(completed_tasks_array,chart_object,calculation
   return chart_object
 }
 
+// function firebase_chart_update(params){
+// 	chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
+
+// 	firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
+// 	filter_function = params.filter_function||function(D){return D.type == 'count'}
+//   	dates = params.dates||dates_past_n_days(30)
+
+//   	array = Object.values(firebase_json_pull(firebase_url))
+//   	array = array.filter(filter_function)
+// 	calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
+// 	date_key = params.date_key||'date_time'
+// 	chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
+
+// }
+
+
 function firebase_chart_update(params){
-	chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
+  chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
 
-	firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
-	filter_function = params.filter_function||function(D){return D.type == 'count'}
-  	dates = params.dates||dates_past_n_days(30)
+  filter_function = params.filter_function||function(D){return D.type == 'count'}
+  dates = params.dates||dates_past_n_days(30)
 
-  	array = Object.values(firebase_json_pull(firebase_url))
-  	array = array.filter(filter_function)
-	calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
-	date_key = params.date_key||'date_time'
-	chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
+  if (params.firebase_url != null){
+    firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
+    array = Object.values(firebase_json_pull(firebase_url))
+  }
+  if (params.data != null){
+    array = params.data
+  }
+
+
+  array = array.filter(filter_function)
+  calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
+  date_key = params.date_key||'date_time'
+  chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
 
 }
+
 //firebase_chat_input.js
 
 
@@ -5220,7 +5311,8 @@ function remaining_tasks_populate(gspread_array){
 
   columns = [
     {data:'Task',title:'Task',name:'Task'},
-    {data:'days_remaining',title:'days_remaining',name:'days_remaining',visible:true,type:'number-float',render:number_format_render},
+    {data:'days_remaining',title:'days_remaining',name:'days_remaining',visible:false,type:'number-float',render:number_format_render},
+    {data:'due_date',title:'Time Remaining',name:'time_remaining',visible:true,render:moment_from_now_reder},
     {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
     {data:'status',title:'status',name:'status',visible:false},
     {data:'days_to_incomplete',title:'days_to_incomplete',name:'days_to_incomplete',visible:false},
@@ -5264,6 +5356,17 @@ function remaining_tasks_populate(gspread_array){
     columns:columns,
     select: true,
     colReorder: true,
+    createdRow: function( row, data, dataIndex){
+                if( data['days_remaining'] < 0){
+                    $(row).addClass('danger');
+                }
+                else if( data['days_remaining'] < 1){
+                    $(row).addClass('warning');
+                }
+                else {
+                    $(row).addClass('success');
+                }
+            },
     buttons: [
     { extend: "excel", title: document.title },
     { extend: "colvis", title: document.title },

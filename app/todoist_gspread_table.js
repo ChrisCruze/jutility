@@ -41,7 +41,8 @@ function remaining_tasks_populate(gspread_array){
 
   columns = [
     {data:'Task',title:'Task',name:'Task'},
-    {data:'days_remaining',title:'days_remaining',name:'days_remaining',visible:true,type:'number-float',render:number_format_render},
+    {data:'days_remaining',title:'days_remaining',name:'days_remaining',visible:false,type:'number-float',render:number_format_render},
+    {data:'due_date',title:'Time Remaining',name:'time_remaining',visible:true,render:moment_from_now_reder},
     {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
     {data:'status',title:'status',name:'status',visible:false},
     {data:'days_to_incomplete',title:'days_to_incomplete',name:'days_to_incomplete',visible:false},
@@ -85,6 +86,17 @@ function remaining_tasks_populate(gspread_array){
     columns:columns,
     select: true,
     colReorder: true,
+    createdRow: function( row, data, dataIndex){
+                if( data['days_remaining'] < 0){
+                    $(row).addClass('danger');
+                }
+                else if( data['days_remaining'] < 1){
+                    $(row).addClass('warning');
+                }
+                else {
+                    $(row).addClass('success');
+                }
+            },
     buttons: [
     { extend: "excel", title: document.title },
     { extend: "colvis", title: document.title },

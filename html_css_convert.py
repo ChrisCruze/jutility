@@ -89,7 +89,19 @@ def intersection_check_rename():
 	index_html_file4 = os.path.join(os.getcwd(),'advent','index-form.html')
 	html_classes_4 =  class_pull_from_html_file(index_html_file4)
 
-	html_classes = html_classes + html_classes_2 + html_classes_3 + html_classes_4
+
+
+
+
+	index_html_file5 = os.path.join(os.getcwd(),'advent','index-slides.html')
+	html_classes_5 =  class_pull_from_html_file(index_html_file5)
+
+
+
+	index_html_file6 = os.path.join(os.getcwd(),'advent','index-img-bg.html')
+	html_classes_6 =  class_pull_from_html_file(index_html_file6)
+
+	html_classes = html_classes + html_classes_2 + html_classes_3 + html_classes_4 + html_classes_5 + html_classes_6
 
 
 
@@ -104,6 +116,8 @@ def intersection_check_rename():
 	page_source_update(index_html_file,intersection)
 	page_source_update(index_html_file3,intersection)
 	page_source_update(index_html_file4,intersection)
+	page_source_update(index_html_file5,intersection)
+	page_source_update(index_html_file6,intersection)
 
 
 	with open(style_css_file,'r') as f:

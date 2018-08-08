@@ -607,9 +607,9 @@ font-family: Arial;
 
 
 .image-bg .hero-section {
-	background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2)), url(../images/image-bg.jpg) no-repeat center center;
+	background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2)), url(../images/a.jpg) no-repeat center center;
 	background-size: cover;
-	padding: 150px 0 100px 0;
+	padding: 400px 0 100px 0;
 }
 
 .image-bg .hero-content h1 {

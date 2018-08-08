@@ -234,9 +234,18 @@ function date_time_datatable_format_render_seconds(data,type,row,meta) {
 
 
   }
-  return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
+  return '<span title="'+date_format_from+'">'+date_format+'</span>'
   //$(td).attr('title',moment(cellData).fromNow())
   //$(td).html(date_format);
+}
+
+
+//format the datatables date with the date and time
+function moment_from_now_reder(data,type,row,meta) {
+  date_format_from_now = moment(data).fromNow()
+  date_format_text = moment(data).format("MM/DD/YY hh:mmA (dd)") 
+  return '<span "title"="'+date_format_text+'">'+date_format_from_now+'</span>'
+
 }
 
 

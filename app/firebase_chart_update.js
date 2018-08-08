@@ -47,17 +47,40 @@ function chart_update_from_params(completed_tasks_array,chart_object,calculation
   return chart_object
 }
 
+// function firebase_chart_update(params){
+// 	chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
+
+// 	firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
+// 	filter_function = params.filter_function||function(D){return D.type == 'count'}
+//   	dates = params.dates||dates_past_n_days(30)
+
+//   	array = Object.values(firebase_json_pull(firebase_url))
+//   	array = array.filter(filter_function)
+// 	calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
+// 	date_key = params.date_key||'date_time'
+// 	chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
+
+// }
+
+
 function firebase_chart_update(params){
-	chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
+  chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
 
-	firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
-	filter_function = params.filter_function||function(D){return D.type == 'count'}
-  	dates = params.dates||dates_past_n_days(30)
+  filter_function = params.filter_function||function(D){return D.type == 'count'}
+  dates = params.dates||dates_past_n_days(30)
 
-  	array = Object.values(firebase_json_pull(firebase_url))
-  	array = array.filter(filter_function)
-	calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
-	date_key = params.date_key||'date_time'
-	chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
+  if (params.firebase_url != null){
+    firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
+    array = Object.values(firebase_json_pull(firebase_url))
+  }
+  if (params.data != null){
+    array = params.data
+  }
+
+
+  array = array.filter(filter_function)
+  calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
+  date_key = params.date_key||'date_time'
+  chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
 
 }

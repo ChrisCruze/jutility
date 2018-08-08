@@ -105,8 +105,9 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
 
 
 
-    editor.on("preSubmit", function(e, data, action) {
+    params.editor.on("preSubmit", function(e, data, action) {
     if (action == 'create'){
+        //console.log(params)
         //console.log(data)
         //console.log(action)
         items_to_add = Object.values(data.data)
@@ -116,11 +117,11 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         submit_attributes = params.submit_attributes||{}
         item = combine_dicts(item,submit_attributes)
         date_field_format_check(item,params)
-        r = firebaseRef.push(item)
+        r = params.firebase_reference.push(item)
         })
 
 
-        editor.close()
+        params.editor.close()
         return false
 
 
@@ -129,7 +130,7 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
     })
 
 
-    editor.on("postSubmit", function(e, json, data, action, xhr) {
+    params.editor.on("postSubmit", function(e, json, data, action, xhr) {
 
     if (action == 'edit'){
         json_array = json.data;
@@ -143,14 +144,14 @@ function dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params
         D = combine_dicts(D,edit_attributes)
         date_field_format_check(D,params)
         console.log(D)
-        firebaseRef.child(record_id).set(D);
+        params.firebase_reference.child(record_id).set(D);
     });
     }
     else if (action == 'remove'){
         items_to_delete = Object.values(data.data)
         items_to_delete.forEach(function(D){
             record_id = D[row_id];
-            r = firebaseRef.child(record_id).remove();
+            r = params.firebase_reference.child(record_id).remove();
             //console.log(r)
         })
 
@@ -179,7 +180,7 @@ function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_i
             date_fields.push(D.data)
         }
     })
-    editor = new $.fn.dataTable.Editor({
+    params.editor = new $.fn.dataTable.Editor({
         table:table_id,
         idSrc: row_id,
         fields: fields
@@ -187,11 +188,12 @@ function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_i
     if (date_fields.length > 0){
         params.date_fields = date_fields
     }
-    dataeditor_firebase_instance_generate_options(firebaseRef,row_id,params)
-    return editor
+    dataeditor_firebase_instance_generate_options(params.firebase_reference,row_id,params)
+    return params.editor
 }
 
 function datatable_generate(table_id,columns_list,editor,params){
+    console.log(params)
     //input_data = input_data || {}
     params = params || {}
 
@@ -217,6 +219,7 @@ function datatable_generate(table_id,columns_list,editor,params){
         data: [],
         columns:columns_list,
         select: true,
+        ///drawCallback:function(){params.callback_function(this.api().rows({page:'current'}).data())} ,
         paging:false,
         scrollX: true,
         colReorder: true,
@@ -224,11 +227,26 @@ function datatable_generate(table_id,columns_list,editor,params){
         buttons: button_params
     }
 
+    if (params.callback_function != null){
+        config.drawCallback = function(){
+            params.callback_function(this.api().rows({page:'current'}).data())
+        }
+    }
+
+
+
+   // console.log(config)
+
     if (params.sort != undefined){
         sort_order = params.sort_order||'desc'
         config.order = [[_.findIndex(columns_list,function(D){return D['data'] == params.sort}),'desc']]
     }
+    params.config = config
+   // console.log(params)
     table_example = $(table_id).DataTable(config);
+    params.table = table_example
+   // console.log(params)
+
     return table_example
 }
 
@@ -354,13 +372,14 @@ function firebase_dataeditor_table_generate_core(params){
     params.input_columns = columns
     new_fields = datatable_column_fields_generate(columns,params)
     params.columns = new_fields
-    editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebase_reference,table_row_id,params)
+    editor = dataeditor_firebase_instance_generate(params.table_selector,params.columns,params.firebase_reference,table_row_id,params)
     table = datatable_generate(table_selector,new_fields,editor,params)
 
     fields_to_check = _.map(new_fields,function(D){return D['data']})
     //console.log(fields_to_check)
 
-    firebase_reference.on("child_added", function(snap) {
+    params.firebase_reference.on("child_added", function(snap) {
+
        // console.log(snap)
         directory_addresses = snap.getRef().path.n
         id = directory_addresses[directory_addresses.length-1]
@@ -371,8 +390,8 @@ function firebase_dataeditor_table_generate_core(params){
         }
         //fields_to_check = _.map(new_fields,function(D){return D['data']})
         //console.log()
-        key_check_func_dictionary(fields_to_check,firebase_dictionary)
-        table.row.add(firebase_dictionary).draw(false);
+        key_check_func_dictionary(_.map(params.columns,function(D){return D['data']}),firebase_dictionary)
+        params.table.row.add(firebase_dictionary).draw(false);
     })
 
 
