@@ -177,7 +177,8 @@ function detail_table_generate(){
             'cadence',//how often should it be done
             'last_completed',
             'days_since_last_completed',
-            'due_date'
+            'due_date',
+            'time_stamp'
             ],
         //columns_generate:true,
         //default_visible:false,
@@ -205,13 +206,18 @@ function catalog_table_generate(){
             'cadence',//how often should it be done
             'last_completed',
             'days_since_last_completed',
-            'due_date'
+            'due_date',
+            'time_stamp'
+
             ],
         //columns_generate:true,
         //default_visible:false,
         live:true,
-        additional_buttons: [{text: 'Update',name:'Update', action: function ( e, dt, node, config ) {
-            //update_stock_data()
+        additional_buttons: [
+            {text: 'Do',name:'Do', action: function ( e, dt, node, config ) {
+                row_data = dt.rows( { selected: true } ).data()[0]
+                row_data.time_stamp = moment().format()
+                ref.child('detail').push(row_data)
         }}]
     })
     return catalog_params
