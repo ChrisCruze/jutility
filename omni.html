@@ -210,9 +210,6 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <div class="container">
 
 
-        <!--         <div class="row" id="dropbox_saver">
-            <a href="https://dl.dropboxusercontent.com/s/deroi5nwm6u7gdf/advice.png" class="dropbox-saver"></a>
-        </div> -->
         <div class="row" id="metric_headers">
 
 
@@ -225,18 +222,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 <button type="button" class="btn m-r-sm" id="ds_percentage">-</button>
                 <span field="habit_text">Ds</span>
             </td>
-<!--             <td field="habit_item">
-                <button type="button" class="btn m-r-sm" id="average_per_d_time">-</button>
-                <span field="habit_text">Avg D</span>
-            </td>
-            <td field="habit_item">
-                <button type="button" class="btn m-r-sm" id="laps">-</button>
-                <span field="habit_text">Laps</span>
-            </td>
-            <td field="habit_item">
-                <button type="button" id='miles' class="btn m-r-sm">-</button>
-                <span field="habit_text">Miles</span>
-            </td> -->
+
         </tr>
         </tbody>
     </table>
@@ -570,12 +556,6 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab-1" data-toggle="tab">Current Tasks</a></li>
                     <li class=""><a href="#tab-2" data-toggle="tab">Completed Tasks</a></li>
-                    <li class=""><a href="#tab-3" data-toggle="tab" onClick=''>Calendar</a></li>
-
-
-                    <li class=""><a href="#tab-4" data-toggle="tab" onClick=''>Calendar Table</a></li>
-
-
 
                 </ul>
 
@@ -586,13 +566,43 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                     <div class="tab-pane" id="tab-2">
                         <table id="completed_tasks_table" class="display" cellspacing="0" width="100%"></table>
 
-                    </div>
-                    <div class="tab-pane" id="tab-3">
-                                    <div id="calendar"></div>
 
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+        </div>
+        </div>
+
+        </div>
+
+
+
+
+
+
+        <div class="row">
+
+        <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>Calendar </h5>
+        </div>
+        <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#calendar-tab-1" data-toggle="tab">Calendar</a></li>
+                    <li class=""><a href="#calendar-tab-2" data-toggle="tab">Calendar Details</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="calendar-tab-1">
+                            <div id="calendar"></div>
                     </div>
-                    <div class="tab-pane" id="tab-4">
-                        <table id="calendar_table" class="display" cellspacing="0" width="100%"></table>
+                    <div class="tab-pane" id="calendar-tab-2">
+                          <table id="calendar_table" class="display nowrap" style="width:100%"></table>  
 
                     </div>
 
@@ -600,7 +610,11 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 </div>
 
 
-            </div>
+
+
+
+
+
 
 
         </div>
@@ -900,11 +914,14 @@ calendar_initiate({events:Object.values(firebase_json_pull("https://shippy-ac235
 datatables_firebase({
     firebase_reference:firebase.database().ref('omni').child('calendar'),
     columns:[
+        {data:'title',format:'title'},
         {data:'start',format:'date'},
         {data:'end',format:'date'},
+        {data:'color'},
+
         ],
     table_selector:"#calendar_table",
-    columns_generate:true
+    columns_generate:false
 })
 }
 
