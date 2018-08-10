@@ -106,6 +106,9 @@ function remaining_tasks_populate(gspread_array){
     {text: 'Not Assigned',name:'Not Assigned', action: function ( e, dt, node, config ) {
           dt.columns('task_assigned:name').search('Red').draw()
         }},
+    {text: 'Not Assigned All',name:'Not Assigned', action: function ( e, dt, node, config ) {
+          dt.columns('task_assigned:name').search('Amber').draw()
+        }},
      {text: 'Red',name:'Red', action: function ( e, dt, node, config ) {
           dt.columns('status:name').search('Red').draw()
         }},

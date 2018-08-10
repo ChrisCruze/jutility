@@ -188,6 +188,14 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                         <i class="fa fa-tasks"></i> Sync
                     </a>
                 </li>
+
+                <li>
+                <a href="https://dl.dropboxusercontent.com/s/deroi5nwm6u7gdf/advice.png" class="dropbox-saver">
+                        <i class="fa fa-tasks"></i> Dropbox
+                    </a>
+                </li>
+
+
                     </ul>
                 </li>
 
@@ -610,32 +618,6 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 </div>
-
-
-<!--   
-
-<div><div id="small-chat"><span class="badge badge-warning pull-right">5</span><a class="open-small-chat"><i class="fa fa-comments"></i></a></div><div class="small-chat-box fadeInRight animated"><div class="heading" draggable="true"><small class="chat-date pull-right">02.19.2015</small></div><div class="content" id="message_content"></div><div class="form-chat"><div class="input-group input-group-sm"><input class="form-control" id="message_box_text" type="text"><span class="input-group-btn"><button class="btn btn-primar" type="button">Send</button></span></div></div></div></div>
-
-<div>
-<div id="small-chat">
-    <span class="badge badge-warning pull-right">5</span>
-    <a class="open-small-chat"><i class="fa fa-comments"></i></a>
-  </div>
-  <div class="small-chat-box fadeInRight animated">
-    <div class="heading" draggable="true">
-      <small class="chat-date pull-right">02.19.2015</small> Small chat
-    </div>
-    <div id="message_content" class="content">
-    </div>
-     <div class="form-chat">
-                <div class="input-group input-group-sm">
-                    <input id="message_box_text" type="text" class="form-control">
-                    <span class="input-group-btn"> <button
-                        class="btn btn-primary" type="button">Send
-                </button> </span></div>
-      </div>
-  </div>
-  </div> -->
 </div>
 
 
@@ -940,7 +922,15 @@ function checklist_gspread(){
 
 
 
-
+function drogas_calculate_now(){
+    drogas_array = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
+    drogas_array.forEach(function(D){D['remaining_in_system'] = dose_remaining_now(D)})
+    in_system = sum_float_convert_from_array_underscore(drogas_array,'remaining_in_system')
+    in_system = in_system.toFixed(1)
+    $("#ds_percentage").html(in_system)
+    return in_system
+}
+setTimeout(drogas_calculate_now,3000)
 //gspread_array
 //('checklist')
 //initiate_check_list_datatable('checklist')

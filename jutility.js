@@ -275,6 +275,21 @@ function downloadURI(uri, name) {
   delete link;
 }
 
+function list_of_lists_to_array(text_lines){
+    key_names = text_lines[0] 
+    key_names = headers_key_names_list_format_string(key_names)
+      array = []
+    text_lines.forEach(function(entry,i){
+        var singleObj = {}
+         key_names.forEach(function(kn,num_index){
+            singleObj[kn] = entry[num_index]
+         })
+        array.push(singleObj)
+    })
+    return array 
+
+
+}
 //use paparse to read from file
 function papa_parse_array(file,delimter){
     delimter = delimter || "|"
@@ -294,6 +309,44 @@ function papa_parse_array(file,delimter){
     })
     return array 
 }
+
+function papa_parse_array_from_file(params){
+  params = params || {'file':"woocommerce_data.csv"}
+
+  data_results = []
+  Papa.parse(params.file, {
+      download: true,
+      complete: function(results) {
+        results_data = list_of_lists_to_array(results.data)
+        data_results.concat(results_data)
+        params['data'] = results_data
+      }
+  });
+
+  return params 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //html_functions.js
 
 
@@ -4993,6 +5046,23 @@ function initiate_firebase_chat_bubbles(params){
 
 
 }
+//firebase_drogas.js
+
+
+
+
+function dose_remaining_now(dictionary_obj){
+    beginning_count = parseInt(dictionary_obj.input_text) ||0
+    beginning_count = beginning_count * 20
+    date_time_string = dictionary_obj.date_time
+    m = moment(date_time_string)
+    now = moment() 
+    hours_difference = now.diff(m, 'hours',true);
+    dose_remaining = beginning_count * Math.pow(.5, (hours_difference/10));
+    return dose_remaining  
+}
+
+
 //firebase_snapshot.js
 
 
@@ -5375,6 +5445,9 @@ function remaining_tasks_populate(gspread_array){
 
     {text: 'Not Assigned',name:'Not Assigned', action: function ( e, dt, node, config ) {
           dt.columns('task_assigned:name').search('Red').draw()
+        }},
+    {text: 'Not Assigned All',name:'Not Assigned', action: function ( e, dt, node, config ) {
+          dt.columns('task_assigned:name').search('Amber').draw()
         }},
      {text: 'Red',name:'Red', action: function ( e, dt, node, config ) {
           dt.columns('status:name').search('Red').draw()
