@@ -20,6 +20,12 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.render = date_time_datatable_format_render_seconds
         new_dictionary.type =  "datetime"
     }
+    if (new_dictionary.format == 'date_adjust'){
+        new_dictionary.render = date_time_datatable_format_render_time_zone_adjust
+        new_dictionary.type =  "datetime"
+    }
+
+
     if (new_dictionary.format == 'date'){
         new_dictionary.render = date_time_datatable_format_render
         new_dictionary.type =  "datetime"
@@ -226,10 +232,12 @@ function datatable_generate(table_id,columns_list,editor,params){
         autoWidth: true,
         buttons: button_params
     }
-
+//params.callback_function(this.api().rows({page:'current'}).data()
     if (params.callback_function != null){
         config.drawCallback = function(){
-            params.callback_function(this.api().rows({page:'current'}).data())
+            data_callback = this.api().rows({page:'current'}).data()
+            
+            params.callback_function(data_callback.toArray())
         }
     }
 

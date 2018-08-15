@@ -17,6 +17,19 @@ function headers_key_names_list_format_string(headers){
   return l 
 }
 
+function regex_between_brackets_pull(my_string){
+  var matches = my_string.match(/\[(.*?)\]/);
+
+  if (matches) {
+      var submatch = matches[1];
+  }
+  submatch = submatch || null
+  return submatch
+
+}
+
+
+
 //convert string to binary
 function text2Binary(string) {
     return string.split('').map(function (char) {

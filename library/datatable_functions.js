@@ -282,6 +282,23 @@ function date_time_datatable_format_render(data,type,row,meta) {
   //$(td).html(date_format);
 }
 
+function date_time_datatable_format_render_time_zone_adjust(data,type,row,meta) {
+  if (moment(data).isValid()){
+
+    date_format = moment(data).subtract(4,'hours').format("MM/DD/YY hh:mmA (dd)")
+    date_format_from = moment(data).fromNow()
+  }
+  else {
+    date_format = moment(data,"MM-DD-YYYY h:mm a").subtract(4,'hours').format("MM/DD/YY hh:mmA (dd)") 
+    date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+
+
+  }
+
+  return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
+  //$(td).attr('title',moment(cellData).fromNow())
+  //$(td).html(date_format);
+}
 //format the datatables date with the date and time
 function date_time_datatable_format(td, cellData, rowData, row, col) {
   date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");

@@ -8,13 +8,23 @@ function calendar_initiate_base(params){
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'month,agendaWeek,agendaDay,listWeek'
+        right: 'month,agendaWeek,agendaDay,listWeek,listDay,agendaFourDay'
+      },
+      views: {
+        listDay: { buttonText: 'list day' },
+        listWeek: { buttonText: 'list week' },
+    agendaFourDay: {
+      type: 'agenda',
+      duration: { days: 4 },
+      buttonText: '4 day'
+    }
       },
       defaultDate: moment().format('YYYY-MM-DD'),//'2018-06-12',
       navLinks: true, // can click day/week names to navigate views
       editable: true,
       eventLimit: true, // allow "more" link when too many events
-      events: events
+      events: events,
+      overlap:false
     });
 }
 

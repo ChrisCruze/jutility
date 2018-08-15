@@ -10,8 +10,8 @@
 <link href="https://cruz.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
 
 <link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
-<link href='https://cruzco.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
-<link href='https://cruzco.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
 <link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
 <link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
@@ -91,7 +91,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
 <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
 <script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
-<script src="https://cruzco.site44.com/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
@@ -215,17 +215,38 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
         </div>
 <div class="row">
-    <table class="table">
+<div class="col-lg-12">
+<div class="ibox">
+<div class="ibox-contentX">
+<table class="table small m-t-sm">
+    <tbody>
+    <tr>
+        <td>
+            <strong id="ds_percentage">-</strong> Ds
+
+        </td>
+        <td>
+            <strong id="expense_cost">-</strong> Expense
+        </td>
+        <td>
+            <strong id="caloric_intake">-</strong> Calories Consumed
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+<!--     <table class="table">
         <tbody>
-        <tr id="">
+        <tr>
             <td field="habit_item">
                 <button type="button" class="btn m-r-sm" id="ds_percentage">-</button>
                 <span field="habit_text">Ds</span>
             </td>
-
         </tr>
         </tbody>
-    </table>
+    </table> -->
 </div>
 
   <div class="col-md-12">
@@ -556,6 +577,8 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab-1" data-toggle="tab">Current Tasks</a></li>
                     <li class=""><a href="#tab-2" data-toggle="tab">Completed Tasks</a></li>
+                    <li class=""><a href="#tab-3" data-toggle="tab">Food</a></li>
+                    <li class=""><a href="#tab-4" data-toggle="tab">Expense</a></li>
 
                 </ul>
 
@@ -569,8 +592,18 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
                 </div>
+                    <div class="tab-pane" id="tab-3">
+                          <table id="food_table" class="display" style="width:100%"></table>  
 
 
+
+                </div>
+                    <div class="tab-pane" id="tab-4">
+                          <table id="expense_table" class="display" style="width:100%"></table>  
+
+
+
+                </div>
             </div>
 
 
@@ -910,7 +943,21 @@ setTimeout(initiate_check_list_datatable,5000,'checklist')
 
 
 function initate_calendar(){
-calendar_initiate({events:Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))})
+
+completed_tasks_filtered = completed_tasks.filter(function(D){return D['end_time'] != null && D['start_time'] != null})
+completed_tasks_filtered.forEach(function(D){
+    D['start'] = D['start_time']
+    D['end'] = D['end_time']
+    D['title'] = D['content']
+    D['color'] = 'gray'
+
+
+})
+
+events_data = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))
+events_data= events_data.concat(completed_tasks_filtered)
+console.log(events_data)
+calendar_initiate({events:events_data})
 datatables_firebase({
     firebase_reference:firebase.database().ref('omni').child('calendar'),
     columns:[
@@ -961,6 +1008,16 @@ setTimeout(drogas_calculate_now,3000)
 //             'within_system',
 setTimeout(initate_calendar,3000)
 
+
+
+function initiate_table_counters(){
+// setTimeout(receipts_table,3000)
+// setTimeout(food_table,6000)
+
+    receipts_table()
+    food_table()
+}
+setTimeout(initiate_table_counters,6000)
 
 
 //     ]})

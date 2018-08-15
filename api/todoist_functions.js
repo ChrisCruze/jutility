@@ -1067,6 +1067,29 @@ function gspread_array_manual_pull(){
     }
 ]
 }
+
+function completed_task_start_time_end_time(D){
+  between_brackets_text = regex_between_brackets_pull(D.content)
+  if (between_brackets_text != null){
+
+  between_brackets_text_time = between_brackets_text.split("|")[0]
+  start_time = between_brackets_text_time.split("-")[0]
+  end_time = between_brackets_text_time.split("-")[1]
+  completed_date = moment(D['completed_date']).format("MM-DD-YYYY")
+
+  start_time_moment = moment(completed_date+ " "+start_time,"MM-DD-YYYY h:mm:ssa")
+  end_time_moment = moment(completed_date+ " "+end_time,"MM-DD-YYYY h:mm:ssa")
+  D.start_time =start_time_moment.format()
+  D.end_time =end_time_moment.format()
+  }
+  else {
+  D.start_time =null
+  D.end_time =null
+  }
+  return D
+
+}
+
 //get dictionary of current_tasks and completed_tasks
 function todoist_tasks_pull_custom_gspread(){
 
@@ -1084,6 +1107,8 @@ function todoist_tasks_pull_custom_gspread(){
 
   completed_tasks.forEach(function(D){D['task_type']='completed'})
   completed_tasks.forEach(function(D){D['task_date']=D['completed_date']})
+  completed_tasks.forEach(function(D){completed_task_start_time_end_time(D)})
+
 
 
   sheet_name = 'Tasks'
