@@ -579,6 +579,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                     <li class=""><a href="#tab-2" data-toggle="tab">Completed Tasks</a></li>
                     <li class=""><a href="#tab-3" data-toggle="tab">Food</a></li>
                     <li class=""><a href="#tab-4" data-toggle="tab">Expense</a></li>
+                    <li class=""><a href="#tab-5" data-toggle="tab">Stocks</a></li>
 
                 </ul>
 
@@ -604,6 +605,14 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
                 </div>
+                    <div class="tab-pane" id="tab-5">
+                          <table id="stocks_table" class="display" style="width:100%"></table>  
+
+
+
+                </div>
+
+
             </div>
 
 
@@ -1016,6 +1025,7 @@ function initiate_table_counters(){
 
     receipts_table()
     food_table()
+    stock_table()
 }
 setTimeout(initiate_table_counters,6000)
 

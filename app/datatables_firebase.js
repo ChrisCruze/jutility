@@ -199,9 +199,6 @@ function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_i
 }
 
 function datatable_generate(table_id,columns_list,editor,params){
-    console.log(params)
-    //input_data = input_data || {}
-    params = params || {}
 
     button_params = [
     { extend: "excel", title: document.title },

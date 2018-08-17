@@ -87,11 +87,86 @@ function papa_parse_array_from_file(params){
 
 
 
+function papa_parse_array_from_file_promise(params) {
+  return new Promise(
+    function(resolve) {
+        return resolve(papa_parse_array_from_file(params))
+    },
+    function(reject) {})
+}
 
 
 
 
 
+function papa_parse_multiple(files){
+
+
+//var files = [file_name_one, file_name_two];
+var allResults = [];
+
+for (var i = 0; i < files.length; i++)
+{
+    Papa.parse(files[i], {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        error: function(err, file, inputElem, reason) { /* handle*/ },
+        complete: function(results) {
+            allResults.push(results);
+            if (allResults.length == files.length)
+            {
+                result_result = allResults
+                // Do whatever you need to do
+            }
+        }
+    });
+}
+    return allResults
+
+}
+
+
+function papa_parse_multiple_promise(params) {
+
+  return new Promise(
+    function(resolve) {
+
+
+var allResults = [];
+
+for (var i = 0; i < files.length; i++)
+{
+    Papa.parse(files[i], {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        error: function(err, file, inputElem, reason) { /* handle*/ },
+        complete: function(results) {
+            allResults.push(results);
+            if (allResults.length == files.length)
+            {
+                resolve(allResults)
+                result_result = allResults
+                // Do whatever you need to do
+            }
+        }
+    });
+}
+
+    },
+    function(reject) {})
+}
+
+
+function papa_parse_multiple_promise_old(params) {
+
+  return new Promise(
+    function(resolve) {
+        return resolve(papa_parse_multiple(params))
+    },
+    function(reject) {})
+}
 
 
 

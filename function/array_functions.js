@@ -121,6 +121,7 @@ function array_check_keys(array,check_keys){
   array.forEach(function(item){
     dictionary_check_keys(item,check_keys)
   })
+  return array 
 }
 
 // turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists

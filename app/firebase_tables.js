@@ -60,7 +60,7 @@ function stock_table(){
 
 
 function update_stock_data(){
-    table_data = $("#table").DataTable().data().toArray()
+    table_data = $("#stocks_table").DataTable().data().toArray()
     stock_symbols = _.map(table_data,function(D){return D['symbol'].toUpperCase()})
     live_stock_data = stocks_batch_pull(stock_symbols)
     console.log(live_stock_data)
@@ -91,9 +91,9 @@ function update_stock_data(){
 }
 
 
-function application_function(user){
+function stocks_table(user){
     return datatables_firebase({
-        table_selector:"#table",
+        table_selector:"#stocks_table",
         firebase_reference:ref,
         columns:[
             {data:'symbol',visible:true},
@@ -131,5 +131,5 @@ function application_function(user){
     })
 }
 
-return application_function()
+return stocks_table()
 }
