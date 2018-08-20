@@ -19,7 +19,8 @@
 <link href="https://cruz.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
-    <link href="https://cruz.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+<link href="https://cruz.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.9/metisMenu.min.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
 <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
@@ -123,11 +124,30 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 </style>
 </head>
-<body>
+<body class="pace-done mini-navbar">
 <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="active">
+                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Reports</span> <span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+
+                        
+                            <li class="active"><a href="omni.html">Omni</a></li>
+                            <li><a href="recurring_tasks.html">recurring_tasks</a></li>
+
+                            <li><a href="stock.html">Stock</a></li>
+                            <li><a href="expenses.html">Expenses</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
 <div id='navigation_side'></div>
 
-<div id="page-wrapper2" class="gray-bg">
+<div id="page-wrapper" class="gray-bg">
 <div class="row border-bottom">
         <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
@@ -934,7 +954,8 @@ function initiate_check_list_datatable(table_node){
     datatables_firebase({
         table_selector:"#checklist_table",
         firebase_reference:dbRef.ref('omni').child(table_node),
-        columns:['text','date',{'data':'rank','format':'rank'}]
+        columns:['name',{'data':'rag','format':'rag'},{'data':'rank','format':'rank'},{'data':'summary',visible:false},{'data':'group',visible:false},{'data':'identifier',visible:false}],
+        sort:'rank'
     })
 }
 
@@ -947,7 +968,7 @@ function load_firebase_blog_instance(){
 
 setTimeout(key_metrics_save_minute,5000)
 
-setTimeout(initiate_check_list_datatable,5000,'checklist')
+setTimeout(initiate_check_list_datatable,5000,'priorities')
 
 
 

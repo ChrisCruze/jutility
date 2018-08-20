@@ -52,6 +52,15 @@ function datatables_column_add_formatting_from_type(new_dictionary){
     if (new_dictionary.visible == 'false'){
         new_dictionary.visible = false
     }
+    if (new_dictionary.format == 'rag'||new_dictionary.format == 'rag'){
+        new_dictionary.render = function(data,type,row,meta){
+            field_name = new_dictionary.name
+            label_name = {'green':'label-primary','amber':'label-warning','red':'label-danger'}[data]||'label-primary'
+            span_element = $("<span>").append($("<span>", {"value":data,"field":field_name,"class": "rag label "+label_name}).text(data).clone()).html()
+            return span_element       
+          }
+    }
+
     if (new_dictionary.format == 'vote'||new_dictionary.format == 'rank'){
         new_dictionary.render = function(data,type,row,meta){
               cellData = parseFloat(data)||0
@@ -255,10 +264,47 @@ function datatable_generate(table_id,columns_list,editor,params){
     return table_example
 }
 
+function editor_rag_status(editor,table_id){
+    $(table_id).on("click", "tbody .rag", function(e) {
+        e.preventDefault()
+        var table = $(table_id).DataTable();
+        row_data = table.row($(this).closest('td')).data();
+        cell_data = table.cell( $(this).closest('td') ).data() 
+        field = $(this).attr('field')
+
+        change_value = 'green'//cell_data + iterator
+
+        if (cell_data == 'null'){
+            change_value = 'green'
+        }
+        if (cell_data == 'green'){
+            change_value = 'amber'
+        }
+        if (cell_data == 'amber'){
+            change_value = 'red'
+        }
+        if (cell_data == 'red'){
+            change_value = 'green'
+        }
+
+
+        
+        col_num_selector = $(this).closest('td')
+
+
+    editor
+        .edit(col_num_selector, false)
+        .set(field, change_value)
+        .submit();
+    });
+
+
+}
 function editor_rank_apply(editor,table_id){
 
     $(table_id).on("click", "tbody .rank", function(e) {
         e.preventDefault()
+        console.log(this)
         var table = $(table_id).DataTable();
         //cell_data = parseFloat(table.cell($(this).closest('td')).data())
         row_data = table.row($(this).closest('td')).data();
@@ -268,21 +314,8 @@ function editor_rank_apply(editor,table_id){
         cell_data = parseFloat(row_data[field])||0
 
         change_value = cell_data + iterator
-        // console.log(iterator)
-        // console.log('field')
-
-        // console.log(field)
-        // console.log('cell_data')
-
-        // console.log(cell_data)
-        // console.log('change_value')
-
-        // console.log(change_value)
-
         col_num_selector = $(this).closest('td')
-        //var col = $(col_num_selector).parent().children().index($(col_num_selector));
-        // console.log(col_num_selector)
-        // console.log(editor)
+
 
     editor
     .edit(col_num_selector, false)
@@ -458,7 +491,7 @@ function firebase_dataeditor_table_generate_core(params){
 // } );
 
     editor_rank_apply(editor,table_selector)
-
+    editor_rag_status(editor,table_selector)
     console.log(params)
     return table
 }

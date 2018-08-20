@@ -98,7 +98,7 @@ function datatables_generate_from_array(params){
 
 
     params.fields = datatable_column_fields_generate(columns ,params)
-    params.field_names  = _.map(fields,function(D){return D['data']})
+    params.field_names  = _.map(params.fields,function(D){return D['data']})
 
 
     params = dataeditor_options_from_arrays(
@@ -121,6 +121,7 @@ function datatables_generate_from_array(params){
 
 
     editor_rank_apply(params.editor,params.table_selector)
+    editor_rag_status(params.editor,params.table_selector)
 
 
 
