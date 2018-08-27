@@ -84,10 +84,10 @@ function datatable_generate_from_array(table_id,columns_list,editor,data,params)
 
 
 
-
-//{columns,table_selector,row_id,editor_create_function,editor_update_function,editor_delete_function}
+//
 function datatables_generate_from_array(params){
-	columns = params.columns 
+    console.log(Object.keys(params.data[0]))
+	columns = params.columns || Object.keys(params.data[0])
 	table_id = params.table_selector
 	row_id = params.row_id||'DT_RowId'
 

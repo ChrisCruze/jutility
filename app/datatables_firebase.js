@@ -24,7 +24,16 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.render = date_time_datatable_format_render_time_zone_adjust
         new_dictionary.type =  "datetime"
     }
+    if (new_dictionary.format == 'datetime'){
+        new_dictionary.render = date_time_datatable_format_render
+        new_dictionary.type =  "datetime"
+    }
 
+
+    if (new_dictionary.format == 'date_days'){
+        new_dictionary.render = date_time_datatable_format_render_days
+        new_dictionary.type =  "datetime"
+    }
 
     if (new_dictionary.format == 'date'){
         new_dictionary.render = date_time_datatable_format_render
@@ -84,6 +93,7 @@ function datatable_column_fields_generate(custom_fields,params){
             custom_field_name = custom_field['data']
             custom_dictionary = {data:custom_field_name, name: custom_field_name,title:custom_field_name,label: custom_field_name}
             new_dictionary = combine_dicts(custom_dictionary,custom_field)
+            console.log(new_dictionary)
             datatables_column_add_formatting_from_type(new_dictionary)
         }
         else {

@@ -425,6 +425,28 @@ function papa_parse_multiple_promise_old(params) {
 
 //html_functions.js
 
+//(document.getElementById("my_div")
+function backdrop(element) {
+  if ($(element).attr('highlight') != 'true') {
+    cover = document.createElement("div");
+    cover.style.height = "100%";
+    cover.style.width = "100%";
+    cover.style.backgroundColor = "black";
+    cover.style.opacity = "0.8";
+    cover.style.position = "fixed";
+    cover.style.top = "0px";
+    cover.style.left = "0px";
+    cover.style.zIndex = "1";
+    document.body.appendChild(cover);
+    element.style.position = "relative";
+    element.style.zIndex = "2";
+    $(element).attr('highlight','true')
+  } else {
+    document.body.removeChild(cover);
+    $(element).attr('highlight','false')
+    element.style.zIndex = "0";
+  }
+}
 
 
 
@@ -1306,488 +1328,419 @@ function crossfilter_generate(params){
 
 //get table data from datatables table
 function datatables_data_get(table){
-  return table.data().toArray();
+return table.data().toArray();
 }
-
 function vote_created_cell_editor(field_name){
-
-
 function vote_created_cell_core(td, cellData, rowData, row, col) {
-  cellData = parseFloat(cellData)||0
-  $(td).html( '<div class="vote-actions"> <a href="#" class="rank up" iterator="1" field="'+field_name+'"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="rank down" iterator="-1" field="'+field_name+'"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
-
-
-
-
-} 
+cellData = parseFloat(cellData)||0
+$(td).html( '<div class="vote-actions"> <a href="#" class="rank up" iterator="1" field="'+field_name+'"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="rank down" iterator="-1" field="'+field_name+'"> <i class="fa fa-chevron-down"> </i> </a> </div>')
+}
 return vote_created_cell_core
-
 }
-
-
 function option_select_dropdown_datatables_from_options(params){
-  function option_select_dropdown_datatables(td, cellData, rowData, row, col) {
-    select_div = $('<select class="selectpicker form-control" data-size="5" data-header="Select a stage" data-actions-box="true"> </select> ')
-    params.options.forEach(function(option){
-      is_selected = cellData == option
-      select_div.append($("<option>", {"id":option,"selected":is_selected}).text(option))
-    })
-    //console.log(select_div)
-    //select_div.selectpicker()
-    master_div = $('<div class="form-group"> </div>')
-    master_div.append(select_div)
-    $(td).html(master_div)
-
-   // $("#"+cellData).attr('selected',true)
-
-
-    //$(td).append(master_div)
-        //$('.selectpicker').selectpicker()
-
-  }
-
-
-
-  return option_select_dropdown_datatables
+function option_select_dropdown_datatables(td, cellData, rowData, row, col) {
+select_div = $('<select class="selectpicker form-control" data-size="5" data-header="Select a stage" data-actions-box="true"> </select> ')
+params.options.forEach(function(option){
+is_selected = cellData == option
+select_div.append($("<option>", {"id":option,"selected":is_selected}).text(option))
+})
+//console.log(select_div)
+//select_div.selectpicker()
+master_div = $('<div class="form-group"> </div>')
+master_div.append(select_div)
+$(td).html(master_div)
+// $("#"+cellData).attr('selected',true)
+//$(td).append(master_div)
+//$('.selectpicker').selectpicker()
 }
-
+return option_select_dropdown_datatables
+}
 function vote_created_cell(td, cellData, rowData, row, col) {
-
-  $(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>') 
-  $('.vote_up').on('click', function (e) { 
-    console.log('up')
-    console.log(cellData)
-    console.log(td)
-    console.log(rowData)
-    console.log(row)
-    console.log(col)
-    console.log($(this))
-  })
-  $('.vote_down').on('click', function (e) { 
-    console.log('down')
-    console.log(rowData)
-    console.log($(this))
-  })
-
-
-
-    // editor
-    // .edit(this, false)
-    // .set("status", change_value)
-    // .submit();
-} 
-
+$(td).html( '<div class="vote-actions"> <a href="#" class="vote_up"> <i class="fa fa-chevron-up"> </i> </a> <div>'+cellData+'</div> <a href="#" class="vote_down"> <i class="fa fa-chevron-down"> </i> </a> </div>')
+$('.vote_up').on('click', function (e) {
+console.log('up')
+console.log(cellData)
+console.log(td)
+console.log(rowData)
+console.log(row)
+console.log(col)
+console.log($(this))
+})
+$('.vote_down').on('click', function (e) {
+console.log('down')
+console.log(rowData)
+console.log($(this))
+})
+// editor
+// .edit(this, false)
+// .set("status", change_value)
+// .submit();
+}
 //add bar chart within the cell
 function bar_create_datatable_cell(td, cellData, rowData, row, col) {
-
-  title_text = cellData
-  id = cellData
-  percentage = rowData['percentage']||50
-  color = 'danger'
-  parent_identifier = null
-  metric_text = percentage + "%"
-  $(td).html(list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color,metric_text));
+title_text = cellData
+id = cellData
+percentage = rowData['percentage']||50
+color = 'danger'
+parent_identifier = null
+metric_text = percentage + "%"
+$(td).html(list_progress_bar_list_element_thick(title_text,id,percentage,parent_identifier,color,metric_text));
 }
-
-
 //This searches and filters https://datatables.net/examples/plug-ins/range_filtering.html || https://datatables.net/manual/plug-ins/search
 function datatable_search_filter(){
-
-
-
 $.fn.dataTable.ext.search.push(
-    function( settings, searchData, index, rowData, counter ) {
-        var min = parseInt( $('#min').val(), 10 );
-        var max = parseInt( $('#max').val(), 10 );
-        var age = parseFloat( searchData[3] ) || 0; // using the data from the 4th column
-  
-        if ( ( isNaN( min ) && isNaN( max ) ) ||
-             ( isNaN( min ) && age <= max ) ||
-             ( min <= age   && isNaN( max ) ) ||
-             ( min <= age   && age <= max ) )
-        {
-            return true;
-        }
-        return false;
-    }
-);
+function( settings, searchData, index, rowData, counter ) {
+var min = parseInt( $('#min').val(), 10 );
+var max = parseInt( $('#max').val(), 10 );
+var age = parseFloat( searchData[3] ) || 0; // using the data from the 4th column
 
-
-$.fn.dataTable.ext.search.push(
-    function( settings, data, dataIndex ) {
-        var min = parseInt( $('#min').val(), 10 );
-        var max = parseInt( $('#max').val(), 10 );
-        var age = parseFloat( data[3] ) || 0; // use data for the age column
- 
-        if ( ( isNaN( min ) && isNaN( max ) ) ||
-             ( isNaN( min ) && age <= max ) ||
-             ( min <= age   && isNaN( max ) ) ||
-             ( min <= age   && age <= max ) )
-        {
-            return true;
-        }
-        return false;
-    }
-);
-    var table = $('#example').DataTable();
-
-        table.draw();
-
-
+if ( ( isNaN( min ) && isNaN( max ) ) ||
+( isNaN( min ) && age <= max ) ||
+( min <= age   && isNaN( max ) ) ||
+( min <= age   && age <= max ) )
+{
+return true;
 }
+return false;
+}
+);
+$.fn.dataTable.ext.search.push(
+function( settings, data, dataIndex ) {
+var min = parseInt( $('#min').val(), 10 );
+var max = parseInt( $('#max').val(), 10 );
+var age = parseFloat( data[3] ) || 0; // use data for the age column
 
-
-
-
+if ( ( isNaN( min ) && isNaN( max ) ) ||
+( isNaN( min ) && age <= max ) ||
+( min <= age   && isNaN( max ) ) ||
+( min <= age   && age <= max ) )
+{
+return true;
+}
+return false;
+}
+);
+var table = $('#example').DataTable();
+table.draw();
+}
 //add filterable column headers for datatables
 function column_header_filterable_autocomplete_apply(table_object,number_of_columns){
-  l = []
-  for(var i=0; i < number_of_columns ; i++){
-    l.push({column_number : i, filter_type: "auto_complete", text_data_delimiter: ","})
-  }
-  yadcf.init(table_object, l)
-
+l = []
+for(var i=0; i < number_of_columns ; i++){
+l.push({column_number : i, filter_type: "auto_complete", text_data_delimiter: ","})
 }
-
-
+yadcf.init(table_object, l)
+}
 //add a filter to the column header of the datatable (https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js , https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css | https://github.com/vedmack/yadcf)
 function header_filter_add_datatable(){
-
 var myTable = $('#example').DataTable();
-  
-  yadcf.init(myTable, [
-    {column_number : 0},
-    {column_number : 1, filter_type: "range_number_slider", filter_container_id: "external_filter_container"},
-    {column_number : 2, data: ["Yes", "No"], filter_default_label: "Select Yes/No"},
-    {column_number : 3, filter_type: "auto_complete", text_data_delimiter: ","},
-    {column_number : 4, column_data_type: "html", html_data_type: "text", filter_default_label: "Select tag"}]);
 
-
-  table = $('#example').dataTable()
-  table.yadcf([
-    {column_number : 0},
-      {column_number : 1,  filter_type: "range_number_slider", filter_container_id: "external_filter_container"},
-      {column_number : 2, data: ["Yes", "No"], filter_default_label: "Select Yes/No"},
-      {column_number : 3, text_data_delimiter: ",", filter_type: "auto_complete"},
-      {column_number : 4, column_data_type: "html", html_data_type: "text", filter_default_label: "Select tag"}]);
+yadcf.init(myTable, [
+{column_number : 0},
+{column_number : 1, filter_type: "range_number_slider", filter_container_id: "external_filter_container"},
+{column_number : 2, data: ["Yes", "No"], filter_default_label: "Select Yes/No"},
+{column_number : 3, filter_type: "auto_complete", text_data_delimiter: ","},
+{column_number : 4, column_data_type: "html", html_data_type: "text", filter_default_label: "Select tag"}]);
+table = $('#example').dataTable()
+table.yadcf([
+{column_number : 0},
+{column_number : 1,  filter_type: "range_number_slider", filter_container_id: "external_filter_container"},
+{column_number : 2, data: ["Yes", "No"], filter_default_label: "Select Yes/No"},
+{column_number : 3, text_data_delimiter: ",", filter_type: "auto_complete"},
+{column_number : 4, column_data_type: "html", html_data_type: "text", filter_default_label: "Select tag"}]);
 }
-
 function datatables_search_negate(dt,search_word){
-  dt.columns('status:name').search('^((?!'+search_word+').)*$',true,false).draw()
+dt.columns('status:name').search('^((?!'+search_word+').)*$',true,false).draw()
 }
-
 //how to search with datatables
 function datatables_search(dt){
-  dt.columns('task_type:name').search('current').draw()
+dt.columns('task_type:name').search('current').draw()
 }
-//add a record to datatables 
+//add a record to datatables
 function row_add_datatables(table,dictionary_obj){
-    table.row.add(dictionary_obj).draw( false );
+table.row.add(dictionary_obj).draw( false );
 }
-
 //update label of status of rag (created: 5/28/18)
 function url_create_datatables(td, cellData, rowData, row, col){
-  title = rowData.name||rowData.title
-  return $(td).html("<a target='_blank' href='"+cellData+"'>" +title + "</a>")
+title = rowData.name||rowData.title
+return $(td).html("<a target='_blank' href='"+cellData+"'>" +title + "</a>")
 }
-
 //update label of status of rag (created: 5/28/18)
 function airbnb_url_create_datatables(td, cellData, rowData, row, col){
-  airbnb_url = rowData.airbnb_url
-  title = rowData.title
-  return $(td).html("<a target='_blank' href='"+airbnb_url+"'>" +title + "</a>")
+airbnb_url = rowData.airbnb_url
+title = rowData.title
+return $(td).html("<a target='_blank' href='"+airbnb_url+"'>" +title + "</a>")
 }
-
-
-//get the data from the api 
+//get the data from the api
 function datatables_data_get_from_api(table_id){
-  table_id = table_id||"#table"
-  return $(table_id).DataTable().api().rows({ page: "current" }).data();
+table_id = table_id||"#table"
+return $(table_id).DataTable().api().rows({ page: "current" }).data();
 }
-
-
 //parse the float to two decimals
 function parse_float_datatable_format(td, cellData, rowData, row, col) {
-  r = parseFloat(cellData)||0
-  r = r.toFixed(2)
-  $(td).html(r)
+r = parseFloat(cellData)||0
+r = r.toFixed(2)
+$(td).html(r)
 }
-
 //used by cleaners.html to format check in
 function date_format_check_in(td, cellData, rowData, row, col){
-  date_format = moment(cellData).format("MM/DD/YY (dd)")
-  $(td).html(date_format)
-
+date_format = moment(cellData).format("MM/DD/YY (dd)")
+$(td).html(date_format)
 }
-
-//used by cleaners.html and others to create guest url 
+//used by cleaners.html and others to create guest url
 function guest_url_create(data, type, row, meta){
-    url = "https://app.guesty.com/reservations/"+row._id+"/inbox"
-    data = '<a target="_blank"  href="' + url + '">' + data + '</a>';
-    return data;
-  }
-
+url = "https://app.guesty.com/reservations/"+row._id+"/inbox"
+data = '<a target="_blank"  href="' + url + '">' + data + '</a>';
+return data;
+}
 //format the datatables date with the date and time
 function date_time_datatable_format_render_seconds(data,type,row,meta) {
-  if (moment(data).isValid()){
-
-    date_format = moment(data).format("MM/DD/YY hh:mm:ssA (dd)")
-    date_format_from = moment(data).fromNow()
-  }
-  else {
-    date_format = moment(data,"MM-DD-YYYY h:mm a").format("MM/DD/YY hh:mmA (dd)") 
-    date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
-
-
-  }
-  return '<span title="'+date_format_from+'">'+date_format+'</span>'
-  //$(td).attr('title',moment(cellData).fromNow())
-  //$(td).html(date_format);
+if (moment(data).isValid()){
+date_format = moment(data).format("MM/DD/YY hh:mm:ssA (dd)")
+date_format_from = moment(data).fromNow()
 }
-
-
+else {
+date_format = moment(data,"MM-DD-YYYY h:mm a").format("MM/DD/YY hh:mmA (dd)")
+date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+}
+return '<span title="'+date_format_from+'">'+date_format+'</span>'
+//$(td).attr('title',moment(cellData).fromNow())
+//$(td).html(date_format);
+}
+//format the datatables date with the date and time
+function date_time_datatable_format_render_days(data,type,row,meta) {
+if (moment(data).isValid()){
+date_format = moment(data).format("YYYY-MM-DD")
+date_format_from = moment(data).fromNow()
+}
+else {
+date_format = moment(data,"MM-DD-YYYY h:mm a").format("YYYY-MM-DD")
+date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+}
+return '<span title="'+date_format_from+'">'+date_format+'</span>'
+//$(td).attr('title',moment(cellData).fromNow())
+//$(td).html(date_format);
+}
+//format the datatables date with the date and time
+function date_time_datatable_format_render_seconds(data,type,row,meta) {
+if (moment(data).isValid()){
+date_format = moment(data).format("MM/DD/YY hh:mm:ssA (dd)")
+date_format_from = moment(data).fromNow()
+}
+else {
+date_format = moment(data,"MM-DD-YYYY h:mm a").format("MM/DD/YY hh:mmA (dd)")
+date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+}
+return '<span title="'+date_format_from+'">'+date_format+'</span>'
+//$(td).attr('title',moment(cellData).fromNow())
+//$(td).html(date_format);
+}
 //format the datatables date with the date and time
 function moment_from_now_reder(data,type,row,meta) {
-  date_format_from_now = moment(data).fromNow()
-  date_format_text = moment(data).format("MM/DD/YY hh:mmA (dd)") 
-  return '<span "title"="'+date_format_text+'">'+date_format_from_now+'</span>'
-
+date_format_from_now = moment(data).fromNow()
+date_format_text = moment(data).format("MM/DD/YY hh:mmA (dd)")
+return '<span "title"="'+date_format_text+'">'+date_format_from_now+'</span>'
 }
-
-
 //format the datatables date with the date and time
 function number_format_render(data,type,row,meta) {
-  num =  parseFloat(data)||'NaN'
-  if (num != 'NaN'){
-    r = num.toFixed(1)
-  }
-  else {
-    r = num 
-  }
-  return r 
-  //$(td).attr('title',moment(cellData).fromNow())
-  //
-
+num =  parseFloat(data)||'NaN'
+if (num != 'NaN'){
+r = num.toFixed(1)
+}
+else {
+r = num
+}
+return r
+//$(td).attr('title',moment(cellData).fromNow())
+//
 }
 //format the datatables date with the date and time
 function date_time_datatable_format_render(data,type,row,meta) {
-  if (moment(data).isValid()){
-
-    date_format = moment(data).format("MM/DD/YY hh:mmA (dd)")
-    date_format_from = moment(data).fromNow()
-  }
-  else {
-    date_format = moment(data,"MM-DD-YYYY h:mm a").format("MM/DD/YY hh:mmA (dd)") 
-    date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
-
-
-  }
-
-  return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
-  //$(td).attr('title',moment(cellData).fromNow())
-  //$(td).html(date_format);
+if (moment(data).isValid()){
+date_format = moment(data).format("MM/DD/YY hh:mmA (dd)")
+date_format_from = moment(data).fromNow()
 }
-
+else {
+date_format = moment(data,"MM-DD-YYYY h:mm a").format("MM/DD/YY hh:mmA (dd)")
+date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+}
+return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
+//$(td).attr('title',moment(cellData).fromNow())
+//$(td).html(date_format);
+}
 function date_time_datatable_format_render_time_zone_adjust(data,type,row,meta) {
-  if (moment(data).isValid()){
-
-    date_format = moment(data).subtract(4,'hours').format("MM/DD/YY hh:mmA (dd)")
-    date_format_from = moment(data).fromNow()
-  }
-  else {
-    date_format = moment(data,"MM-DD-YYYY h:mm a").subtract(4,'hours').format("MM/DD/YY hh:mmA (dd)") 
-    date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
-
-
-  }
-
-  return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
-  //$(td).attr('title',moment(cellData).fromNow())
-  //$(td).html(date_format);
+if (moment(data).isValid()){
+date_format = moment(data).subtract(4,'hours').format("MM/DD/YY hh:mmA (dd)")
+date_format_from = moment(data).fromNow()
+}
+else {
+date_format = moment(data,"MM-DD-YYYY h:mm a").subtract(4,'hours').format("MM/DD/YY hh:mmA (dd)")
+date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+}
+return '<span "title"="'+date_format_from+'">'+date_format+'</span>'
+//$(td).attr('title',moment(cellData).fromNow())
+//$(td).html(date_format);
 }
 //format the datatables date with the date and time
 function date_time_datatable_format(td, cellData, rowData, row, col) {
-  date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");
-  $(td).attr('title',moment(cellData).fromNow())
-  $(td).html(date_format);
+date_format = moment(cellData).format("MM/DD/YY hh:mmA (dd)");
+$(td).attr('title',moment(cellData).fromNow())
+$(td).html(date_format);
 }
-
-
-//simple datatable from array 
+//simple datatable from array
 function data_table_simple(array,div_id){
-  key_names = Object.keys(array[0])
-  columns_list = []
-  key_names.forEach(function(i){
-    columns_list.push({data:i,title:i,name:i})
-  })
-  div_id = div_id || "#table"
-  array.forEach(function(D){
-          key_check_func_dictionary(key_names,D)
+key_names = Object.keys(array[0])
+columns_list = []
+key_names.forEach(function(i){
+columns_list.push({data:i,title:i,name:i})
+})
+div_id = div_id || "#table"
+array.forEach(function(D){
+key_check_func_dictionary(key_names,D)
 
-    
-  })
-
-  return $(div_id).DataTable({
-  paging: false,
-  dom: '<"html5buttons"B>lTfgitp',
-  data: array,
-  columns:columns_list,
-  select: true,
-  colReorder: true,
-  buttons: [
-    { extend: "excel", title: document.title },
-    { extend: "colvis", title: document.title }
-  ],
-  order: [3, "desc"]
+})
+return $(div_id).DataTable({
+paging: false,
+dom: '<"html5buttons"B>lTfgitp',
+data: array,
+columns:columns_list,
+select: true,
+colReorder: true,
+buttons: [
+{ extend: "excel", title: document.title },
+{ extend: "colvis", title: document.title }
+],
+order: [3, "desc"]
 });
-
 }
-
 //when you click on row, it changes the value
 function clickable_change_value(table_id,editor,){
-  table_id = table_id||"#table"
-  $(table_id).on("click", "tbody td", function(e) {
-  var table = $(table_id).DataTable();
-  row_data = table.row(this).data();
-  if (row_data.status == 'Green'){
-    change_value = 'Red'
-  }
-  else {
-    change_value = 'Green'
-  }
-  row_data['status'] = change_value
-  editor
-    .edit(this, false)
-    .set("status", change_value)
-    .submit();
-    status_format(this, row_data.name, row_data, 1, 1)
+table_id = table_id||"#table"
+$(table_id).on("click", "tbody td", function(e) {
+var table = $(table_id).DataTable();
+row_data = table.row(this).data();
+if (row_data.status == 'Green'){
+change_value = 'Red'
+}
+else {
+change_value = 'Green'
+}
+row_data['status'] = change_value
+editor
+.edit(this, false)
+.set("status", change_value)
+.submit();
+status_format(this, row_data.name, row_data, 1, 1)
 });
 }
-
-
 //update label of status of rag (created: 5/28/18)
 function status_format_datatables(td, cellData, rowData, row, col){
-    if (rowData.status == 'Green'){
-      html_result = '<span class="label label-primary" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
-    }
-    else if (rowData.status  == 'Amber'){
-      html_result = '<span class="label label-warning" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
-    }
-    else if (rowData.status  == 'Red'){
-      html_result = '<span class="label label-danger" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
-    }
-    else if (rowData.status  == 'Red'){
-      html_result = '<span class="label label-danger" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
-    }
-    else {
-      html_result = '<span class="label" style="min-width: 55px ;display: inline-block">'+cellData  +'</span>'
-    }
-    $(td).html(html_result)
+if (rowData.status == 'Green'){
+html_result = '<span class="label label-primary" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
 }
-
+else if (rowData.status  == 'Amber'){
+html_result = '<span class="label label-warning" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
+}
+else if (rowData.status  == 'Red'){
+html_result = '<span class="label label-danger" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
+}
+else if (rowData.status  == 'Red'){
+html_result = '<span class="label label-danger" style="min-width: 55px ;display: inline-block">'+cellData+'</span>'
+}
+else {
+html_result = '<span class="label" style="min-width: 55px ;display: inline-block">'+cellData  +'</span>'
+}
+$(td).html(html_result)
+}
 //convenience function for custom fields
 function datatable_fields_array_from_custom_fields(custom_fields){
-  l = []
-  custom_fields.forEach(function(custom_field){
-    new_dictionary = {data:custom_field, name: custom_field,title:custom_field}
-    l.push(new_dictionary)
-  })
-  return l 
+l = []
+custom_fields.forEach(function(custom_field){
+new_dictionary = {data:custom_field, name: custom_field,title:custom_field}
+l.push(new_dictionary)
+})
+return l
 }
-
-
 //convenience function for custom fields
 function editor_fields_array_from_custom_fields(custom_fields){
-  l = []
-  custom_fields.forEach(function(custom_field){
-    new_dictionary = { label: custom_field + ":", name: custom_field }
-    l.push(new_dictionary)
-  })
-  return l 
+l = []
+custom_fields.forEach(function(custom_field){
+new_dictionary = { label: custom_field + ":", name: custom_field }
+l.push(new_dictionary)
+})
+return l
 }
-
-
-
 //this should go at top of datatables
 function sort_by_unix_datatabes(){
-	$.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
-	  r = moment(d).utc();
-	  return r;
-	};
+$.fn.dataTable.ext.type.order["date-format-moment-pre"] = function(d) {
+r = moment(d).utc();
+return r;
+};
 }
-
 //based on filter from table , update a funciton
 function callback_function_sum_datatables(variable_name){
-  var api = this.api();
-  variable_name = api.column(variable_name+":name", {page:'current'} ).data().sum()
-  return api 
+var api = this.api();
+variable_name = api.column(variable_name+":name", {page:'current'} ).data().sum()
+return api
 }
-
 //format the datatables date with the date
 function date_format_with_day(td, cellData, rowData, row, col) {
-  date_format = moment(cellData).format("MM/DD/YY (dd)");
-  $(td).html(date_format);
+date_format = moment(cellData).format("MM/DD/YY (dd)");
+$(td).html(date_format);
 }
-
 //format the date as its created
 function date_format_created_moment_datatables(td, cellData, rowData, row, col) {
-  date_format = moment(cellData).format("MMM-YYYY");
-  $(td).html(date_format);
+date_format = moment(cellData).format("MMM-YYYY");
+$(td).html(date_format);
 }
-
-
 function editor_initiate(table_id,fields_list){
-	fields_list == fields_list|| [{label: "Custom Field:",name: "custom_field"}]
-	editor = new $.fn.dataTable.Editor( {
-      table: table_id,
-      fields:fields_list,
-      idSrc:  'id'
- 	 });
-	return editor
-
+fields_list == fields_list|| [{label: "Custom Field:",name: "custom_field"}]
+editor = new $.fn.dataTable.Editor( {
+table: table_id,
+fields:fields_list,
+idSrc:  'id'
+});
+return editor
 }
 //process the response from the psot submit
 function editor_post_submit_function_datatables(func){
-	editor.on( 'postSubmit', function (e, json, data, action, xhr) {
-	    json_array = json.data
-	    json_array.forEach(function(D){
-	    	func(D)
-	    })
-  	});
+editor.on( 'postSubmit', function (e, json, data, action, xhr) {
+json_array = json.data
+json_array.forEach(function(D){
+func(D)
+})
+});
 }
-
 function datatables_initiate_render(table_id,columns_list,editor,input_data){
-  input_data = input_data || {}
-	table_example = $(table_id).DataTable({
-    dom: '<"html5buttons"B>lTfgitp',
-    data: [],
-    columns:columns_list,
-    // columns: [
-    //   {data:'account_name',title:'Account Name',name:'Account Name',visible:true},
-    //   {data:'amount',title:'Amount',name:'Amount',visible:true},
-    //   {data:'category',title:'Category',name:'Category',visible:true},
-    //   {data:'date',title:'Date',name:'Date',visible:true,type: "date-format-moment"},
-    //   {data:'month',title:'Month',name:'month',visible:true},
-    //   {data:'description',title:'Description',name:'Description',visible:true},
-    //   {data:'labels',title:'Labels',name:'Labels',visible:false},
-    //   {data:'notes',title:'Notes',name:'Notes',visible:false},
-    //   {data:'original_description',title:'Original Description',name:'Original Description',visible:false},
-    //   {data:'transaction_type',title:'Transaction Type',name:'Transaction Type',visible:true}
-
-    // ],
-    select: true,
-    colReorder: true,
-    buttons: [
-                { extend: "excel", title: document.title },
-                { extend: "colvis", title: document.title },
-                { extend: 'create', editor: editor },
-                { extend: "edit", editor: editor },
-                {text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
-                  dt.columns('').search('').draw()
-                }}]
-  });
-
-  return table_example
+input_data = input_data || {}
+table_example = $(table_id).DataTable({
+dom: '<"html5buttons"B>lTfgitp',
+data: [],
+columns:columns_list,
+// columns: [
+//   {data:'account_name',title:'Account Name',name:'Account Name',visible:true},
+//   {data:'amount',title:'Amount',name:'Amount',visible:true},
+//   {data:'category',title:'Category',name:'Category',visible:true},
+//   {data:'date',title:'Date',name:'Date',visible:true,type: "date-format-moment"},
+//   {data:'month',title:'Month',name:'month',visible:true},
+//   {data:'description',title:'Description',name:'Description',visible:true},
+//   {data:'labels',title:'Labels',name:'Labels',visible:false},
+//   {data:'notes',title:'Notes',name:'Notes',visible:false},
+//   {data:'original_description',title:'Original Description',name:'Original Description',visible:false},
+//   {data:'transaction_type',title:'Transaction Type',name:'Transaction Type',visible:true}
+// ],
+select: true,
+colReorder: true,
+buttons: [
+{ extend: "excel", title: document.title },
+{ extend: "colvis", title: document.title },
+{ extend: 'create', editor: editor },
+{ extend: "edit", editor: editor },
+{text: 'Clear',name:'Clear', action: function ( e, dt, node, config ) {
+dt.columns('').search('').draw()
+}}]
+});
+return table_example
 }
 //excel_functions.js
 
@@ -2300,13 +2253,21 @@ function time_since_start_time_moment_compare(end_time,start_time){
     return time_text
  }
 
+function hours_difference_moment(startTime,end){
+  var duration = moment.duration(end.diff(startTime));
+  var hours = duration.asHours();
+  return hours
+}
 //used in create_task_v2 to keep track of time
 function time_since_start_time_moment(start_time){
     now = moment().valueOf()  //now is the time right now
     start_time_instance = moment(start_time).valueOf()
     elapsed = now - start_time_instance;
+    days_calculated = elapsed / (1000*60*60*24)
     time_text_value = moment(elapsed).subtract({hours: 19}); //have to subtract 19 hours for some reason
+    days_passed = time_text_value.days() - 3
     time_text = time_text_value.format("HH:mm:ss")
+    time_text = days_passed +":"+ time_text
     return time_text
  }
 
@@ -4299,10 +4260,10 @@ function datatable_generate_from_array(table_id,columns_list,editor,data,params)
 
 
 
-
-//{columns,table_selector,row_id,editor_create_function,editor_update_function,editor_delete_function}
+//
 function datatables_generate_from_array(params){
-	columns = params.columns 
+    console.log(Object.keys(params.data[0]))
+	columns = params.columns || Object.keys(params.data[0])
 	table_id = params.table_selector
 	row_id = params.row_id||'DT_RowId'
 
@@ -4336,6 +4297,7 @@ function datatables_generate_from_array(params){
 
 
     editor_rank_apply(params.editor,params.table_selector)
+    editor_rag_status(params.editor,params.table_selector)
 
 
 
@@ -4374,7 +4336,16 @@ function datatables_column_add_formatting_from_type(new_dictionary){
         new_dictionary.render = date_time_datatable_format_render_time_zone_adjust
         new_dictionary.type =  "datetime"
     }
+    if (new_dictionary.format == 'datetime'){
+        new_dictionary.render = date_time_datatable_format_render
+        new_dictionary.type =  "datetime"
+    }
 
+
+    if (new_dictionary.format == 'date_days'){
+        new_dictionary.render = date_time_datatable_format_render_days
+        new_dictionary.type =  "datetime"
+    }
 
     if (new_dictionary.format == 'date'){
         new_dictionary.render = date_time_datatable_format_render
@@ -4434,6 +4405,7 @@ function datatable_column_fields_generate(custom_fields,params){
             custom_field_name = custom_field['data']
             custom_dictionary = {data:custom_field_name, name: custom_field_name,title:custom_field_name,label: custom_field_name}
             new_dictionary = combine_dicts(custom_dictionary,custom_field)
+            console.log(new_dictionary)
             datatables_column_add_formatting_from_type(new_dictionary)
         }
         else {
@@ -5438,6 +5410,44 @@ return todoist_gspread_pull
 
 //firebase_tables.js
 
+function run_table(firebase_reference,table_selector){
+    function callback_function(data){
+        console.log(data)
+        // data.forEach(function(D){D['cost'] = D['file_name'].split(' ')[0] })
+        // val = sum_float_convert_from_array_underscore(data,'cost').toFixed(1)
+        // $("#expense_cost").html(val)
+    }
+
+
+
+    columns = [
+    {data: 'notes',title: 'notes',visible:true,name:'notes'},
+    {data: 'calories',title: 'Calories',visible:true,name:'calories'},
+    // {data: 'miles',title: 'miles',visible:true,name:'miles'},
+    // {data: 'minutes',title: 'minutes',visible:true,name:'minutes'},
+    // {data: 'time_stamp',title: 'time_stamp',visible:true,name:'time_stamp',format:'date_adjust'},
+    //{data: 'speed',title: 'speed',visible:true,name:'speed'}
+    ]
+
+
+    params = datatables_firebase({
+                firebase_reference:firebase_reference,//dbRef.ref('receipts')
+                table_selector:table_selector,//table_selector
+                columns_generate:true,
+                default_visible:true,
+                //callback_function:callback_function,
+                columns: columns,
+                //sort:'time_stamp',
+                //callback_function:visits_callback,
+
+            })
+    return params
+
+}
+
+
+
+
 function receipts_table(){
 	function callback_function(data){
 		data.forEach(function(D){D['cost'] = D['file_name'].split(' ')[0] })
@@ -5575,66 +5585,76 @@ return stocks_table()
 }
 //intermittent_timer.js
 
-//update the html of the timer
-function html_timer_update_from_jquery_intermittent(start_timer){
-	//console.log(start_timer)
-    time_text = time_since_start_time_moment(start_timer)
-    //console.log(time_text)
-    $("#intermittent_timer").find(".metric_text").html(time_text)
-
-    end_text = time_since_start_time_moment_to(moment(start_timer).add('hours',18).format())
-    $("#intermittent_timer").find(".sub_title").html(end_text)
-
-//moment(start_timer).add('hours',18).format()
-    $("#intermittent_timer").find(".sub_title").attr('title',"Fast then: "+moment(start_timer).add({'hours': 8}).format('YYYY-MM-DD h:mm:ssa'))
+function html_timer_update_from_jquery_intermittent(start_timer,drogas_array){
 
 
-     $("#intermittent_timer").find(".metric_text").attr('title',moment(start_timer).format('YYYY-MM-DD h:mm:ssa'))
-
-
-    end_text_eight = time_since_start_time_moment_to(moment(start_timer).add('hours',8).format())
-    $("#intermittent_timer").find(".sub_metric_text").html(end_text_eight)
-
-
-    $("#intermittent_timer").find(".sub_metric_text").attr('title',"Eat Then: "+moment(start_timer).add({'hours': 16}).format('YYYY-MM-DD h:mm:ssa'))
+    
+time_text = time_since_start_time_moment(start_timer)
+$("#intermittent_timer").find(".metric_text").html(time_text)
 
 
 
-    //https://shippy-ac235.firebaseio.com/cruz_control/food2.json
+drogas_array.forEach(function(D){D['remaining_in_system'] = dose_remaining_now(D)})
+in_system = sum_float_convert_from_array_underscore(drogas_array,'remaining_in_system')
+end_text = in_system.toFixed(3)
+
+
+last_time = moment(start_timer).format('MM/DD h:mma')
+
+$("#intermittent_timer").find(".sub_title").html(last_time)
+$("#intermittent_timer").find(".sub_metric_text").html(end_text)
+
+
 
 }
 
 
-function start_intermittent_timer(){
 
+
+
+
+
+
+
+
+
+
+
+//date_time
+function start_drogas_timer(l){
+    $('#metric_headers').append(metric_header_create_label('Timer',sub_title,metric_text,sub_metric_text,'intermittent_timer'))
+    //$('#metric_headers').append(metric_header_create_label('Cals',sub_title,metric_text,sub_metric_text,'calorie_counter'))
+
+    max_dict = max_date_from_array_underscore(l,'date_time')
+    setInterval(html_timer_update_from_jquery_intermittent,1000,max_dict['date_time'],l)
+    //html_timer_update_from_jquery_intermittent(max_dict['time_stamp'])
+}
+
+
+
+
+
+
+function start_intermittent_timer(){
 $('#metric_headers').append(metric_header_create_label('Timer',sub_title,metric_text,sub_metric_text,'intermittent_timer'))
 $('#metric_headers').append(metric_header_create_label('Cals',sub_title,metric_text,sub_metric_text,'calorie_counter'))
 
 
+
 var firebaseRef = dbRef.ref('cruz_control').child('food2');
 l = firebase_json_pull("https://shippy-ac235.firebaseio.com/cruz_control/food2.json")
-console.log(l)
-
-
-     filtered_array = Object.values(l).filter(function(D){return moment(D['time_stamp']) > moment().subtract(24, 'hours')})
-
+filtered_array = Object.values(l).filter(function(D){return moment(D['time_stamp']) > moment().subtract(24, 'hours')})
 calories = sum_float_convert_from_array_underscore(filtered_array,'comment')
-    $("#calorie_counter").find(".metric_text").html(calories)
+$("#calorie_counter").find(".metric_text").html(calories)
 
 
 max_dict = max_date_from_array_underscore(l,'time_stamp')
 console.log(max_dict)
 console.log('here')
 console.log(max_dict['time_stamp'])
-
 setInterval(html_timer_update_from_jquery_intermittent,1000,max_dict['time_stamp'])
 //html_timer_update_from_jquery_intermittent(max_dict['time_stamp'])
-
-
-
 }
-
-
 //
 //time_since_start_time_moment_to('2018-06-24T12:46:50-04:00')
 //timer.js
@@ -5649,11 +5669,18 @@ function html_timer_update_from_jquery(timer_instance_dictionary){
 
 
 //ispecific to todoist on updating page for omni.html
+//timer_instance_page_initiate
 function timer_instance_page_initiate(timer_instance_dictionary){
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
     return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
 }
+
+function timer_instance_page_initiate_2(time){
+    //$("#input_text").val()
+    return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+}
+
 
 
 
@@ -5893,7 +5920,21 @@ function remaining_tasks_populate(gspread_array){
     { extend: "colvis", title: document.title },
     { extend: "edit", editor: editor },
 
+    {text: 'Add',name:'Add', action: function ( e, dt, node, config ) {
 
+                row_data = dt.rows( { selected: true } ).data()[0]
+                console.log(row_data)
+              task_create_todoist(row_data.Task,row_data.project_id)
+
+        },
+
+
+
+
+
+
+                //ref.child('detail').push(row_data)
+        },
     {text: 'Not Assigned',name:'Not Assigned', action: function ( e, dt, node, config ) {
           dt.columns('task_assigned:name').search('Red').draw()
         }},

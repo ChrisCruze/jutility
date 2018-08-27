@@ -57,7 +57,6 @@ class TextFunctions(object):
     	function_list = [i for i in function_list if i != '']
     	description_list = [page_source.split("\n")[self.line_number_pull_from_file(page_source,i)-1] for i in function_list]
     	function_code_list = self.get_all_function_texts(page_source,function_list)
-
         l = [{'name':str(function_name),'file_name':file_name,'folder_name':folder_name,'description':str(description)[2:],'code':code}  for function_name,description,code in zip(function_list,description_list,function_code_list)]
     	return l 
 

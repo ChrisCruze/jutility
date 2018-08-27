@@ -1,899 +1,713 @@
 <!doctype html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cruz Control</title>
-<link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
-<link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
-<link href="https://cruz.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
-
-<link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
-<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
-<link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
-<link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
-  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
-
-<link href="https://cruz.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
-<link href="https://cruz.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.9/metisMenu.min.css">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
-<link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
-<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
-<link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
-<link rel="stylesheet" href="css/small_chat.css">
-
-
-<!-- Mainly scripts -->
-<script src="https://cruz.site44.com/js/jquery-3.1.1.min.js"></script>
-<script src="https://cruz.site44.com/js/bootstrap.min.js"></script>
-<script src="https://cruz.site44.com/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="https://cruz.site44.com/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-<!-- Flot -->
-<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.js"></script>
-<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.spline.js"></script>
-<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.resize.js"></script>
-<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.pie.js"></script>
-<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.symbol.js"></script>
-<script src="https://cruz.site44.com/js/plugins/flot/curvedLines.js"></script>
-
-<!-- Peity -->
-<script src="https://cruz.site44.com/js/plugins/peity/jquery.peity.min.js"></script>
-<script src="https://cruz.site44.com/js/demo/peity-demo.js"></script>
-
-<!-- Custom and plugin javascript -->
-<script src="https://cruz.site44.com/js/inspinia.js"></script>
-<script src="https://cruz.site44.com/js/plugins/pace/pace.min.js"></script>
-
-<!-- jQuery UI -->
-<script src="https://cruz.site44.com/js/plugins/jquery-ui/jquery-ui.min.js"></script>
-
-<!-- Jvectormap -->
-<script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
-<script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-
-<!-- Sparkline -->
-<script src="https://cruz.site44.com/js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
-<!-- ChartJS-->
-<script src="https://cruz.site44.com/js/plugins/chartJs/Chart.min.js"></script>
-
-<!-- CodeMirror-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
-
-<!-- FirebaseJS-->
-<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-<script>
-firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authDomain: "shippy-ac235.firebaseapp.com", databaseURL: "https://shippy-ac235.firebaseio.com"});
-</script>
-<script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
-<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
-    <!-- Bootstrap markdown -->
-    <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
-    <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/markdown.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js'></script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-<script src='https://cruzco.site44.com/lib/moment.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.min.js
-'></script>
-
-
-<script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
-<script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
-<script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/vderm9/jutility/master/js/dataTables.editor.min.js"></script>
-<link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
-<link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
-<link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<script src="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js"></script>
-<script src="https://cruz.site44.com/js/plugins/daterangepicker/daterangepicker.js"></script>
-
-<script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
-<!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
- -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-
-<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.10/sass.min.js"></script>
- -->
-
- <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="gb3pnnrxyrysbbu"></script>
-
- <script src="jutility.js"></script>
-<style>
-
-</style>
-</head>
-<body class="pace-done mini-navbar">
-<div id="wrapper">
-        <nav class="navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav metismenu" id="side-menu">
-                    <li class="active">
-                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Reports</span> <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-
-                        
-                            <li class="active"><a href="omni.html">Omni</a></li>
-                            <li><a href="recurring_tasks.html">recurring_tasks</a></li>
-
-                            <li><a href="stock.html">Stock</a></li>
-                            <li><a href="expenses.html">Expenses</a></li>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cruz Control</title>
+        <link href="https://cruzco.site44.com/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cruzco.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="https://cruzco.site44.com/css/animate.css" rel="stylesheet">
+        <link href="https://cruzco.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
+        <link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+        <link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
+        <link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+        <link href="https://cruzco.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+        <link href="https://cruzco.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.9/metisMenu.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+        <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+        <link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
+        <link rel="stylesheet" href="css/small_chat.css">
+        <!-- Mainly scripts -->
+        <script src="https://cruzco.site44.com/js/jquery-3.1.1.min.js"></script>
+        <script src="https://cruzco.site44.com/js/bootstrap.min.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <!-- Flot -->
+        <script src="https://cruzco.site44.com/js/plugins/flot/jquery.flot.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/flot/jquery.flot.spline.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/flot/jquery.flot.resize.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/flot/jquery.flot.pie.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/flot/jquery.flot.symbol.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/flot/curvedLines.js"></script>
+        <!-- Peity -->
+        <script src="https://cruzco.site44.com/js/plugins/peity/jquery.peity.min.js"></script>
+        <script src="https://cruzco.site44.com/js/demo/peity-demo.js"></script>
+        <!-- Custom and plugin javascript -->
+        <script src="https://cruzco.site44.com/js/inspinia.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/pace/pace.min.js"></script>
+        <!-- jQuery UI -->
+        <script src="https://cruzco.site44.com/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+        <!-- Jvectormap -->
+        <script src="https://cruzco.site44.com/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+        <!-- Sparkline -->
+        <script src="https://cruzco.site44.com/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+        <!-- ChartJS-->
+        <script src="https://cruzco.site44.com/js/plugins/chartJs/Chart.min.js"></script>
+        <!-- CodeMirror-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
+        <!-- FirebaseJS-->
+        <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+        <script>
+        firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authDomain: "shippy-ac235.firebaseapp.com", databaseURL: "https://shippy-ac235.firebaseio.com"});
+        </script>
+        <script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
+        <!-- Bootstrap markdown -->
+        <script src="https://cruzco.site44.com/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/bootstrap-markdown/markdown.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        <script src='https://cruzco.site44.com/lib/moment.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.min.js
+        '></script>
+        <script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
+        <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+        <script src="https://cruzco.site44.com/js/plugins/dataTables/datatables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/vderm9/jutility/master/js/dataTables.editor.min.js"></script>
+        <link href="https://cruzco.site44.com/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cruzco.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+        <link href="https://cruzco.site44.com/css/animate.css" rel="stylesheet">
+        <link href="https://cruzco.site44.com/css/style.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <script src="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js"></script>
+        <script src="https://cruzco.site44.com/js/plugins/daterangepicker/daterangepicker.js"></script>
+        <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
+        <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+        -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+        <!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.10/sass.min.js"></script>
+        -->
+        <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="gb3pnnrxyrysbbu"></script>
+        <script src="jutility.js"></script>
+        <style>
+        </style>
+    </head>
+    <body class="pace-done mini-navbar">
+        <div id="wrapper">
+            <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+                        <li class="active">
+                            <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Reports</span> <span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                
+                                <li class="active"><a href="omni.html">Omni</a></li>
+                                <li><a href="recurring_tasks.html">recurring_tasks</a></li>
+                                <li><a href="stock.html">Stock</a></li>
+                                <li><a href="expenses.html">Expenses</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div id='navigation_side'></div>
+            <div id="page-wrapper" class="gray-bg">
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                        <div class="navbar-header">
+                            <span id='timer_text_container'>
+                                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="timer_text" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
+                            </span>
+                            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="favicon_select_button" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
+                            <ul class="dropdown-menu" id="favicon_dropdown_menu">
+                                <li><small id='task_content'></small></li>
+                            </ul>
+                            <form  class="navbar-form-custom" style="width: 400px; z-index: -1;">
+                                <div class="form-group">
+                                    <input size="80" placeholder="Task" class="form-control" name="top-search" id="input_text" type="text">
+                                </div>
+                            </form>
+                        </div>
+                        <ul class="nav navbar-top-links navbar-right">
+                            <li class="dropdown">
+                                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-tasks"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-alerts">
+                                    <li>
+                                        <a id='input_start'>
+                                            <i class="fa fa-tasks"></i> Start
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id='input_create'>
+                                            <i class="fa fa-tasks"></i> Create
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id='input_update'>
+                                            <i class="fa fa-tasks"></i> Update
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id='input_complete'>
+                                            <i class="fa fa-tasks"></i> Complete
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id='input_delete'>
+                                            <i class="fa fa-tasks"></i> Delete
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a id='sync_todoist'>
+                                            <i class="fa fa-tasks"></i> Sync
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://dl.dropboxusercontent.com/s/deroi5nwm6u7gdf/advice.png" class="dropbox-saver">
+                                            <i class="fa fa-tasks"></i> Dropbox
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-<div id='navigation_side'></div>
-
-<div id="page-wrapper" class="gray-bg">
-<div class="row border-bottom">
-        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-
-
-        <span id='timer_text_container'>
-            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="timer_text" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
-        </span>
-            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="favicon_select_button" data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="false" href="#"><i class="fa fa-bars"></i> </a>
-            <ul class="dropdown-menu" id="favicon_dropdown_menu">
-                <li><small id='task_content'></small></li>
-            </ul>   
-
-
-
-
-            <form  class="navbar-form-custom" style="width: 400px; z-index: -1;">
-
-                <div class="form-group">
-                    <input size="80" placeholder="Task" class="form-control" name="top-search" id="input_text" type="text">
+                    </nav>
                 </div>
-            </form>
-        </div>
-            <ul class="nav navbar-top-links navbar-right">
-
-                <li class="dropdown">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                        <i class="fa fa-tasks"></i>  
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                <li>
-                    <a id='input_start'>
-                        <i class="fa fa-tasks"></i> Start
-                    </a>
-                </li>
-                <li>
-                    <a id='input_create'>
-                        <i class="fa fa-tasks"></i> Create
-                    </a>
-                </li>
-                <li>
-                    <a id='input_update'>
-                        <i class="fa fa-tasks"></i> Update
-                    </a>
-                </li>
-                <li>
-                    <a id='input_complete'>
-                        <i class="fa fa-tasks"></i> Complete
-                    </a>
-                </li>
-                <li>
-                    <a id='input_delete'>
-                        <i class="fa fa-tasks"></i> Delete
-                    </a>
-                </li>
-                <li>
-                    <a id='sync_todoist'>
-                        <i class="fa fa-tasks"></i> Sync
-                    </a>
-                </li>
-
-                <li>
-                <a href="https://dl.dropboxusercontent.com/s/deroi5nwm6u7gdf/advice.png" class="dropbox-saver">
-                        <i class="fa fa-tasks"></i> Dropbox
-                    </a>
-                </li>
-
-
-                    </ul>
-                </li>
-
-
-            </ul>
-
-        </nav>
-        </div>
-
-<div class="wrapper wrapper-content">
-<div id='main_content'>
-<div class="container">
-
-
-        <div class="row" id="metric_headers">
-
-
-        </div>
-<div class="row">
-<div class="col-lg-12">
-<div class="ibox">
-<div class="ibox-contentX">
-<table class="table small m-t-sm">
-    <tbody>
-    <tr>
-        <td>
-            <strong id="ds_percentage">-</strong> Ds
-
-        </td>
-        <td>
-            <strong id="expense_cost">-</strong> Expense
-        </td>
-        <td>
-            <strong id="caloric_intake">-</strong> Calories Consumed
-        </td>
-    </tr>
-    </tbody>
-</table>
-</div>
-</div>
-</div>
-<!--     <table class="table">
-        <tbody>
-        <tr>
-            <td field="habit_item">
-                <button type="button" class="btn m-r-sm" id="ds_percentage">-</button>
-                <span field="habit_text">Ds</span>
-            </td>
-        </tr>
-        </tbody>
-    </table> -->
-</div>
-
-  <div class="col-md-12">
-          <div class="size-chart pure-g" id='row_bar_size_chart'>
-          <div field="row_bar_color_width" class="size-chart-base pure-u" style="">
-            <a field="row_bar_link" class="size-chart-item" href="https://purecss.io/base/">
-                <span class="size-chart-label">
-                    <span field="row_bar_title" class="size-chart-mod"></span>
-                </span>
-            </a>
-          </div>
-          </div>
-  </div>
-
-
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5></h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" onClick="drogas_chart_update()">Ds</a>
-                                </li>
-                                <li><a href="#"  onClick="run_chart_update()">Run</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div>
-                                        <span class="pull-right text-right">
-                                        <small></small>
-                                        </span>
-                            <h3 class="font-bold no-margins">
-                                Tasks Over Time
-                            </h3>
-                            <small></small>
-                        </div>
-
-                        <div class="m-t-sm">
-
+                <div class="wrapper wrapper-content">
+                    <div id='main_content'>
+                        <div class="container">
+                            <div class="row" id="metric_headers">
+                            </div>
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-lg-12">
+                                    <div class="ibox">
+                                        <div class="ibox-contentX">
+                                            <table class="table small m-t-sm">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <strong id="ds_percentage">-</strong> Ds
+                                                        </td>
+                                                        <td>
+                                                            <strong id="expense_cost">-</strong> Expense
+                                                        </td>
+                                                        <td>
+                                                            <strong id="caloric_intake">-</strong> Calories Consumed
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--     <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td field="habit_item">
+                                                <button type="button" class="btn m-r-sm" id="ds_percentage">-</button>
+                                                <span field="habit_text">Ds</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table> -->
+                            </div>
+                            <div class="col-md-12">
+                                <div class="size-chart pure-g" id='row_bar_size_chart'>
+                                    <div field="row_bar_color_width" class="size-chart-base pure-u" style="">
+                                        <a field="row_bar_link" class="size-chart-item" href="https://purecss.io/base/">
+                                            <span class="size-chart-label">
+                                                <span field="row_bar_title" class="size-chart-mod"></span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <h5></h5>
+                                            <div class="ibox-tools">
+                                                <a class="collapse-link">
+                                                    <i class="fa fa-chevron-up"></i>
+                                                </a>
+                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                    <i class="fa fa-wrench"></i>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-user">
+                                                    <li><a href="#" onClick="drogas_chart_update()">Ds</a>
+                                                </li>
+                                                <li><a href="#"  onClick="run_chart_update()">Run</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
                                     <div>
-                                        <canvas id="barChart" height="114"></canvas>
+                                        <span class="pull-right text-right">
+                                            <small></small>
+                                        </span>
+                                        <h3 class="font-bold no-margins">
+                                        Tasks Over Time
+                                        </h3>
+                                        <small></small>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <canvas id="horizontalbarChart" ></canvas>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="m-t-md">
-                            <small class="pull-right">
-                                <i class="fa fa-clock-o"> </i>
-                            </small>
-                            <small>
-                            </small>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4" style="display:none">
-                    <div class="ibox float-e-margins">
-                    <div class="ibox-content">
-                    <ul class="stat-list" id="progress_bar_list">
-                    </ul>
-                </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div id='morning_review'>
-                    <div class="ibox">
-
-
-                    <div class="ibox-title">
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" onClick='load_firebase_blog_instance()'>Load Blog</a>
-                                </li>
-
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-
-                    </div>
-
-
-
-
-
-                        <div class="ibox-content" style="max-height: 300px;overflow-y: scroll;">
-                            <div class="text-center article-title">
-                                <h3 id="blog_title">
-                                    Goals/Priorities
-                                </h3>
-                                <div class="small m-b-xs">Grateful for, Excited for, Affirmation, Focus, Exercise, Priorities, Schedule
-                                </div>
-                                <span class='text_content' ></span>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <button class="btn btn-white btn-xs edit_content" type="button">edit</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="small text-right">
-                            <span class="text-muted timestamp" ><i class="fa fa-clock-o"></i> </span>
-                            <input type="text" class='date_picker_calendar' />
+                                    <div class="m-t-sm">
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div>
+                                                    <canvas id="barChart" height="114"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <canvas id="horizontalbarChart" ></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-t-md">
+                                        <small class="pull-right">
+                                        <i class="fa fa-clock-o"> </i>
+                                        </small>
+                                        <small>
+                                        </small>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="ibox-footer markdown_edit_form" style='display:none'>
-                             What went well (instead of what went wrong)? 
-                                <textarea style="resize: none;"  class="md-input markdown_area" name="content" data-provide="markdown" rows="10">
-                                </textarea><div class="md-fullscreen-controls"><a href="#" class="exit-fullscreen" title="Exit fullscreen">
-                                <span class="glyphicon glyphicon-fullscreen"></span></a></div>
+                        <div class="col-lg-4" style="display:none">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-content">
+                                    <ul class="stat-list" id="progress_bar_list">
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-
-                    </div>
-                </div>
-                </div>
-            </div>
-
-                        <div class="row">
-
-                            <div class="col-lg-4">
-                                <div class="ibox float-e-margins">
+                        <div class="col-lg-4">
+                            <div id='morning_review'>
+                                <div class="ibox">
                                     <div class="ibox-title">
-                                        <h5>Needed Tasks</h5>
                                         <div class="ibox-tools">
                                             <a class="collapse-link">
                                                 <i class="fa fa-chevron-up"></i>
                                             </a>
-                                            <a class="close-link">
-                                                <i class="fa fa-times"></i>
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                <i class="fa fa-wrench"></i>
                                             </a>
+                                            <ul class="dropdown-menu dropdown-user">
+                                                <li><a href="#" onClick='load_firebase_blog_instance()'>Load Blog</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content" style="max-height: 300px;overflow-y: scroll;">
+                                    <div class="text-center article-title">
+                                        <h3 id="blog_title">
+                                        Goals/Priorities
+                                        </h3>
+                                        <div class="small m-b-xs">Grateful for, Excited for, Affirmation, Focus, Exercise, Priorities, Schedule
+                                        </div>
+                                        <span class='text_content' ></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-white btn-xs edit_content" type="button">edit</button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="small text-right">
+                                                <span class="text-muted timestamp" ><i class="fa fa-clock-o"></i> </span>
+                                                <input type="text" class='date_picker_calendar' />
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="ibox-footer markdown_edit_form" style='display:none'>
+                                    What went well (instead of what went wrong)?
+                                    <textarea style="resize: none;"  class="md-input markdown_area" name="content" data-provide="markdown" rows="10">
+                                    </textarea><div class="md-fullscreen-controls"><a href="#" class="exit-fullscreen" title="Exit fullscreen">
+                                        <span class="glyphicon glyphicon-fullscreen"></span></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Needed Tasks</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table table-hover no-margins" id="remaining_tasks_table">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Progress</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content" style="max-height: 450px;overflow-y: scroll;">
+                                    <table class="table table-hover no-margins" id="progress_table">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Checklist</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#" onClick="initiate_check_list_datatable('checklist')">Initiate</a></li>
+                                            <li><a href="#" onClick='datatables_firebase({table_selector:"#checklist_table", firebase_reference:dbRef.ref("omni").child("calendar"), columns:["title","start","end"] })'>Calendar</a></li>
+                                            <li><a href="#" onClick='calendar_initiate({events:Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))})'>Calendar object</a></li>
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content" style="max-height: 450px;overflow-y: scroll;">
+                                <table class="display" cellspacing="0" width="100%" id="checklist_table"></table>
+                                <!-- <table class="display" cellspacing="0" width="100%" id="ds_table"></table> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div class="col-lg-4">
+                        <div id='end_of_day_review'>
+                            <div class="ibox">
+                                <div class="ibox-content">
+                                    <div class="text-center article-title">
+                                        <h3 id="blog_title">
+                                        End of Day Review
+                                        </h3>
+                                        <div class="small m-b-xs">
+                                            What went well (instead of what went wrong)? How will I improve?
+                                        </div>
+                                        <span class='text_content'></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-white btn-xs edit_content"  type="button">edit</button>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="small text-right">
+                                                <span class="text-muted timestamp" ><i class="fa fa-clock-o"></i> </span>
+                                                <input type="text" class='date_picker_calendar' />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ibox-footer markdown_edit_form" style='display:none'>
+                                    What went well (instead of what went wrong)?
+                                    How will I improve?
+                                    <textarea style="resize: none;" class="md-input markdown_area" name="content" data-provide="markdown" rows="10">
+                                    </textarea><div class="md-fullscreen-controls"><a href="#" class="exit-fullscreen" title="Exit fullscreen">
+                                        <span class="glyphicon glyphicon-fullscreen"></span></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div id='morning_review'>
+                                <div class="ibox">
                                     <div class="ibox-content">
-                                        <table class="table table-hover no-margins" id="remaining_tasks_table">
-                                        </table>
+                                        <div class="text-center article-title">
+                                            <h3 id="blog_title">
+                                            Morning Review
+                                            </h3>
+                                            <div class="small m-b-xs">
+                                                What are your top three to five priorities?
+                                            </div>
+                                            <span class='text_content'></span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-white btn-xs edit_content" type="button">edit</button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="small text-right">
+                                                    <span class="text-muted timestamp" ><i class="fa fa-clock-o"></i> </span>
+                                                    <input type="text" class='date_picker_calendar' />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-footer markdown_edit_form" style='display:none'>
+                                        What went well (instead of what went wrong)?
+                                        <textarea style="resize: none;"  class="md-input markdown_area" name="content" data-provide="markdown" rows="10">
+                                        </textarea><div class="md-fullscreen-controls"><a href="#" class="exit-fullscreen" title="Exit fullscreen">
+                                            <span class="glyphicon glyphicon-fullscreen"></span></a></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-lg-4">
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title">
-                                        <h5>Progress</h5>
+                                        <h5>Todoist Tasks </h5>
                                         <div class="ibox-tools">
                                             <a class="collapse-link">
                                                 <i class="fa fa-chevron-up"></i>
                                             </a>
-                                            <a class="close-link">
-                                                <i class="fa fa-times"></i>
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                <i class="fa fa-wrench"></i>
                                             </a>
-                                        </div>
-                                    </div>
-                                    <div class="ibox-content" style="max-height: 450px;overflow-y: scroll;">
-                                        <table class="table table-hover no-margins" id="progress_table">
-                                        </table>
-                                    </div>
+                                            <ul class="dropdown-menu dropdown-user">
+                                                <li><a href="#">Config option 1</a>
+                                            </li>
+                                            <li><a href="#">Config option 2</a>
+                                        </li>
+                                    </ul>
+                                    <a class="close-link">
+                                        <i class="fa fa-times"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <div class="ibox float-e-margins">
-                                    <div class="ibox-title">
-                                        <h5>Checklist</h5>
-
-
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" onClick="initiate_check_list_datatable('checklist')">Initiate</a></li>
-                                <li><a href="#" onClick='datatables_firebase({table_selector:"#checklist_table", firebase_reference:dbRef.ref("omni").child("calendar"), columns:["title","start","end"] })'>Calendar</a></li>
-
-                             <li><a href="#" onClick='calendar_initiate({events:Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))})'>Calendar object</a></li>
-
-
-
-
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-
-
+                            <div class="ibox-content">
+                                <div class="row">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#tab-1" data-toggle="tab">Current Tasks</a></li>
+                                        <li class=""><a href="#tab-2" data-toggle="tab">Completed Tasks</a></li>
+                                        <li class=""><a href="#tab-3" data-toggle="tab">Food</a></li>
+                                        <li class=""><a href="#tab-4" data-toggle="tab">Expense</a></li>
+                                        <li class=""><a href="#tab-5" data-toggle="tab">Stocks</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="tab-1">
+                                        <table id="current_tasks_table" class="display" cellspacing="0" width="100%"></table>
                                     </div>
-                                    <div class="ibox-content" style="max-height: 450px;overflow-y: scroll;">
-                                        <table class="display" cellspacing="0" width="100%" id="checklist_table"></table> 
-                                        <!-- <table class="display" cellspacing="0" width="100%" id="ds_table"></table> -->
-                                    </div>
+                                    <div class="tab-pane" id="tab-2">
+                                    <table id="completed_tasks_table" class="display" cellspacing="0" width="100%"></table>
                                 </div>
+                                <div class="tab-pane" id="tab-3">
+                                <table id="food_table" class="display" style="width:100%"></table>
                             </div>
+                            <div class="tab-pane" id="tab-4">
+                            <table id="expense_table" class="display" style="width:100%"></table>
                         </div>
-
-
-
-            <div class="row" style="display:none">
-                <div class="col-lg-4">
-                <div id='end_of_day_review'>
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <div class="text-center article-title">
-                                <h3 id="blog_title">
-                                    End of Day Review
-                                </h3>
-                                <div class="small m-b-xs">
-                                    What went well (instead of what went wrong)? How will I improve?
-                                </div>
-                                <span class='text_content'></span>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <button class="btn btn-white btn-xs edit_content"  type="button">edit</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="small text-right">
-                            <span class="text-muted timestamp" ><i class="fa fa-clock-o"></i> </span>
-                            <input type="text" class='date_picker_calendar' />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox-footer markdown_edit_form" style='display:none'>
-                             What went well (instead of what went wrong)? 
-                             How will I improve? 
-                                <textarea style="resize: none;" class="md-input markdown_area" name="content" data-provide="markdown" rows="10">
-                                </textarea><div class="md-fullscreen-controls"><a href="#" class="exit-fullscreen" title="Exit fullscreen">
-                                <span class="glyphicon glyphicon-fullscreen"></span></a></div>
-                        </div>
+                        <div class="tab-pane" id="tab-5">
+                        <table id="stocks_table" class="display" style="width:100%"></table>
                     </div>
-                </div>
-                </div>
-                <div class="col-lg-4">
-                <div id='morning_review'>
-                    <div class="ibox">
-                        <div class="ibox-content">
-                            <div class="text-center article-title">
-                                <h3 id="blog_title">
-                                    Morning Review
-                                </h3>
-                                <div class="small m-b-xs">
-                                    What are your top three to five priorities?
-                                </div>
-                                <span class='text_content'></span>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <button class="btn btn-white btn-xs edit_content" type="button">edit</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="small text-right">
-                            <span class="text-muted timestamp" ><i class="fa fa-clock-o"></i> </span>
-                            <input type="text" class='date_picker_calendar' />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox-footer markdown_edit_form" style='display:none'>
-                             What went well (instead of what went wrong)? 
-                                <textarea style="resize: none;"  class="md-input markdown_area" name="content" data-provide="markdown" rows="10">
-                                </textarea><div class="md-fullscreen-controls"><a href="#" class="exit-fullscreen" title="Exit fullscreen">
-                                <span class="glyphicon glyphicon-fullscreen"></span></a></div>
-                        </div>
-
-                    </div>
-                </div>
                 </div>
             </div>
-
-
-        <div class="row">
-
-        <div class="col-lg-12">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
         <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h5>Todoist Tasks </h5>
-            <div class="ibox-tools">
-                <a class="collapse-link">
-                    <i class="fa fa-chevron-up"></i>
-                </a>
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-wrench"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#">Config option 1</a>
-                    </li>
-                    <li><a href="#">Config option 2</a>
-                    </li>
-                </ul>
-                <a class="close-link">
-                    <i class="fa fa-times"></i>
-                </a>
+            <div class="ibox-title">
+                <h5>Calendar </h5>
             </div>
-        </div>
-        <div class="ibox-content">
-            <div class="row">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab-1" data-toggle="tab">Current Tasks</a></li>
-                    <li class=""><a href="#tab-2" data-toggle="tab">Completed Tasks</a></li>
-                    <li class=""><a href="#tab-3" data-toggle="tab">Food</a></li>
-                    <li class=""><a href="#tab-4" data-toggle="tab">Expense</a></li>
-                    <li class=""><a href="#tab-5" data-toggle="tab">Stocks</a></li>
-
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab-1">
-                        <table id="current_tasks_table" class="display" cellspacing="0" width="100%"></table>
-                    </div>
-                    <div class="tab-pane" id="tab-2">
-                        <table id="completed_tasks_table" class="display" cellspacing="0" width="100%"></table>
-
-
-
-                </div>
-                    <div class="tab-pane" id="tab-3">
-                          <table id="food_table" class="display" style="width:100%"></table>  
-
-
-
-                </div>
-                    <div class="tab-pane" id="tab-4">
-                          <table id="expense_table" class="display" style="width:100%"></table>  
-
-
-
-                </div>
-                    <div class="tab-pane" id="tab-5">
-                          <table id="stocks_table" class="display" style="width:100%"></table>  
-
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-        </div>
-        </div>
-
-        </div>
-
-
-
-
-
-
-        <div class="row">
-
-        <div class="col-lg-12">
-        <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h5>Calendar </h5>
-        </div>
-        <div class="ibox-content">
+            <div class="ibox-content">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#calendar-tab-1" data-toggle="tab">Calendar</a></li>
                     <li class=""><a href="#calendar-tab-2" data-toggle="tab">Calendar Details</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="calendar-tab-1">
-                            <div id="calendar"></div>
+                        <div id="calendar"></div>
                     </div>
                     <div class="tab-pane" id="calendar-tab-2">
-                          <table id="calendar_table" class="display nowrap" style="width:100%"></table>  
-
-                    </div>
-
-
+                    <table id="calendar_table" class="display nowrap" style="width:100%"></table>
                 </div>
-
-
-
-
-
-
-
-
-
+            </div>
         </div>
-        </div>
-        </div>
-
-        </div>
-
-
-
-
+    </div>
 </div>
 </div>
 </div>
-
-
 </div>
 </div>
-
-
-
+</div>
+</div>
 <script>
 $.fn.dataTable.ext.type.order["number-order-pre"] = function(d) {
-      r = parseFloat(d)||0
-      return r;
-    };
-
+r = parseFloat(d)||0
+return r;
+};
 var dbRef = dbRef||firebase.database();
 omni_node = 'todoist_tasks'
 var FirebaseRef = dbRef.ref('omni').child(omni_node)
 var timer_instance = dbRef.ref('omni').child('timer_instance')
 var timer_instance_archive = dbRef.ref('omni').child('timer_instance_archive')
-
 var snapshot_instance = dbRef.ref('omni').child('snapshot')
 todoist_gspread_pull = todoist_gspread_pull_firebase()
-
-
-
 $("#sync_todoist").click(function(event) {
-    todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
-    snapshot_instance.set(todoist_gspread_pull)
-    toastr_notification("Todoist Synced")
+todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
+snapshot_instance.set(todoist_gspread_pull)
+toastr_notification("Todoist Synced")
 })
-
-
 projects_dictionary = todoist_gspread_pull.projects
 gspread_array = todoist_gspread_pull.gspread
 current_tasks = todoist_gspread_pull.todoist_current
 completed_tasks = todoist_gspread_pull.todoist_completed
-
-
-
 todoist_snapshot_store()
 header_metrics_create_todoist()
 percentage_complete_metric_generate(gspread_array)
-
-
 horizontal_bar_chart_object = horizontal_bar_chart_initiate_render_chartjs("horizontalbarChart")
 bar_chart_object = bar_chart_initiate_render_chartjs("barChart")
-
 row_bar_size_chart_base = $("#row_bar_size_chart").html()
-
 function completed_tasks_callback_wrapper(callback_array){
-    metric_func = null
-    color_func = null
-    function date_func(i){return moment(i).format("MM/DD")}
-    bar_chart_update_time_scale_calculate_function(bar_chart_object,callback_array,'completed_date',metric_func)
-
-    metric_func = function(l){return sum_float_convert_from_array_underscore(l,'duration')}
-    bar_chart_update_category_calculate_function(horizontal_bar_chart_object,callback_array,'project_name',metric_func)
-
-
-     $("#row_bar_size_chart").html(row_bar_size_chart_base)
-    area_row_chart_initiate({completed_tasks:callback_array,chart_id:"#row_bar_size_chart"})
-
-
-    return completed_tasks_call_back(callback_array)
+metric_func = null
+color_func = null
+function date_func(i){return moment(i).format("MM/DD")}
+bar_chart_update_time_scale_calculate_function(bar_chart_object,callback_array,'completed_date',metric_func)
+metric_func = function(l){return sum_float_convert_from_array_underscore(l,'duration')}
+bar_chart_update_category_calculate_function(horizontal_bar_chart_object,callback_array,'project_name',metric_func)
+$("#row_bar_size_chart").html(row_bar_size_chart_base)
+area_row_chart_initiate({completed_tasks:callback_array,chart_id:"#row_bar_size_chart"})
+return completed_tasks_call_back(callback_array)
 }
-
-
-
 remaining_tasks_populate(gspread_array)
 todoist_table_create_current(current_tasks,"#current_tasks_table",current_tasks_call_back)
 todoist_table_complete = todoist_table_create_complete(completed_tasks,"#completed_tasks_table",completed_tasks_callback_wrapper)
-
-
-
-
-
-
-
-
-
-
 var my_interval_timer;
 empty_timer_html = $("#timer_text_container").html()
 timer_instance.on('value', function(snapshot) {
-    //console.log(snapshot)
-    timer_instance_dictionary = snapshot.val()
-    //console.log(timer_instance_dictionary)
-    if (timer_instance_dictionary != null){
-        my_interval_timer = timer_instance_exists_process(timer_instance_dictionary,timer_instance,timer_instance_archive)
-    }
-    else {
-        document.title = 'Omni'
-        $("#input_text").val("") 
-        clearInterval(my_interval_timer)
-        $("#timer_text_container").html(empty_timer_html)
-    }
+//console.log(snapshot)
+timer_instance_dictionary = snapshot.val()
+//console.log(timer_instance_dictionary)
+if (timer_instance_dictionary != null){
+my_interval_timer = timer_instance_exists_process(timer_instance_dictionary,timer_instance,timer_instance_archive)
+}
+else {
+document.title = 'Omni'
+$("#input_text").val("")
+clearInterval(my_interval_timer)
+$("#timer_text_container").html(empty_timer_html)
+}
 });
-
-
 //pulls straight json if the firebase is open
 function firebase_json_pull_cruz(url){
-    url = url||"https://cruz-7aa89.firebaseio.com/todoist_timer_instance.json"
-    l = $.ajax({
-      url: url,
-      method: "GET",
-      async:false,
-      headers: {"Accept":"application/json; odata=verbose"}
-    })
-    results = l.responseJSON
-    return results
-  }
-
-
-
+url = url||"https://cruz-7aa89.firebaseio.com/todoist_timer_instance.json"
+l = $.ajax({
+url: url,
+method: "GET",
+async:false,
+headers: {"Accept":"application/json; odata=verbose"}
+})
+results = l.responseJSON
+return results
+}
 //task_create_todoist('test',2159934072)
 $("#input_create").click(function(event) {
-    event.preventDefault()
-    project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
-    content = $("#input_text").val()
-    start_time = moment().format()
-    original_start_time = start_time
-    r =   $.ajax({
-      type: "POST",
-      data:{"content": content, "project_id": project_id,"start_time":start_time},
-      url: "https://hooks.zapier.com/hooks/catch/229795/w23pcd/",
-    })
-
-    new_start_time = start_time
-    //console.log(original_start_time)
-    do {
-        firebase_dictionary = firebase_json_pull_cruz()
-       // console.log(firebase_dictionary)
-        if (firebase_dictionary['start_time'] == original_start_time){
-            task_id = firebase_dictionary['id']
-            upload_dictionary = {
-                start_time: moment().format(),
-                id: task_id,
-                task_id: task_id,
-                content:content,
-                project_id:project_id
-            }
-            timer_instance.set(upload_dictionary)
-        }
-    }
-    while (firebase_dictionary['start_time'] != original_start_time);  
-
-    //console.log(r)
-
-
-    // task_id
-
-
-  // function create_task_promise(input) {
-  //   return new Promise(function(resolve, reject) {
-  //     result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
-  //     resolve(result)
-  //   });}
-
-  // create_task_promise({"content": content, "project_id": project_id}).then(function(r) {
-  //   task_id = Object.values(r.temp_id_mapping)[0]
-    // upload_dictionary = {
-    //     start_time: moment().format(),
-    //     id: task_id,
-    //     task_id: task_id,
-    //     content:content,
-    //     project_id:project_id
-    // }
-    // timer_instance.set(upload_dictionary)
-  // });
+event.preventDefault()
+project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
+content = $("#input_text").val()
+start_time = moment().format()
+original_start_time = start_time
+r =   $.ajax({
+type: "POST",
+data:{"content": content, "project_id": project_id,"start_time":start_time},
+url: "https://hooks.zapier.com/hooks/catch/229795/w23pcd/",
+})
+new_start_time = start_time
+//console.log(original_start_time)
+do {
+firebase_dictionary = firebase_json_pull_cruz()
+// console.log(firebase_dictionary)
+if (firebase_dictionary['start_time'] == original_start_time){
+task_id = firebase_dictionary['id']
+upload_dictionary = {
+start_time: moment().format(),
+id: task_id,
+task_id: task_id,
+content:content,
+project_id:project_id
+}
+timer_instance.set(upload_dictionary)
+}
+}
+while (firebase_dictionary['start_time'] != original_start_time);
+//console.log(r)
+// task_id
+// function create_task_promise(input) {
+//   return new Promise(function(resolve, reject) {
+//     result = todoist_add_tasks_ajax("a14f98a6b546b044dbb84bcd8eee47fbe3788671",input)
+//     resolve(result)
+//   });}
+// create_task_promise({"content": content, "project_id": project_id}).then(function(r) {
+//   task_id = Object.values(r.temp_id_mapping)[0]
+// upload_dictionary = {
+//     start_time: moment().format(),
+//     id: task_id,
+//     task_id: task_id,
+//     content:content,
+//     project_id:project_id
+// }
+// timer_instance.set(upload_dictionary)
+// });
 });
-
-
 $("#current_tasks_table").on("click", "tbody td", function(e) {
-  var table = $("#current_tasks_table").DataTable();
-  row_data = table.row(this).data();
-  $("#input_text").val(row_data.content)
-  $("#input_text").attr('task_id',row_data.id)
-  $("#input_text").attr('project_id',row_data.project_id)
+var table = $("#current_tasks_table").DataTable();
+row_data = table.row(this).data();
+$("#input_text").val(row_data.content)
+$("#input_text").attr('task_id',row_data.id)
+$("#input_text").attr('project_id',row_data.project_id)
 });
-
-
 //task_create_todoist('test',2159934072)
 $("#input_start").click(function(event) {
-    console.log($("#input_text"))
-    content = $("#input_text").val()
-    project_id = $("#input_text").attr('project_id')
-    task_id = $("#input_text").attr('task_id')
-    upload_dictionary = {
-        start_time: moment().format(),
-        id: task_id,
-        task_id: task_id,
-        content:content,
-        project_id:project_id
-    }
-    timer_instance.set(upload_dictionary)
+console.log($("#input_text"))
+content = $("#input_text").val()
+project_id = $("#input_text").attr('project_id')
+task_id = $("#input_text").attr('task_id')
+upload_dictionary = {
+start_time: moment().format(),
+id: task_id,
+task_id: task_id,
+content:content,
+project_id:project_id
+}
+timer_instance.set(upload_dictionary)
 });
-
-
 create_project_dropdown_list(projects_dictionary)
-
 progress_bar_table_formulate()
-
-  var progress_table = $("#progress_table").DataTable();
-start_intermittent_timer()
+var progress_table = $("#progress_table").DataTable();
+//start_intermittent_timer()
 // list_progress_bar_list_element_thick()
 // list_progress_bar_list_element_thick()
 //firebase_generate_datatable()
@@ -901,159 +715,125 @@ start_intermittent_timer()
 //setTimeout(initiate_firebase_chat_bubbles,3000)
 initiate_firebase_chat_bubbles({firebase_reference:dbRef.ref('omni').child('ideas')})
 //initiate_firebase_chat_bubbles({box_style:'right: 1000px',bubble_style:'right: 1000px',firebase_reference:dbRef.ref('omni').child('ideas2')})
-
-
 function update_progress(){
 current_completed_tasks = todoist_table_complete.rows({ page: "current" }).data().toArray();
 measure_progress_bars(current_completed_tasks,progress_table)
-
-
 progress_table = $("#progress_table").DataTable()
-
 progress_table.order( [ 3, 'asc' ] ).draw()
-
 progress_table
-    .columns( 'priority:name' )
-    .search( 'High' )
-    .draw();
+.columns( 'priority:name' )
+.search( 'High' )
+.draw();
 }
-
-
 setTimeout(update_progress,7000)
-
-
 function drogas_chart_update(){
-    firebase_chart_update({
-        chart_object:bar_chart_object,
-        firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json",
-        filter_function:function(D){return D.type == 'count'},
-        calculation_function:function(l){return sum_float_convert_from_array_underscore(l,'input_text')},
-        date_key:'date_time',
-        dates:dates_past_n_days(30)
-    })
+firebase_chart_update({
+chart_object:bar_chart_object,
+firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json",
+filter_function:function(D){return D.type == 'count'},
+calculation_function:function(l){return sum_float_convert_from_array_underscore(l,'input_text')},
+date_key:'date_time',
+dates:dates_past_n_days(30)
+})
 }
-
 function run_chart_update(){
-    firebase_chart_update({
-        chart_object:bar_chart_object,
-        firebase_url:"https://shippy-ac235.firebaseio.com/run_log.json",
-        filter_function:function(D){return true},
-        calculation_function:function(l){return sum_float_convert_from_array_underscore(l,'miles')},
-        date_key:'time_stamp',
-        dates:dates_past_n_days(30)
-    })
-
+firebase_chart_update({
+chart_object:bar_chart_object,
+firebase_url:"https://shippy-ac235.firebaseio.com/run_log.json",
+filter_function:function(D){return true},
+calculation_function:function(l){return sum_float_convert_from_array_underscore(l,'miles')},
+date_key:'time_stamp',
+dates:dates_past_n_days(30)
+})
 }
-
-
-
-
-
-
 function initiate_check_list_datatable(table_node){
-    datatables_firebase({
-        table_selector:"#checklist_table",
-        firebase_reference:dbRef.ref('omni').child(table_node),
-        columns:['name',{'data':'rag','format':'rag'},{'data':'rank','format':'rank'},{'data':'summary',visible:false},{'data':'group',visible:false},{'data':'identifier',visible:false}],
-        sort:'rank'
-    })
+datatables_firebase({
+table_selector:"#checklist_table",
+firebase_reference:dbRef.ref('omni').child(table_node),
+columns:['name',{'data':'rag','format':'rag'},{'data':'rank','format':'rank'},{'data':'summary',visible:false},{'data':'group',visible:false},{'data':'identifier',visible:false}],
+sort:'rank'
+})
 }
-
-
 function load_firebase_blog_instance(){
-    load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})
+load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})
 }
-    load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})
-
-
+load_firebase_blog({blog_selector:"#morning_review",firebase_reference:dbRef.ref("omni").child("omni_blog")})
 setTimeout(key_metrics_save_minute,5000)
-
 setTimeout(initiate_check_list_datatable,5000,'priorities')
-
-
-
 function initate_calendar(){
-
 completed_tasks_filtered = completed_tasks.filter(function(D){return D['end_time'] != null && D['start_time'] != null})
 completed_tasks_filtered.forEach(function(D){
-    D['start'] = D['start_time']
-    D['end'] = D['end_time']
-    D['title'] = D['content']
-    D['color'] = 'gray'
-
-
+D['start'] = D['start_time']
+D['end'] = D['end_time']
+D['title'] = D['content']
+D['color'] = 'gray'
 })
-
 events_data = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))
 events_data= events_data.concat(completed_tasks_filtered)
 console.log(events_data)
 calendar_initiate({events:events_data})
 datatables_firebase({
-    firebase_reference:firebase.database().ref('omni').child('calendar'),
-    columns:[
-        {data:'title',format:'title'},
-        {data:'start',format:'date'},
-        {data:'end',format:'date'},
-        {data:'color'},
-
-        ],
-    table_selector:"#calendar_table",
-    columns_generate:false
+firebase_reference:firebase.database().ref('omni').child('calendar'),
+columns:[
+{data:'title',format:'title'},
+{data:'start',format:'date'},
+{data:'end',format:'date'},
+{data:'color'},
+],
+table_selector:"#calendar_table",
+columns_generate:false
+})
+}
+////dbRef.ref('omni').child('todoist_gspread_checklist').set(gspread_array)
+function checklist_gspread(){
+datatables_firebase({
+table_selector:"#remaining_tasks_table",
+firebase_reference:dbRef.ref('omni').child('todoist_gspread_checklist')
 })
 }
 
-
-
-
-////dbRef.ref('omni').child('todoist_gspread_checklist').set(gspread_array)
-function checklist_gspread(){
-    datatables_firebase({
-        table_selector:"#remaining_tasks_table",
-        firebase_reference:dbRef.ref('omni').child('todoist_gspread_checklist')
-    })
+function drogas_most_recent_time(drogas_array){
+    drogas_array = drogas_array.filter(function(D){return D['type'] == 'count'})
+    most_recent_time = drogas_array[drogas_array.length-1]
+    return most_recent_time
 }
 //remaining_tasks_populate(gspread_array)
-
-
-
 function drogas_calculate_now(){
-    drogas_array = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
-    drogas_array.forEach(function(D){D['remaining_in_system'] = dose_remaining_now(D)})
-    in_system = sum_float_convert_from_array_underscore(drogas_array,'remaining_in_system')
-    in_system = in_system.toFixed(1)
-    $("#ds_percentage").html(in_system)
-    return in_system
+drogas_array = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
+
+start_drogas_timer(drogas_array)
+
+
+
+drogas_array.forEach(function(D){D['remaining_in_system'] = dose_remaining_now(D)})
+in_system = sum_float_convert_from_array_underscore(drogas_array,'remaining_in_system')
+in_system = in_system.toFixed(1)
+
+
+$("#ds_percentage").html(in_system)
+return in_system
 }
 setTimeout(drogas_calculate_now,3000)
 //gspread_array
 //('checklist')
 //initiate_check_list_datatable('checklist')
 // var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
-
 // datatables_firebase_table_generate({table_selector:"#ds_table",firebase_reference:dbRef.ref('drogas'),
 //     columns:[        {'data':'input_text',visible:true},
 //             'date_time',
-
 //             'type',
 //             'within_system',
 setTimeout(initate_calendar,3000)
-
-
-
 function initiate_table_counters(){
 // setTimeout(receipts_table,3000)
 // setTimeout(food_table,6000)
-
-    receipts_table()
-    food_table()
-    stock_table()
+receipts_table()
+food_table()
+stock_table()
 }
 setTimeout(initiate_table_counters,6000)
-
-
 //     ]})
 //    data_to_push = {'input_text':input_text,'date_time':date_time,'type':type,'within_system':within_system}
-
 //firebase_json_pull_promise_pull_simple()
 // function load_ds_table(){
 //     r = datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#ds_table"})
@@ -1063,9 +843,7 @@ setTimeout(initiate_table_counters,6000)
 // table.data().toArray();
 //progress_table
 //completed_tasks
-
 // table.data().toArray();
 </script>
-
 </body>
 </html>

@@ -213,6 +213,7 @@ function catalog_table_generate(){
         //columns_generate:true,
         //default_visible:false,
         live:true,
+        select: true,
         additional_buttons: [
             {text: 'Do',name:'Do', action: function ( e, dt, node, config ) {
                 row_data = dt.rows( { selected: true } ).data()[0]

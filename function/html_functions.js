@@ -1,3 +1,25 @@
+//(document.getElementById("my_div")
+function backdrop(element) {
+  if ($(element).attr('highlight') != 'true') {
+    cover = document.createElement("div");
+    cover.style.height = "100%";
+    cover.style.width = "100%";
+    cover.style.backgroundColor = "black";
+    cover.style.opacity = "0.8";
+    cover.style.position = "fixed";
+    cover.style.top = "0px";
+    cover.style.left = "0px";
+    cover.style.zIndex = "1";
+    document.body.appendChild(cover);
+    element.style.position = "relative";
+    element.style.zIndex = "2";
+    $(element).attr('highlight','true')
+  } else {
+    document.body.removeChild(cover);
+    $(element).attr('highlight','false')
+    element.style.zIndex = "0";
+  }
+}
 
 
 

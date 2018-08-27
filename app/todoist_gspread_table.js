@@ -102,7 +102,21 @@ function remaining_tasks_populate(gspread_array){
     { extend: "colvis", title: document.title },
     { extend: "edit", editor: editor },
 
+    {text: 'Add',name:'Add', action: function ( e, dt, node, config ) {
 
+                row_data = dt.rows( { selected: true } ).data()[0]
+                console.log(row_data)
+              task_create_todoist(row_data.Task,row_data.project_id)
+
+        },
+
+
+
+
+
+
+                //ref.child('detail').push(row_data)
+        },
     {text: 'Not Assigned',name:'Not Assigned', action: function ( e, dt, node, config ) {
           dt.columns('task_assigned:name').search('Red').draw()
         }},

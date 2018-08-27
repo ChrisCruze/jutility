@@ -54,13 +54,21 @@ function time_since_start_time_moment_compare(end_time,start_time){
     return time_text
  }
 
+function hours_difference_moment(startTime,end){
+  var duration = moment.duration(end.diff(startTime));
+  var hours = duration.asHours();
+  return hours
+}
 //used in create_task_v2 to keep track of time
 function time_since_start_time_moment(start_time){
     now = moment().valueOf()  //now is the time right now
     start_time_instance = moment(start_time).valueOf()
     elapsed = now - start_time_instance;
+    days_calculated = elapsed / (1000*60*60*24)
     time_text_value = moment(elapsed).subtract({hours: 19}); //have to subtract 19 hours for some reason
+    days_passed = time_text_value.days() - 3
     time_text = time_text_value.format("HH:mm:ss")
+    time_text = days_passed +":"+ time_text
     return time_text
  }
 

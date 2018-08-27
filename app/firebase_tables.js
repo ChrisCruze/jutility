@@ -1,3 +1,41 @@
+function run_table(firebase_reference,table_selector){
+    function callback_function(data){
+        console.log(data)
+        // data.forEach(function(D){D['cost'] = D['file_name'].split(' ')[0] })
+        // val = sum_float_convert_from_array_underscore(data,'cost').toFixed(1)
+        // $("#expense_cost").html(val)
+    }
+
+
+
+    columns = [
+    {data: 'notes',title: 'notes',visible:true,name:'notes'},
+    {data: 'calories',title: 'Calories',visible:true,name:'calories'},
+    // {data: 'miles',title: 'miles',visible:true,name:'miles'},
+    // {data: 'minutes',title: 'minutes',visible:true,name:'minutes'},
+    // {data: 'time_stamp',title: 'time_stamp',visible:true,name:'time_stamp',format:'date_adjust'},
+    //{data: 'speed',title: 'speed',visible:true,name:'speed'}
+    ]
+
+
+    params = datatables_firebase({
+                firebase_reference:firebase_reference,//dbRef.ref('receipts')
+                table_selector:table_selector,//table_selector
+                columns_generate:true,
+                default_visible:true,
+                //callback_function:callback_function,
+                columns: columns,
+                //sort:'time_stamp',
+                //callback_function:visits_callback,
+
+            })
+    return params
+
+}
+
+
+
+
 function receipts_table(){
 	function callback_function(data){
 		data.forEach(function(D){D['cost'] = D['file_name'].split(' ')[0] })

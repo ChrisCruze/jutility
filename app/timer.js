@@ -8,11 +8,18 @@ function html_timer_update_from_jquery(timer_instance_dictionary){
 
 
 //ispecific to todoist on updating page for omni.html
+//timer_instance_page_initiate
 function timer_instance_page_initiate(timer_instance_dictionary){
     $("#input_text").attr('task_id',timer_instance_dictionary.id)
     $("#input_text").val(timer_instance_dictionary.content)
     return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
 }
+
+function timer_instance_page_initiate_2(time){
+    //$("#input_text").val()
+    return setInterval(html_timer_update_from_jquery,1000,timer_instance_dictionary)
+}
+
 
 
 
