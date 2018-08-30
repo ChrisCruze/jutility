@@ -426,6 +426,29 @@ function firebase_dataeditor_table_generate_core(params){
     fields_to_check = _.map(new_fields,function(D){return D['data']})
     //console.log(fields_to_check)
 
+    firebase_limit = params.firebase_limit|| false
+
+
+    if (firebase_limit){
+        params.firebase_reference.limitToLast(firebase_limit).on("child_added", function(snap) {
+
+       // console.log(snap)
+        directory_addresses = snap.getRef().path.n
+        id = directory_addresses[directory_addresses.length-1]
+        firebase_dictionary = snap.val()
+        firebase_dictionary['DT_RowId'] = id
+        if (params.process_function != undefined){
+            firebase_dictionary = params.process_function(firebase_dictionary)
+        }
+        //fields_to_check = _.map(new_fields,function(D){return D['data']})
+        //console.log()
+        key_check_func_dictionary(_.map(params.columns,function(D){return D['data']}),firebase_dictionary)
+        params.table.row.add(firebase_dictionary).draw(false);
+    })
+
+
+    }
+    else {
     params.firebase_reference.on("child_added", function(snap) {
 
        // console.log(snap)
@@ -441,6 +464,9 @@ function firebase_dataeditor_table_generate_core(params){
         key_check_func_dictionary(_.map(params.columns,function(D){return D['data']}),firebase_dictionary)
         params.table.row.add(firebase_dictionary).draw(false);
     })
+
+
+    }
 
 
 

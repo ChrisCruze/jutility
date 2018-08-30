@@ -836,6 +836,17 @@ function regex_between_brackets_pull(my_string){
 
 }
 
+//https://stackoverflow.com/questions/21354235/converting-binary-to-text-using-javascript
+function binary_to_string(str) {
+
+var newBin = str.split(" ");
+var binCode = [];
+
+for (i = 0; i < newBin.length; i++) {
+    binCode.push(String.fromCharCode(parseInt(newBin[i], 2)));
+  }
+return binCode.join("");
+}
 
 
 //convert string to binary
@@ -2828,6 +2839,29 @@ function ipLookUp () {
       }
   );
 }
+//slack_functions.js
+
+
+
+
+
+//slack_push({'text':"<http://aesopba.com/bug_features.html|New Bug Feature: "+message+">",'channel':"CBJFKKB35"})
+function slack_post_message(text,channel){
+  slack_token = "1111000 1101111 1111000 1110000 101101 110011 110101 110100 110111 110110 111000 110001 110000 110100 110000 111001 110110 101101 110011 110101 110101 110010 110011 111000 110101 110111 110000 111001 110011 110010 101101 110011 110101 110111 110001 110100 110001 110000 110000 110101 110010 110111 110000 101101 110100 1100010 111001 110010 111001 110100 110001 110101 110000 110011 110100 110000 110011 110001 110111 110101 1100101 1100011 1100011 111000 1100010 110110 111001 110001 111001 110111 1100011 110111 110101 111001 110111 110100"
+  channel = channel||"CBJFKKB35"//CAFB12X8T
+  //chat_url = "<https://chriscruze.github.io/Aesop/admin.html?viewer=Aesop&id="+String(chat_id)+"|New Website Message: "+message+">"
+  r = $.ajax({type: "POST",
+    url: "https://slack.com/api/chat.postMessage",
+    dataType: 'json',
+    async: false,
+    data: {"channel":channel,
+    "username":"Chat",
+    "text":text,
+    "token":binary_to_string(slack_token)}
+    });
+  console.log(r)
+}
+
 //todoist_functions.js
 
 //toodoist custom functions 
@@ -3174,7 +3208,7 @@ function todoist_delete_task(task_id){
 
 //child function of todoist_completed_tasks_all
 function todoist_completed_tasks_with_offset(todoist_api_token,offset,since) {
-  since = since||moment().subtract(30,'days').format('YYYY-MM-DD') + "T10:00"// '2018-05-08T10:00'//moment().subtract(60,'days').format('YYYY-MM-DD') //
+  since = since||moment().subtract(70,'days').format('YYYY-MM-DD') + "T10:00"// '2018-05-08T10:00'//moment().subtract(60,'days').format('YYYY-MM-DD') //
     results = $.ajax({
       type: "GET",
       url: 'https://en.todoist.com/api/v7/completed/get_all',
@@ -4738,6 +4772,29 @@ function firebase_dataeditor_table_generate_core(params){
     fields_to_check = _.map(new_fields,function(D){return D['data']})
     //console.log(fields_to_check)
 
+    firebase_limit = params.firebase_limit|| false
+
+
+    if (firebase_limit){
+        params.firebase_reference.limitToLast(firebase_limit).on("child_added", function(snap) {
+
+       // console.log(snap)
+        directory_addresses = snap.getRef().path.n
+        id = directory_addresses[directory_addresses.length-1]
+        firebase_dictionary = snap.val()
+        firebase_dictionary['DT_RowId'] = id
+        if (params.process_function != undefined){
+            firebase_dictionary = params.process_function(firebase_dictionary)
+        }
+        //fields_to_check = _.map(new_fields,function(D){return D['data']})
+        //console.log()
+        key_check_func_dictionary(_.map(params.columns,function(D){return D['data']}),firebase_dictionary)
+        params.table.row.add(firebase_dictionary).draw(false);
+    })
+
+
+    }
+    else {
     params.firebase_reference.on("child_added", function(snap) {
 
        // console.log(snap)
@@ -4753,6 +4810,9 @@ function firebase_dataeditor_table_generate_core(params){
         key_check_func_dictionary(_.map(params.columns,function(D){return D['data']}),firebase_dictionary)
         params.table.row.add(firebase_dictionary).draw(false);
     })
+
+
+    }
 
 
 
@@ -5186,7 +5246,7 @@ function chart_update_from_params(completed_tasks_array,chart_object,calculation
 
 
   average_per_d_time = (running_total/counter_of_day_i_did_it).toFixed(2)
-  console.log(average_per_d_time)
+  //console.log(average_per_d_time)
   //$("#average_per_d_time").html(average_per_d_time)
  
    

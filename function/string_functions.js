@@ -28,6 +28,17 @@ function regex_between_brackets_pull(my_string){
 
 }
 
+//https://stackoverflow.com/questions/21354235/converting-binary-to-text-using-javascript
+function binary_to_string(str) {
+
+var newBin = str.split(" ");
+var binCode = [];
+
+for (i = 0; i < newBin.length; i++) {
+    binCode.push(String.fromCharCode(parseInt(newBin[i], 2)));
+  }
+return binCode.join("");
+}
 
 
 //convert string to binary

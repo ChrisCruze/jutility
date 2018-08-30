@@ -179,6 +179,12 @@ def run():
     #save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
     #save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
     save_file(directory="/Users/chriscruz/Dropbox/Github/Aesop-WearWell/js/jutility.js")
-
     save_file(directory="/Users/chriscruz/Documents/Aesop_080518/Aesop/js/jutility.js")
+    save_file(directory="/Users/chriscruz/Dropbox/Github/Aesop/Aesop/js/jutility.js")
+    save_file(directory="/Users/chriscruz/Dropbox/Github/ChrisCross/jutility.js")
+
+
+    
+
+    #save_file(directory="/Users/chriscruz/Documents/Aesop_080518/Aesop/js/jutility.js")
 run()

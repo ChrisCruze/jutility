@@ -39,7 +39,7 @@ function chart_update_from_params(completed_tasks_array,chart_object,calculation
 
 
   average_per_d_time = (running_total/counter_of_day_i_did_it).toFixed(2)
-  console.log(average_per_d_time)
+  //console.log(average_per_d_time)
   //$("#average_per_d_time").html(average_per_d_time)
  
    
