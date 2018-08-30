@@ -897,6 +897,23 @@ function calendar_initiate_base(params){
 	calendar_selector = params.calendar_selector||'#calendar'
 	events = params.events
 	calendar_object = $(calendar_selector).fullCalendar({
+      selectable: true,
+      selectHelper: true,
+      select: function(start, end) {
+        var title = prompt('Event Title:');
+        var eventData;
+        if (title) {
+          eventData = {
+            title: title,
+            start: start,
+            end: end
+          };
+          console.log(eventData)
+          $(calendar_selector).fullCalendar('renderEvent', eventData, true); // stick? = true
+        }
+        $(calendar_selector).fullCalendar('unselect');
+      },
+      editable: true,
       header: {
         left: 'prev,next today',
         center: 'title',
