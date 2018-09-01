@@ -116,6 +116,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 
+
 <div id="page-wrapper" class="gray-bg">
 <div class="wrapper wrapper-content">
 <div id='main_content'>
@@ -161,8 +162,8 @@ var dbRef = dbRef||firebase.database();
 
 datatables_firebase({
 table_selector:"#table",
-firebase_reference:dbRef.ref('omni').child('priorities'),
-columns:['name',{'data':'rag','format':'rag'},{'data':'rank','format':'rank'},{'data':'summary',visible:false},{'data':'group',visible:false},{'data':'identifier',visible:false}],
+firebase_reference:dbRef.ref('omni').child('side_panel'),
+columns:['name','url',{'data':'category'},{'data':'rank','format':'rank'},{'data':'status','format':'rag'}],
 sort:'rank'
 })
 

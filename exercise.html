@@ -123,10 +123,34 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <body>
 
 <div id="wrapper">
+<div id="page-wrapper" class="gray-bg">
+
 <div class="wrapper wrapper-content">
 <div id='main_content'>
 <div class="container">
+<!--         <div class="row border-bottom white-bg dashboard-header">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content">
+                        <div class="row">
+                        <div class="col-lg-12">
+                        <div class="iboxX float-e-marginsX">
+                        <div class="ibox-titleX">
+                            <h5>Summary</h5>
+                        </div>
+                        <div class="ibox-contentX">
+                            <table id="remaining_tasks_table" class="display nowrap" style="width:100%"></table>  
+                        </div>
+
+                        </div>
+                        </div>
+                        </div>
+                </div>
+            </div>
+        </div> -->
+
 <div class="row" id="metric_headers">
+</div>   
+<div class="row" >
 
 <div class="col-lg-6">
 <div class="ibox float-e-margins">
@@ -155,6 +179,7 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 </div>
 </div>
 </div>
+</div>
 
 
 
@@ -163,22 +188,37 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 var ref = firebase.database().ref('exercise')//.child('test_user').child('data').child('stocks').child('data')
 
 
+function metric_headers_apply(){
+    sub_title = '-'
+    metric_text = '-'
+    sub_metric_text = '-'
+    $('#metric_headers').append(metric_header_create_label('Reps',sub_title,metric_text,sub_metric_text,'reps_today'))
+
+}
+metric_headers_apply()
+function callback_function(data){
+    filtered_today = data.filter(function(D){return  check_if_date_is_current_range(D['time_stamp'])})
+      $("#reps_today").find(".metric_text").html(filtered_today.length)
+
+}
 function detail_table_generate(){
      detail_params = datatables_firebase({
         table_selector:"#detail_table",
+        callback_function:callback_function,
         firebase_reference:ref.child('detail'),
         columns:[
             'name',
             'reps',
-            'minutes',
+            // 'minutes',
             'weight',
-            'pace',
-            'distance',//this can be miles or be the pace * the minutes or reps
-            'cadence',//how often should it be done
-            'last_completed',
-            'days_since_last_completed',
-            'due_date',
-            'time_stamp'
+            // 'pace',
+            // 'distance',//this can be miles or be the pace * the minutes or reps
+            // 'cadence',//how often should it be done
+            // 'last_completed',
+            // 'days_since_last_completed',
+            // 'due_date',
+             {'data':'time_stamp','format':'date'}
+
             ],
         //columns_generate:true,
         //default_visible:false,
@@ -192,22 +232,21 @@ function detail_table_generate(){
 }
 
 function catalog_table_generate(){
-
     catalog_params = datatables_firebase({
         table_selector:"#catalog_table",
         firebase_reference:ref.child('catalog'),
         columns:[
             'name',
             'reps',
-            'minutes',
+            // 'minutes',
             'weight',
-            'pace',
-            'distance',//this can be miles or be the pace * the minutes or reps
-            'cadence',//how often should it be done
-            'last_completed',
-            'days_since_last_completed',
-            'due_date',
-            'time_stamp'
+            // 'pace',
+            // 'distance',//this can be miles or be the pace * the minutes or reps
+            // 'cadence',//how often should it be done
+            // 'last_completed',
+            // 'days_since_last_completed',
+            // 'due_date',
+            // 'time_stamp'
 
             ],
         //columns_generate:true,
@@ -254,6 +293,7 @@ all_tables()
 
 
 
+replace_side_panel_platform_omni()
 
 
 

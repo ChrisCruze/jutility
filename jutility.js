@@ -425,6 +425,52 @@ function papa_parse_multiple_promise_old(params) {
 
 //html_functions.js
 
+function side_panel_section_create(params){
+ // params = {parent_name: 'Reports',links:[{attributes:{href:"#"},text:'first_report'}]}
+  parent_link = '<a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">'+params.parent_name+'</span> <span class="fa arrow"></span></a>'
+  parent_elem = $("<li>",{'style': ""}).append( $(parent_link))
+  list_wrapper = $('<ul class="nav nav-second-level collapse"> </ul>')
+
+ params.links.forEach(function(D){
+  a_link = $("<a>",D.attributes).text(D.text)
+  list_wrapper.append($("<li>",{}).append(a_link))
+ })
+  var link_elem = parent_elem.append(list_wrapper)
+  return link_elem
+
+}
+
+
+function replace_side_panel_platform(link_elem_array){
+//link_elem_array = [{parent_name: 'Reports',links:[{attributes:{href:"#"},text:'first_report'}]}]
+  var outer_div = $("<ul>", {"class":"nav metismenu"});
+  link_elem_array.forEach(function(D){
+      outer_div.append(side_panel_section_create(D))
+  })
+  nav_wrapper = $('<nav class="navbar-default navbar-static-side" role="navigation"> <div class="sidebar-collapse"> </div> </nav>')
+  nav_wrapper.append(outer_div)
+  $("#wrapper").prepend(nav_wrapper)
+  $(".metismenu").metisMenu();
+}
+
+function replace_side_panel_platform_omni(){
+    array = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/side_panel.json"))
+    array_dict = _.groupBy(array,'category')
+    L = []
+    Object.keys(array_dict).forEach(function(key_name){
+        array_subli = array_dict[key_name]
+        array_subli = _.sortBy(array_subli,function(D){return parseFloat(D['rank'])||0})
+        array_subli.reverse()
+        L.push({parent_name:key_name,links:_.map(array_subli,function(D){return {attributes:{href:D['url'],text:D['name']}}})})
+    })
+    replace_side_panel_platform(L)
+
+}
+
+
+
+
+
 //(document.getElementById("my_div")
 function backdrop(element) {
   if ($(element).attr('highlight') != 'true') {
@@ -4598,6 +4644,7 @@ function datatable_generate(table_id,columns_list,editor,params){
     if (params.additional_buttons != undefined){
         button_params = button_params.concat(params.additional_buttons)
     }
+
 
     config = {
         dom: '<"html5buttons"B>lTfgitp',

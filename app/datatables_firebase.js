@@ -217,6 +217,11 @@ function dataeditor_firebase_instance_generate(table_id,fields,firebaseRef,row_i
     return params.editor
 }
 
+
+function datatables_add_metrics(){
+    row_div = '<div class="row"> <div class="col-xs-3"> <small class="stats-label">Pages / Visit</small> <h4>236 321.80</h4> </div> <div class="col-xs-3"> <small class="stats-label">% New Visits</small> <h4>46.11%</h4> </div> <div class="col-xs-3"> <small class="stats-label">Last week</small> <h4>432.021</h4> </div> <div class="col-xs-3"> <small class="stats-label">Last week</small> <h4>432.021</h4> </div> </div>'
+    $("#metrics_row").html(row_div)
+}
 function datatable_generate(table_id,columns_list,editor,params){
 
     button_params = [
@@ -236,8 +241,9 @@ function datatable_generate(table_id,columns_list,editor,params){
         button_params = button_params.concat(params.additional_buttons)
     }
 
+
     config = {
-        dom: '<"html5buttons"B>lTfgitp',
+        dom: '<"#metrics_row.row"<"col-sm-12">><"html5buttons"B>lTfgitp',
         data: [],
         columns:columns_list,
         select: true,
