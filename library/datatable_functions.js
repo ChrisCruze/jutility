@@ -181,18 +181,36 @@ return '<span title="'+date_format_from+'">'+date_format+'</span>'
 }
 //format the datatables date with the date and time
 function date_time_datatable_format_render_days(data,type,row,meta) {
-if (moment(data).isValid()){
-date_format = moment(data).format("YYYY-MM-DD")
-date_format_from = moment(data).fromNow()
+	if (moment(data).isValid()){
+	date_format = moment(data).format("YYYY-MM-DD")
+	date_format_from = moment(data).fromNow()
+	}
+	else {
+	date_format = moment(data,"MM-DD-YYYY h:mm a").format("YYYY-MM-DD")
+	date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+	}
+	return '<span title="'+date_format_from+'">'+date_format+'</span>'
+	//$(td).attr('title',moment(cellData).fromNow())
+	//$(td).html(date_format);
 }
-else {
-date_format = moment(data,"MM-DD-YYYY h:mm a").format("YYYY-MM-DD")
-date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+//format = "YYYY-MM-DD"
+function date_time_datatable_format_render_custom(date_format){
+	function date_time_datatable_format_render_base(data,type,row,meta) {
+		if (moment(data).isValid()){
+			date_format = moment(data).format(date_format)
+			date_format_from = moment(data).fromNow()
+		}
+		else {
+			date_format = moment(data,"MM-DD-YYYY h:mm a").format(date_format)
+			date_format_from = moment(data,"MM-DD-YYYY h:mm a").fromNow()
+		}
+		return '<span title="'+date_format_from+'">'+date_format+'</span>'
+	}
+	return date_time_datatable_format_render_base
 }
-return '<span title="'+date_format_from+'">'+date_format+'</span>'
-//$(td).attr('title',moment(cellData).fromNow())
-//$(td).html(date_format);
-}
+
+
+
 //format the datatables date with the date and time
 function date_time_datatable_format_render_seconds(data,type,row,meta) {
 if (moment(data).isValid()){

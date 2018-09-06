@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exercise</title>
+    <title>Drogas</title>
 <link href="https://cruzco.site44.com/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/css/animate.css" rel="stylesheet">
@@ -25,6 +25,8 @@
 <link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
 <link rel="stylesheet" href="css/small_chat.css">
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.13.0/pivot.min.css"/>
 
 
 <!-- Mainly scripts -->
@@ -104,75 +106,49 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script src="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js"></script>
 <script src="https://cruzco.site44.com/js/plugins/daterangepicker/daterangepicker.js"></script>
-
 <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
 <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
  -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.13.0/pivot.min.js"></script>
 
-<!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.10/sass.min.js"></script>
- -->
- <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="gb3pnnrxyrysbbu"></script>
-
- <script src="jutility.js"></script>
-<style>
-
-</style>
+<script src="jutility.js"></script>
 </head>
 <body>
-
 <div id="wrapper">
-<div id="page-wrapper" class="gray-bg">
 
+
+<div id="page-wrapper" class="gray-bg">
 <div class="wrapper wrapper-content">
 <div id='main_content'>
 <div class="container">
-<!--         <div class="row border-bottom white-bg dashboard-header">
-            <div class="col-lg-12">
-                <div class="wrapper wrapper-content">
-                        <div class="row">
-                        <div class="col-lg-12">
-                        <div class="iboxX float-e-marginsX">
-                        <div class="ibox-titleX">
-                            <h5>Summary</h5>
-                        </div>
-                        <div class="ibox-contentX">
-                            <table id="remaining_tasks_table" class="display nowrap" style="width:100%"></table>  
-                        </div>
+<div class="row">
 
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#" onClick="drogas_chart_update()">Ds</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
                         </div>
-                        </div>
-                        </div>
+                    </div>
+                    <div class="ibox-content">
+                          <table id="table" class="display nowrap" style="width:100%"></table>  
+                    </div>
                 </div>
             </div>
-        </div> -->
-
-<div class="row" id="metric_headers">
-</div>   
-<div class="row" >
-
-<div class="col-lg-6">
-<div class="ibox float-e-margins">
-<div class="ibox-title">
-<h5>Catalog</h5>
-</div>
-<div class="ibox-content" style="">
-<table class="display nowrap" cellspacing="0" width="100%" id="catalog_table"></table> 
-</div>
-</div>
-</div>
-
-<div class="col-lg-6">
-<div class="ibox float-e-margins">
-<div class="ibox-title">
-<h5>Detail</h5>
-</div>
-<div class="ibox-content" style="max-height: 600px;overflow-y: scroll;">
-<table class="display nowrap" cellspacing="0" width="100%" id="detail_table"></table> 
-</div>
-</div>
-</div>
 
 </div>
 </div>
@@ -180,170 +156,83 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 </div>
 </div>
 </div>
-
 
 
 <script>
-
-var ref = firebase.database().ref('exercise')//.child('test_user').child('data').child('stocks').child('data')
-
-
-function metric_headers_apply(){
-    sub_title = '-'
-    metric_text = '-'
-    sub_metric_text = '-'
-    $('#metric_headers').append(metric_header_create_label('Reps',sub_title,metric_text,sub_metric_text,'reps_today'))
-
-}
+var ref = firebase.database().ref('drogas')
 
 
 
-metric_headers_apply()
+function pivot_generate(){
+    $.pivotUtilities.tipsData = data
+    var utils = $.pivotUtilities;
+    var heatmap =  utils.renderers["Heatmap"];
 
+    var count = function(data, rowKey, colKey) {
+        D =  {
+        count: 0,
+        push: function(record) {this.count++; },
+        value: function(i) { return this.count; },
+        format: function(x) { return x; },
+        };
+        return D
+    };
 
-
-
-function callback_function(data){
-    filtered_today = data.filter(function(D){return  check_if_date_is_current_range(D['time_stamp'])})
-    $("#reps_today").find(".metric_text").html(filtered_today.length)
-}
-
-
-function detail_table_generate(){
-     detail_params = datatables_firebase({
-        table_selector:"#detail_table",
-        callback_function:callback_function,
-        firebase_reference:ref.child('detail'),
-        columns:[
-            'name',
-            'reps',
-            // 'minutes',
-            'weight',
-            // 'pace',
-            // 'distance',//this can be miles or be the pace * the minutes or reps
-            // 'cadence',//how often should it be done
-            // 'last_completed',
-            // 'days_since_last_completed',
-            // 'due_date',
-             {'data':'time_stamp','format':'date'}
-
-            ],
-        //columns_generate:true,
-        //default_visible:false,
-        live:true,
-        additional_buttons: [{text: 'Update',name:'Update', action: function ( e, dt, node, config ) {
-            //update_stock_data()
-        }}]
-    })
-     return detail_params
-}
-
-function catalog_table_generate(details_table){
-
-    details_array = details_table.table.data().toArray()
-    console.log(details_array)
-    //details_group = _.groupBy()
-
-    catalog_params = datatables_firebase({
-        table_selector:"#catalog_table",
-        firebase_reference:ref.child('catalog'),
-        columns:[
-            'name',
-            'reps',
-            // 'minutes',
-            'weight',
-            {'data':null,'visible':true,title:'last_completed',name:'last_completed',render:function(data,type,row,meta){
-                array = details_table.table.data().toArray()
-                exercise_array = _.groupBy(array,'name')[row['name']]
-                max_time_dict = _.max(exercise_array,function(D){return moment(D['time_stamp']).unix()})
-                max_time_stamp = max_time_dict['time_stamp']
-                return moment(max_time_stamp).fromNow()
-                //console.log(exercise_max_dict)
-                //console.log(details_table.table.data().toArray())
-                //return 'here'
-            }},
-
-            {'data':null,'visible':true,title:'hours_difference',name:'hours_difference',render:function(data,type,row,meta){
-                array = details_table.table.data().toArray()
-                exercise_array = _.groupBy(array,'name')[row['name']]
-                max_time_dict = _.max(exercise_array,function(D){return moment(D['time_stamp']).unix()})
-                max_time_stamp = max_time_dict['time_stamp']
-                return hours_difference_moment(moment(),moment(max_time_stamp))
-                //return moment(max_time_stamp).fromNow()
-                //console.log(exercise_max_dict)
-                //console.log(details_table.table.data().toArray())
-                //return 'here'
-            }},
-
-
-
-            // 'pace',
-            // 'distance',//this can be miles or be the pace * the minutes or reps
-            // 'cadence',//how often should it be done
-            // 'last_completed',
-            // 'days_since_last_completed',
-            // 'due_date',
-            // 'time_stamp'
-
-            ],
-        //columns_generate:true,
-        //default_visible:false,
-        live:true,
-        //sort:'hours_difference',
-        order:[4,'desc'],
-        select: true,
-        additional_buttons: [
-            {text: 'Do',name:'Do', action: function ( e, dt, node, config ) {
-                row_data = dt.rows( { selected: true } ).data()[0]
-                row_data.time_stamp = moment().format()
-                ref.child('detail').push(row_data)
-        }}]
-    })
-
-
-
-catalog_params.table
-    .order( [ 4, 'asc' ] )
-    .draw();
-
-
-    return catalog_params
-
-
-}
-
-
-//detail_table_generate()
-
-
-function detail_table() {
-  return new Promise(
-    function(resolve) {
-        return resolve(detail_table_generate())
-    },
-    function(reject) {})
-}
-
-
-function all_tables(){
-    detail_table().then(function(detail_table) {
-        //console.log(detail_table)
-       catalog_table_generate(detail_table)
-        //resp2 = Object.values(resp)
+    function render_function(pivot_object,options){
+        return utils.renderers["Heatmap"](pivot_object,options)
     }
-    )
+
+    var sumOverSum =  utils.aggregators["Sum over Sum"];
+
+    $("#output").pivot(
+    utils.tipsData, {
+    rows: ["first_name"],
+    cols: ["position"],
+    aggregator: count,
+    renderer: render_function
+    });
+
+
 }
-all_tables()
 
 
+function datatables_initiate(){
+    function callback_function(data){
 
-//.table.data().toArray()
-//r = temp0.table.row("#-LJR1sfoea5eBmApGCaH")
 
+    }
+    params = datatables_firebase({
+                firebase_reference:ref,
+                table_selector:"#table",
+                columns_generate:true,
+                default_visible:true,
+                callback_function:callback_function,
+                columns: [
+                    {'data':'date_time','visible':true,format:'date'},
+                    {'data':'date_time','visible':false,format:'date_days',title:'formatted_date',name:'date_days'},
+                    {'data':'date_time','visible':false,title:'month',name:'month',render:function(data,type,row,meta){return moment(data).format("MMM")}},
+                    {'data':'date_time','visible':false,title:'day',name:'day',render:function(data,type,row,meta){return moment(data).format("ddd")}},
+                    {'data':'date_time','visible':false,title:'hour',name:'hour',render:function(data,type,row,meta){return moment(data).format("HH")}},
+                    {'data':'input_text','visible':true,format:'text'},
+                    {'data':'type','visible':true,format:'text'},
+                    {'data':'within_system','visible':false,format:'text'},
+                ],
+                firebase_limit:20,
+                sort:'date_time',
+                //callback_function:visits_callback,
+            })
+    return params
+
+}
+
+datatables_initiate()
 replace_side_panel_platform_omni()
 
 
 
+
+
 </script>
+
 </body>
 </html>
