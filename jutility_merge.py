@@ -4,6 +4,7 @@ import csv
 import StringIO
 import requests 
 import traceback
+import jsbeautifier
 
 class CSVFunctions(object):
     def write(self, lst, filename,sort=True,first_key=None):
@@ -160,18 +161,20 @@ def run():
     	    array.extend(sub_array)
     	    divider = "\n//{}\n\n".format(os.path.basename(i))
     	    s = s + divider+ payload
-    print s
+    #print s
 
     #array = TextFunctions().javascript_function_pull(s)
     #print array 
     filename = os.path.join(os.getcwd(),'functions.csv')
+    array = [D for D in array if '=' not in D['name']]
     CSVFunctions().write(array,filename)
 
     readme_file_write(array)
 
     def save_file(directory=os.path.join(os.getcwd(),'jutility.js')):
         f = open(directory, 'w+')
-        f.write(str(s))
+        #f.write(str(s))
+        f.write(jsbeautifier.beautify(s))
         f.close()
     save_file()
     save_file(directory="/Users/chriscruz/Dropbox/Github/Dashbot/js/jutility.js")
