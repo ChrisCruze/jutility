@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Priorities</title>
+        <title>Gs</title>
         <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
         <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
@@ -23,11 +23,7 @@
         <link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
         <link rel="stylesheet" href="css/small_chat.css">
-
-
         <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
-
-
         <!-- Mainly scripts -->
         <script src="https://cruz.site44.com/js/jquery-3.1.1.min.js"></script>
         <script src="https://cruz.site44.com/js/bootstrap.min.js"></script>
@@ -81,7 +77,6 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
-
         <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
@@ -109,35 +104,58 @@
                                 <div class="col-lg-12">
                                     <div class="ibox float-e-margins">
                                         <div class="ibox-title">
-                                            <h5>Editor</h5>
-                                        </div>
-                                    <div class="ibox-content" id="summernote_ibox">
-                                     <div id="summernote"><p></p></div>
-                                    </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="ibox float-e-margins">
-                                        <div class="ibox-title">
                                             <h5></h5>
-                                            <div class="ibox-tools">
-                                                <a class="collapse-link">
-                                                    <i class="fa fa-chevron-up"></i>
-                                                </a>
-                                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                                    <i class="fa fa-wrench"></i>
-                                                </a>
-                                                <ul class="dropdown-menu dropdown-user">
-                                                    <li><a href="#" onClick="drogas_chart_update()">Ds</a>
-                                                </li>
-                                            </ul>
-                                            <a class="close-link">
-                                                <i class="fa fa-times"></i>
-                                            </a>
+                                        </div>
+                                        <div class="ibox-content" id="summernote_ibox">
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <button type="button" status='true' class="btn btn-block btn-outline btn-primary submit_button">Yes</button>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <button type="button" status='false' class="btn btn-block btn-outline btn-danger submit_button">No</button>
+                                                </div>
+                                            </div>
+
+
+                                            <form method="get" class="form-horizontal">
+
+<div class="form-group">
+
+    <div class="col-sm-12">
+
+        <input id="comment" placeholder="comment" class="form-control m-b" type="text">
+    </div>
+</div>
+</div>
+
+
                                         </div>
                                     </div>
-                                    <div class="ibox-content">
-                                    <table id="table" class="display nowrap" style="width:100%"></table>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="ibox float-e-margins">
+                                                <div class="ibox-title">
+                                                    <h5></h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="collapse-link">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                            <i class="fa fa-wrench"></i>
+                                                        </a>
+                                                        <ul class="dropdown-menu dropdown-user">
+                                                            <li><a href="#" onClick="drogas_chart_update()">Ds</a>
+                                                        </li>
+                                                    </ul>
+                                                    <a class="close-link">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="ibox-content">
+                                            <table id="table" class="display nowrap" style="width:100%"></table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -145,91 +163,37 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<script>
-var url = new URL(window.location.href );
-var hash = url.searchParams.get('id')||'home'
-document.title = hash
+        <script>
 
-var dbRef = dbRef||firebase.database();
-firebase_reference_instance = dbRef.ref('lists').child(hash).child('data')
-firebase_reference_content = dbRef.ref('lists').child(hash).child('content')
 
-datatables_firebase({
-    table_selector:"#table",
-    firebase_reference:firebase_reference_instance,
-    columns:[
-        {'data':'name',render:function(data,type,row,meta){
-              return "<a target='_blank' href='"+ "list.html?id="+file_formatted_string(data) +"'>" +data + "</a>"
-        }},
-        // {'data':'url',render:function(data,type,row,meta){
-        //       return "<a target='_blank' href='"+ "list.html?id="+file_formatted_string(data) +"'>" +data + "</a>"
-        // }},
-        {'data':'url','format':'',visible:false},
-        {'data':'rag','format':'rag'},
-        {'data':'rank','format':'rank'},
-        {'data':'summary',visible:false},
-        {'data':'group',visible:false},
-        {'data':'identifier',visible:false}
+        var dbRef = dbRef||firebase.database();
+        firebase_reference_instance = dbRef.ref('Gs').child('data')
+        datatables_firebase({
+        table_selector:"#table",
+        firebase_reference:firebase_reference_instance,
+        columns:[
+            // {'data':'name','format':'',visible:true},
+            {'data':'status','format':'',visible:true},
+            {'data':'comment','format':'',visible:true},
+            {'data':'time_stamp','format':'date',visible:true},
         ],
-        sort:'rank'
-})
-$('#summernote').summernote();
+        //sort:'rank'
+        })
 
 
-function firebase_update_from_summernote(){
-    var markupStr = $('#summernote').summernote('code');
-    update_dict = {
-            id: hash,
-            content:$('#summernote').summernote('code'),
-        timestamp: moment().format()}
-    console.log(update_dict)
-    firebase_reference_content.set(update_dict)
-}
+        $(".submit_button").click(function(event) {
+            status = $(this).attr('status')
+            date_time = moment().format(); //new Date()
 
-
-
-//setup before functions
-var typingTimer;                //timer identifier
-var doneTypingInterval = 3000;  //time in ms, 5 second for example
-var $input = $('#summernote_ibox');
-
-//on keyup, start the countdown
-$input.on('keyup', function () {
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(doneTyping, doneTypingInterval);
-});
-
-//on keydown, clear the countdown 
-$input.on('keydown', function () {
-  clearTimeout(typingTimer);
-});
-
-//user is "finished typing," do something
-function doneTyping () {
-  //do something
-  firebase_update_from_summernote()
-}
+            comment = $("#comment").val()
+            data_to_push = {'time_stamp':date_time,'status':status,'comment':comment}
+            firebase_reference_instance.push(data_to_push)
+            $("#comment").val("")
+        });
 
 
 
-function set_summernote_text(){
-    var markupStr ="<p>Hello Summernote</p><p><br></p><p><br></p><p>My name is X hello<br></p>"
-    var markupStr = 'hello world';
-    $('#summernote').summernote('code', markupStr);
-}
-
-firebase_reference_content.on('value', function(snapshot) {
-    object_dictionary = snapshot.val()
-    $('#summernote').summernote('code', object_dictionary['content'])
-})
-
-
-replace_side_panel_platform_omni()
-
-
-
-</script>
-</body>
+        replace_side_panel_platform_omni()
+        </script>
+    </body>
 </html>
