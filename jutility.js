@@ -3001,6 +3001,102 @@ function max_date_from_array_underscore(array, key_name) {
     })
 
 }
+//asana_functions.js
+
+
+asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+
+///0/781b6a9daca621f04ff29e4cf4c741ae
+//https://asana.com/developers/api-reference/users
+//https://github.com/Asana/node-asana/
+// <script src="https://github.com/Asana/node-asana/releases/download/<LATEST_RELEASE>/asana-min.js"></script>
+//client = asana.Client.create().useAccessToken('my_access_token');
+//client.users.me().then(function(me) {
+//   console.log(me);
+// });
+
+
+
+function asana_users_me_get() {
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/users/me",
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+        }
+    });
+    return result.responseJSON
+}
+
+function asana_workspaces_get() {
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/workspaces",
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+        }
+    });
+    return result.responseJSON
+
+    //800363353090437
+}
+
+
+function asana_projects_get() {
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/projects",
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+            'workspace': 800363353090437,
+
+        }
+    });
+    return result.responseJSON['data']
+
+    //
+}
+
+
+
+function asana_tasks_get(project_id) {
+    //projects_array = asana_projects_get()//['data']
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/projects/" + project_id + "/tasks",
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+        }
+    });
+
+    return result.responseJSON['data']
+    //
+}
+
+//800362391724583
+
+function asana_tasks_get_from_projects() {
+    projects_array = asana_projects_get()
+    project_ids = _.map(projects_array, function(D) {
+        return asana_tasks_get(D['id'])
+    })
+    return project_ids
+}
+
+//GET    /projects/project-id/tasks
+//GET    /projects/project-id/tasks
 //gspread_functions.js
 
 //query google spreadsheets
@@ -6911,6 +7007,7 @@ function header_metrics_create_todoist() {
     $('#metric_headers').append(metric_header_create_label('Tasks Completed', sub_title, metric_text, sub_metric_text, 'tasks_completed_number'))
     $('#metric_headers').append(metric_header_create_label('Tasks Number', sub_title, metric_text, sub_metric_text, 'tasks_current_number'))
     $('#metric_headers').append(metric_header_create_label('Age', sub_title, metric_text, sub_metric_text, 'tasks_age'))
+    $('#metric_headers').append(metric_header_create_label('Due Today', sub_title, metric_text, sub_metric_text, 'tasks_due'))
 
 
 
@@ -6942,6 +7039,31 @@ function percentage_sub_text(id, total_tasks, total_goal_tasks) {
 
 }
 
+
+function percentage_sub_text_inverse(id, total_tasks, total_goal_tasks) {
+    id = id || "#tasks_current_number"
+    total_tasks = total_tasks || 5
+    total_goal_tasks = total_goal_tasks || 10
+
+    percentage_to_goal = total_tasks / total_goal_tasks
+    percentage_text = (percentage_to_goal * 100).toFixed(1) + "%"
+    num_denominator = total_tasks + "/" + total_goal_tasks
+
+    $(id).find(".sub_metric_text").html(num_denominator + "|" + percentage_text)
+    add_percentage_label_html(id, percentage_to_goal)
+
+    label_object = $(id).find(".sub_metric_text")
+
+    if (percentage_to_goal > .9) {
+        add_remove_labels(label_object, 'green')
+    } else if (percentage_to_goal > .6) {
+        add_remove_labels(label_object, 'amber')
+    } else {
+        add_remove_labels(label_object, 'red')
+    }
+
+}
+
 function current_tasks_call_back(callback_array) {
     total_count = callback_array.length
 
@@ -6961,6 +7083,28 @@ function current_tasks_call_back(callback_array) {
     percentage_sub_text('#tasks_age', task_age, 3)
     $('#tasks_age').find(".metric_text").html(task_age)
 
+
+    tasks_with_due_date = callback_array.filter(function(D) {
+        return D['due_date_utc'] != "null"
+    })
+    tasks_with_no_due_date = callback_array.filter(function(D) {
+        return D['due_date_utc'] == "null"
+    })
+
+    percentage_with_due = ((tasks_with_due_date.length / total_count) * 100).toFixed(1) + "%"
+
+
+    due_today = tasks_with_due_date.filter(function(D) {
+        return hours_difference_moment(moment(), moment(D['due_date_utc'])) < 24
+    })
+
+
+    $('#tasks_due').find(".metric_text").html(due_today.length)
+    $('#tasks_due').find(".sub_title").html(tasks_with_no_due_date.length + 'TBD')
+    $('#tasks_due').find(".sub_metric_text").html(percentage_with_due)
+
+
+    percentage_sub_text_inverse('#tasks_due', tasks_with_due_date.length, total_count)
 
     percentage_sub_text('#tasks_current_number', total_count, goal_number)
 

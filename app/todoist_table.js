@@ -12,6 +12,7 @@ function header_metrics_create_todoist(){
   $('#metric_headers').append(metric_header_create_label('Tasks Completed',sub_title,metric_text,sub_metric_text,'tasks_completed_number'))
   $('#metric_headers').append(metric_header_create_label('Tasks Number',sub_title,metric_text,sub_metric_text,'tasks_current_number'))
   $('#metric_headers').append(metric_header_create_label('Age',sub_title,metric_text,sub_metric_text,'tasks_age'))
+  $('#metric_headers').append(metric_header_create_label('Due Today',sub_title,metric_text,sub_metric_text,'tasks_due'))
 
 
 
@@ -45,6 +46,33 @@ function percentage_sub_text(id,total_tasks,total_goal_tasks){
 
 }
 
+
+function percentage_sub_text_inverse(id,total_tasks,total_goal_tasks){
+  id = id || "#tasks_current_number"
+  total_tasks = total_tasks || 5
+  total_goal_tasks = total_goal_tasks || 10
+
+  percentage_to_goal = total_tasks/total_goal_tasks
+  percentage_text = (percentage_to_goal * 100).toFixed(1) + "%"
+  num_denominator = total_tasks + "/" + total_goal_tasks
+
+  $(id).find(".sub_metric_text").html(num_denominator+"|"+percentage_text)
+  add_percentage_label_html(id,percentage_to_goal)
+
+  label_object = $(id).find(".sub_metric_text")
+
+  if (percentage_to_goal > .9){
+    add_remove_labels(label_object,'green')
+  }
+  else if (percentage_to_goal > .6){
+    add_remove_labels(label_object,'amber')
+  }
+  else {
+    add_remove_labels(label_object,'red')
+  }
+
+}
+
 function current_tasks_call_back(callback_array){
   total_count = callback_array.length
 
@@ -62,6 +90,22 @@ function current_tasks_call_back(callback_array){
   percentage_sub_text('#tasks_age',task_age,3)
   $('#tasks_age').find(".metric_text").html(task_age)
 
+
+  tasks_with_due_date = callback_array.filter(function(D){return D['due_date_utc'] != "null"})
+  tasks_with_no_due_date = callback_array.filter(function(D){return D['due_date_utc'] == "null"})
+
+  percentage_with_due = ((tasks_with_due_date.length/total_count)*100).toFixed(1) + "%"
+
+
+  due_today = tasks_with_due_date.filter(function(D){return hours_difference_moment(moment(),moment(D['due_date_utc'])) < 24})
+
+
+  $('#tasks_due').find(".metric_text").html(due_today.length)
+  $('#tasks_due').find(".sub_title").html(tasks_with_no_due_date.length + 'TBD')
+  $('#tasks_due').find(".sub_metric_text").html(percentage_with_due)
+
+
+  percentage_sub_text_inverse('#tasks_due',tasks_with_due_date.length,total_count)
 
   percentage_sub_text('#tasks_current_number',total_count,goal_number)
 
