@@ -101,11 +101,12 @@ function current_tasks_call_back(callback_array){
 
 
   $('#tasks_due').find(".metric_text").html(due_today.length)
-  $('#tasks_due').find(".sub_title").html(tasks_with_no_due_date.length + 'TBD')
-  $('#tasks_due').find(".sub_metric_text").html(percentage_with_due)
+  $('#tasks_due').find(".sub_title").html(percentage_with_due)//tasks_with_no_due_date.length + 'TBD')
+  //$('#tasks_due').find(".sub_metric_text").html(percentage_with_due)
 
 
-  percentage_sub_text_inverse('#tasks_due',tasks_with_due_date.length,total_count)
+  //percentage_sub_text_inverse('#tasks_due',tasks_with_due_date.length,total_count)
+  percentage_sub_text('#tasks_due',due_today.length,3)
 
   percentage_sub_text('#tasks_current_number',total_count,goal_number)
 
