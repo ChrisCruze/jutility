@@ -703,8 +703,9 @@ $("#remaining_tasks_table").on("click", "tbody td", function(e) {
     var table = $("#remaining_tasks_table").DataTable();
     row_data = table.row(this).data();
     console.log(row_data)
-
-    $("#favicon_select_button").html('<a href="#" id="'+row_data['project_id']+'" class="favicon_select">'+row_data['Category']+'</a>')
+    html_input = '<a href="#" id="'+row_data['project_id']+'" class="favicon_select">'+row_data['Category']+'</a>'
+    console.log(html_input)
+    $("#favicon_select_button").html(html_input)
     $("#input_text").val(row_data['Task'])
     //$("#input_text").attr('task_id',row_data.id)
     $("#input_text").attr('project_id',row_data['project_id'])
