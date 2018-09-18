@@ -178,13 +178,7 @@ datatables_params = datatables_firebase({
     firebase_reference:firebase_reference_instance,
     columns:[
         {'data':'name',render:function(data,type,row,meta){
-            if (row['url'] == undefined || row['url'] == 'null'){
-                url_reference = "list.html?id="+file_formatted_string(data) 
-            }
-            else {
-                url_reference = row['url']
-            }
-            return "<a target='_blank' href='"+ url_reference +"'>" +data + "</a>"
+              return "<a target='_blank' href='"+ "list.html?id="+file_formatted_string(data) +"'>" +data + "</a>"
         }},
         // {'data':'url',render:function(data,type,row,meta){
         //       return "<a target='_blank' href='"+ "list.html?id="+file_formatted_string(data) +"'>" +data + "</a>"
@@ -211,8 +205,10 @@ $("#table").on("click", "tbody td", function(e) {
 
 
     td_column_selector = $(this)
+            console.log(td_column_selector)
 
     $(".submit_button").click(function(event) {
+        console.log(td_column_selector)
     datatables_params.editor
         .edit(td_column_selector, false)
         .set('summary', $('#summernote').summernote('code'))
