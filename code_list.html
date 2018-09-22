@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stocks</title>
+    <title>Priorities</title>
 <link href="https://cruzco.site44.com/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/css/animate.css" rel="stylesheet">
@@ -108,10 +108,23 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
 <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
  -->
+  <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
+  <style>
+    html { height: 100%; }
+    body { margin: 0; height: 100%; position: relative; }
+    /* Height / width / positioning can be customized for your use case.
+       For demo purposes, we make firepad fill the entire browser. */
+    #firepad-container {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 <script src="jutility.js"></script>
 </head>
 <body>
 <div id="wrapper">
+
+
 
 
 <div id="page-wrapper" class="gray-bg">
@@ -141,6 +154,8 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                         </div>
                     </div>
                     <div class="ibox-content">
+                      <div id="firepad-container" style="height:200px"></div>
+
                           <table id="table" class="display nowrap" style="width:100%"></table>  
                     </div>
                 </div>
@@ -155,89 +170,82 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 <script>
-var ref = firebase.database().ref('blogs').child('test_user').child('data').child('stocks').child('data')
+var dbRef = dbRef||firebase.database();
+firebase_reference = firebase.database().ref('code').child('code_list')
+
+    var firepadRef = firebase_reference.child('null')
+
+    //// Create CodeMirror (with line numbers and the JavaScript mode).
+    var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+    lineNumbers: true,
+    mode: 'javascript'
+    });
+
+    //// Create Firepad.
+    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+    defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+    });
 
 
 
+        datatables_firebase({
+            firebase_reference: firebase_reference,
+            columns: [{
+                data: 'title',
+                format: 'title'
+            }, {
+                data: 'id',
+                format: 'id'
+            }, {
+                data: 'type',
+            }, {
+                data: 'end',
+                format: 'date'
+            }, {
+                data: 'color'
+            }, ],
+            table_selector: "#table",
+            columns_generate: false
+        })
 
-function update_stock_data(){
-    table_data = $("#table").DataTable().data().toArray()
-    stock_symbols = _.map(table_data,function(D){return D['symbol'].toUpperCase()})
-    live_stock_data = stocks_batch_pull(stock_symbols)
-    console.log(live_stock_data)
-    combined_stock_data = _.map(table_data,function(D){
 
-        live_stock_dict = live_stock_data[D['symbol'].toUpperCase()]
-        if (live_stock_dict != undefined){
-            live_stock_dict_formatted = combine_dicts(live_stock_dict.stats,live_stock_dict.quote)
-            live_stock_dict_formatted = combine_dicts(live_stock_dict_formatted,live_stock_dict.news[0])
-            return combine_dicts(D,live_stock_dict_formatted)
+
+$("#table").on("click", "tbody td", function(e) {
+    var table = $("#table").DataTable();
+    row_data = table.row(this).data();
+
+    var firepadRef = firebase_reference.child(row_data['id']||'null')
+
+    //// Create CodeMirror (with line numbers and the JavaScript mode).
+    var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+    lineNumbers: true,
+    mode: 'javascript'
+    });
+
+    try{
+            firepad.dispose()
+
         }
-        else {
-            console.log('ERROR')
-            console.log(D)
+        catch(err){
+            console.log(err)
         }
 
-    })
-    console.log(combined_stock_data)
-    combined_stock_data.forEach(function(D){
-        if (D != undefined){
-            D.last_update = moment().format()
-         console.log(D)
-        ref.child(D['DT_RowId']).set(D)
-
-        }
-
-    })
-}
+    //// Create Firepad.
+    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+    defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+    });
 
 
-function application_function(user){
-    datatables_firebase({
-        table_selector:"#table",
-        firebase_reference:ref,
-        columns:[
-            {data:'symbol',visible:true},
-            {data:'invested_date',visible:false},
-            {data:'average_cost',visible:true},
-            {data:'latestPrice',visible:true},
-            {data:'shares',visible:true},
-            {data:'share_return',title:'share_return',render:function(data,type,row,meta){
-                r = parseFloat(row.latestPrice) - parseFloat(row.average_cost)
-                r = r.toFixed(2)
-                return r 
-            }},
-            {data:'total_share_return',title:'total_share_return',render:function(data,type,row,meta){
-                r = parseFloat(row.latestPrice) - parseFloat(row.average_cost)
-                r = r * parseFloat(row.shares)
-                r = r.toFixed(2)
-                return r//.share_return
-            }},
-            {data:'last_update',visible:true,format:'date'},
-            {data:'headline',visible:false,className:"10"},
-            'cash',
-            'equity',
-            'name',
-            'price',
-            'time_stamp',
-            'total_return',
-            'DT_RowId',
-            'assets',
-            'liability','debt','net_current_assets','deficit','last_year_earnings','net_tangible_assets','annual_report','multiplier_of_record_earnings','management_efficiency','stakeholder_recognition','competitors'],
-        columns_generate:true,
-        default_visible:false,
-        live:true,
-        additional_buttons: [{text: 'Update',name:'Update', action: function ( e, dt, node, config ) {
-            update_stock_data()
-        }}]
-    })
-}
 
 
-application_function('test')
+
+
+
+
+});
+
+
 replace_side_panel_platform_omni()
-
-
 
 
 

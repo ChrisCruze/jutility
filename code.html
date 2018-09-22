@@ -3,12 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stocks</title>
+    <title>Priorities</title>
 <link href="https://cruzco.site44.com/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/css/animate.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
-
 <link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
 <link href='https://cruzco.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
 <link href='https://cruzco.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
@@ -17,8 +16,7 @@
 <link href="https://cruzco.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
-    <link href="https://cruzco.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
-
+<link href="https://cruzco.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
 <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
 <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
@@ -26,8 +24,6 @@
 <link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
 <link rel="stylesheet" href="css/small_chat.css">
 
-
-<!-- Mainly scripts -->
 <script src="https://cruzco.site44.com/js/jquery-3.1.1.min.js"></script>
 <script src="https://cruzco.site44.com/js/bootstrap.min.js"></script>
 <script src="https://cruzco.site44.com/js/plugins/metisMenu/jquery.metisMenu.js"></script>
@@ -108,140 +104,65 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
 <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
  -->
+ <script src="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.min.js"></script>
 <script src="jutility.js"></script>
+  <style>
+    html { height: 100%; }
+    body { margin: 0; height: 100%; position: relative; }
+    /* Height / width / positioning can be customized for your use case.
+       For demo purposes, we make firepad fill the entire browser. */
+    #firepad-container {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
-<body>
-<div id="wrapper">
 
+<body onload="init()">
+  <div id="firepad-container"></div>
 
-<div id="page-wrapper" class="gray-bg">
-<div class="wrapper wrapper-content">
-<div id='main_content'>
-<div class="container">
-<div class="row">
+  <script>
+    function init() {
+      //// Initialize Firebase.
+      //// TODO: replace with your Firebase project configuration.
+      // var config = {
+      //   apiKey: "AIzaSyC_JdByNm-E1CAJUkePsr-YJZl7W77oL3g",
+      //   authDomain: "firepad-tests.firebaseapp.com",
+      //   databaseURL: "https://firepad-tests.firebaseio.com"
+      // };
 
-            <div class="col-lg-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5></h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" onClick="drogas_chart_update()">Ds</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                          <table id="table" class="display nowrap" style="width:100%"></table>  
-                    </div>
-                </div>
-            </div>
+      //// Get Firebase Database reference.
+      var firepadRef = getExampleRef();
 
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+      //// Create CodeMirror (with line numbers and the JavaScript mode).
+      var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+        lineNumbers: true,
+        mode: 'javascript'
+      });
 
+      //// Create Firepad.
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+        defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+      });
+    }
 
-<script>
-var ref = firebase.database().ref('blogs').child('test_user').child('data').child('stocks').child('data')
-
-
-
-
-function update_stock_data(){
-    table_data = $("#table").DataTable().data().toArray()
-    stock_symbols = _.map(table_data,function(D){return D['symbol'].toUpperCase()})
-    live_stock_data = stocks_batch_pull(stock_symbols)
-    console.log(live_stock_data)
-    combined_stock_data = _.map(table_data,function(D){
-
-        live_stock_dict = live_stock_data[D['symbol'].toUpperCase()]
-        if (live_stock_dict != undefined){
-            live_stock_dict_formatted = combine_dicts(live_stock_dict.stats,live_stock_dict.quote)
-            live_stock_dict_formatted = combine_dicts(live_stock_dict_formatted,live_stock_dict.news[0])
-            return combine_dicts(D,live_stock_dict_formatted)
-        }
-        else {
-            console.log('ERROR')
-            console.log(D)
-        }
-
-    })
-    console.log(combined_stock_data)
-    combined_stock_data.forEach(function(D){
-        if (D != undefined){
-            D.last_update = moment().format()
-         console.log(D)
-        ref.child(D['DT_RowId']).set(D)
-
-        }
-
-    })
-}
-
-
-function application_function(user){
-    datatables_firebase({
-        table_selector:"#table",
-        firebase_reference:ref,
-        columns:[
-            {data:'symbol',visible:true},
-            {data:'invested_date',visible:false},
-            {data:'average_cost',visible:true},
-            {data:'latestPrice',visible:true},
-            {data:'shares',visible:true},
-            {data:'share_return',title:'share_return',render:function(data,type,row,meta){
-                r = parseFloat(row.latestPrice) - parseFloat(row.average_cost)
-                r = r.toFixed(2)
-                return r 
-            }},
-            {data:'total_share_return',title:'total_share_return',render:function(data,type,row,meta){
-                r = parseFloat(row.latestPrice) - parseFloat(row.average_cost)
-                r = r * parseFloat(row.shares)
-                r = r.toFixed(2)
-                return r//.share_return
-            }},
-            {data:'last_update',visible:true,format:'date'},
-            {data:'headline',visible:false,className:"10"},
-            'cash',
-            'equity',
-            'name',
-            'price',
-            'time_stamp',
-            'total_return',
-            'DT_RowId',
-            'assets',
-            'liability','debt','net_current_assets','deficit','last_year_earnings','net_tangible_assets','annual_report','multiplier_of_record_earnings','management_efficiency','stakeholder_recognition','competitors'],
-        columns_generate:true,
-        default_visible:false,
-        live:true,
-        additional_buttons: [{text: 'Update',name:'Update', action: function ( e, dt, node, config ) {
-            update_stock_data()
-        }}]
-    })
-}
-
-
-application_function('test')
-replace_side_panel_platform_omni()
-
-
-
-
-
-</script>
+    // Helper to get hash from end of URL or generate a random one.
+    function getExampleRef() {
+      var ref = firebase.database().ref('code');
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+      }
+      return ref;
+    }
+  </script>
+</body>
 
 </body>
 </html>

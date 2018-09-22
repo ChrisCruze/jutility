@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stocks</title>
+    <title>Priorities</title>
 <link href="https://cruzco.site44.com/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/css/animate.css" rel="stylesheet">
@@ -114,6 +114,8 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 <div id="wrapper">
 
 
+
+
 <div id="page-wrapper" class="gray-bg">
 <div class="wrapper wrapper-content">
 <div id='main_content'>
@@ -155,89 +157,32 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
 <script>
-var ref = firebase.database().ref('blogs').child('test_user').child('data').child('stocks').child('data')
+var dbRef = dbRef||firebase.database();
+
+
+        datatables_firebase({
+            firebase_reference: firebase.database().ref('omni').child('calendar'),
+            columns: [{
+                data: 'title',
+                format: 'title'
+            }, {
+                data: 'start',
+                format: 'date'
+            }, {
+                data: 'type',
+            }, {
+                data: 'end',
+                format: 'date'
+            }, {
+                data: 'color'
+            }, ],
+            table_selector: "#table",
+            columns_generate: false
+        })
 
 
 
-
-function update_stock_data(){
-    table_data = $("#table").DataTable().data().toArray()
-    stock_symbols = _.map(table_data,function(D){return D['symbol'].toUpperCase()})
-    live_stock_data = stocks_batch_pull(stock_symbols)
-    console.log(live_stock_data)
-    combined_stock_data = _.map(table_data,function(D){
-
-        live_stock_dict = live_stock_data[D['symbol'].toUpperCase()]
-        if (live_stock_dict != undefined){
-            live_stock_dict_formatted = combine_dicts(live_stock_dict.stats,live_stock_dict.quote)
-            live_stock_dict_formatted = combine_dicts(live_stock_dict_formatted,live_stock_dict.news[0])
-            return combine_dicts(D,live_stock_dict_formatted)
-        }
-        else {
-            console.log('ERROR')
-            console.log(D)
-        }
-
-    })
-    console.log(combined_stock_data)
-    combined_stock_data.forEach(function(D){
-        if (D != undefined){
-            D.last_update = moment().format()
-         console.log(D)
-        ref.child(D['DT_RowId']).set(D)
-
-        }
-
-    })
-}
-
-
-function application_function(user){
-    datatables_firebase({
-        table_selector:"#table",
-        firebase_reference:ref,
-        columns:[
-            {data:'symbol',visible:true},
-            {data:'invested_date',visible:false},
-            {data:'average_cost',visible:true},
-            {data:'latestPrice',visible:true},
-            {data:'shares',visible:true},
-            {data:'share_return',title:'share_return',render:function(data,type,row,meta){
-                r = parseFloat(row.latestPrice) - parseFloat(row.average_cost)
-                r = r.toFixed(2)
-                return r 
-            }},
-            {data:'total_share_return',title:'total_share_return',render:function(data,type,row,meta){
-                r = parseFloat(row.latestPrice) - parseFloat(row.average_cost)
-                r = r * parseFloat(row.shares)
-                r = r.toFixed(2)
-                return r//.share_return
-            }},
-            {data:'last_update',visible:true,format:'date'},
-            {data:'headline',visible:false,className:"10"},
-            'cash',
-            'equity',
-            'name',
-            'price',
-            'time_stamp',
-            'total_return',
-            'DT_RowId',
-            'assets',
-            'liability','debt','net_current_assets','deficit','last_year_earnings','net_tangible_assets','annual_report','multiplier_of_record_earnings','management_efficiency','stakeholder_recognition','competitors'],
-        columns_generate:true,
-        default_visible:false,
-        live:true,
-        additional_buttons: [{text: 'Update',name:'Update', action: function ( e, dt, node, config ) {
-            update_stock_data()
-        }}]
-    })
-}
-
-
-application_function('test')
 replace_side_panel_platform_omni()
-
-
 
 
 
