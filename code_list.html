@@ -123,130 +123,172 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 </head>
 <body>
 <div id="wrapper">
-
-
-
-
-<div id="page-wrapper" class="gray-bg">
-<div class="wrapper wrapper-content">
-<div id='main_content'>
-<div class="container">
-<div class="row">
-
-            <div class="col-lg-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5></h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="#" onClick="drogas_chart_update()">Ds</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
+    <div class="gray-bg" id="page-wrapper">
+        <div class="wrapper wrapper-content">
+            <div id='main_content'>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5></h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="display nowrap" id="table" style="width:100%"></table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="ibox-content">
-                      <div id="firepad-container" style="height:200px"></div>
-
-                          <table id="table" class="display nowrap" style="width:100%"></table>  
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5></h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div id="firepad-container" style="height:200px"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
+        </div>
+    </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-
 
 <script>
-var dbRef = dbRef||firebase.database();
+var dbRef = dbRef || firebase.database();
+firebase_reference_table = firebase.database().ref('code').child('table')
+
 firebase_reference = firebase.database().ref('code').child('code_list')
+var firepadRef = firebase_reference.child('null')
 
-    var firepadRef = firebase_reference.child('null')
 
-    //// Create CodeMirror (with line numbers and the JavaScript mode).
-    var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
     lineNumbers: true,
     mode: 'javascript'
+});
+
+
+
+
+
+
+
+
+
+//// Create Firepad.
+var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+    defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+table_params = datatables_firebase({
+    firebase_reference: firebase_reference_table,
+    columns: [{
+        data: 'title',
+        format: 'title'
+    }, {
+        data: 'id',
+        format: 'id'
+    }, {
+        data: 'type',
+    }, {
+        data: 'end',
+        format: 'date'
+    }, {
+        data: 'color'
+    }, ],
+    table_selector: "#table",
+    columns_generate: false
+})
+
+
+
+
+
+
+
+
+
+
+
+
+function initiate_code_mirror(container_id){
+        var firepadRef = firebase_reference.child(container_id|| 'null')
+        var codeMirror = CodeMirror(document.getElementById(container_id+'_container'), {
+            lineNumbers: true,
+        mode: 'javascript'
     });
 
     //// Create Firepad.
     var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-    defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+        defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
     });
 
+}
 
 
-        datatables_firebase({
-            firebase_reference: firebase_reference,
-            columns: [{
-                data: 'title',
-                format: 'title'
-            }, {
-                data: 'id',
-                format: 'id'
-            }, {
-                data: 'type',
-            }, {
-                data: 'end',
-                format: 'date'
-            }, {
-                data: 'color'
-            }, ],
-            table_selector: "#table",
-            columns_generate: false
-        })
+function create_container_id(container_section_id){
+    html_container = '<div class="row"> <div class="col-lg-12"> <div class="ibox float-e-margins"> <div class="ibox-title"> <h5></h5> </div> <div class="ibox-content"> <div id="'+container_section_id+'" style="height:200px"></div> </div> </div> </div> </div>'
+    $('.container').append($(html_container))
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
 $("#table").on("click", "tbody td", function(e) {
     var table = $("#table").DataTable();
     row_data = table.row(this).data();
+    container_id = row_data['id'] 
+    console.log(container_id)
 
-    var firepadRef = firebase_reference.child(row_data['id']||'null')
+    container_section_id = "#"+container_id+'_container'
+    if ($(container_section_id).length ) {
 
-    //// Create CodeMirror (with line numbers and the JavaScript mode).
-    var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-    lineNumbers: true,
-    mode: 'javascript'
-    });
-
-    try{
-            firepad.dispose()
-
-        }
-        catch(err){
-            console.log(err)
-        }
-
-    //// Create Firepad.
-    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-    defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
-    });
-
-
-
-
+    }
+    else {
+        create_container_id(container_id+'_container')
+        setTimeout(initiate_code_mirror,3000,container_id)
+    }
 
 
 
 
 });
-
-
 replace_side_panel_platform_omni()
-
 
 
 </script>

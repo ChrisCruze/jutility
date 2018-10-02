@@ -5,6 +5,14 @@ import StringIO
 import requests 
 import traceback
 import jsbeautifier
+import html2text
+import nltk   
+from bs4 import BeautifulSoup
+
+# h = html2text.HTML2Text()
+# h.ignore_links = True
+# print BeautifulSoup("""//{application_function:func,login_url:func}<br>function firebase_check_login_initiate(params) {<br>        return firebase.auth().onAuthStateChanged(function(user) {<br>              if (user) {<br>                user.getIdToken().then(function(accessToken) {<br>                  console.log(user)<br>                  params.application_function(user)<br>                });<br>              } else {<br><br>                  window.location.href = params.login_url||'https://chriscruze.github.io/Taskr/index.html';<br>              }<br>            }, function(error) {<br>                console.log(error);<br>            });<br>    };<br><br><br>//datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})<br>function datatables_firebase(params){<br>    if (params.columns == undefined||params.columns_generate == true){<br>        datatables_firebase_columns_define(params)<br>    }<br>    else {<br>        table = firebase_dataeditor_table_generate_core(params)<br>    }<br>        return params<br>}<br><br><br><br><br><br><br>""").get_text()
+# 0/0
 
 class CSVFunctions(object):
     def write(self, lst, filename,sort=True,first_key=None):
@@ -137,9 +145,49 @@ def download_references(file_name=os.path.join(os.getcwd(),'omni.html')):
 
         f = open(file_name.replace(".html","2.html"), 'w+').write(payload)
 
-
+def get_text_from_html(s):
+    lines = s.split("<br>")
+    lines = [line for line in lines if "//" not in line]
+    s = "\n".join(lines)
+    return s#BeautifulSoup(s).get_text()
+    #html2text.html2text(D['code']) 
 #print requests.get('https://cruzco.site44.com/lib/moment.min.js').text()
 #download_references()
+
+def check_payload(payload,code_array):
+    relevant_functions = []
+    new_payload = ""
+    for D in code_array:
+        if D['name'] in payload:
+            relevant_functions.append(D)
+            new_payload = new_payload + get_text_from_html(D['code']) 
+
+    return new_payload
+
+def save_payload_file(payload,directory=os.path.join(os.getcwd(),'jutility.js')):
+    f = open(directory, 'w+')
+    #f.write(str(s))
+    f.write(jsbeautifier.beautify(payload))
+    f.close()
+
+def jutility_based_on_file(code_array,file_directory="/Users/chriscruz/Dropbox/Github/Tracker/index.html"):
+    relevant_functions = []
+    new_payload = ""
+    with open(file_directory,'r') as f:
+        payload = f.read()
+        for D in code_array:
+            if D['name'] in payload:
+                relevant_functions.append(D)
+                new_payload = new_payload + get_text_from_html(D['code']) 
+
+
+    #new_payload = check_payload(new_payload,code_array) + new_payload
+    #new_payload = check_payload(new_payload,code_array) + new_payload
+    #new_payload = check_payload(new_payload,code_array) + new_payload
+    #new_payload = check_payload(new_payload,code_array) + new_payload
+
+    save_payload_file(new_payload,directory="/Users/chriscruz/Dropbox/Github/Tracker/jutility.js")
+
 
 def run():
     folders = ['function','library','api','app']
@@ -160,9 +208,10 @@ def run():
     	    sub_array = TextFunctions().javascript_function_pull(payload,file_name=os.path.basename(i),folder_name=os.path.basename(os.path.dirname(i)))
     	    array.extend(sub_array)
     	    divider = "\n//{}\n\n".format(os.path.basename(i))
-    	    s = s + divider+ payload
+    	    s = s + divider + payload
     #print s
 
+    jutility_based_on_file(array,file_directory="/Users/chriscruz/Dropbox/Github/Tracker/index.html")
     #array = TextFunctions().javascript_function_pull(s)
     #print array 
     filename = os.path.join(os.getcwd(),'functions.csv')

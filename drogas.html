@@ -27,7 +27,8 @@
 <link rel="stylesheet" href="css/small_chat.css">
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.13.0/pivot.min.css"/>
-
+        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/18.1.6/css/dx.common.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/18.1.6/css/dx.light.css" />
 
 <!-- Mainly scripts -->
 <script src="https://cruzco.site44.com/js/jquery-3.1.1.min.js"></script>
@@ -112,6 +113,8 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
  -->
      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.13.0/pivot.min.js"></script>
 
+
+        <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/18.1.6/js/dx.all.js"></script>
 <script src="jutility.js"></script>
 </head>
 <body>
@@ -145,6 +148,11 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
                         </div>
                     </div>
                     <div class="ibox-content">
+                            <form action="your-action" id="form-container">
+
+
+                        <div id="form"></div>
+                        </form>
                           <table id="table" class="display nowrap" style="width:100%"></table>  
                     </div>
                 </div>
@@ -160,40 +168,153 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 <script>
 var ref = firebase.database().ref('drogas')
-
-
-
-function pivot_generate(){
-    $.pivotUtilities.tipsData = data
-    var utils = $.pivotUtilities;
-    var heatmap =  utils.renderers["Heatmap"];
-
-    var count = function(data, rowKey, colKey) {
-        D =  {
-        count: 0,
-        push: function(record) {this.count++; },
-        value: function(i) { return this.count; },
-        format: function(x) { return x; },
-        };
-        return D
+var employee = {
+        "ID": 1,
+        "FirstName": "John",
+        "LastName": "Heart",
+        "Position": "CEO",
+        "BirthDate": "1964/03/16",
+        "HireDate": "1995/01/15",
+        "Notes": "John has been in the Audio/Video industry since 1990. He has led DevAV as its CEO since 2003.\r\nWhen not working hard as the CEO, John loves to golf and bowl. He once bowled a perfect game of 300.",
+        "Address": "351 S Hill St.",
+        "City": "Los Angeles",
+        "State": "CA",
+        "ZipCode": "90013",
+        "Home": "555-684-1334",
+        "Mobile": "555-684-1335",
+        "Email": "jheart@dx-email.com",
+        "Skype": "jheart_DX_skype",
     };
 
-    function render_function(pivot_object,options){
-        return utils.renderers["Heatmap"](pivot_object,options)
-    }
+    var positions = [
+        "HR Manager",
+        "IT Manager",
+        "Controller",
+        "Sales Manager",
+        "Support Manager",
+        "Shipping Manager"
+    ];
 
-    var sumOverSum =  utils.aggregators["Sum over Sum"];
+    var states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"];
 
-    $("#output").pivot(
-    utils.tipsData, {
-    rows: ["first_name"],
-    cols: ["position"],
-    aggregator: count,
-    renderer: render_function
+$(function() {
+    form_object = $("#form").dxForm({
+        //formData: employee,
+        items: [{
+            itemType: "group",
+            cssClass: "first-group",
+            colCount: 4,
+            items: [{
+                template: "<div class='form-avatar'></div>"
+            }, {
+                itemType: "group",
+                colSpan: 3,
+                items: [{
+                    dataField: "FirstName"
+                }, {
+                    dataField: "LastName"
+                }, {
+                    dataField: "BirthDate",
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        width: "100%"
+                    }
+                }]
+            }]
+        }, {
+            itemType: "group",
+            cssClass: "second-group",
+            colCount: 2,
+            items: [{
+                itemType: "group",
+                items: [{
+                    dataField: "Address"
+                }, {
+                    dataField: "City"
+                }, {
+                    dataField: "Position",
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        items: positions,
+                        value: ""
+                    }
+                }]
+            }, {
+                itemType: "group",
+                items: [{
+                    dataField: "State",
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        items: states
+                    },
+                }, {
+                    dataField: "ZipCode"
+                }, {
+                    dataField: "Mobile",
+                    label: {
+                        text: "Phone"
+                    },
+                    editorOptions: {
+                        mask: "+1 (000) 000-0000"
+                    }
+                }]
+            }, {
+                colSpan: 2,
+                dataField: "Notes",
+                editorType: "dxTextArea",
+                editorOptions: {
+                    height: 140
+                }
+            }]
+        },
+
+
+
+
+
+
+
+{
+            itemType: "button",
+            horizontalAlignment: "left",
+            buttonOptions: {
+                text: "Register",
+                type: "success",
+                useSubmitBehavior: true
+            }}
+
+
+
+        ],
+
+                onFieldDataChanged: function(e) {
+            var newFormData = e.component.option("formData");
+            console.log(newFormData)
+        }
+    }).dxForm("instance");
+
+
+
+
+form_object.option("formData")
+console.log(form_object)
+
+        $("#form-container").on("submit", function(e) {
+            console.log(e)
+        DevExpress.ui.notify({
+            message: "You have submitted the form",
+            position: {
+                my: "center top",
+                at: "center top"
+            }
+        }, "success", 3000);
+        
+        e.preventDefault();
     });
 
 
-}
+
+});
 
 
 function datatables_initiate(){

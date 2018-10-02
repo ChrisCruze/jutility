@@ -282,7 +282,7 @@
 | 280 | [datatables_firebase_table_generate_simple](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
 | 281 | [datatables_firebase_columns_define](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
 | 282 | [firebase_pull_json](http://cruzco.site44.com/streak.html) | datatables_firebase.js |   ref = params.firebase_reference|
-| 283 | [datatables_firebase](http://cruzco.site44.com/streak.html) | datatables_firebase.js | datatables_firebase({firebase_url:"https://shippy-ac235.firebaseio.com/drogas.json", table_selector:"#table"})|
+| 283 | [datatables_firebase](http://cruzco.site44.com/streak.html) | datatables_firebase.js | datatables_firebase|
 | 284 | [firebase_editor_initiate](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
 | 285 | [firebase_generate_datatable](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
 | 286 | [firebase_dataeditor_table_editor_instance_options](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |

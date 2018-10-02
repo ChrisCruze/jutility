@@ -119,17 +119,24 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 </head>
 
 <body onload="init()">
-  <div id="firepad-container"></div>
+<div id="wrapper">
+    <div class="gray-bg" id="page-wrapper">
+        <div class="wrapper wrapper-content">
+            <div id='main_content'>
+                <div class="container">
+
+
+  <div id="firepad-container" style="height:200px"></div>
+                                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="submit_code" class="btn btn-white" type="button" href="#"><i class="fa fa-bars"></i> </a>
+
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
 
   <script>
     function init() {
-      //// Initialize Firebase.
-      //// TODO: replace with your Firebase project configuration.
-      // var config = {
-      //   apiKey: "AIzaSyC_JdByNm-E1CAJUkePsr-YJZl7W77oL3g",
-      //   authDomain: "firepad-tests.firebaseapp.com",
-      //   databaseURL: "https://firepad-tests.firebaseio.com"
-      // };
 
       //// Get Firebase Database reference.
       var firepadRef = getExampleRef();
@@ -144,6 +151,52 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
       var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
         defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
       });
+
+
+      var hash = window.location.hash.replace(/#/g, '');
+
+
+
+          function upload_file(){
+
+            var formData = new FormData();
+
+            formData.append("name", "test");
+
+
+            // JavaScript file-like object
+            var content = firepad.getText()
+            var blob = new Blob([content], { type: 'application/json'});
+
+            formData.append("webmasterfile", blob);
+
+            var request = new XMLHttpRequest();
+            request.open("POST","https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+            request.send(formData);
+
+
+          }
+
+
+    $("#submit_code").on("click",function(e) {
+                  var formData = new FormData();
+
+            formData.append("name", window.location.hash.replace(/#/g, ''));
+            formData.append("code", firepad.getText());
+
+
+            // JavaScript file-like object
+            var content = firepad.getText()
+            var blob = new Blob([content], { type: 'application/json'});
+
+            formData.append("webmasterfile", blob);
+
+            var request = new XMLHttpRequest();
+            request.open("POST","https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+            request.send(formData);
+            console.log(formData)
+
+})
     }
 
     // Helper to get hash from end of URL or generate a random one.
@@ -161,6 +214,10 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
       }
       return ref;
     }
+
+
+    replace_side_panel_platform_omni()
+
   </script>
 </body>
 
