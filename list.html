@@ -165,42 +165,54 @@
     </div>
 </div>
 <script>
-var url = new URL(window.location.href );
-var hash = url.searchParams.get('id')||'home'
+var url = new URL(window.location.href);
+var hash = url.searchParams.get('id') || 'home'
 document.title = hash
-
-var dbRef = dbRef||firebase.database();
+var dbRef = dbRef || firebase.database();
 firebase_reference_instance = dbRef.ref('lists').child(hash).child('data')
 firebase_reference_content = dbRef.ref('lists').child(hash).child('content')
-
 datatables_params = datatables_firebase({
-    table_selector:"#table",
-    firebase_reference:firebase_reference_instance,
-    columns:[
-        {'data':'name',render:function(data,type,row,meta){
-            if (row['url'] == undefined || row['url'] == 'null'){
-                url_reference = "list.html?id="+file_formatted_string(data) 
+    table_selector: "#table",
+    firebase_reference: firebase_reference_instance,
+    columns: [{
+            'data': 'name',
+            render: function(data, type, row, meta) {
+                if (row['url'] == undefined || row['url'] == 'null') {
+                    url_reference = "list.html?id=" + file_formatted_string(data)
+                } else {
+                    url_reference = row['url']
+                }
+                return "<a target='_blank' href='" + url_reference + "'>" + data + "</a>"
             }
-            else {
-                url_reference = row['url']
-            }
-            return "<a target='_blank' href='"+ url_reference +"'>" +data + "</a>"
-        }},
+        },
         // {'data':'url',render:function(data,type,row,meta){
         //       return "<a target='_blank' href='"+ "list.html?id="+file_formatted_string(data) +"'>" +data + "</a>"
         // }},
-        {'data':'url','format':'',visible:false},
-        {'data':'rag','format':'rag'},
-        {'data':'rank','format':'rank'},
-        {'data':'summary',visible:false},
-        {'data':'group',visible:false},
-        {'data':'identifier',visible:false}
-        ],
-        sort:'rank'
+        {
+            'data': 'url',
+            'format': '',
+            visible: false
+        }, {
+            'data': 'rag',
+            'format': 'rag'
+        }, {
+            'data': 'rank',
+            'format': 'rank'
+        }, {
+            'data': 'summary',
+            visible: false
+        }, {
+            'data': 'group',
+            visible: false
+        }, {
+            'data': 'identifier',
+            visible: false
+        }
+    ],
+    sort: 'rank'
 })
 console.log(datatables_params)
 $('#summernote').summernote();
-
 
 
 
@@ -208,54 +220,35 @@ $("#table").on("click", "tbody td", function(e) {
     var table = $("#table").DataTable();
     row_data = table.row(this).data();
     $('#summernote').summernote('code', row_data['summary'])
-
-
     td_column_selector = $(this)
-
     $(".submit_button").click(function(event) {
-    datatables_params.editor
-        .edit(td_column_selector, false)
-        .set('summary', $('#summernote').summernote('code'))
-        .submit();
-
+        datatables_params.editor.edit(td_column_selector, false).set('summary', $('#summernote').summernote('code')).submit();
     })
-
-
-
-
-
+    window.location = window.location.href.substr(0, window.location.href.indexOf('#')) + '#' + file_formatted_string(row_data['name']);
 });
 
+function check_hash() {
+    current_hash = window.location.hash.replace(/#/g, '');
+    if (current_hash != "") {
+        var table = $("#table").DataTable();
+        // row_data = table.row(this).data();
+        var row_data = table.row(function(idx, data, node) {
+            return file_formatted_string(data['name']) == current_hash
+        }).data()
+        console.log(row_data)
+        $('#summernote').summernote('code', row_data['summary'])
 
+    $(".submit_button").click(function(event) {
+        datatables_params.editor.edit(td_column_selector, false).set('summary', $('#summernote').summernote('code')).submit();
+    })
 
+    }
+}
 
-
-// function firebase_update_from_summernote(){
-//     var markupStr = $('#summernote').summernote('code');
-//     update_dict = {
-//             id: hash,
-//             content:$('#summernote').summernote('code'),
-//         timestamp: moment().format()}
-//     console.log(update_dict)
-//     firebase_reference_content.set(update_dict)
-// }
-
-
-
-
-// firebase_update_from_summernote()
-
-
-
-// firebase_reference_content.on('value', function(snapshot) {
-//     object_dictionary = snapshot.val()
-//     $('#summernote').summernote('code', object_dictionary['content'])
-// })
-
+setTimeout(check_hash,3000)
+//check_hash()
 
 replace_side_panel_platform_omni()
-
-
 
 </script>
 </body>
