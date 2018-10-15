@@ -1,4 +1,36 @@
+// var a = moment('2016-06-06T21:03:55');//now
+// var b = moment('2016-05-06T20:03:55');
 
+
+
+
+function time_difference_moment_from_now(end,startTime){
+  var duration = moment.duration(end.diff(startTime));
+  return duration
+}
+
+// console.log(a.diff(b, 'minutes')) // 44700
+// console.log(a.diff(b, 'hours')) // 745
+// console.log(a.diff(b, 'days')) // 31
+// console.log(a.diff(b, 'weeks')) // 4
+function time_difference_moment_from_interval(end,startTime,interval){
+  var end = moment(end);//now
+  var startTime = moment(startTime);
+  duration = startTime.diff(end, interval) // 44700
+  //var duration = moment.duration(end.diff(startTime,interval));
+  return duration
+}
+
+
+function time_difference_moment_from_now_interval(end,interval){
+  var duration = time_difference_moment_from_interval(end,moment(),interval)
+  return duration
+}
+
+function time_difference_moment(end,startTime){
+  var duration = moment.duration(end.diff(startTime));
+  return duration
+}
 
 
 //create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time

@@ -224,6 +224,12 @@ function firebase_json_pull(url){
     return results
   }
 
+  function firebase_json_pull_values(url){
+    results = firebase_json_pull(url)
+    result_values = Object.values(results)
+    return result_values
+  }
+
 //purpose is to check one dictionary against another and update it 
 function dictionary_cross_check_apply_key(D,firebase_defined_dict,key){
     	if (firebase_defined_dict != undefined) {

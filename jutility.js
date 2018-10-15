@@ -418,6 +418,18 @@ function papa_parse_multiple_promise_old(params) {
 
 //html_functions.js
 
+function widget_create_html_element(goal_color, goal_name, goal_metric) {
+    return '<div class="col-lg-2 goal"> <div class="widget style1 goal_color ' + goal_color + '"> <div class="row"> <div class="col-xs-12"> <span class="goal_name"> ' + goal_name + '</span> <h4 class="font-bold goal_metric">' + goal_metric + '</h4> </div> </div> </div> </div>'
+
+}
+
+function widget_create_html_element_append(identifier, goal_color, goal_name, goal_metric) {
+    html_element = widget_create_html_element(goal_color, goal_name, goal_metric)
+    $(identifier).append($(html_element))
+}
+
+
+
 function side_panel_section_create(params) {
     // params = {parent_name: 'Reports',links:[{attributes:{href:"#"},text:'first_report'}]}
     parent_link = '<a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">' + params.parent_name + '</span> <span class="fa arrow"></span></a>'
@@ -977,6 +989,126 @@ function create_guid() {
         s4() + '-' + s4() + s4() + s4();
 }
 
+//pivot_functions.js
+
+
+
+
+
+
+
+
+
+function count_function(data, rowKey, colKey) {
+    return {
+        count: 0,
+        push: function(record) {
+            this.count++;
+        },
+        value: function() {
+            return this.count;
+        },
+        format: function(x) {
+            return x;
+        },
+    };
+}
+
+function rows_column_dictionary_create_instance(data) {
+    row_key_name = 'row_number'
+    col_key_name = 'col_number'
+    row_dict = _.groupBy(data, row_key_name);
+    rows = Object.keys(row_dict)
+    rows.forEach(function(row) {
+        subli = row_dict[row]
+        row_dict[row] = _.groupBy(subli, col_key_name);
+    })
+    return row_dict
+}
+
+function parent_element_create_from_row_dict_div(row_dict) {
+    row_keys = Object.keys(row_dict)
+    col_keys = Object.keys(row_dict[row_keys[0]])
+    parent_element = $("<span>", {})
+    row_keys.forEach(function(row, i) {
+        row_html = $("<div>", {
+            "row": row,
+            "class": "row row-eq-height show-grid nopadding tower-row"
+        })
+        col_keys.forEach(function(col) {
+            cell_dict = row_dict[row][col][0]
+            cell_text = cell_dict.cell_value
+            row_html.append($("<div>", cell_dict).html(cell_text))
+        })
+        parent_element.append(row_html)
+    })
+    return parent_element[0].innerHTML
+}
+
+function render_function(pivot_data_object) {
+    tree_data = pivot_data_object['tree']
+    row_keys = Object.keys(tree_data) //servicing, originations, etc.
+    col_keys = Object.keys(tree_data[row_keys[0]])
+    full_array = []
+    row_keys.forEach(function(row_key, row_number) {
+        col_keys.forEach(function(col_key, col_number) {
+
+
+
+            cell_class = " table-cell-value col-md-2 nopadding "
+
+
+
+            try {
+                cell_value = tree_data[row_key][col_key]['count']
+            } catch (err) {
+                cell_value = "-"
+            }
+            try {
+                if (row_key == "Total" && col_key != "Total") {
+                    cell_value = pivot_data_object['colTotals'][col_key]['count']
+                    cell_class = "total-cell " + cell_class
+                }
+                if (row_key != "Total" && col_key == "Total" && row_key != "Percentage") {
+                    cell_value = pivot_data_object['rowTotals'][row_key]['count']
+                    cell_class = "total-cell " + cell_class
+                }
+                if (row_key == "Total" && col_key == "Total") {
+                    cell_value = pivot_data_object['allTotal']['count']
+                    cell_class = "total-cell " + cell_class
+                }
+            } catch (err) {
+                cell_value = "-"
+            }
+            new_dictionary = {
+                row_name: row_key,
+                column_name: col_key,
+                row_number: row_number + 1,
+                col_number: col_number + 2,
+                class: cell_class,
+                style: "background-color:white",
+                cell_value: cell_value
+            }
+            full_array.push(new_dictionary)
+        })
+    })
+    row_dict = rows_column_dictionary_create_instance(full_array)
+    table_html = parent_element_create_from_row_dict_div(row_dict)
+    return table_html
+}
+
+// callback_array = [
+//     {color: "blue", shape: "circle", value: 1},
+//     {color: "red", shape: "triangle", value: 2},
+//     {color: "blue", shape: "circle", value: 3},
+//     {color: "red", shape: "triangle", value: 4}
+// ]
+// $(table_selector).pivot(callback_array, {
+//     rows: [row_field],
+//     cols: [col_field],
+//     aggregator: count_function,
+//     renderer: render_function
+// })
 //string_functions.js
 
 //convert stirng to fromatted string 
@@ -1712,36 +1844,24 @@ function bar_create_datatable_cell(td, cellData, rowData, row, col) {
 }
 //This searches and filters https://datatables.net/examples/plug-ins/range_filtering.html || https://datatables.net/manual/plug-ins/search
 function datatable_search_filter() {
-    $.fn.dataTable.ext.search.push(
-        function(settings, searchData, index, rowData, counter) {
-            var min = parseInt($('#min').val(), 10);
-            var max = parseInt($('#max').val(), 10);
-            var age = parseFloat(searchData[3]) || 0; // using the data from the 4th column
-
-            if ((isNaN(min) && isNaN(max)) ||
-                (isNaN(min) && age <= max) ||
-                (min <= age && isNaN(max)) ||
-                (min <= age && age <= max)) {
-                return true;
-            }
-            return false;
+    $.fn.dataTable.ext.search.push(function(settings, searchData, index, rowData, counter) {
+        var min = parseInt($('#min').val(), 10);
+        var max = parseInt($('#max').val(), 10);
+        var age = parseFloat(searchData[3]) || 0; // using the data from the 4th column
+        if ((isNaN(min) && isNaN(max)) || (isNaN(min) && age <= max) || (min <= age && isNaN(max)) || (min <= age && age <= max)) {
+            return true;
         }
-    );
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var min = parseInt($('#min').val(), 10);
-            var max = parseInt($('#max').val(), 10);
-            var age = parseFloat(data[3]) || 0; // use data for the age column
-
-            if ((isNaN(min) && isNaN(max)) ||
-                (isNaN(min) && age <= max) ||
-                (min <= age && isNaN(max)) ||
-                (min <= age && age <= max)) {
-                return true;
-            }
-            return false;
+        return false;
+    });
+    $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+        var min = parseInt($('#min').val(), 10);
+        var max = parseInt($('#max').val(), 10);
+        var age = parseFloat(data[3]) || 0; // use data for the age column
+        if ((isNaN(min) && isNaN(max)) || (isNaN(min) && age <= max) || (min <= age && isNaN(max)) || (min <= age && age <= max)) {
+            return true;
         }
-    );
+        return false;
+    });
     var table = $('#example').DataTable();
     table.draw();
 }
@@ -1760,7 +1880,6 @@ function column_header_filterable_autocomplete_apply(table_object, number_of_col
 //add a filter to the column header of the datatable (https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js , https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css | https://github.com/vedmack/yadcf)
 function header_filter_add_datatable() {
     var myTable = $('#example').DataTable();
-
     yadcf.init(myTable, [{
         column_number: 0
     }, {
@@ -1890,9 +2009,6 @@ function date_time_datatable_format_render_custom(date_format) {
     }
     return date_time_datatable_format_render_base
 }
-
-
-
 //format the datatables date with the date and time
 function date_time_datatable_format_render_seconds(data, type, row, meta) {
     if (moment(data).isValid()) {
@@ -1970,7 +2086,6 @@ function data_table_simple(array, div_id) {
     div_id = div_id || "#table"
     array.forEach(function(D) {
         key_check_func_dictionary(key_names, D)
-
     })
     return $(div_id).DataTable({
         paging: false,
@@ -2001,10 +2116,7 @@ function clickable_change_value(table_id, editor, ) {
             change_value = 'Green'
         }
         row_data['status'] = change_value
-        editor
-            .edit(this, false)
-            .set("status", change_value)
-            .submit();
+        editor.edit(this, false).set("status", change_value).submit();
         status_format(this, row_data.name, row_data, 1, 1)
     });
 }
@@ -2432,6 +2544,12 @@ function firebase_json_pull(url) {
     return results
 }
 
+function firebase_json_pull_values(url) {
+    results = firebase_json_pull(url)
+    result_values = Object.values(results)
+    return result_values
+}
+
 //purpose is to check one dictionary against another and update it 
 function dictionary_cross_check_apply_key(D, firebase_defined_dict, key) {
     if (firebase_defined_dict != undefined) {
@@ -2605,7 +2723,39 @@ function table_jquery_objects(table_id) {
 
 //moment_functions.js
 
+// var a = moment('2016-06-06T21:03:55');//now
+// var b = moment('2016-05-06T20:03:55');
 
+
+
+
+function time_difference_moment_from_now(end, startTime) {
+    var duration = moment.duration(end.diff(startTime));
+    return duration
+}
+
+// console.log(a.diff(b, 'minutes')) // 44700
+// console.log(a.diff(b, 'hours')) // 745
+// console.log(a.diff(b, 'days')) // 31
+// console.log(a.diff(b, 'weeks')) // 4
+function time_difference_moment_from_interval(end, startTime, interval) {
+    var end = moment(end); //now
+    var startTime = moment(startTime);
+    duration = startTime.diff(end, interval) // 44700
+    //var duration = moment.duration(end.diff(startTime,interval));
+    return duration
+}
+
+
+function time_difference_moment_from_now_interval(end, interval) {
+    var duration = time_difference_moment_from_interval(end, moment(), interval)
+    return duration
+}
+
+function time_difference_moment(end, startTime) {
+    var duration = moment.duration(end.diff(startTime));
+    return duration
+}
 
 
 //create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time
@@ -4591,7 +4741,9 @@ function todoist_tasks_pull_custom_gspread() {
     sheet_name = 'Tasks'
     spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
     gspread_array_data = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/recurring_tasks.json")) //||gspread_array_manual_pull()//gspread_array_pull(sheet_name,spreadsheet_id)
-
+    gspread_array_data = gspread_array_data.filter(function(D) {
+        return D['Type'] != 'Cancelled'
+    })
 
 
 
@@ -4848,6 +5000,89 @@ function full_calendar_generate(params) {
 
 
 
+//cycling_age_status_list.js
+
+
+
+
+
+//var dbRef = dbRef || firebase.database();
+
+
+function determine_state_from_age(hours_age, recurrence_age) {
+    recurrence_age = parseFloat(recurrence_age) || 0
+    surplus_time = recurrence_age - hours_age
+    if (surplus_time > 0) {
+        state = 'green'
+    } else {
+        state = 'red'
+    }
+    return surplus_time
+
+}
+
+function columns_generate_cycling_list() {
+    columns = [{
+        'data': 'name',
+        'format': '',
+        visible: true
+    }, {
+        'data': 'rag',
+        'format': 'rag',
+        visible: true
+    }, {
+        'data': 'time_stamp',
+        'format': 'date',
+        visible: false
+    }, {
+        'data': 'recurrence_age',
+        'format': '',
+        visible: false
+    }, {
+        'data': 'age',
+        'format': '',
+        visible: false,
+        render: function(data, type, row, meta) {
+            return time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+        }
+    }, {
+        'data': 'state',
+        'format': 'state',
+        visible: false,
+        render: function(data, type, row, meta) {
+            hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+            return determine_state_from_age(hours_age, row['recurrence_age'])
+        }
+    }, {
+
+        'data': 'rank',
+        'format': 'rank',
+        visible: false
+    }, {
+        'data': 'summary',
+        visible: false
+    }, {
+        'data': 'group',
+        visible: false
+    }, {
+        'data': 'identifier',
+        visible: false
+    }]
+    return columns
+}
+
+function cycling_list_generate() {
+    columns = columns_generate_cycling_list()
+    datatables_params = datatables_firebase({
+        table_selector: "#cycling_list",
+        firebase_reference: dbRef.ref('omni').child('cycling_list'),
+        columns: columns
+        // sort: 'rank'
+    })
+
+}
+
+
 //datatables_array.js
 
 
@@ -5007,7 +5242,6 @@ function datatables_generate_from_array(params) {
 
 //datatables_firebase.js
 
-
 function datatables_firebase_params() {
     params = {
         columns: [],
@@ -5019,10 +5253,6 @@ function datatables_firebase_params() {
         default_visible: false
     }
 }
-
-
-
-
 
 function datatables_column_add_formatting_from_type(new_dictionary) {
     if (new_dictionary.format == 'date_seconds') {
@@ -5037,13 +5267,10 @@ function datatables_column_add_formatting_from_type(new_dictionary) {
         new_dictionary.render = date_time_datatable_format_render
         new_dictionary.type = "datetime"
     }
-
-
     if (new_dictionary.format == 'date_days') {
         new_dictionary.render = date_time_datatable_format_render_days
         new_dictionary.type = "datetime"
     }
-
     if (new_dictionary.format == 'date') {
         new_dictionary.render = date_time_datatable_format_render
         new_dictionary.type = "datetime"
@@ -5088,21 +5315,18 @@ function datatables_column_add_formatting_from_type(new_dictionary) {
             return span_element
         }
     }
-
     if (new_dictionary.format == 'vote' || new_dictionary.format == 'rank') {
         new_dictionary.render = function(data, type, row, meta) {
             cellData = parseFloat(data) || 0
             field_name = new_dictionary.name
-            return '<div class="vote-actions"> <a href="#" class="rank up" iterator="1" field="' + field_name + '"> <i class="fa fa-chevron-up"> </i> </a> <div>' + cellData + '</div> <a href="#" class="rank down" iterator="-1" field="' + field_name + '"> <i class="fa fa-chevron-down"> </i> </a> </div>'
-
-
-
+            return '<div class="vote-actions"> <a href="#" class="rank up" iterator="1" field="' +
+                field_name + '"> <i class="fa fa-chevron-up"> </i> </a> <div>' + cellData +
+                '</div> <a href="#" class="rank down" iterator="-1" field="' + field_name +
+                '"> <i class="fa fa-chevron-down"> </i> </a> </div>'
             //vote_created_cell_editor(new_dictionary.name)()
         }
-
         //new_dictionary.createdCell = vote_created_cell_editor(new_dictionary.name)   //vote_created_cell //vote_created_cell_editor(editor) //vote_created_cell
     }
-
 }
 
 function datatable_column_fields_generate(custom_fields, params) {
@@ -5117,7 +5341,7 @@ function datatable_column_fields_generate(custom_fields, params) {
                 label: custom_field_name
             }
             new_dictionary = combine_dicts(custom_dictionary, custom_field)
-            console.log(new_dictionary)
+            //console.log(new_dictionary)
             datatables_column_add_formatting_from_type(new_dictionary)
         } else {
             default_visible = true
@@ -5131,7 +5355,6 @@ function datatable_column_fields_generate(custom_fields, params) {
                 label: custom_field,
                 visible: default_visible
             }
-
         }
         l.push(new_dictionary)
     })
@@ -5148,18 +5371,13 @@ function date_field_format_check(item, params) {
                 console.log(params)
                 item[date_field] = moment(item[date_field], 'MM-DD-YYYY h:mm a').format()
             }
-
-
         })
     }
 }
 
-function dataeditor_firebase_instance_generate_options(firebaseRef, row_id, params) {
-
+function dataeditor_firebase_instance_generate_options(firebaseRef, row_id,
+    params) {
     row_id = row_id || 'DT_RowId'
-
-
-
     params.editor.on("preSubmit", function(e, data, action) {
         if (action == 'create') {
             //console.log(params)
@@ -5174,27 +5392,17 @@ function dataeditor_firebase_instance_generate_options(firebaseRef, row_id, para
                 date_field_format_check(item, params)
                 r = params.firebase_reference.push(item)
             })
-
-
             params.editor.close()
             return false
-
-
         }
-
     })
-
-
     params.editor.on("postSubmit", function(e, json, data, action, xhr) {
-
         if (action == 'edit') {
             json_array = json.data;
             json_array.forEach(function(D) {
                 record_id = D[row_id];
-
                 D["time_stamp"] = moment().format();
                 D['modified_time'] = moment().format()
-
                 edit_attributes = params.submit_attributes || params.edit_attributes
                 D = combine_dicts(D, edit_attributes)
                 date_field_format_check(D, params)
@@ -5208,26 +5416,22 @@ function dataeditor_firebase_instance_generate_options(firebaseRef, row_id, para
                 r = params.firebase_reference.child(record_id).remove();
                 //console.log(r)
             })
-
         } else {
             return false
             // //console.log(e)
             // //console.log(json)
             // //console.log(data)
             // //console.log(action)
-
-
-
         }
     })
 }
 
-function dataeditor_firebase_instance_generate(table_id, fields, firebaseRef, row_id, params) {
+function dataeditor_firebase_instance_generate(table_id, fields, firebaseRef,
+    row_id, params) {
     row_id = row_id || 'DT_RowId'
     date_fields = []
     console.log(fields)
     fields.forEach(function(D) {
-
         if (D.format == 'date' || D.format == 'MM-DD-YYYY h:mm a') {
             D.type = 'datetime'
             //D.keyInput = false
@@ -5243,18 +5447,18 @@ function dataeditor_firebase_instance_generate(table_id, fields, firebaseRef, ro
     if (date_fields.length > 0) {
         params.date_fields = date_fields
     }
-    dataeditor_firebase_instance_generate_options(params.firebase_reference, row_id, params)
+    dataeditor_firebase_instance_generate_options(params.firebase_reference,
+        row_id, params)
     return params.editor
 }
 
-
 function datatables_add_metrics() {
-    row_div = '<div class="row"> <div class="col-xs-3"> <small class="stats-label">Pages / Visit</small> <h4>236 321.80</h4> </div> <div class="col-xs-3"> <small class="stats-label">% New Visits</small> <h4>46.11%</h4> </div> <div class="col-xs-3"> <small class="stats-label">Last week</small> <h4>432.021</h4> </div> <div class="col-xs-3"> <small class="stats-label">Last week</small> <h4>432.021</h4> </div> </div>'
+    row_div =
+        '<div class="row"> <div class="col-xs-3"> <small class="stats-label">Pages / Visit</small> <h4>236 321.80</h4> </div> <div class="col-xs-3"> <small class="stats-label">% New Visits</small> <h4>46.11%</h4> </div> <div class="col-xs-3"> <small class="stats-label">Last week</small> <h4>432.021</h4> </div> <div class="col-xs-3"> <small class="stats-label">Last week</small> <h4>432.021</h4> </div> </div>'
     $("#metrics_row").html(row_div)
 }
 
 function datatable_generate(table_id, columns_list, editor, params) {
-
     button_params = [{
             extend: "excel",
             title: document.title
@@ -5283,12 +5487,9 @@ function datatable_generate(table_id, columns_list, editor, params) {
             }
         }
     ]
-
     if (params.additional_buttons != undefined) {
         button_params = button_params.concat(params.additional_buttons)
     }
-
-
     config = {
         dom: '<"#metrics_row.row"<"col-sm-12">><"html5buttons"B>lTfgitp',
         data: [],
@@ -5307,15 +5508,10 @@ function datatable_generate(table_id, columns_list, editor, params) {
             data_callback = this.api().rows({
                 page: 'current'
             }).data()
-
             params.callback_function(data_callback.toArray())
         }
     }
-
-
-
     // console.log(config)
-
     if (params.sort != undefined) {
         sort_order = params.sort_order || 'desc'
         config.order = [
@@ -5329,9 +5525,9 @@ function datatable_generate(table_id, columns_list, editor, params) {
     table_example = $(table_id).DataTable(config);
     params.table = table_example
     // console.log(params)
-
     return table_example
 }
+
 
 function editor_rag_status(editor, table_id) {
     $(table_id).on("click", "tbody .rag", function(e) {
@@ -5340,9 +5536,7 @@ function editor_rag_status(editor, table_id) {
         row_data = table.row($(this).closest('td')).data();
         cell_data = table.cell($(this).closest('td')).data()
         field = $(this).attr('field')
-
         change_value = 'green' //cell_data + iterator
-
         if (cell_data == 'null') {
             change_value = 'green'
         }
@@ -5355,23 +5549,12 @@ function editor_rag_status(editor, table_id) {
         if (cell_data == 'red') {
             change_value = 'green'
         }
-
-
-
         col_num_selector = $(this).closest('td')
-
-
-        editor
-            .edit(col_num_selector, false)
-            .set(field, change_value)
-            .submit();
+        editor.edit(col_num_selector, false).set(field, change_value).submit();
     });
-
-
 }
 
 function editor_rank_apply(editor, table_id) {
-
     $(table_id).on("click", "tbody .rank", function(e) {
         e.preventDefault()
         console.log(this)
@@ -5382,55 +5565,33 @@ function editor_rank_apply(editor, table_id) {
         iterator = parseFloat($(this).attr('iterator'))
         field = $(this).attr('field')
         cell_data = parseFloat(row_data[field]) || 0
-
         change_value = cell_data + iterator
         col_num_selector = $(this).closest('td')
-
-
-        editor
-            .edit(col_num_selector, false)
-            .set(field, change_value)
-            .submit();
-
-
+        editor.edit(col_num_selector, false).set(field, change_value).submit();
     });
-
-
 }
-
-
 // function firebase_dataeditor_table_generate_core(table_selector,columns,firebaseRef,row_id,params){
-
 //     var firebaseRef = firebaseRef||dbRef.ref('drogas');
 //     table_selector = table_selector||//"#ds_table"
 //     columns = fields||['input_text','date_time','type','within_system','DT_RowId']
 //     row_id = row_id || 'DT_RowId'
-
-
 //     new_fields = datatable_column_fields_generate(columns,params)
 //     editor = dataeditor_firebase_instance_generate(table_selector,new_fields,firebaseRef,row_id,params)
 //     table = datatable_generate(table_selector,new_fields,editor,params)
-
 //     firebaseRef.on("child_added", function(snap) {
-
 //         directory_addresses = snap.getRef().path.n
 //         id = directory_addresses[directory_addresses.length-1]
 //         firebase_dictionary = snap.val()
 //         ////console.log(firebase_dictionary)
 //         firebase_dictionary['DT_RowId'] = id
-
-
 //         if (params.process_function != undefined){
 //             firebase_dictionary = params.process_function(firebase_dictionary)
 //         }
-
 //         fields_to_check = _.map(new_fields,function(D){return D['data']})
 //         key_check_func_dictionary(fields_to_check,firebase_dictionary)
 //         table.row.add(firebase_dictionary).draw(false);
 //     })
-
 //     if (params.live == true){
-
 //         firebaseRef.on("child_changed", function(snap) {
 //             data = table.data().toArray();
 //             data.forEach(function(D,row_number){D['row_number'] = row_number})
@@ -5441,22 +5602,16 @@ function editor_rank_apply(editor, table_id) {
 //             //dictionary_obj = dictionary_reformat(dictionary_obj)
 //             table.row(row_number).data(dictionary_obj).draw( false )
 //         })
-
 //     }
-
 //     editor_rank_apply(editor,table_id)
 //     return table
 // }
-
-
-
 //columns
 //table_selector
 //firebase_reference
 //process_function - process firebase dictionary as its created
 //table_row_id
 function firebase_dataeditor_table_generate_core(params) {
-
     $.fn.dataTable.ext.type.order["datetime-pre"] = function(string_variable) {
         d = string_variable.match(/>(.*)</).pop();
         r = -1
@@ -5469,49 +5624,41 @@ function firebase_dataeditor_table_generate_core(params) {
         }
         return r;
     };
-
     firebase_reference = params.firebase_reference //||//dbRef.ref('drogas');
     table_selector = params.table_selector || "#table"
     columns = params.columns
     table_row_id = params.table_row_id || 'DT_RowId'
-
     params.input_columns = columns
     new_fields = datatable_column_fields_generate(columns, params)
     params.columns = new_fields
-    editor = dataeditor_firebase_instance_generate(params.table_selector, params.columns, params.firebase_reference, table_row_id, params)
+    editor = dataeditor_firebase_instance_generate(params.table_selector, params.columns,
+        params.firebase_reference, table_row_id, params)
     table = datatable_generate(table_selector, new_fields, editor, params)
-
     fields_to_check = _.map(new_fields, function(D) {
         return D['data']
     })
     //console.log(fields_to_check)
-
     firebase_limit = params.firebase_limit || false
-
-
     if (firebase_limit) {
-        params.firebase_reference.limitToLast(firebase_limit).on("child_added", function(snap) {
-
-            // console.log(snap)
-            directory_addresses = snap.getRef().path.n
-            id = directory_addresses[directory_addresses.length - 1]
-            firebase_dictionary = snap.val()
-            firebase_dictionary['DT_RowId'] = id
-            if (params.process_function != undefined) {
-                firebase_dictionary = params.process_function(firebase_dictionary)
-            }
-            //fields_to_check = _.map(new_fields,function(D){return D['data']})
-            //console.log()
-            key_check_func_dictionary(_.map(params.columns, function(D) {
-                return D['data']
-            }), firebase_dictionary)
-            params.table.row.add(firebase_dictionary).draw(false);
-        })
-
-
+        params.firebase_reference.limitToLast(firebase_limit).on("child_added",
+            function(snap) {
+                // console.log(snap)
+                directory_addresses = snap.getRef().path.n
+                id = directory_addresses[directory_addresses.length - 1]
+                firebase_dictionary = snap.val()
+                firebase_dictionary['DT_RowId'] = id
+                if (params.process_function != undefined) {
+                    firebase_dictionary = params.process_function(firebase_dictionary)
+                }
+                //fields_to_check = _.map(new_fields,function(D){return D['data']})
+                //console.log()
+                key_check_func_dictionary(_.map(params.columns, function(D) {
+                    return D['data']
+                }), firebase_dictionary)
+                params.table.row.add(firebase_dictionary).draw(false);
+            })
     } else {
         params.firebase_reference.on("child_added", function(snap) {
-
             // console.log(snap)
             directory_addresses = snap.getRef().path.n
             id = directory_addresses[directory_addresses.length - 1]
@@ -5527,26 +5674,17 @@ function firebase_dataeditor_table_generate_core(params) {
             }), firebase_dictionary)
             params.table.row.add(firebase_dictionary).draw(false);
         })
-
-
     }
-
-
-
     params.table = table
     params.editor = editor
-
     firebase_reference.on("child_changed", function(snap) {
-
         dt_id_alternative = snap.getRef().path.n[snap.getRef().path.n.length - 1]
-
         // console.log('my table')
         // console.log(table)
         //console.log(params)
         // directory_addresses = snap.getRef().path.n
         // id = directory_addresses[directory_addresses.length-1]
         // dictionary_obj = snap.val()
-
         // fields_to_check = _.map(new_fields,function(D){return D['data']})
         // key_check_func_dictionary(fields_to_check,dictionary_obj)
         // console.log('go')
@@ -5554,79 +5692,63 @@ function firebase_dataeditor_table_generate_core(params) {
         // console.log(id)
         // console.log(dictionary_obj)
         // table.row(id).data(dictionary_obj).draw( false )
-
-
-
-
         data = params.table.data().toArray()
         //$(table_selector).dataTable()
-
         /// data = table.data().toArray();
         data.forEach(function(D, row_number) {
             D['row_number'] = row_number
         })
-
         //console.log(data)
         data_dict = _.groupBy(data, 'DT_RowId')
-
         dictionary_obj = snap.val()
         dictionary_obj['DT_RowId'] = dt_id_alternative
         //console.log(dictionary_obj)
         //console.log(dt_id_alternative)
-        selected_dict = data_dict[String(dictionary_obj['DT_RowId'] || dt_id_alternative)]
-
+        selected_dict = data_dict[String(dictionary_obj['DT_RowId'] ||
+            dt_id_alternative)]
         row_number = selected_dict[0]['row_number']
         //console.log(row_number)
         //console.log(selected_dict)
-
         //dictionary_obj = dictionary_reformat(dictionary_obj)
         key_check_func_dictionary(_.map(params.columns, function(D) {
             return D['data']
         }), dictionary_obj)
-
         params.table.row(row_number).data(dictionary_obj).draw(false)
     })
-
     // editor.add( {
     //     type:       "date",
     //     label:      "Start date:",
     //     name:       "start_date"
     // } );
-
     editor_rank_apply(editor, table_selector)
     editor_rag_status(editor, table_selector)
     console.log(params)
     return table
 }
-
-
 //datatables_firebase_table_generate({table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})
 function datatables_firebase_table_generate(params) {
     params.table_selector = params.table_selector || "#table"
     params.table_row_id = params.table_row_id || 'DT_RowId'
-    params.firebase_reference = params.firebase_reference || firebase.database().ref('bug_features');
+    params.firebase_reference = params.firebase_reference || firebase.database().ref(
+        'bug_features');
     return firebase_dataeditor_table_generate_core(params)
 }
 
 function firebase_json_pull_promise_original() {
-    return new Promise(
-        function(resolve) {
-            setTimeout(function() {
-                return resolve(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
-            }, 4000)
-        },
-        function(reject) {})
+    return new Promise(function(resolve) {
+        setTimeout(function() {
+            return resolve(firebase_json_pull(
+                "https://shippy-ac235.firebaseio.com/drogas.json"))
+        }, 4000)
+    }, function(reject) {})
 }
-
 
 function firebase_json_pull_promise() {
-    return new Promise(
-        function(resolve) {
-            return resolve(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
-        },
-        function(reject) {})
+    return new Promise(function(resolve) {
+        return resolve(firebase_json_pull(
+            "https://shippy-ac235.firebaseio.com/drogas.json"))
+    }, function(reject) {})
 }
-
 
 function firebase_json_pull_promise_pull(array, params) {
     //array = firebase_json_pull(params['firebase_url'])
@@ -5656,10 +5778,10 @@ function firebase_json_pull_promise_pull_simple() {
     })
 }
 
-
 function datatables_firebase_table_generate_simple(params) {
     //params['firebase_reference'] = firebase.database().ref('drogas')
-    params['firebase_url'] = params['firebase_url'] || "https://shippy-ac235.firebaseio.com/drogas.json"
+    params['firebase_url'] = params['firebase_url'] ||
+        "https://shippy-ac235.firebaseio.com/drogas.json"
     array = firebase_json_pull(params['firebase_url'])
     key_names = Object.keys(array[0])
     columns_list = []
@@ -5673,7 +5795,6 @@ function datatables_firebase_table_generate_simple(params) {
     params.columns = params.columns || key_names
     return datatables_firebase_table_generate(params)
 }
-
 
 function datatables_firebase_columns_define(params) {
     ref = params.firebase_reference
@@ -5689,7 +5810,8 @@ function datatables_firebase_columns_define(params) {
     p1.then(function(array) {
         col_names = Object.keys(array)
         if (params.columns != undefined) {
-            col_names_to_add = _.difference(col_names, _.map(params.columns, function(D) {
+            col_names_to_add = _.difference(col_names, _.map(params.columns, function(
+                D) {
                 return D.data || D
             }))
             col_names = params.columns.concat(col_names_to_add)
@@ -5699,10 +5821,6 @@ function datatables_firebase_columns_define(params) {
         firebase_dataeditor_table_generate_core(params)
     });
 }
-
-
-
-
 //datatables_firebase
 function datatables_firebase(params) {
     if (params.columns == undefined || params.columns_generate == true) {
@@ -5712,14 +5830,6 @@ function datatables_firebase(params) {
     }
     return params
 }
-
-
-
-
-
-
-
-
 //firebase_array_generate.js
 
 $("#drogas_submit").click(function(event) {
@@ -6456,6 +6566,219 @@ function stock_table() {
 
     return stocks_table()
 }
+//goal_widgets.js
+
+
+
+function less_than_number_of_days(date_added, number_of_days) {
+    return date_difference_from_today_days_moment(date_added) < number_of_days
+}
+
+function array_filter_last_number_of_days(array, key_name, number_of_days) {
+    filtered_day = array.filter(function(D) {
+        return less_than_number_of_days(D[key_name], number_of_days)
+    })
+    return filtered_day
+}
+
+//"https://shippy-ac235.firebaseio.com/run_log.json"),'time_stamp',number_of_days
+function array_firebase_url_filter(url, key_name, number_of_days) {
+    array = firebase_json_pull_values(url)
+    filtered_array = array_filter_last_number_of_days(array, key_name, number_of_days)
+    return filtered_array
+}
+
+function array_firebase_url_filter_sum(url, key_name, number_of_days, sum_field) {
+    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+    return sum_value
+}
+
+function array_filter_sum_return(array, key_name, number_of_days, sum_field) {
+    filtered_array = array_filter_last_number_of_days(array, key_name, number_of_days)
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+    return sum_value
+}
+
+function goal_widget_of_goal_percentage(sum_value, goal_metric) {
+    percentage_of_goal = sum_value / goal_metric
+    return percentage_of_goal
+}
+
+function color_from_percentage(percentage_of_goal) {
+    if (percentage_of_goal >= 1) {
+        color = 'navy-bg'
+    } else if (percentage_of_goal >= .66) {
+        color = 'yellow-bg'
+    } else {
+        color = 'red-bg'
+    }
+    return color
+}
+
+function number_single_decimal_format(sum_value) {
+    return sum_value.toFixed(1)
+}
+
+function percentage_single_decimal_format(percentage_of_goal) {
+    percentage_of_goal_formatted = (percentage_of_goal * 100).toFixed(1) + "%"
+    return percentage_of_goal_formatted
+}
+
+function metric_text_create(sum_value, percentage_of_goal, goal_number) {
+    sum_value_formatted = number_single_decimal_format(sum_value)
+    percentage_of_goal_formatted = percentage_single_decimal_format(percentage_of_goal)
+    text = sum_value_formatted + "/" + goal_number + " (" + percentage_of_goal_formatted + ")"
+    return text
+}
+
+function run_goal_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/run_log.json"
+    key_name = "time_stamp"
+    number_of_days = 30
+    sum_field = "miles"
+    sum_value = array_firebase_url_filter_sum(url, key_name, number_of_days, sum_field)
+    goal_number = 40
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Run'
+    }
+    return metric_dict
+}
+
+function hours_age_determine_dict(row) {
+    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+    recurrence_age = parseFloat(row['recurrence_age']) || 0
+    surplus_time = recurrence_age - hours_age
+    is_surplus = recurrence_age > hours_age
+    return is_surplus
+}
+
+function recurring_tasks_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/omni/cycling_list.json"
+    array = firebase_json_pull_values(url)
+    filtered_array = array.filter(function(D) {
+        return hours_age_determine_dict(D)
+    })
+
+    key_name = "time_stamp"
+    number_of_days = 21
+    sum_field = "miles"
+    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+    //filtered_array_true = filtered_array.filter(function(D){return D['status'] == 'true'})
+    sum_value = filtered_array.length //array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+    goal_number = array.length
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Cycle'
+    }
+    return metric_dict
+}
+
+function gs_goal_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/Gs/data.json"
+    key_name = "time_stamp"
+    number_of_days = 21
+    sum_field = "miles"
+    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
+    filtered_array_true = filtered_array.filter(function(D) {
+        return D['status'] == 'true'
+    })
+    sum_value = filtered_array_true.length //array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+    goal_number = 1
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Gs'
+    }
+    return metric_dict
+}
+
+function metric_widget_calculate_from_completed_tasks(completed_tasks) {
+    filtered_array = completed_tasks.filter(function(D) {
+        return D['content'].indexOf('Travel:') > -1
+    })
+    sum_value = array_filter_sum_return(filtered_array, 'completed_date', 7, 'duration')
+    goal_number = 30
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Travel'
+    }
+    return metric_dict
+}
+
+function academy_widget_calculate_from_completed_tasks(completed_tasks) {
+    filtered_array = completed_tasks.filter(function(D) {
+        return D['content'].indexOf('Academy') > -1
+    })
+    filtered_array = array_filter_last_number_of_days(filtered_array, 'completed_date', 7)
+    sum_value = filtered_array.length
+    goal_number = 50
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Academy'
+    }
+    return metric_dict
+}
+
+
+function run_goal_widget_create() {
+    run_dict = run_goal_widget_dictionary()
+    widget_create_html_element_append("#goal_widgets", run_dict['color'], run_dict['name'], run_dict['text'])
+}
+
+function travel_goal_widget_create(completed_tasks) {
+    metric_dict = metric_widget_calculate_from_completed_tasks(completed_tasks)
+    widget_create_html_element_append("#goal_widgets", metric_dict['color'], metric_dict['name'], metric_dict['text'])
+}
+
+function widget_create_from_metric_dict(metric_dict) {
+    widget_create_html_element_append("#goal_widgets", metric_dict['color'], metric_dict['name'], metric_dict['text'])
+}
+
+function metric_widgets_create(completed_tasks) {
+    run_goal_widget_create()
+
+    widget_create_from_metric_dict(recurring_tasks_widget_dictionary())
+    travel_goal_widget_create(completed_tasks)
+    widget_create_from_metric_dict(academy_widget_calculate_from_completed_tasks(completed_tasks))
+    widget_create_from_metric_dict(gs_goal_widget_dictionary())
+}
+
+//sum_float_convert_from_array_underscore(array, sum_field)
+// yellow-bg
+// navy-bg
+// redy-bg
+
+// widget_create_html_element_append("#goal_widgets",goal_color,goal_name,goal_metric)
 //intermittent_timer.js
 
 function html_timer_update_from_jquery_intermittent(start_timer, drogas_array) {

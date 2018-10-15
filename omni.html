@@ -178,22 +178,7 @@
                         <div class="container">
                             <div class="row" id="metric_headers">
                             </div>
-                            <div class="row" id="date_picker_element">
-
-
-
-<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
-
-<script>
-$(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-  });
-});
-</script>
-
+                            <div class="row" id="goal_widgets">
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
@@ -303,7 +288,30 @@ $(function() {
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <div id='morning_review'>
+                        <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Cycling</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#" onClick="initiate_check_list_datatable('checklist')">Initiate</a></li>
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content" style="max-height: 450px;overflow-y: scroll;">
+                                <table class="display" cellspacing="0" width="100%" id="cycling_list"></table>
+                            </div>
+                        </div>
+
+                            <div id='morning_review' style="display:none">
                                 <div class="ibox">
                                     <div class="ibox-title">
                                         <div class="ibox-tools">
@@ -457,6 +465,7 @@ $(function() {
                             </div>
                         </div>
                         <div class="col-lg-4">
+
                             <div id='morning_review'>
                                 <div class="ibox">
                                     <div class="ibox-content">
@@ -574,87 +583,146 @@ $(function() {
 </div>
 <script>
     $.fn.dataTable.ext.type.order["number-order-pre"] = function(d) {
-        r = parseFloat(d) || 0
-        return r;
-    };
-    var dbRef = dbRef || firebase.database();
-    omni_node = 'todoist_tasks'
-    var FirebaseRef = dbRef.ref('omni').child(omni_node)
-    var timer_instance = dbRef.ref('omni').child('timer_instance')
-    var timer_instance_archive = dbRef.ref('omni').child('timer_instance_archive')
-    var snapshot_instance = dbRef.ref('omni').child('snapshot')
-    todoist_gspread_pull = todoist_gspread_pull_firebase()
-    $("#sync_todoist").click(function(event) {
-        todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
-        snapshot_instance.set(todoist_gspread_pull)
-        toastr_notification("Todoist Synced")
+    r = parseFloat(d) || 0
+    return r;
+};
+var dbRef = dbRef || firebase.database();
+omni_node = 'todoist_tasks'
+var FirebaseRef = dbRef.ref('omni').child(omni_node)
+var timer_instance = dbRef.ref('omni').child('timer_instance')
+var timer_instance_archive = dbRef.ref('omni').child('timer_instance_archive')
+var snapshot_instance = dbRef.ref('omni').child('snapshot')
+todoist_gspread_pull = todoist_gspread_pull_firebase()
+$("#sync_todoist").click(function(event) {
+    todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
+    snapshot_instance.set(todoist_gspread_pull)
+    toastr_notification("Todoist Synced")
+})
+projects_dictionary = todoist_gspread_pull.projects
+gspread_array = todoist_gspread_pull.gspread
+current_tasks = todoist_gspread_pull.todoist_current
+completed_tasks = todoist_gspread_pull.todoist_completed
+todoist_snapshot_store()
+header_metrics_create_todoist()
+percentage_complete_metric_generate(gspread_array)
+horizontal_bar_chart_object = horizontal_bar_chart_initiate_render_chartjs(
+    "horizontalbarChart")
+bar_chart_object = bar_chart_initiate_render_chartjs("barChart")
+row_bar_size_chart_base = $("#row_bar_size_chart").html()
+
+function completed_tasks_callback_wrapper(callback_array) {
+    metric_func = null
+    color_func = null
+
+    function date_func(i) {
+        return moment(i).format("MM/DD")
+    }
+    bar_chart_update_time_scale_calculate_function(bar_chart_object,
+        callback_array, 'completed_date', metric_func)
+    metric_func = function(l) {
+        return sum_float_convert_from_array_underscore(l, 'duration')
+    }
+    bar_chart_update_category_calculate_function(horizontal_bar_chart_object,
+        callback_array, 'project_name', metric_func)
+    $("#row_bar_size_chart").html(row_bar_size_chart_base)
+    area_row_chart_initiate({
+        completed_tasks: callback_array,
+        chart_id: "#row_bar_size_chart"
     })
-    projects_dictionary = todoist_gspread_pull.projects
-    gspread_array = todoist_gspread_pull.gspread
-    current_tasks = todoist_gspread_pull.todoist_current
-    completed_tasks = todoist_gspread_pull.todoist_completed
-    todoist_snapshot_store()
-    header_metrics_create_todoist()
-    percentage_complete_metric_generate(gspread_array)
-    horizontal_bar_chart_object = horizontal_bar_chart_initiate_render_chartjs("horizontalbarChart")
-    bar_chart_object = bar_chart_initiate_render_chartjs("barChart")
-    row_bar_size_chart_base = $("#row_bar_size_chart").html()
-
-    function completed_tasks_callback_wrapper(callback_array) {
-        metric_func = null
-        color_func = null
-
-        function date_func(i) {
-            return moment(i).format("MM/DD")
-        }
-        bar_chart_update_time_scale_calculate_function(bar_chart_object, callback_array, 'completed_date', metric_func)
-        metric_func = function(l) {
-            return sum_float_convert_from_array_underscore(l, 'duration')
-        }
-        bar_chart_update_category_calculate_function(horizontal_bar_chart_object, callback_array, 'project_name', metric_func)
-        $("#row_bar_size_chart").html(row_bar_size_chart_base)
-        area_row_chart_initiate({
-            completed_tasks: callback_array,
-            chart_id: "#row_bar_size_chart"
-        })
-        return completed_tasks_call_back(callback_array)
+    return completed_tasks_call_back(callback_array)
+}
+remaining_tasks_populate(gspread_array)
+todoist_table_create_current(current_tasks, "#current_tasks_table",
+    current_tasks_call_back)
+todoist_table_complete = todoist_table_create_complete(completed_tasks,
+    "#completed_tasks_table", completed_tasks_callback_wrapper)
+var my_interval_timer;
+empty_timer_html = $("#timer_text_container").html()
+timer_instance.on('value', function(snapshot) {
+    //console.log(snapshot)
+    timer_instance_dictionary = snapshot.val()
+    //console.log(timer_instance_dictionary)
+    if (timer_instance_dictionary != null) {
+        my_interval_timer = timer_instance_exists_process(timer_instance_dictionary,
+            timer_instance, timer_instance_archive)
+    } else {
+        document.title = 'Omni'
+        $("#input_text").val("")
+        clearInterval(my_interval_timer)
+        $("#timer_text_container").html(empty_timer_html)
     }
-    remaining_tasks_populate(gspread_array)
-    todoist_table_create_current(current_tasks, "#current_tasks_table", current_tasks_call_back)
-    todoist_table_complete = todoist_table_create_complete(completed_tasks, "#completed_tasks_table", completed_tasks_callback_wrapper)
-    var my_interval_timer;
-    empty_timer_html = $("#timer_text_container").html()
-    timer_instance.on('value', function(snapshot) {
-        //console.log(snapshot)
-        timer_instance_dictionary = snapshot.val()
-        //console.log(timer_instance_dictionary)
-        if (timer_instance_dictionary != null) {
-            my_interval_timer = timer_instance_exists_process(timer_instance_dictionary, timer_instance, timer_instance_archive)
-        } else {
-            document.title = 'Omni'
-            $("#input_text").val("")
-            clearInterval(my_interval_timer)
-            $("#timer_text_container").html(empty_timer_html)
+});
+//pulls straight json if the firebase is open
+function firebase_json_pull_cruz(url) {
+    url = url || "https://cruz-7aa89.firebaseio.com/todoist_timer_instance.json"
+    l = $.ajax({
+        url: url,
+        method: "GET",
+        async: false,
+        headers: {
+            "Accept": "application/json; odata=verbose"
         }
-    });
-    //pulls straight json if the firebase is open
-    function firebase_json_pull_cruz(url) {
-        url = url || "https://cruz-7aa89.firebaseio.com/todoist_timer_instance.json"
-        l = $.ajax({
-            url: url,
-            method: "GET",
-            async: false,
-            headers: {
-                "Accept": "application/json; odata=verbose"
-            }
-        })
-        results = l.responseJSON
-        return results
-    }
-    //task_create_todoist('test',2159934072)
-    $("#input_create").click(function(event) {
-        event.preventDefault()
-        project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
+    })
+    results = l.responseJSON
+    return results
+}
+function get_task_attributes_for_task_create(){
+    project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
+    content = $("#input_text").val()
+    D = {project_id:project_id,content:content}
+    return D 
+}
+
+function create_task_ajax_request_todoist(){
+    task_dict = get_task_attributes_for_task_create()
+    content = task_dict.content
+    project_id  = task_dict.project_id
+    response = task_create_todoist(content,project_id)
+    return response
+}   
+
+function get_task_id_from_todoist_response(response){
+    console.log(response)
+    task_id = Object.values(response.temp_id_mapping)[0]
+    return task_id
+}
+
+function create_task_ajax_request_todoist_task_id(){
+    response = create_task_ajax_request_todoist()
+    task_id = get_task_id_from_todoist_response(response)
+    return task_id
+}
+
+
+// function create_task_ajax_request_todoist_promise(){
+//     return new Promise(function(resolve, reject) {
+//         task_id = create_task_ajax_request_todoist_task_id()
+//         console.log(task_id)
+//         resolve(task_id)
+//     })
+// }
+
+
+function update_firebase_for_created_task(){
+    create_task_ajax_request_todoist().done(function(response){
+        task_id = get_task_id_from_todoist_response(response)
+        task_dict = get_task_attributes_for_task_create()
+        task_dict['start_time'] = moment().format()
+        task_dict['id'] = task_id
+        task_dict['task_id'] = task_id
+        timer_instance.set(task_dict)
+        console.log(response)
+    })
+
+
+
+}
+
+
+function zapier_todoist_create(){
+
+    project_id = $("#favicon_select_button").find('.favicon_select').attr(
+            'id')
         content = $("#input_text").val()
         start_time = moment().format()
         original_start_time = start_time
@@ -686,214 +754,262 @@ $(function() {
         }
         while (firebase_dictionary['start_time'] != original_start_time);
 
-    });
-    $("#current_tasks_table").on("click", "tbody td", function(e) {
-        var table = $("#current_tasks_table").DataTable();
-        row_data = table.row(this).data();
-        $("#input_text").val(row_data.content)
-        $("#input_text").attr('task_id', row_data.id)
-        $("#input_text").attr('project_id', row_data.project_id)
-    });
-    $("#remaining_tasks_table").on("click", "tbody td", function(e) {
-        var table = $("#remaining_tasks_table").DataTable();
-        row_data = table.row(this).data();
-        console.log(row_data)
-        html_input = '<a href="#" id="' + row_data['project_id'] + '" class="favicon_select">' + row_data['Category'] + '</a>'
-        console.log(html_input)
-        $("#favicon_select_button").html(html_input)
-        $("#input_text").val(row_data['Task'])
-        //$("#input_text").attr('task_id',row_data.id)
-        $("#input_text").attr('project_id', row_data['project_id'])
-    });
-    //task_create_todoist('test',2159934072)
-    $("#input_start").click(function(event) {
-        console.log($("#input_text"))
-        content = $("#input_text").val()
-        project_id = $("#input_text").attr('project_id')
-        task_id = $("#input_text").attr('task_id')
-        upload_dictionary = {
-            start_time: moment().format(),
-            id: task_id,
-            task_id: task_id,
-            content: content,
-            project_id: project_id
-        }
-        timer_instance.set(upload_dictionary)
-    });
-    create_project_dropdown_list(projects_dictionary)
-    progress_bar_table_formulate()
-    var progress_table = $("#progress_table").DataTable();
-    //start_intermittent_timer()
-    // list_progress_bar_list_element_thick()
-    // list_progress_bar_list_element_thick()
-    //firebase_generate_datatable()
-    //initiate_firebase_chat_bubbles()
-    //setTimeout(initiate_firebase_chat_bubbles,3000)
-    initiate_firebase_chat_bubbles({
-        firebase_reference: dbRef.ref('omni').child('ideas')
+}
+//task_create_todoist('test',2159934072)
+$("#input_create").click(function(event) {
+    event.preventDefault()
+    zapier_todoist_create()
+
+    // try {
+    //     update_firebase_for_created_task()
+
+    // }
+    // catch(err){
+        
+
+
+    // }
+
+    // project_id = $("#favicon_select_button").find('.favicon_select').attr('id')
+    // content = $("#input_text").val()
+    // start_time = moment().format()
+    // original_start_time = start_time
+
+
+    // r = $.ajax({
+    //     type: "POST",
+    //     data: {
+    //         "content": content,
+    //         "project_id": project_id,
+    //         "start_time": start_time
+    //     },
+    //     url: "https://hooks.zapier.com/hooks/catch/229795/w23pcd/",
+    // })
+    // new_start_time = start_time
+
+    // response = task_create_todoist(content,project_id)
+    // console.log(response)
+    // //console.log(original_start_time)
+    // //do {
+    //     //firebase_dictionary = firebase_json_pull_cruz()
+    //     // console.log(firebase_dictionary)
+    //     //if (firebase_dictionary['start_time'] == original_start_time) {
+    //      //   task_id = firebase_dictionary['id']
+    //         upload_dictionary = {
+    //             start_time: moment().format(),
+    //             id: task_id,
+    //             task_id: task_id,
+    //             content: content,
+    //             project_id: project_id
+    //         }
+    //         timer_instance.set(upload_dictionary)
+    //     //}
+    // //}
+    // //while (firebase_dictionary['start_time'] != original_start_time);
+});
+$("#current_tasks_table").on("click", "tbody td", function(e) {
+    var table = $("#current_tasks_table").DataTable();
+    row_data = table.row(this).data();
+    $("#input_text").val(row_data.content)
+    $("#input_text").attr('task_id', row_data.id)
+    $("#input_text").attr('project_id', row_data.project_id)
+});
+$("#remaining_tasks_table").on("click", "tbody td", function(e) {
+    var table = $("#remaining_tasks_table").DataTable();
+    row_data = table.row(this).data();
+    console.log(row_data)
+    html_input = '<a href="#" id="' + row_data['project_id'] +
+        '" class="favicon_select">' + row_data['Category'] + '</a>'
+    console.log(html_input)
+    $("#favicon_select_button").html(html_input)
+    $("#input_text").val(row_data['Task'])
+    //$("#input_text").attr('task_id',row_data.id)
+    $("#input_text").attr('project_id', row_data['project_id'])
+});
+//task_create_todoist('test',2159934072)
+$("#input_start").click(function(event) {
+    console.log($("#input_text"))
+    content = $("#input_text").val()
+    project_id = $("#input_text").attr('project_id')
+    task_id = $("#input_text").attr('task_id')
+    upload_dictionary = {
+        start_time: moment().format(),
+        id: task_id,
+        task_id: task_id,
+        content: content,
+        project_id: project_id
+    }
+    timer_instance.set(upload_dictionary)
+});
+create_project_dropdown_list(projects_dictionary)
+progress_bar_table_formulate()
+var progress_table = $("#progress_table").DataTable();
+//start_intermittent_timer()
+// list_progress_bar_list_element_thick()
+// list_progress_bar_list_element_thick()
+//firebase_generate_datatable()
+//initiate_firebase_chat_bubbles()
+//setTimeout(initiate_firebase_chat_bubbles,3000)
+initiate_firebase_chat_bubbles({
+    firebase_reference: dbRef.ref('omni').child('ideas')
+})
+//initiate_firebase_chat_bubbles({box_style:'right: 1000px',bubble_style:'right: 1000px',firebase_reference:dbRef.ref('omni').child('ideas2')})
+function update_progress() {
+    current_completed_tasks = todoist_table_complete.rows({
+        page: "current"
+    }).data().toArray();
+    measure_progress_bars(current_completed_tasks, progress_table)
+    progress_table = $("#progress_table").DataTable()
+    progress_table.order([3, 'asc']).draw()
+    progress_table.columns('priority:name').search('High').draw();
+}
+setTimeout(update_progress, 7000)
+
+function drogas_chart_update() {
+    firebase_chart_update({
+        chart_object: bar_chart_object,
+        firebase_url: "https://shippy-ac235.firebaseio.com/drogas.json",
+        filter_function: function(D) {
+            return D.type == 'count'
+        },
+        calculation_function: function(l) {
+            return sum_float_convert_from_array_underscore(l, 'input_text')
+        },
+        date_key: 'date_time',
+        dates: dates_past_n_days(30)
     })
-    //initiate_firebase_chat_bubbles({box_style:'right: 1000px',bubble_style:'right: 1000px',firebase_reference:dbRef.ref('omni').child('ideas2')})
-    function update_progress() {
-        current_completed_tasks = todoist_table_complete.rows({
-            page: "current"
-        }).data().toArray();
-        measure_progress_bars(current_completed_tasks, progress_table)
-        progress_table = $("#progress_table").DataTable()
-        progress_table.order([3, 'asc']).draw()
-        progress_table.columns('priority:name').search('High').draw();
-    }
-    setTimeout(update_progress, 7000)
+}
 
-    function drogas_chart_update() {
-        firebase_chart_update({
-            chart_object: bar_chart_object,
-            firebase_url: "https://shippy-ac235.firebaseio.com/drogas.json",
-            filter_function: function(D) {
-                return D.type == 'count'
-            },
-            calculation_function: function(l) {
-                return sum_float_convert_from_array_underscore(l, 'input_text')
-            },
-            date_key: 'date_time',
-            dates: dates_past_n_days(30)
-        })
-    }
+function run_chart_update() {
+    firebase_chart_update({
+        chart_object: bar_chart_object,
+        firebase_url: "https://shippy-ac235.firebaseio.com/run_log.json",
+        filter_function: function(D) {
+            return true
+        },
+        calculation_function: function(l) {
+            return sum_float_convert_from_array_underscore(l, 'miles')
+        },
+        date_key: 'time_stamp',
+        dates: dates_past_n_days(30)
+    })
+}
 
-    function run_chart_update() {
-        firebase_chart_update({
-            chart_object: bar_chart_object,
-            firebase_url: "https://shippy-ac235.firebaseio.com/run_log.json",
-            filter_function: function(D) {
-                return true
-            },
-            calculation_function: function(l) {
-                return sum_float_convert_from_array_underscore(l, 'miles')
-            },
-            date_key: 'time_stamp',
-            dates: dates_past_n_days(30)
-        })
-    }
+function initiate_check_list_datatable(table_node) {
+    datatables_firebase({
+        table_selector: "#checklist_table",
+        firebase_reference: dbRef.ref('omni').child(table_node),
+        columns: ['name', {
+            'data': 'rag',
+            'format': 'rag'
+        }, {
+            'data': 'rank',
+            'format': 'rank'
+        }, {
+            'data': 'summary',
+            visible: false
+        }, {
+            'data': 'group',
+            visible: false
+        }, {
+            'data': 'identifier',
+            visible: false
+        }],
+        sort: 'rank'
+    })
+}
 
-    function initiate_check_list_datatable(table_node) {
-        datatables_firebase({
-            table_selector: "#checklist_table",
-            firebase_reference: dbRef.ref('omni').child(table_node),
-            columns: ['name', {
-                'data': 'rag',
-                'format': 'rag'
-            }, {
-                'data': 'rank',
-                'format': 'rank'
-            }, {
-                'data': 'summary',
-                visible: false
-            }, {
-                'data': 'group',
-                visible: false
-            }, {
-                'data': 'identifier',
-                visible: false
-            }],
-            sort: 'rank'
-        })
-    }
-
-    function load_firebase_blog_instance() {
-        load_firebase_blog({
-            blog_selector: "#morning_review",
-            firebase_reference: dbRef.ref("omni").child("omni_blog")
-        })
-    }
+function load_firebase_blog_instance() {
     load_firebase_blog({
         blog_selector: "#morning_review",
         firebase_reference: dbRef.ref("omni").child("omni_blog")
     })
-    setTimeout(key_metrics_save_minute, 5000)
-    setTimeout(initiate_check_list_datatable, 5000, 'priorities')
+}
+load_firebase_blog({
+    blog_selector: "#morning_review",
+    firebase_reference: dbRef.ref("omni").child("omni_blog")
+})
+setTimeout(key_metrics_save_minute, 5000)
+setTimeout(initiate_check_list_datatable, 5000, 'priorities')
 
-    function initate_calendar() {
-        completed_tasks_filtered = completed_tasks.filter(function(D) {
-            return D['end_time'] != null && D['start_time'] != null
-        })
-        completed_tasks_filtered.forEach(function(D) {
-            D['start'] = D['start_time']
-            D['end'] = D['end_time']
-            D['title'] = D['content']
-            D['color'] = 'gray'
-        })
-        events_data = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json"))
-        events_data = events_data.concat(completed_tasks_filtered)
-        console.log(events_data)
-        calendar_initiate({
-            events: events_data
-        })
-        datatables_firebase({
-            firebase_reference: firebase.database().ref('omni').child('calendar'),
-            columns: [{
-                data: 'title',
-                format: 'title'
-            }, {
-                data: 'start',
-                format: 'date'
-            }, {
-                data: 'end',
-                format: 'date'
-            }, {
-                data: 'color'
-            }, ],
-            table_selector: "#calendar_table",
-            columns_generate: false
-        })
-    }
-    ////dbRef.ref('omni').child('todoist_gspread_checklist').set(gspread_array)
-    function checklist_gspread() {
-        datatables_firebase({
-            table_selector: "#remaining_tasks_table",
-            firebase_reference: dbRef.ref('omni').child('todoist_gspread_checklist')
-        })
-    }
+function initate_calendar() {
+    completed_tasks_filtered = completed_tasks.filter(function(D) {
+        return D['end_time'] != null && D['start_time'] != null
+    })
+    completed_tasks_filtered.forEach(function(D) {
+        D['start'] = D['start_time']
+        D['end'] = D['end_time']
+        D['title'] = D['content']
+        D['color'] = 'gray'
+    })
+    events_data = Object.values(firebase_json_pull(
+        "https://shippy-ac235.firebaseio.com/omni/calendar.json"))
+    events_data = events_data.concat(completed_tasks_filtered)
+    console.log(events_data)
+    calendar_initiate({
+        events: events_data
+    })
+    datatables_firebase({
+        firebase_reference: firebase.database().ref('omni').child('calendar'),
+        columns: [{
+            data: 'title',
+            format: 'title'
+        }, {
+            data: 'start',
+            format: 'date'
+        }, {
+            data: 'end',
+            format: 'date'
+        }, {
+            data: 'color'
+        }, ],
+        table_selector: "#calendar_table",
+        columns_generate: false
+    })
+}
+////dbRef.ref('omni').child('todoist_gspread_checklist').set(gspread_array)
+function checklist_gspread() {
+    datatables_firebase({
+        table_selector: "#remaining_tasks_table",
+        firebase_reference: dbRef.ref('omni').child('todoist_gspread_checklist')
+    })
+}
 
-    function drogas_most_recent_time(drogas_array) {
-        drogas_array = drogas_array.filter(function(D) {
-            return D['type'] == 'count'
-        })
-        most_recent_time = drogas_array[drogas_array.length - 1]
-        return most_recent_time
-    }
-    //remaining_tasks_populate(gspread_array)
-    function drogas_calculate_now() {
-        drogas_array = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/drogas.json"))
-        start_drogas_timer(drogas_array)
-        drogas_array.forEach(function(D) {
-            D['remaining_in_system'] = dose_remaining_now(D)
-        })
-        in_system = sum_float_convert_from_array_underscore(drogas_array, 'remaining_in_system')
-        in_system = in_system.toFixed(1)
-        $("#ds_percentage").html(in_system)
-        return in_system
-    }
-    setTimeout(drogas_calculate_now, 3000)
-    //gspread_array
-    //('checklist')
-    //initiate_check_list_datatable('checklist')
-    // var firebaseRef = params.firebase_reference||firebase.database().ref('bug_features');
-    // datatables_firebase_table_generate({table_selector:"#ds_table",firebase_reference:dbRef.ref('drogas'),
-    //     columns:[        {'data':'input_text',visible:true},
-    //             'date_time',
-    //             'type',
-    //             'within_system',
-    setTimeout(initate_calendar, 3000)
+function drogas_most_recent_time(drogas_array) {
+    drogas_array = drogas_array.filter(function(D) {
+        return D['type'] == 'count'
+    })
+    most_recent_time = drogas_array[drogas_array.length - 1]
+    return most_recent_time
+}
+//remaining_tasks_populate(gspread_array)
+function drogas_calculate_now() {
+    drogas_array = Object.values(firebase_json_pull(
+        "https://shippy-ac235.firebaseio.com/drogas.json"))
+    start_drogas_timer(drogas_array)
+    drogas_array.forEach(function(D) {
+        D['remaining_in_system'] = dose_remaining_now(D)
+    })
+    in_system = sum_float_convert_from_array_underscore(drogas_array,
+        'remaining_in_system')
+    in_system = in_system.toFixed(1)
+    $("#ds_percentage").html(in_system)
+    return in_system
+}
+setTimeout(drogas_calculate_now, 3000)
 
-    function initiate_table_counters() {
-        // setTimeout(receipts_table,3000)
-        // setTimeout(food_table,6000)
-        receipts_table()
-        food_table()
-        stock_table()
-    }
-    setTimeout(initiate_table_counters, 6000)
+setTimeout(initate_calendar, 3000)
+function initiate_table_counters() {
+    receipts_table()
+    food_table()
+    stock_table()
+}
+setTimeout(initiate_table_counters, 6000)
+metric_widgets_create(completed_tasks)
 
-    replace_side_panel_platform_omni()
+setTimeout(cycling_list_generate,4000)
+//cycling_list_generate()
+replace_side_panel_platform_omni()
 </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recurring Tasks</title>
+    <title>Academy</title>
 
         <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
@@ -107,57 +107,30 @@
         <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
         -->
         <script src="jutility.js"></script>
-<style>
-
-</style>
 </head>
-<body class="pace-done">
+<body>
 <div id="wrapper">
-    <div class="gray-bg dashbard-1" id="page-wrapper">
-        <div class="row border-bottom">
-            <nav class="navbar navbar-static-top" role="navigation" style=
-            "margin-bottom: 0">
-                <div class="navbar-header">
-                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href=
-                    "#"><i class="fa fa-bars"></i></a>
-                </div>
-                <ul class="nav navbar-top-links navbar-right">
-                    <li><span class="m-r-sm text-muted welcome-message">Supply Demand
-                    Summary</span></li>
-                    <li>
-                        <a href="login.html">Aesop</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div class="row border-bottom white-bg dashboard-header">
-            <div class="col-lg-12">
-                <div class="wrapper wrapper-content">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="iboxX float-e-marginsX">
-                                <div class="ibox-titleX">
-                                    <h5>Summary</h5>
-                                </div>
-                                <div class="ibox-contentX">
-                                    <table class="display nowrap" id="remaining_tasks_table" style=
-                                    "width:100%"></table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="wrapper wrapper-content">
+    <div class="gray-bg" id="page-wrapper">
+        <div class="wrapper wrapper-content">
+            <div id='main_content'>
+                <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>Remaining</h5>
+                                    <h5></h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class=
+                                        "fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li>
+                                                <a href="#" onclick="drogas_chart_update()">Ds</a>
+                                            </li>
+                                        </ul><a class="close-link"><i class="fa fa-times"></i></a>
+                                    </div>
                                 </div>
+
                                 <div class="ibox-content">
                                     <div id="summernote">
                                         <p></p>
@@ -168,7 +141,7 @@
                                             type="button">Submit</button>
                                         </div>
                                     </div>
-                                    <table class="display nowrap" id="remaining_tasks_table_firebase"
+                                    <table class="display nowrap" id="table"
                                     style="width:100%"></table>
                                 </div>
                             </div>
@@ -179,142 +152,95 @@
         </div>
     </div>
 </div>
-
 <script>
-$.fn.dataTable.ext.type.order["number-order-pre"] = function(d) {
-    r = parseFloat(d) || 0
-    return r;
-};
 var dbRef = dbRef || firebase.database();
-omni_node = 'todoist_tasks'
-var FirebaseRef = dbRef.ref('omni').child(omni_node)
-var timer_instance = dbRef.ref('omni').child('timer_instance')
-var timer_instance_archive = dbRef.ref('omni').child('timer_instance_archive')
-var snapshot_instance = dbRef.ref('omni').child('snapshot')
-todoist_gspread_pull = todoist_gspread_pull_firebase()
-
-
-$("#sync_todoist").click(function(event) {
-    todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
-    snapshot_instance.set(todoist_gspread_pull)
-    toastr_notification("Todoist Synced")
-})
-
-
-
-projects_dictionary = todoist_gspread_pull.projects
-gspread_array = todoist_gspread_pull.gspread
-current_tasks = todoist_gspread_pull.todoist_current
-completed_tasks = todoist_gspread_pull.todoist_completed
-gspread_array_core = Object.values(firebase_json_pull(
-    "https://shippy-ac235.firebaseio.com/omni/recurring_tasks.json"))
-gspread_array = gspread_table_tasks_generate(gspread_array_core,
-    completed_tasks, current_tasks)
-gspread_array_project_id_append(gspread_array, projects_dictionary)
-//dbRef.ref('omni').child('recurring_tasks').set(gspread_array)
-remaining_tasks_populate(gspread_array)
 columns = [{
-        data: "Task",
-        title: "Task",
-        visible: true,
-        name: "Task"
-    }, {
-        data: "Category",
-        title: "Category",
-        visible: false,
-        name: "Category"
-    }, {
-        data: "Description",
-        title: "Description",
-        visible: false,
-        name: "Description"
-    }, {
-        data: "Type",
-        title: "Type",
-        visible: true,
-        name: "Type"
-    }, {
-        data: "Estimated Duration",
-        title: "Estimated Duration",
-        visible: false,
-        name: "Estimated Duration"
-    }, {
-        'data': 'rag',
-        'format': 'rag',
-        visible: true
-    }, {
-        data: "summary",
-        title: "summary",
-        visible: false,
-        name: "summary"
-    }, {
-        data: "Max Age",
-        title: "Max Age",
-        visible: false,
-        name: "Max Age"
-    }, {
-        data: "Sprint",
-        title: "Sprint",
-        visible: false,
-        name: "Sprint"
-    }, {
-        'data': 'name',
-        render: function(data, type, row, meta) {
-            if (row['url'] == undefined || row['url'] == 'null') {
-                url_reference = "list.html?id=" + file_formatted_string(data)
-            } else {
-                url_reference = row['url']
-            }
-            return "<a target='_blank' href='" + url_reference + "'>" + data + "</a>"
-        }
+    data: 'row_number',
+    title: 'slide',
+    render: function(data, type, row, meta) {
+        return parseInt(row.number) + 1
     }
-
-]
+}, {
+    data: "deck",
+    title: "deck",
+    visible: true,
+    name: "deck"
+}, {
+    data: "slide_title",
+    title: "slide_title",
+    visible: true,
+    name: "slide_title"
+}, {
+    data: "owner",
+    title: "owner",
+    visible: false,
+    name: "owner"
+}, {
+    data: "date",
+    title: "date",
+    visible: false,
+    name: "date"
+}, {
+    data: "number",
+    title: "number",
+    visible: false,
+    name: "number"
+}, {
+    'data': 'rag',
+    'format': 'rag',
+    visible: true
+}, {
+    data: "notes",
+    title: "notes",
+    visible: false,
+    name: "notes"
+}, {
+    data: "name",
+    title: "name",
+    visible: false,
+    name: "name"
+}, {
+    data: "summary",
+    title: "summary",
+    visible: false,
+    name: "summary"
+}, {
+    data: "content",
+    title: "content",
+    visible: false,
+    name: "content"
+}]
 params = datatables_firebase({
-    firebase_reference: dbRef.ref('omni').child('recurring_tasks'),
-    table_selector: "#remaining_tasks_table_firebase",
-    //columns_generate: true,
-    //default_visible:false,
-    callback_function: null,
+    table_selector: "#table",
+    table_row_id: 'number',
+    firebase_reference: dbRef.ref('omni').child('course'),
     columns: columns
-    //callback_function:callback_function
-    //sort:'start_time',
-    //callback_function:visits_callback,
+    // columns:['name',{'data':'rag','format':'rag'},{'data':'rank','format':'rank'},{'data':'summary',visible:false},{'data':'group',visible:false},{'data':'identifier',visible:false}],
+    // sort:'rank'
 })
 
-
-$('#summernote').summernote();
-$("#remaining_tasks_table_firebase").on("click", "tbody td", function(e) {
-    var table = $("#remaining_tasks_table_firebase").DataTable();
-    row_data = table.row(this).data();
-    $('#summernote').summernote('code', row_data['summary'])
-    td_column_selector = $(this)
-    $(".submit_button").click(function(event) {
-        params.editor.edit(td_column_selector, false).set('summary', $(
-            '#summernote').summernote('code')).submit();
-            toastr_notification("Todoist Synced")
-
-    })
-
-$( ".note-editing-area" ).focusout(function() {
-        params.editor.edit(td_column_selector, false).set('summary', $(
-            '#summernote').summernote('code')).submit();
-            toastr_notification("Todoist Synced")
-
-
-  })
+// $('#summernote').summernote();
+// $("#table").on("click", "tbody td", function(e) {
+//     var table = $("#table").DataTable();
+//     row_data = table.row(this).data();
+//     $('#summernote').summernote('code', row_data['summary'])
+//     td_column_selector = $(this)
+//     $(".submit_button").click(function(event) {
+//         params.editor.edit(td_column_selector, false).set('summary', $(
+//             '#summernote').summernote('code')).submit();
+//         toastr_notification("Synced")
+//     })
+//     $(".note-editing-area").focusout(function() {
+//         params.editor.edit(td_column_selector, false).set('summary', $(
+//             '#summernote').summernote('code')).submit();
+//         //toastr_notification("Todoist Synced")
+//     })
+//     window.location = window.location.href.substr(0, window.location.href.indexOf(
+//         '#')) + '#' + file_formatted_string(row_data['number']);
+// });
 
 
-
-    window.location = window.location.href.substr(0, window.location.href.indexOf(
-        '#')) + '#' + file_formatted_string(row_data['name']);
-});
 replace_side_panel_platform_omni()
-
-
-
-
-
 </script>
 
 </body>

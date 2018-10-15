@@ -175,14 +175,14 @@ datatables_params = datatables_firebase({
     table_selector: "#table",
     firebase_reference: firebase_reference_instance,
     columns: [{
-            'data': 'name',
+            'data': 'name_url',
             render: function(data, type, row, meta) {
                 if (row['url'] == undefined || row['url'] == 'null') {
-                    url_reference = "list.html?id=" + file_formatted_string(data)
+                    url_reference = "list.html?id=" + file_formatted_string(row.name)
                 } else {
                     url_reference = row['url']
                 }
-                return "<a target='_blank' href='" + url_reference + "'>" + data + "</a>"
+                return "<a target='_blank' href='" + url_reference + "'>" + row.name + "</a>"
             }
         },
         // {'data':'url',render:function(data,type,row,meta){
@@ -224,6 +224,16 @@ $("#table").on("click", "tbody td", function(e) {
     $(".submit_button").click(function(event) {
         datatables_params.editor.edit(td_column_selector, false).set('summary', $('#summernote').summernote('code')).submit();
     })
+
+
+$( ".note-editing-area" ).focusout(function(event) {
+        datatables_params.editor.edit(td_column_selector, false).set('summary', $('#summernote').summernote('code')).submit();
+           // toastr_notification("Todoist Synced")
+
+
+  })
+
+
     window.location = window.location.href.substr(0, window.location.href.indexOf('#')) + '#' + file_formatted_string(row_data['name']);
 });
 
@@ -238,9 +248,12 @@ function check_hash() {
         console.log(row_data)
         $('#summernote').summernote('code', row_data['summary'])
 
-    $(".submit_button").click(function(event) {
-        datatables_params.editor.edit(td_column_selector, false).set('summary', $('#summernote').summernote('code')).submit();
-    })
+
+    // $(".submit_button").click(function(event) {
+    //     datatables_params.editor.edit(td_column_selector, false).set('summary', $('#summernote').summernote('code')).submit();
+    // })
+
+
 
     }
 }

@@ -1,3 +1,15 @@
+function widget_create_html_element(goal_color,goal_name,goal_metric){
+    return '<div class="col-lg-2 goal"> <div class="widget style1 goal_color '+goal_color+'"> <div class="row"> <div class="col-xs-12"> <span class="goal_name"> '+goal_name+'</span> <h4 class="font-bold goal_metric">'+goal_metric+'</h4> </div> </div> </div> </div>'
+
+}
+
+function widget_create_html_element_append(identifier,goal_color,goal_name,goal_metric){
+    html_element = widget_create_html_element(goal_color,goal_name,goal_metric)
+    $(identifier).append($(html_element))
+}
+
+
+
 function side_panel_section_create(params){
  // params = {parent_name: 'Reports',links:[{attributes:{href:"#"},text:'first_report'}]}
   parent_link = '<a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">'+params.parent_name+'</span> <span class="fa arrow"></span></a>'

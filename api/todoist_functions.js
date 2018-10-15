@@ -1114,7 +1114,7 @@ function todoist_tasks_pull_custom_gspread(){
   sheet_name = 'Tasks'
   spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
   gspread_array_data = Object.values(firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/recurring_tasks.json"))//||gspread_array_manual_pull()//gspread_array_pull(sheet_name,spreadsheet_id)
-
+  gspread_array_data = gspread_array_data.filter(function(D){return D['Type'] != 'Cancelled'})
 
 
   
