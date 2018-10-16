@@ -174,11 +174,17 @@ firebase_reference_content = dbRef.ref('lists').child(hash).child('content')
 datatables_params = datatables_firebase({
     table_selector: "#table",
     firebase_reference: firebase_reference_instance,
-    columns: [{
+    columns: [
+        {'data':'name',render:function(data,type,row,meta){
+              return "<a target='_blank' href='"+ "list.html?id="+file_formatted_string(data) +"'>" +data + "</a>"
+        }},
+
+
+    {
             'data': 'name_url',
             render: function(data, type, row, meta) {
                 if (row['url'] == undefined || row['url'] == 'null') {
-                    url_reference = "list.html?id=" + file_formatted_string(row.name)
+                    url_reference = "list.html?id=" + file_formatted_string(String(row.name))
                 } else {
                     url_reference = row['url']
                 }

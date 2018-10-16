@@ -270,112 +270,116 @@
 | 268 | [calendar_create_from_array](http://cruzco.site44.com/streak.html) | calendar_datatables_firebase.js | |
 | 269 | [calendar_create_from_array](http://cruzco.site44.com/streak.html) | calendar_datatables_firebase.js | |
 | 270 | [create_task_promise](http://cruzco.site44.com/streak.html) | calendar_datatables_firebase.js | |
-| 271 | [determine_state_from_age](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
-| 272 | [columns_generate_cycling_list](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
-| 273 | [cycling_list_generate](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
-| 274 | [dataeditor_options_from_arrays](http://cruzco.site44.com/streak.html) | datatables_array.js | |
-| 275 | [datatable_generate_from_array](http://cruzco.site44.com/streak.html) | datatables_array.js | |
-| 276 | [datatables_generate_from_array](http://cruzco.site44.com/streak.html) | datatables_array.js | |
-| 277 | [datatables_firebase_params](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 278 | [datatables_column_add_formatting_from_type](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 279 | [datatable_column_fields_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 280 | [date_field_format_check](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 281 | [dataeditor_firebase_instance_generate_options](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 282 | [dataeditor_firebase_instance_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 283 | [datatables_add_metrics](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 284 | [datatable_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 285 | [editor_rag_status](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 286 | [editor_rank_apply](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 287 | [firebase_dataeditor_table_generate_core](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 288 | [firebase_dataeditor_table_generate_core](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 289 | [datatables_firebase_table_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | datatables_firebase_table_generate({table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})|
-| 290 | [firebase_json_pull_promise_original](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 291 | [firebase_json_pull_promise](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 292 | [firebase_json_pull_promise_pull](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 293 | [firebase_json_pull_promise_pull_simple](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 294 | [datatables_firebase_table_generate_simple](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 295 | [datatables_firebase_columns_define](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 296 | [firebase_pull_json](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
-| 297 | [datatables_firebase](http://cruzco.site44.com/streak.html) | datatables_firebase.js | datatables_firebase|
-| 298 | [firebase_editor_initiate](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
-| 299 | [firebase_generate_datatable](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
-| 300 | [firebase_dataeditor_table_editor_instance_options](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
-| 301 | [firebase_dataeditor_table_editor_instance](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
-| 302 | [firebase_dataeditor_table_generate](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
-| 303 | [timer_instance_dictionary_load](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
-| 304 | [timer_instance_markdown_generate](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
-| 305 | [set_timer_instance](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
-| 306 | [load_firebase_blog](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
-| 307 | [chart_update_from_params](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | |
-| 308 | [length_func](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | line_chart_name = line_chart_name ||'Rolling Total'|
-| 309 | [firebase_chart_update](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | |
-| 310 | [firebase_chart_update](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | |
-| 311 | [initiate_firebase_chat_bubbles_base](http://cruzco.site44.com/streak.html) | firebase_chat_input.js | |
-| 312 | [initiate_firebase_chat_bubbles](http://cruzco.site44.com/streak.html) | firebase_chat_input.js | |
-| 313 | [dose_remaining_now](http://cruzco.site44.com/streak.html) | firebase_drogas.js | |
-| 314 | [key_metrics_save](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
-| 315 | [key_metrics_save_minute](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
-| 316 | [todoist_snapshot_store](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
-| 317 | [todoist_gspread_pull_firebase](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
-| 318 | [run_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
-| 319 | [callback_function](http://cruzco.site44.com/streak.html) | firebase_tables.js | nction run_table(firebase_reference,table_selector){|
-| 320 | [receipts_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
-| 321 | [callback_function](http://cruzco.site44.com/streak.html) | firebase_tables.js | nction run_table(firebase_reference,table_selector){|
-| 322 | [food_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
+| 271 | [surplus_time_calculate](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
+| 272 | [determine_state_from_age](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
+| 273 | [label_create_from_rag_input](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
+| 274 | [determine_state_from_row_dictionary_calculate](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
+| 275 | [determine_age_from_row_dictionary_calculate](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
+| 276 | [columns_generate_cycling_list](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
+| 277 | [cycling_list_generate](http://cruzco.site44.com/streak.html) | cycling_age_status_list.js | |
+| 278 | [dataeditor_options_from_arrays](http://cruzco.site44.com/streak.html) | datatables_array.js | |
+| 279 | [datatable_generate_from_array](http://cruzco.site44.com/streak.html) | datatables_array.js | |
+| 280 | [datatables_generate_from_array](http://cruzco.site44.com/streak.html) | datatables_array.js | |
+| 281 | [datatables_firebase_params](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 282 | [datatables_column_add_formatting_from_type](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 283 | [datatable_column_fields_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 284 | [date_field_format_check](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 285 | [dataeditor_firebase_instance_generate_options](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 286 | [dataeditor_firebase_instance_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 287 | [datatables_add_metrics](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 288 | [datatable_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 289 | [editor_rag_status](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 290 | [editor_rank_apply](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 291 | [firebase_dataeditor_table_generate_core](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 292 | [firebase_dataeditor_table_generate_core](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 293 | [datatables_firebase_table_generate](http://cruzco.site44.com/streak.html) | datatables_firebase.js | datatables_firebase_table_generate({table_selector:"#table",firebase_reference:firebase.database().ref('bug_features'),columns:['date']})|
+| 294 | [firebase_json_pull_promise_original](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 295 | [firebase_json_pull_promise](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 296 | [firebase_json_pull_promise_pull](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 297 | [firebase_json_pull_promise_pull_simple](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 298 | [datatables_firebase_table_generate_simple](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 299 | [datatables_firebase_columns_define](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 300 | [firebase_pull_json](http://cruzco.site44.com/streak.html) | datatables_firebase.js | |
+| 301 | [datatables_firebase](http://cruzco.site44.com/streak.html) | datatables_firebase.js | datatables_firebase|
+| 302 | [firebase_editor_initiate](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 303 | [firebase_generate_datatable](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 304 | [firebase_dataeditor_table_editor_instance_options](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 305 | [firebase_dataeditor_table_editor_instance](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 306 | [firebase_dataeditor_table_generate](http://cruzco.site44.com/streak.html) | firebase_array_generate.js | |
+| 307 | [timer_instance_dictionary_load](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
+| 308 | [timer_instance_markdown_generate](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
+| 309 | [set_timer_instance](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
+| 310 | [load_firebase_blog](http://cruzco.site44.com/streak.html) | firebase_blog.js | |
+| 311 | [chart_update_from_params](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | |
+| 312 | [length_func](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | line_chart_name = line_chart_name ||'Rolling Total'|
+| 313 | [firebase_chart_update](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | |
+| 314 | [firebase_chart_update](http://cruzco.site44.com/streak.html) | firebase_chart_update.js | |
+| 315 | [initiate_firebase_chat_bubbles_base](http://cruzco.site44.com/streak.html) | firebase_chat_input.js | |
+| 316 | [initiate_firebase_chat_bubbles](http://cruzco.site44.com/streak.html) | firebase_chat_input.js | |
+| 317 | [dose_remaining_now](http://cruzco.site44.com/streak.html) | firebase_drogas.js | |
+| 318 | [key_metrics_save](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
+| 319 | [key_metrics_save_minute](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
+| 320 | [todoist_snapshot_store](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
+| 321 | [todoist_gspread_pull_firebase](http://cruzco.site44.com/streak.html) | firebase_snapshot.js | |
+| 322 | [run_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
 | 323 | [callback_function](http://cruzco.site44.com/streak.html) | firebase_tables.js | nction run_table(firebase_reference,table_selector){|
-| 324 | [stock_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
-| 325 | [update_stock_data](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
-| 326 | [stocks_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
-| 327 | [less_than_number_of_days](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 328 | [array_filter_last_number_of_days](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 329 | [array_firebase_url_filter](http://cruzco.site44.com/streak.html) | goal_widgets.js | "https://shippy-ac235.firebaseio.com/run_log.json"),'time_stamp',number_of_days|
-| 330 | [array_firebase_url_filter_sum](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 331 | [array_filter_sum_return](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 332 | [goal_widget_of_goal_percentage](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 333 | [color_from_percentage](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 334 | [number_single_decimal_format](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 335 | [percentage_single_decimal_format](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 336 | [metric_text_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 337 | [run_goal_widget_dictionary](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 338 | [hours_age_determine_dict](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 339 | [recurring_tasks_widget_dictionary](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 340 | [gs_goal_widget_dictionary](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 341 | [metric_widget_calculate_from_completed_tasks](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 342 | [academy_widget_calculate_from_completed_tasks](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 343 | [run_goal_widget_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 344 | [travel_goal_widget_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 345 | [widget_create_from_metric_dict](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 346 | [metric_widgets_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
-| 347 | [html_timer_update_from_jquery_intermittent](http://cruzco.site44.com/streak.html) | intermittent_timer.js | time_since_start_time_moment_to('2018-06-24T12:46:50-04:00')|
-| 348 | [start_drogas_timer](http://cruzco.site44.com/streak.html) | intermittent_timer.js | date_time|
-| 349 | [start_intermittent_timer](http://cruzco.site44.com/streak.html) | intermittent_timer.js | |
-| 350 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | timer.js | update the html of the timer|
-| 351 | [timer_instance_page_initiate](http://cruzco.site44.com/streak.html) | timer.js | timer_instance_page_initiate|
-| 352 | [timer_instance_page_initiate_2](http://cruzco.site44.com/streak.html) | timer.js | |
-| 353 | [datatables_firebase_columns_define](http://cruzco.site44.com/streak.html) | timer.js | |
-| 354 | [firebase_pull_json](http://cruzco.site44.com/streak.html) | timer.js |   ref = params.firebase_reference|
-| 355 | [task_complete_todoist_promise_generate](http://cruzco.site44.com/streak.html) | timer.js | |
-| 356 | [complete_task_via_zapier](http://cruzco.site44.com/streak.html) | timer.js | nction task_complete_todoist_promise_generate(timer_instance_dictionary,timer_instance){|
-| 357 | [task_complete_todoist](http://cruzco.site44.com/streak.html) | timer.js | |
-| 358 | [page_update_from_timer](http://cruzco.site44.com/streak.html) | timer.js | |
-| 359 | [timer_instance_exists_process](http://cruzco.site44.com/streak.html) | timer.js | if timer instances exists, add certain tactions to the timer|
-| 360 | [add_dropdown_item_todoist_app](http://cruzco.site44.com/streak.html) | timer.js | creates timer for omni.html|
-| 361 | [create_project_dropdown_list](http://cruzco.site44.com/streak.html) | timer.js | for omni.html |
-| 362 | [percentage_complete_metric_generate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | |
-| 363 | [remaining_tasks_populate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | remaining tasks populate|
-| 364 | [update_progress](http://cruzco.site44.com/streak.html) | todoist_progress_bars.js | |
-| 365 | [progress_bar_table_formulate](http://cruzco.site44.com/streak.html) | todoist_progress_bars.js | |
-| 366 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 367 | [percentage_sub_text](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 368 | [percentage_sub_text_inverse](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 369 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 370 | [add_percentage_label_html](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 371 | [measure_progress_bars](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 372 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 373 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 374 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 375 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
-| 376 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 377 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
-| 378 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
-| 379 | [run_refresh](http://cruzco.site44.com/streak.html) | todoist_table.js |   table.columns('task_date_range:name').search('this_month').draw()|
+| 324 | [receipts_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
+| 325 | [callback_function](http://cruzco.site44.com/streak.html) | firebase_tables.js | nction run_table(firebase_reference,table_selector){|
+| 326 | [food_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
+| 327 | [callback_function](http://cruzco.site44.com/streak.html) | firebase_tables.js | nction run_table(firebase_reference,table_selector){|
+| 328 | [stock_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
+| 329 | [update_stock_data](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
+| 330 | [stocks_table](http://cruzco.site44.com/streak.html) | firebase_tables.js | |
+| 331 | [less_than_number_of_days](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 332 | [array_filter_last_number_of_days](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 333 | [array_firebase_url_filter](http://cruzco.site44.com/streak.html) | goal_widgets.js | "https://shippy-ac235.firebaseio.com/run_log.json"),'time_stamp',number_of_days|
+| 334 | [array_firebase_url_filter_sum](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 335 | [array_filter_sum_return](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 336 | [goal_widget_of_goal_percentage](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 337 | [color_from_percentage](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 338 | [number_single_decimal_format](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 339 | [percentage_single_decimal_format](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 340 | [metric_text_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 341 | [run_goal_widget_dictionary](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 342 | [hours_age_determine_dict](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 343 | [recurring_tasks_widget_dictionary](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 344 | [gs_goal_widget_dictionary](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 345 | [metric_widget_calculate_from_completed_tasks](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 346 | [academy_widget_calculate_from_completed_tasks](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 347 | [run_goal_widget_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 348 | [travel_goal_widget_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 349 | [widget_create_from_metric_dict](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 350 | [metric_widgets_create](http://cruzco.site44.com/streak.html) | goal_widgets.js | |
+| 351 | [html_timer_update_from_jquery_intermittent](http://cruzco.site44.com/streak.html) | intermittent_timer.js | time_since_start_time_moment_to('2018-06-24T12:46:50-04:00')|
+| 352 | [start_drogas_timer](http://cruzco.site44.com/streak.html) | intermittent_timer.js | date_time|
+| 353 | [start_intermittent_timer](http://cruzco.site44.com/streak.html) | intermittent_timer.js | |
+| 354 | [html_timer_update_from_jquery](http://cruzco.site44.com/streak.html) | timer.js | update the html of the timer|
+| 355 | [timer_instance_page_initiate](http://cruzco.site44.com/streak.html) | timer.js | timer_instance_page_initiate|
+| 356 | [timer_instance_page_initiate_2](http://cruzco.site44.com/streak.html) | timer.js | |
+| 357 | [datatables_firebase_columns_define](http://cruzco.site44.com/streak.html) | timer.js | |
+| 358 | [firebase_pull_json](http://cruzco.site44.com/streak.html) | timer.js |   ref = params.firebase_reference|
+| 359 | [task_complete_todoist_promise_generate](http://cruzco.site44.com/streak.html) | timer.js | |
+| 360 | [complete_task_via_zapier](http://cruzco.site44.com/streak.html) | timer.js | nction task_complete_todoist_promise_generate(timer_instance_dictionary,timer_instance){|
+| 361 | [task_complete_todoist](http://cruzco.site44.com/streak.html) | timer.js | |
+| 362 | [page_update_from_timer](http://cruzco.site44.com/streak.html) | timer.js | |
+| 363 | [timer_instance_exists_process](http://cruzco.site44.com/streak.html) | timer.js | if timer instances exists, add certain tactions to the timer|
+| 364 | [add_dropdown_item_todoist_app](http://cruzco.site44.com/streak.html) | timer.js | creates timer for omni.html|
+| 365 | [create_project_dropdown_list](http://cruzco.site44.com/streak.html) | timer.js | for omni.html |
+| 366 | [percentage_complete_metric_generate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | |
+| 367 | [remaining_tasks_populate](http://cruzco.site44.com/streak.html) | todoist_gspread_table.js | remaining tasks populate|
+| 368 | [update_progress](http://cruzco.site44.com/streak.html) | todoist_progress_bars.js | |
+| 369 | [progress_bar_table_formulate](http://cruzco.site44.com/streak.html) | todoist_progress_bars.js | |
+| 370 | [header_metrics_create_todoist](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 371 | [percentage_sub_text](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 372 | [percentage_sub_text_inverse](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 373 | [current_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 374 | [add_percentage_label_html](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 375 | [measure_progress_bars](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 376 | [completed_tasks_call_back](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 377 | [todoist_table_create_current](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 378 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 379 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 380 | [todoist_table_create_complete](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 381 | [array_dictionary_customize](http://cruzco.site44.com/streak.html) | todoist_table.js | |
+| 382 | [callback_function](http://cruzco.site44.com/streak.html) | todoist_table.js |   //based on filter from table , update a funciton|
+| 383 | [run_refresh](http://cruzco.site44.com/streak.html) | todoist_table.js |   table.columns('task_date_range:name').search('this_month').draw()|

@@ -55,7 +55,7 @@ function datatables_column_add_formatting_from_type(new_dictionary) {
     if (new_dictionary.visible == 'false') {
         new_dictionary.visible = false
     }
-    if (new_dictionary.format == 'rag' || new_dictionary.format == 'rag') {
+    if ((new_dictionary.format == 'rag' || new_dictionary.format == 'rag') && new_dictionary.render == undefined) {
         new_dictionary.render = function(data, type, row, meta) {
             field_name = new_dictionary.name
             label_name = {

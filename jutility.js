@@ -5008,6 +5008,11 @@ function full_calendar_generate(params) {
 
 //var dbRef = dbRef || firebase.database();
 
+function surplus_time_calculate(hours_age, recurrence_age) {
+    recurrence_age = parseFloat(recurrence_age) || 0
+    surplus_time = recurrence_age - hours_age
+    return surplus_time
+}
 
 function determine_state_from_age(hours_age, recurrence_age) {
     recurrence_age = parseFloat(recurrence_age) || 0
@@ -5017,8 +5022,32 @@ function determine_state_from_age(hours_age, recurrence_age) {
     } else {
         state = 'red'
     }
-    return surplus_time
+    return state
 
+}
+
+function label_create_from_rag_input(data, field_name, text_input) {
+    label_name = {
+        'green': 'label-primary',
+        'amber': 'label-warning',
+        'red': 'label-danger'
+    } [data] || 'label-primary'
+    span_element = $("<span>").append($("<span>", {
+        "value": data,
+        "field": field_name,
+        "class": "rag label " + label_name
+    }).text(text_input).clone()).html()
+    return span_element
+}
+
+function determine_state_from_row_dictionary_calculate(row) {
+    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+    return determine_state_from_age(hours_age, row['recurrence_age'])
+}
+
+function determine_age_from_row_dictionary_calculate(row) {
+    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+    return surplus_time_calculate(hours_age, row['recurrence_age'])
 }
 
 function columns_generate_cycling_list() {
@@ -5026,19 +5055,37 @@ function columns_generate_cycling_list() {
         'data': 'name',
         'format': '',
         visible: true
-    }, {
-        'data': 'rag',
-        'format': 'rag',
-        visible: true
-    }, {
-        'data': 'time_stamp',
-        'format': 'date',
-        visible: false
+
     }, {
         'data': 'recurrence_age',
         'format': '',
         visible: false
     }, {
+
+        'data': 'rag',
+        'format': 'rag',
+        'title': 'Hrs Remain',
+        visible: true,
+        render: function(data, type, row, meta) {
+            field_name = 'rag' //new_dictionary.name
+            rag_status = determine_state_from_row_dictionary_calculate(row)
+            text_input = determine_age_from_row_dictionary_calculate(row)
+
+            span_element = label_create_from_rag_input(rag_status, field_name, text_input.toFixed(1))
+            return span_element
+        }
+
+
+    }, {
+        //     'data': 'rag',
+        //     'format': 'rag',
+        //     visible:true
+        // }, {
+        'data': 'time_stamp',
+        'format': 'date',
+        visible: false
+    }, {
+
         'data': 'age',
         'format': '',
         visible: false,
@@ -5299,7 +5346,7 @@ function datatables_column_add_formatting_from_type(new_dictionary) {
     if (new_dictionary.visible == 'false') {
         new_dictionary.visible = false
     }
-    if (new_dictionary.format == 'rag' || new_dictionary.format == 'rag') {
+    if ((new_dictionary.format == 'rag' || new_dictionary.format == 'rag') && new_dictionary.render == undefined) {
         new_dictionary.render = function(data, type, row, meta) {
             field_name = new_dictionary.name
             label_name = {
@@ -6731,7 +6778,7 @@ function metric_widget_calculate_from_completed_tasks(completed_tasks) {
 
 function academy_widget_calculate_from_completed_tasks(completed_tasks) {
     filtered_array = completed_tasks.filter(function(D) {
-        return D['content'].indexOf('Academy') > -1
+        return D['content'].toLowerCase().indexOf('academy') > -1
     })
     filtered_array = array_filter_last_number_of_days(filtered_array, 'completed_date', 7)
     sum_value = filtered_array.length

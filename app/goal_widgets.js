@@ -126,7 +126,7 @@ function metric_widget_calculate_from_completed_tasks(completed_tasks){
 }
 
 function academy_widget_calculate_from_completed_tasks(completed_tasks){
-	filtered_array = completed_tasks.filter(function(D){return D['content'].indexOf('Academy') > -1})
+	filtered_array = completed_tasks.filter(function(D){return D['content'].toLowerCase().indexOf('academy') > -1})
 	filtered_array = array_filter_last_number_of_days(filtered_array,'completed_date',7)
 	sum_value = filtered_array.length
 	goal_number = 50
