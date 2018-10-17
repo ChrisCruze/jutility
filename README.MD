@@ -223,7 +223,7 @@
 | 221 | [stock_pull](http://cruzco.site44.com/streak.html) | iextrading_functions.js | |
 | 222 | [stocks_batch_pull](http://cruzco.site44.com/streak.html) | iextrading_functions.js | |
 | 223 | [ipLookUp ](http://cruzco.site44.com/streak.html) | ip_functions.js | |
-| 224 | [success](http://cruzco.site44.com/streak.html) | ip_functions.js | $.ajax('http://ip-api.com/json').then(|
+| 224 | [success](http://cruzco.site44.com/streak.html) | ip_functions.js | $.ajax('https://ip-api.com/json').then(|
 | 225 | [fail](http://cruzco.site44.com/streak.html) | ip_functions.js |     },|
 | 226 | [slack_post_message](http://cruzco.site44.com/streak.html) | slack_functions.js | slack_push({'text':"<http://aesopba.com/bug_features.html|New Bug Feature: "+message+">",'channel':"CBJFKKB35"})|
 | 227 | [tableau_connector_run](http://cruzco.site44.com/streak.html) | tableau_functions.js | |

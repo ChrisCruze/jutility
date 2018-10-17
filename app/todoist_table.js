@@ -424,11 +424,11 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
     }
 
     array.forEach(array_dictionary_customize);
-    array = firebase_array_integrate(array,"https://shippy-ac235.firebaseio.com/omni/"+omni_node+".json","DT_RowId",['status','notes'])
+    array = firebase_array_integrate(array,"https://shippy-ac235.firebaseio.com/omni/"+omni_node+".json","DT_RowId",['status','notes','rag'])
 
     editor = new $.fn.dataTable.Editor({
       table: table_id,
-      fields: [{ label: "status:", name: "status" },{ label: "notes:", name: "notes" }]
+      fields: [{ label: "status:", name: "status" },{ label: "notes:", name: "notes" },{ label: "rag:", name: "rag" }]
     });
 
     editor.on("postSubmit", function(e, json, data, action, xhr) {
@@ -457,6 +457,18 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
           title: "content",
           visible: true,
           name: "content"
+        }, {
+          'data': 'rag',
+          'format': 'rag',
+          'title':'RAG',
+            visible:true,
+            render:function(data, type, row, meta) {
+            field_name = 'rag'//new_dictionary.name
+            rag_status = 'rag'//determine_state_from_row_dictionary_calculate(row)
+            text_input = 'rag'//determine_age_from_row_dictionary_calculate(row)
+            text_input = String(data)
+            span_element = label_create_from_rag_input(data,field_name,text_input) 
+            return span_element}
         },
         {
           data: "duration",
@@ -541,6 +553,9 @@ function todoist_table_create_complete(array,table_id,metric_headers_update_list
 
     }
     setTimeout(run_refresh,5000)
+
+
+    editor_rag_status(editor, table_id)
    // console.log(table)
     //console.log(Object.values(table.rows({ page: "current" }).data()))
     return table

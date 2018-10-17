@@ -1,5 +1,5 @@
 function ipLookUp () {
-  $.ajax('http://ip-api.com/json').then(
+  $.ajax('https://ip-api.com/json').then(
       function success(response) {
         
         session_dictionary['ip_data'] = response

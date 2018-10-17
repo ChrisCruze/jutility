@@ -3538,7 +3538,7 @@ function stocks_batch_pull(stocks) {
 //ip_functions.js
 
 function ipLookUp() {
-    $.ajax('http://ip-api.com/json').then(
+    $.ajax('https://ip-api.com/json').then(
         function success(response) {
 
             session_dictionary['ip_data'] = response
@@ -7894,7 +7894,7 @@ function todoist_table_create_complete(array, table_id, metric_headers_update_li
     }
 
     array.forEach(array_dictionary_customize);
-    array = firebase_array_integrate(array, "https://shippy-ac235.firebaseio.com/omni/" + omni_node + ".json", "DT_RowId", ['status', 'notes'])
+    array = firebase_array_integrate(array, "https://shippy-ac235.firebaseio.com/omni/" + omni_node + ".json", "DT_RowId", ['status', 'notes', 'rag'])
 
     editor = new $.fn.dataTable.Editor({
         table: table_id,
@@ -7904,6 +7904,9 @@ function todoist_table_create_complete(array, table_id, metric_headers_update_li
         }, {
             label: "notes:",
             name: "notes"
+        }, {
+            label: "rag:",
+            name: "rag"
         }]
     });
 
@@ -7934,6 +7937,19 @@ function todoist_table_create_complete(array, table_id, metric_headers_update_li
             title: "content",
             visible: true,
             name: "content"
+        }, {
+            'data': 'rag',
+            'format': 'rag',
+            'title': 'RAG',
+            visible: true,
+            render: function(data, type, row, meta) {
+                field_name = 'rag' //new_dictionary.name
+                rag_status = 'rag' //determine_state_from_row_dictionary_calculate(row)
+                text_input = 'rag' //determine_age_from_row_dictionary_calculate(row)
+                text_input = String(data)
+                span_element = label_create_from_rag_input(data, field_name, text_input)
+                return span_element
+            }
         }, {
             data: "duration",
             title: "duration",
@@ -8039,6 +8055,9 @@ function todoist_table_create_complete(array, table_id, metric_headers_update_li
 
     }
     setTimeout(run_refresh, 5000)
+
+
+    editor_rag_status(editor, table_id)
     // console.log(table)
     //console.log(Object.values(table.rows({ page: "current" }).data()))
     return table
