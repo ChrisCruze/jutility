@@ -7056,6 +7056,30 @@ function start_intermittent_timer() {
 }
 //
 //time_since_start_time_moment_to('2018-06-24T12:46:50-04:00')
+//meditation_row.js
+
+
+
+function formulate_label_square() {
+    html = '<span class="label label-success" style="margin:0">1</span>'
+    return html
+}
+
+function meditation_dates_loop_instance(date) {
+    html = formulate_label_square()
+    $("#meditation_row").append($(html))
+}
+
+function meditation_dates_loop(dates) {
+    dates.forEach(function(date) {
+        meditation_dates_loop_instance(date)
+    })
+}
+
+function meditation_dates(days) {
+    dates = dates_past_n_days(days)
+    meditation_dates_loop(dates)
+}
 //timer.js
 
 //update the html of the timer

@@ -214,6 +214,8 @@
                             </div>
                             <div class="row" id="goal_widgets">
                             </div>
+                            <div class="row" id="meditation_row">
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="ibox">
@@ -679,6 +681,7 @@ timer_instance.on('value', function(snapshot) {
     if (timer_instance_dictionary != null) {
         my_interval_timer = timer_instance_exists_process(timer_instance_dictionary,
             timer_instance, timer_instance_archive)
+        action_button_complete()
     } else {
         document.title = 'Omni'
         $("#input_text").val("")
@@ -841,6 +844,20 @@ $("#input_create").click(function(event) {
     // //}
     // //while (firebase_dictionary['start_time'] != original_start_time);
 });
+
+function action_button_start(){
+    $("#action_button").html('<a href="#" onclick="input_start()"> Start </a>')
+}
+
+function action_button_create(){
+    $("#action_button").html('<a href="#" onclick="zapier_todoist_create()"> Create </a>')
+}
+
+function action_button_complete(){
+
+    $("#action_button").html('<a href="#" onclick="$(\'#input_complete\').click()"> Complete  </a>')
+}
+
 $("#current_tasks_table").on("click", "tbody td", function(e) {
     var table = $("#current_tasks_table").DataTable();
     row_data = table.row(this).data();
@@ -848,8 +865,7 @@ $("#current_tasks_table").on("click", "tbody td", function(e) {
     $("#input_text").attr('task_id', row_data.id)
     $("#input_text").attr('project_id', row_data.project_id)
 
-    $("#action_button").html('<a href="#" onclick="input_start()"> Start <i class="fa fa-tasks"></i> </a>')
-
+    action_button_start()
 
 });
 $("#remaining_tasks_table").on("click", "tbody td", function(e) {
@@ -863,8 +879,7 @@ $("#remaining_tasks_table").on("click", "tbody td", function(e) {
     $("#input_text").val(row_data['Task'])
     //$("#input_text").attr('task_id',row_data.id)
     $("#input_text").attr('project_id', row_data['project_id'])
-
-    $("#action_button").html('<a href="#" onclick="zapier_todoist_create()"> Create <i class="fa fa-tasks"></i> </a>')
+    action_button_create()
                                     
 
 });

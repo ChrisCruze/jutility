@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Priorities</title>
+    <title>Code</title>
 <link href="https://cruzco.site44.com/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
 <link href="https://cruzco.site44.com/css/animate.css" rel="stylesheet">
@@ -136,87 +136,73 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
   </div>
 
   <script>
+    function update_page_title(){
+      document.title =  window.location.hash.replace(/#/g, '') 
+
+  }
+    setTimeout(update_page_title,5000)
+
     function init() {
-
-      //// Get Firebase Database reference.
-      var firepadRef = getExampleRef();
-
-      //// Create CodeMirror (with line numbers and the JavaScript mode).
-      var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-        lineNumbers: true,
-        mode: 'javascript'
+    //// Get Firebase Database reference.
+    var firepadRef = getExampleRef();
+    //// Create CodeMirror (with line numbers and the JavaScript mode).
+    var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+      lineNumbers: true,
+      mode: 'javascript'
+    });
+    //// Create Firepad.
+    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+      defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+    });
+    var hash = window.location.hash.replace(/#/g, '');
+    function upload_file() {
+      var formData = new FormData();
+      formData.append("name", "test");
+      // JavaScript file-like object
+      var content = firepad.getText()
+      var blob = new Blob([content], {
+        type: 'application/json'
       });
-
-      //// Create Firepad.
-      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-        defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+      formData.append("webmasterfile", blob);
+      var request = new XMLHttpRequest();
+      request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+      request.send(formData);
+    }
+    $("#submit_code").on("click", function(e) {
+      var formData = new FormData();
+      formData.append("name", window.location.hash.replace(/#/g, ''));
+      formData.append("code", firepad.getText());
+      // JavaScript file-like object
+      var content = firepad.getText()
+      var blob = new Blob([content], {
+        type: 'application/json'
       });
+      formData.append("webmasterfile", blob);
+      var request = new XMLHttpRequest();
+      request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+      request.send(formData);
+      console.log(formData)
+    })
+  }
+  // Helper to get hash from end of URL or generate a random one.
+  function getExampleRef() {
+    var ref = firebase.database().ref('code');
+    var hash = window.location.hash.replace(/#/g, '');
 
-
-      var hash = window.location.hash.replace(/#/g, '');
-
-
-
-          function upload_file(){
-
-            var formData = new FormData();
-
-            formData.append("name", "test");
-
-
-            // JavaScript file-like object
-            var content = firepad.getText()
-            var blob = new Blob([content], { type: 'application/json'});
-
-            formData.append("webmasterfile", blob);
-
-            var request = new XMLHttpRequest();
-            request.open("POST","https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
-            request.send(formData);
-
-
-          }
-
-
-    $("#submit_code").on("click",function(e) {
-                  var formData = new FormData();
-
-            formData.append("name", window.location.hash.replace(/#/g, ''));
-            formData.append("code", firepad.getText());
-
-
-            // JavaScript file-like object
-            var content = firepad.getText()
-            var blob = new Blob([content], { type: 'application/json'});
-
-            formData.append("webmasterfile", blob);
-
-            var request = new XMLHttpRequest();
-            request.open("POST","https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
-            request.send(formData);
-            console.log(formData)
-
-})
+    if (hash) {
+      ref = ref.child(hash);
+    } else {
+      ref = ref.push(); // generate unique location.
+      window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
     }
-
-    // Helper to get hash from end of URL or generate a random one.
-    function getExampleRef() {
-      var ref = firebase.database().ref('code');
-      var hash = window.location.hash.replace(/#/g, '');
-      if (hash) {
-        ref = ref.child(hash);
-      } else {
-        ref = ref.push(); // generate unique location.
-        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
-      }
-      if (typeof console !== 'undefined') {
-        console.log('Firebase data: ', ref.toString());
-      }
-      return ref;
+    if (typeof console !== 'undefined') {
+      console.log('Firebase data: ', ref.toString());
     }
+    return ref;
+  }
+  replace_side_panel_platform_omni()
 
 
-    replace_side_panel_platform_omni()
 
   </script>
 </body>
