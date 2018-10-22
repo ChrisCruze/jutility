@@ -189,6 +189,16 @@ function date_difference_from_today_days_moment(date_added){
     return age_days
 }
 
+function beginning_of_month_moment(){
+    today = new Date()
+    month = String(today.getMonth()+1)
+    year = String(today.getFullYear())
+    date_string = year + "-" + month + "-01"
+    start_time = moment(date_string)
+    return start_time
+}
+
+
 
 //dates that are within this month
 function dates_within_this_month(){

@@ -2317,6 +2317,38 @@ function excel_define_sheet_name(excel) {
 
 //firebase_functions.js
 
+function firebaseui_auth_configuration(signInSuccessUrl) {
+    var uiConfig = {
+        callbacks: {
+            signInSuccess: function(currentUser, credential, redirectUrl) {
+                return true;
+            },
+            signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                console.log(authResult)
+                return true;
+            },
+            signInFailure: function(error) {
+                return console.log(error);
+            },
+            uiShown: function() {}
+        },
+        credentialHelper: firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM,
+        queryParameterForWidgetMode: 'mode',
+        queryParameterForSignInSuccessUrl: 'signInSuccessUrl',
+        signInFlow: 'popup',
+        signInSuccessUrl: signInSuccessUrl,
+        signInOptions: [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ]
+    }
+    return uiConfig
+}
+
+function firebaseui_auth_initiate(firebase_auth_container, signInSuccessUrl) {
+    uiConfig = firebaseui_auth_configuration(signInSuccessUrl)
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    ui.start(firebase_auth_container, uiConfig);
+}
 
 function firebase_signin_prompt_params() {
     params = params || {
@@ -2350,13 +2382,35 @@ function firebase_signin_prompt_params() {
     ui.start(params.firebase_auth_container, uiConfig);
 }
 
+function login_in_process_fb(user) {
+    user.getIdToken().then(function(accessToken) {
+
+    })
+}
+
+function not_logged_in_process_fb(firebase_auth_container, signInSuccessUrl) {
+    firebaseui_auth_initiate(firebase_auth_container, signInSuccessUrl)
+}
+
+function check_login_condition_fb(user, firebase_auth_container, signInSuccessUrl) {
+    if (user) {
+        login_in_process_fb(user)
+    } else {
+        not_logged_in_process_fb(firebase_auth_container, signInSuccessUrl)
+    }
+}
+
+function check_login_fb(firebase_auth_container, signInSuccessUrl) {
+    firebase.auth().onAuthStateChanged(function(user) {
+        check_login_condition_fb(user, firebase_auth_container, signInSuccessUrl)
+    })
+}
 
 function firebase_login_configuration(params) {
     params = params || {
         firebase_auth_container: '#firebaseui-auth-container',
         signInSuccessUrl: 'https://chriscruze.github.io/Taskr/index.html',
         // application_function: function(user){console.log(user)},
-
     }
     return firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -2385,17 +2439,12 @@ function firebase_check_login_initiate(params) {
                 params.application_function(user)
             });
         } else {
-
             window.location.href = params.login_url || 'https://chriscruze.github.io/Taskr/index.html';
         }
     }, function(error) {
         console.log(error);
     });
 };
-
-
-
-
 
 function firebase_account_create(email, password) {
     firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
@@ -2406,8 +2455,6 @@ function firebase_account_create(email, password) {
     });
 }
 //account_create('cruzc.09@gmail.com','sTorr955')
-
-
 function firebase_account_login(email, password) {
     return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         // Handle Errors here.
@@ -2416,8 +2463,6 @@ function firebase_account_login(email, password) {
         // ...
     });
 }
-
-
 //sign in using firebase
 function firebase_signin() {
     // FirebaseUI config.
@@ -2427,7 +2472,6 @@ function firebase_signin() {
                 console.log(currentUser)
                 console.log(credential)
                 console.log(redirectUrl)
-
                 // Do something.
                 // Return type determines whether we continue the redirect automatically
                 // or whether we leave that to developer to handle.
@@ -2457,7 +2501,6 @@ function firebase_signin() {
         // Terms of service url.
         tosUrl: '<your-tos-url>'
     };
-
     var ui = new firebaseui.auth.AuthUI(firebase.auth());
     // The start method will wait until the DOM is loaded.
     ui.start('#firebaseui-auth-container', uiConfig);
@@ -2478,57 +2521,42 @@ function account_sign_in_status() {
                 user.getIdToken().then(function(accessToken) {
                     console.log(displayName)
                     console.log(email)
-
                     // $("#username").html(displayName)
                     // $("#email").html(email)
                     // $("#user_photo").attr('src',photoURL)
-
                 });
             } else {
                 console.log('not signed in')
-
                 //window.location.href = 'https://chriscruze.github.io/CruzControl/login.html';
                 document.getElementById('sign-in-status').textContent = 'Signed out';
                 document.getElementById('sign-in').textContent = 'Sign in';
                 document.getElementById('account-details').textContent = 'null';
             }
-
-
         }, function(error) {
             console.log(error);
         });
-
-
-
     };
-
     window.addEventListener('load', function() {
         initApp()
     });
-
 }
-
 //pull ref from firebase
 function ref_attain_from_firebase(reference_name, child_name) {
     var dbRef = firebase.database();
     var contactsRef = dbRef.ref(reference_name).child(child_name)
     return contactsRef
 }
-
 //push data to firebase
 function data_push_to_firebase(contactsRef, data_to_push) {
     //data_to_push = {'chat_id':chat_id, 'viewer':site_viewer, 'content': input_text, 'timestamp': date_time }
     contactsRef.push(data_to_push)
-
 }
-
 //query the contacts ref and run the process_func on the results
 function query_elements_array_firebase(contactsRef, process_func) {
     contactsRef.on('child_added', function(snapshot) {
         process_func(snapshot.val())
     })
 }
-
 //pulls straight json if the firebase is open
 function firebase_json_pull(url) {
     url = url || "https://shippy-ac235.firebaseio.com/DataTablesTest/Test3.json"
@@ -2549,7 +2577,6 @@ function firebase_json_pull_values(url) {
     result_values = Object.values(results)
     return result_values
 }
-
 //purpose is to check one dictionary against another and update it 
 function dictionary_cross_check_apply_key(D, firebase_defined_dict, key) {
     if (firebase_defined_dict != undefined) {
@@ -2557,28 +2584,21 @@ function dictionary_cross_check_apply_key(D, firebase_defined_dict, key) {
     } else {
         D[key] = "null";
     }
-
 }
-
 //purpose is to sync firebase array with regular array across keys
 function firebase_array_integrate(array, firebase_url, identifier, keys) {
     keys = keys || ['status']
     firebase_url = firebase_url || "https://shippy-ac235.firebaseio.com/dashbot/accounts.json"
     identifier = identifier || "DT_RowId"
-
     firebase_dict = firebase_json_pull(firebase_url) || {}
     array.forEach(function(D) {
         firebase_defined_dict = firebase_dict[D[String(identifier)]]
         keys.forEach(function(key) {
             dictionary_cross_check_apply_key(D, firebase_defined_dict, key)
         })
-
-
     });
     return array;
 }
-
-
 // initialize the firebase instance
 function firebase_initialize() {
     var config = {
@@ -2589,7 +2609,6 @@ function firebase_initialize() {
     firebase.initializeApp(config);
     return firebase
 }
-
 //authenticate the user that has been authed
 function firebase_auth_user_process(user_process_func) {
     firebase.auth().onAuthStateChanged((user) => {
@@ -2919,6 +2938,16 @@ function date_difference_from_today_days_moment(date_added) {
     age_days = a.diff(b, 'days')
     return age_days
 }
+
+function beginning_of_month_moment() {
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    date_string = year + "-" + month + "-01"
+    start_time = moment(date_string)
+    return start_time
+}
+
 
 
 //dates that are within this month
@@ -6679,16 +6708,67 @@ function metric_text_create(sum_value, percentage_of_goal, goal_number) {
     return text
 }
 
+
+function lift_goal_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/exercise/detail.json"
+    key_name = "time_stamp"
+    number_of_days = 30
+    number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(), 'days') + 1
+    sum_field = "reps"
+
+    array = firebase_json_pull_values(url)
+    filtered_array = array.filter(function(D) {
+        return date_range_filter_moment(D['time_stamp'], 'MMM-Y')
+    })
+
+
+
+    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+
+
+    //sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+    goal_number = 40
+    days_this_month = dates_within_this_month().length
+    goal_number = (number_of_days / days_this_month) * 50
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number.toFixed(1))
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Lift'
+    }
+    return metric_dict
+}
+
 function run_goal_widget_dictionary() {
     url = "https://shippy-ac235.firebaseio.com/run_log.json"
     key_name = "time_stamp"
     number_of_days = 30
+    number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(), 'days') + 1
     sum_field = "miles"
-    sum_value = array_firebase_url_filter_sum(url, key_name, number_of_days, sum_field)
+
+    array = firebase_json_pull_values(url)
+    filtered_array = array.filter(function(D) {
+        return date_range_filter_moment(D['time_stamp'], 'MMM-Y')
+    })
+
+
+
+    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+
+
+    //sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
     goal_number = 40
+    days_this_month = dates_within_this_month().length
+    goal_number = (number_of_days / days_this_month) * 50
     percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
     widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number.toFixed(1))
     metric_dict = {
         text: metric_text,
         value: sum_value_formatted,
@@ -6814,10 +6894,14 @@ function widget_create_from_metric_dict(metric_dict) {
 function metric_widgets_create(completed_tasks) {
     run_goal_widget_create()
 
+
+
     widget_create_from_metric_dict(recurring_tasks_widget_dictionary())
     travel_goal_widget_create(completed_tasks)
-    widget_create_from_metric_dict(academy_widget_calculate_from_completed_tasks(completed_tasks))
+    //widget_create_from_metric_dict(academy_widget_calculate_from_completed_tasks(completed_tasks))
     widget_create_from_metric_dict(gs_goal_widget_dictionary())
+    widget_create_from_metric_dict(lift_goal_widget_dictionary())
+
 }
 
 //sum_float_convert_from_array_underscore(array, sum_field)

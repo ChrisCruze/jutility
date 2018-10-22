@@ -59,16 +59,57 @@ function metric_text_create(sum_value,percentage_of_goal,goal_number){
 	text = sum_value_formatted + "/" + goal_number + " (" + percentage_of_goal_formatted + ")"
 	return text 
 }
+
+
+function lift_goal_widget_dictionary(){
+	url = "https://shippy-ac235.firebaseio.com/exercise/detail.json"
+	key_name = "time_stamp"
+	number_of_days = 30
+	number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(),'days') + 1
+	sum_field = "reps"
+
+	array = firebase_json_pull_values(url)
+	filtered_array = array.filter(function(D){return date_range_filter_moment(D['time_stamp'],'MMM-Y')})
+
+
+
+	//filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+	sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+
+
+	//sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+	goal_number = 40
+	days_this_month = dates_within_this_month().length
+	goal_number = (number_of_days/days_this_month) * 50
+	percentage_of_goal = goal_widget_of_goal_percentage(sum_value,goal_number)
+	widget_color = color_from_percentage(percentage_of_goal)
+	metric_text = metric_text_create(sum_value,percentage_of_goal,goal_number.toFixed(1))
+	metric_dict = {text:metric_text,value:sum_value_formatted,percentage:percentage_of_goal,color:widget_color,name:'Lift'}
+	return metric_dict
+}
 function run_goal_widget_dictionary(){
 	url = "https://shippy-ac235.firebaseio.com/run_log.json"
 	key_name = "time_stamp"
 	number_of_days = 30
+	number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(),'days') + 1
 	sum_field = "miles"
-	sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+
+	array = firebase_json_pull_values(url)
+	filtered_array = array.filter(function(D){return date_range_filter_moment(D['time_stamp'],'MMM-Y')})
+
+
+
+	//filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+	sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+
+
+	//sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
 	goal_number = 40
+	days_this_month = dates_within_this_month().length
+	goal_number = (number_of_days/days_this_month) * 50
 	percentage_of_goal = goal_widget_of_goal_percentage(sum_value,goal_number)
 	widget_color = color_from_percentage(percentage_of_goal)
-	metric_text = metric_text_create(sum_value,percentage_of_goal,goal_number)
+	metric_text = metric_text_create(sum_value,percentage_of_goal,goal_number.toFixed(1))
 	metric_dict = {text:metric_text,value:sum_value_formatted,percentage:percentage_of_goal,color:widget_color,name:'Run'}
 	return metric_dict
 }
@@ -154,10 +195,14 @@ function widget_create_from_metric_dict(metric_dict){
 function metric_widgets_create(completed_tasks){
 	run_goal_widget_create()
 
+
+
 	widget_create_from_metric_dict(recurring_tasks_widget_dictionary())
 	travel_goal_widget_create(completed_tasks)
-	widget_create_from_metric_dict(academy_widget_calculate_from_completed_tasks(completed_tasks))
+	//widget_create_from_metric_dict(academy_widget_calculate_from_completed_tasks(completed_tasks))
 	widget_create_from_metric_dict(gs_goal_widget_dictionary())
+		widget_create_from_metric_dict(lift_goal_widget_dictionary())
+
 }
 
 //sum_float_convert_from_array_underscore(array, sum_field)
