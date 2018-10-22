@@ -101,6 +101,31 @@
 
         <script src="jutility.js"></script>
         <style>
+          .navbar-form-customx .form-control:focus,
+.navbar-form-customx .form-control:hover,
+.navbar-form-customx {
+  float: left;
+  height: 50px;
+  padding: 0;
+  width: 200px;
+  display: block;
+}
+.navbar-form-customx .form-group {
+  margin-bottom: 0;
+}
+
+.navbar-form-customx .form-control {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border: medium none;
+  font-size: 14px;
+  height: 60px;
+  margin: 0;
+  z-index: 2000;
+}
+
+.md-skin .navbar-form-customx .form-control {
+  font-weight: 300;
+}
         </style>
     </head>
     <body class="pace-done ">
@@ -121,24 +146,31 @@
                             <ul class="dropdown-menu" id="favicon_dropdown_menu">
                                 <li><small id='task_content'></small></li>
                             </ul>
-                            <form  class="navbar-form-custom" style="width: 400px; z-index: -1;">
+                            <form  class="navbar-form-customx" style="width: 400px; z-index: 100;float: left; height: 50px; padding: 0; width: 200px; display: block;">
                                 <div class="form-group">
                                     <input size="80" placeholder="Task" class="form-control" name="top-search" id="input_text" type="text">
                                 </div>
                             </form>
                         </div>
                         <ul class="nav navbar-top-links navbar-right">
+                            <li class="" id='action_button'>
+                                <a href="#" onclick="">
+                                Start
+                                    <i class="fa fa-tasks"></i>
+                                </a>
+                            </li>
                             <li class="dropdown">
+
                                 <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                                     <i class="fa fa-tasks"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-alerts">
-                                    <li>
+                                    <li class='start_button'>
                                         <a id='input_start'>
                                             <i class="fa fa-tasks"></i> Start
                                         </a>
                                     </li>
-                                    <li>
+                                    <li class='create_button'>
                                         <a id='input_create'>
                                             <i class="fa fa-tasks"></i> Create
                                         </a>
@@ -813,6 +845,10 @@ $("#current_tasks_table").on("click", "tbody td", function(e) {
     $("#input_text").val(row_data.content)
     $("#input_text").attr('task_id', row_data.id)
     $("#input_text").attr('project_id', row_data.project_id)
+
+    $("#action_button").html('<a href="#" onclick="input_start()"> Start <i class="fa fa-tasks"></i> </a>')
+
+
 });
 $("#remaining_tasks_table").on("click", "tbody td", function(e) {
     var table = $("#remaining_tasks_table").DataTable();
@@ -825,10 +861,13 @@ $("#remaining_tasks_table").on("click", "tbody td", function(e) {
     $("#input_text").val(row_data['Task'])
     //$("#input_text").attr('task_id',row_data.id)
     $("#input_text").attr('project_id', row_data['project_id'])
+
+    $("#action_button").html('<a href="#" onclick="zapier_todoist_create()"> Create <i class="fa fa-tasks"></i> </a>')
+                                    
+
 });
-//task_create_todoist('test',2159934072)
-$("#input_start").click(function(event) {
-    console.log($("#input_text"))
+function input_start(){
+        console.log($("#input_text"))
     content = $("#input_text").val()
     project_id = $("#input_text").attr('project_id')
     task_id = $("#input_text").attr('task_id')
@@ -840,6 +879,11 @@ $("#input_start").click(function(event) {
         project_id: project_id
     }
     timer_instance.set(upload_dictionary)
+}
+
+//task_create_todoist('test',2159934072)
+$("#input_start").click(function(event) {
+    input_start()
 });
 create_project_dropdown_list(projects_dictionary)
 progress_bar_table_formulate()
