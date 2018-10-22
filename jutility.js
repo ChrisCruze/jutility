@@ -3569,7 +3569,7 @@ function stocks_batch_pull(stocks) {
 function ipLookUp() {
     $.ajax('https://ip-api.com/json').then(
         function success(response) {
-
+            console.log(response)
             session_dictionary['ip_data'] = response
             update_firebase_session_dictionary(response, 'ip_data')
             console.log('User\'s Location Data is ', response);
@@ -6329,17 +6329,20 @@ function initiate_firebase_chat_bubbles(params) {
 //firebase_drogas.js
 
 
-
-
-function dose_remaining_now(dictionary_obj) {
-    beginning_count = parseInt(dictionary_obj.input_text) || 0
+function dose_remaining_now_base(input_text, date_time) {
+    beginning_count = parseInt(input_text) || 0
     beginning_count = beginning_count * 20
-    date_time_string = dictionary_obj.date_time
+    date_time_string = date_time
     m = moment(date_time_string)
     now = moment()
     hours_difference = now.diff(m, 'hours', true);
     dose_remaining = beginning_count * Math.pow(.5, (hours_difference / 10));
     return dose_remaining
+}
+
+
+function dose_remaining_now(dictionary_obj) {
+    return dose_remaining_now_base(dictionary_obj.input_text, dictionary_obj.date_time)
 }
 
 
@@ -6473,12 +6476,31 @@ function receipts_table() {
         columns: [{
                 'data': 'direct_media_link',
                 'visible': false
+            }, {
+                'data': 'file_name',
+                'visible': true,
+                render: function(data, type, row, meta) {
+                    return "<a target='_blank' href='" + row.dropbox_link + "'>" + data + "</a>"
+                }
+            }, {
+                'data': 'vendor',
+                'visible': false
+            }, {
+                'data': 'category',
+                'visible': false
+            }, {
+                'data': 'section',
+                'visible': false
+            }, {
+                'data': 'type',
+                'visible': false
+            }, {
+                'data': 'time_stamp',
+                'visible': false,
+                format: 'date'
             },
 
             {
-                'data': 'file_name',
-                'visible': true
-            }, {
                 'data': 'dropbox_link',
                 'visible': false
             }, {
@@ -6514,22 +6536,41 @@ function food_table() {
         default_visible: false,
         callback_function: callback_function,
         columns: [{
-            'data': 'direct_media_link',
-            'visible': false
-        }, {
-            'data': 'file_name',
-            'visible': true
-        }, {
-            'data': 'dropbox_link',
-            'visible': false
-        }, {
-            'data': 'evernote_url',
-            'visible': false
-        }, {
-            'data': 'time_created',
-            'visible': true,
-            format: 'date_adjust'
-        }, ]
+                'data': 'direct_media_link',
+                'visible': false
+            }, {
+                'data': 'file_name',
+                'visible': true,
+                render: function(data, type, row, meta) {
+                    return "<a target='_blank' href='" + row.dropbox_link + "'>" + data + "</a>"
+                }
+            }, {
+                'data': 'category',
+                'visible': false
+            }, {
+                'data': 'section',
+                'visible': false
+            }, {
+                'data': 'type',
+                'visible': false
+            }, {
+                'data': 'time_stamp',
+                'visible': false,
+                format: 'date'
+            },
+
+            {
+                'data': 'dropbox_link',
+                'visible': false
+            }, {
+                'data': 'evernote_url',
+                'visible': false
+            }, {
+                'data': 'time_created',
+                'visible': true,
+                format: 'date_adjust'
+            },
+        ]
     })
     return params
 }

@@ -51,8 +51,15 @@ function receipts_table(){
 			    callback_function:callback_function,
 			    columns: [
 			    	{'data':'direct_media_link','visible':false},
+			    	{'data':'file_name','visible':true,render:function(data, type, row, meta) {
+                        return "<a target='_blank' href='" + row.dropbox_link + "'>" + data + "</a>"
+                    }},
+                    {'data':'vendor','visible':false},
+                    {'data':'category','visible':false},
+                    {'data':'section','visible':false},
+                    {'data':'type','visible':false},
+                    {'data':'time_stamp','visible':false,format:'date'},
 
-			    	{'data':'file_name','visible':true},
 			    	{'data':'dropbox_link','visible':false},
 			    	{'data':'evernote_url','visible':false},
 			    	{'data':'time_created','visible':true,format:'date_adjust'},
@@ -80,7 +87,14 @@ function food_table(){
 			    callback_function:callback_function,
 			    columns: [
 			    	{'data':'direct_media_link','visible':false},
-			    	{'data':'file_name','visible':true},
+                    {'data':'file_name','visible':true,render:function(data, type, row, meta) {
+                        return "<a target='_blank' href='" + row.dropbox_link + "'>" + data + "</a>"
+                    }},
+                    {'data':'category','visible':false},
+                    {'data':'section','visible':false},
+                    {'data':'type','visible':false},
+                    {'data':'time_stamp','visible':false,format:'date'},
+
 			    	{'data':'dropbox_link','visible':false},
 			    	{'data':'evernote_url','visible':false},
 			    	{'data':'time_created','visible':true,format:'date_adjust'},
