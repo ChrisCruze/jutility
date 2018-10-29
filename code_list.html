@@ -159,67 +159,59 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 <script>
 var dbRef = dbRef || firebase.database();
-firebase_reference_table = firebase.database().ref('code').child('table')
-
-firebase_reference = firebase.database().ref('code').child('code_list')
-var firepadRef = firebase_reference.child('null')
+firebase_reference_table = firebase.database().ref('omni').child('codes').child('scripts')
 
 
-var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-    lineNumbers: true,
-    mode: 'javascript'
-});
-
-
-
-
-
-
-
-
-
-//// Create Firepad.
-var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-    defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
-});
+function upload_file_content(name,code){
+    var formData = new FormData();
+    formData.append("name", name);
+    formData.append("code", code);
+    var content = code
+    var blob = new Blob([content], {
+    type: 'application/json'
+    });
+    formData.append("webmasterfile", blob);
+    var request = new XMLHttpRequest();
+    request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+    request.send(formData);   
+}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function code_mirror_initiate(){
+    var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+        lineNumbers: true,
+        mode: 'javascript'
+    });
+    return codeMirror
+}
+codeMirror = code_mirror_initiate()
 
 
 
 table_params = datatables_firebase({
     firebase_reference: firebase_reference_table,
     columns: [{
-        data: 'title',
-        format: 'title'
+        data: 'name',
+        format: 'name'
     }, {
-        data: 'id',
-        format: 'id'
+        data: 'time_stamp',
+        format: 'time_stamp'
     }, {
         data: 'type',
+        format: 'type',
+        visible: false
     }, {
-        data: 'end',
-        format: 'date'
+        data: 'publish',
+        format: 'publish',
+        visible: false
     }, {
-        data: 'color'
+        data: 'gist',
+        format: 'gist',
+        visible: false
+    }, {
+        data: 'code',
+        visible: false
     }, ],
     table_selector: "#table",
     columns_generate: false
@@ -227,69 +219,22 @@ table_params = datatables_firebase({
 
 
 
-
-
-
-
-
-
-
-
-
-function initiate_code_mirror(container_id){
-        var firepadRef = firebase_reference.child(container_id|| 'null')
-        var codeMirror = CodeMirror(document.getElementById(container_id+'_container'), {
-            lineNumbers: true,
-        mode: 'javascript'
-    });
-
-    //// Create Firepad.
-    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-        defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
-    });
-
+function table_row_identify(this_element,table_selector){
+    var table = $(table_selector).DataTable();
+    row_data = table.row(this_element).data(); 
+    return row_data
 }
-
-
-function create_container_id(container_section_id){
-    html_container = '<div class="row"> <div class="col-lg-12"> <div class="ibox float-e-margins"> <div class="ibox-title"> <h5></h5> </div> <div class="ibox-content"> <div id="'+container_section_id+'" style="height:200px"></div> </div> </div> </div> </div>'
-    $('.container').append($(html_container))
-
-}
-
-
-
-
-
-
-
-
-
 
 
 
 
 $("#table").on("click", "tbody td", function(e) {
-    var table = $("#table").DataTable();
-    row_data = table.row(this).data();
-    container_id = row_data['id'] 
-    console.log(container_id)
+    row_data = table_row_identify(this,"#table")
 
-    container_section_id = "#"+container_id+'_container'
-    if ($(container_section_id).length ) {
-
-    }
-    else {
-        create_container_id(container_id+'_container')
-        setTimeout(initiate_code_mirror,3000,container_id)
-    }
-
-
-
+    codeMirror.setValue(row_data['code'])
 
 });
 replace_side_panel_platform_omni()
-
 
 </script>
 

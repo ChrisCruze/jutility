@@ -55,7 +55,8 @@
 
 <!-- Sparkline -->
 <script src="https://cruzco.site44.com/js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js">
+    </script> 
 <!-- ChartJS-->
 <script src="https://cruzco.site44.com/js/plugins/chartJs/Chart.min.js"></script>
 
@@ -127,7 +128,9 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
 
 
   <div id="firepad-container" style="height:600px"></div>
-                                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="submit_code" class="btn btn-white" type="button" href="#"><i class="fa fa-bars"></i> </a>
+    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " id="submit_code" class="btn btn-white" type="button" href="#"><i class="fa fa-bars"></i> </a>
+
+    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " onclick="upload_master_file()" id="submit_master" class="btn btn-white" type="button" href="#">Master<i class="fa fa-check"></i> </a>
 
   </div>
   </div>
@@ -136,73 +139,194 @@ firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authD
   </div>
 
   <script>
-    function update_page_title(){
-      document.title =  window.location.hash.replace(/#/g, '') 
 
+
+function firebase_pull_json_codes() {
+  url = "https://shippy-ac235.firebaseio.com/omni/codes/scripts.json"
+  l = firebase_json_pull_values(url)
+  return l
+}
+
+function nl2br(str, is_xhtml) {
+  var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+  return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+}
+
+function firebase_filter_codes(l) {
+  l = l.filter(function(D) {
+    return D['publish'] == 'true'
+  })
+  l = l.filter(function(D) {
+    return D['name'] != 'jutility'
+  })
+  return l
+}
+
+function upload_file_content(name, code) {
+  var formData = new FormData();
+  formData.append("name", name);
+  //console.log(code)
+  //code = nl2br(code)
+  //code = code.replace('\n', '<br/>')
+  console.log({code:code})
+  formData.append("code", code);
+  var content = code
+  var blob = new Blob([content], {
+    type: 'application/json'
+  });
+  formData.append("webmasterfile", blob);
+  var request = new XMLHttpRequest();
+  request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+  request.send(formData);
+
+
+
+}
+
+function code_alter(input_text){
+  console.log({code_alter:code_alter})
+  return input_text
+}
+
+function create_text_blog(l) {
+  text_blob = ''
+  l.forEach(function(D) {
+    text_blob = text_blob + code_alter(D['code']) //.replace('\n','<br/>')
+  })
+  return text_blob
+}
+
+function upload_master_file() {
+  l = firebase_pull_json_codes()
+  l = firebase_filter_codes(l)
+  text_blob = create_text_blog(l)
+  console.log(text_blob)
+  upload_file_content('jutility',text_blob)
+}
+
+function update_page_title() {
+  document.title = window.location.hash.replace(/#/g, '')
+}
+setTimeout(update_page_title, 5000)
+
+
+
+function script_dict_create_from_firepad_codemirror(firepad,codeMirror){
+  name = window.location.hash.replace(/#/g, '')
+  code = firepad.getText()
+  html = firepad.getHtml()
+  value = codeMirror.getValue()
+  binary = text2Binary(codeMirror.getValue())
+  compressed = LZString.compressToUTF16(codeMirror.getValue())
+  script_dict = {name:name,code:code,html:html,value:value,binary:binary,compressed:compressed}
+  return script_dict
+}
+
+
+function firebase_set_from_code(name,firepad,codeMirror){
+  script_dict = script_dict_create_from_firepad_codemirror(firepad,codeMirror)
+  firebase.database().ref('omni').child('codes').child('scripts').child(name).set(script_dict)
+}
+
+
+
+
+function form_data_create(formData,firepad,codeMirror){
+    compressed_string = LZString.compressToUTF16(codeMirror.getValue())
+    name =  window.location.hash.replace(/#/g, '')
+    firebase_set_from_code(name,firepad,codeMirror)
+
+    formData.append("name",name);
+    formData.append("code", firepad.getText());
+    formData.append("html", firepad.getHtml());
+    formData.append("value", codeMirror.getValue());
+    formData.append("binary", text2Binary(codeMirror.getValue()));
+    formData.append("compressed", compressed_string);
+    return formData
+}
+
+
+
+function init() {
+  //// Get Firebase Database reference.
+  var firepadRef = getExampleRef();
+  //// Create CodeMirror (with line numbers and the JavaScript mode).
+  var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+    lineNumbers: true,
+    mode: 'javascript'
+  });
+  //// Create Firepad.
+  var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+    defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
+  });
+  var hash = window.location.hash.replace(/#/g, '');
+
+  function upload_file() {
+    var formData = new FormData();
+    formData.append("name", "test");
+    // JavaScript file-like object
+    var content = firepad.getText()
+    var blob = new Blob([content], {
+      type: 'application/json'
+    });
+    formData.append("webmasterfile", blob);
+    var request = new XMLHttpRequest();
+    request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+    request.send(formData);
   }
-    setTimeout(update_page_title,5000)
-
-    function init() {
-    //// Get Firebase Database reference.
-    var firepadRef = getExampleRef();
-    //// Create CodeMirror (with line numbers and the JavaScript mode).
-    var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-      lineNumbers: true,
-      mode: 'javascript'
-    });
-    //// Create Firepad.
-    var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-      defaultText: '// JavaScript Editing with Firepad!\nfunction go() {\n  var message = "Hello, world.";\n  console.log(message);\n}'
-    });
-    var hash = window.location.hash.replace(/#/g, '');
-    function upload_file() {
-      var formData = new FormData();
-      formData.append("name", "test");
-      // JavaScript file-like object
-      var content = firepad.getText()
-      var blob = new Blob([content], {
-        type: 'application/json'
-      });
-      formData.append("webmasterfile", blob);
-      var request = new XMLHttpRequest();
-      request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
-      request.send(formData);
-    }
-    $("#submit_code").on("click", function(e) {
-      var formData = new FormData();
-      formData.append("name", window.location.hash.replace(/#/g, ''));
-      formData.append("code", firepad.getText());
-      // JavaScript file-like object
-      var content = firepad.getText()
-      var blob = new Blob([content], {
-        type: 'application/json'
-      });
-      formData.append("webmasterfile", blob);
-      var request = new XMLHttpRequest();
-      request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
-      request.send(formData);
-      console.log(formData)
+  $("#submit_code").on("click", function(e) {
+    var formData = new FormData();
+    console.log({
+      codeMirror: codeMirror,
+      firepad: firepad,
+      firepad_text: firepad.getText(),
+      codemirror_value: codeMirror.getValue()
     })
+
+    // formData.append("name", window.location.hash.replace(/#/g, ''));
+    // formData.append("code", firepad.getText());
+    // formData.append("html", firepad.getHtml());
+    // formData.append("value", codeMirror.getValue());
+    // formData.append("binary", text2Binary(codeMirror.getValue()));
+    // formData.append("compressed", compressed_string);
+
+    formData  = form_data_create(formData,firepad,codeMirror)
+    // JavaScript file-like object
+    var content = firepad.getText()
+    console.log({
+      content: content
+    })
+    var blob = new Blob([content], {
+      type: 'application/json'
+    });
+    console.log({
+      blob: blob
+    })
+    formData.append("webmasterfile", blob);
+    var request = new XMLHttpRequest();
+    request.open("POST", "https://hooks.zapier.com/hooks/catch/229795/lmosoc/");
+    request.send(formData);
+    console.log({
+      formData: formData
+    })
+  })
+}
+// Helper to get hash from end of URL or generate a random one.
+function getExampleRef() {
+  var ref = firebase.database().ref('code');
+  var hash = window.location.hash.replace(/#/g, '');
+  if (hash) {
+    ref = ref.child(hash);
+  } else {
+    ref = ref.push(); // generate unique location.
+    window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
   }
-  // Helper to get hash from end of URL or generate a random one.
-  function getExampleRef() {
-    var ref = firebase.database().ref('code');
-    var hash = window.location.hash.replace(/#/g, '');
-
-    if (hash) {
-      ref = ref.child(hash);
-    } else {
-      ref = ref.push(); // generate unique location.
-      window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
-    }
-    if (typeof console !== 'undefined') {
-      console.log('Firebase data: ', ref.toString());
-    }
-    return ref;
+  if (typeof console !== 'undefined') {
+    console.log('Firebase data: ', ref.toString());
   }
-  replace_side_panel_platform_omni()
-
-
+  return ref;
+}
+replace_side_panel_platform_omni()
 
   </script>
 </body>

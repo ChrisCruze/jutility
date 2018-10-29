@@ -1,246 +1,3 @@
-//array_functions.js
-
-
-//https://stackoverflow.com/questions/38304401/javascript-check-if-dictionary - determine object type
-function determine_object_type(a) {
-    if (typeof a === "object") {
-        return 'object'
-    } else if (Array.isArray(a)) {
-        return 'array'
-    } else {
-        return 'other'
-    }
-
-
-
-}
-
-//array from number. iterate
-function array_generate_from_number(number_of_rows) {
-    for (var i = 0; i < number_of_rows; i++) {
-        //console.log(i)
-    }
-}
-
-function format_standardize_from_key_name(D, key_name) {
-    if (Array.isArray(key_name)) {
-        l = []
-        key_name.forEach(function(i) {
-            l.push(D[i])
-        })
-        r = l.join(' ')
-        //console.log(r)
-        return r.toLowerCase()
-    } else {
-        return D[key_name].toLowerCase()
-    }
-}
-
-//array filter tasks for text
-function array_filter_from_text(array, text, key_name) {
-    key_name = key_name || "content"
-    array = array.filter(function(D) {
-        return format_standardize_from_key_name(D, key_name).indexOf(text.toLowerCase()) !== -1
-    })
-    return array
-}
-
-
-
-
-//converts list of lists to array
-function list_of_lists_to_array(lol, key_names) {
-    key_names = lol[0] || key_names
-    array = []
-    lol.forEach(function(row, row_num) {
-        var new_dict = {}
-        row.forEach(function(col, col_num) {
-            cell_val = lol[row_num][col_num]
-            key_name = key_names[col_num]
-
-            new_dict[key_name] = cell_val
-        })
-        array.push(new_dict)
-    })
-    return array
-}
-
-
-//filter tasks for text and return sum from it
-function array_filter_from_text_sum(array, text, key_name, sum_field) {
-    sum_field = sum_field || 'duration'
-    array = array_filter_from_text(array, text, key_name)
-    var sum_total = sum_float_convert_from_array_underscore(array, sum_field)
-    return sum_total
-}
-//make triple check for the key 
-function dictionary_check_keys_triple_return(item, check_key, second_key, third_key, alternative_val) {
-    alternative_val = alternative_val || "null"
-    check_key = check_key || 'fullName'
-    not_undefined = item[check_key] != undefined
-    if (not_undefined) {
-        not_second_undefined = item[check_key][second_key] != undefined
-        if (not_second_undefined) {
-            r = item[check_key][second_key][third_key] || alternative_val
-        } else {
-            r = alternative_val
-        }
-    } else {
-        r = alternative_val
-    }
-    return r
-}
-
-//check for the key on second layer or return null
-function dictionary_check_keys_double_return(item, check_key, second_key, alternative_val) {
-    alternative_val = alternative_val || "null"
-    check_key = check_key || 'fullName'
-    not_undefined = item[check_key] != undefined
-    if (not_undefined) {
-        r = item[check_key][second_key] || alternative_val
-
-    } else {
-        r = alternative_val
-    }
-    return r
-}
-
-//checks if item has a key and gives it null if not
-function dictionary_check_keys(item, check_keys, alternative_val) {
-    alternative_val = alternative_val || "null"
-    check_keys = check_keys || ['fullName', 'active', 'connectedAt', 'id']
-    check_keys.forEach(function(i) {
-        item[i] = item[i] || 'null'
-    })
-}
-
-//checks if item has a key and gives it null if not (for the whole array)
-function array_check_keys(array, check_keys) {
-    check_keys = check_keys || ['fullName', 'active', 'connectedAt', 'id']
-    array.forEach(function(item) {
-        dictionary_check_keys(item, check_keys)
-    })
-    return array
-}
-
-// turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists
-function list_of_lists_from_array(array, keys) {
-    list_of_lists = [] //this is an empty list that will be filled with sublists
-    array.forEach(function(dictionary_object, index) { //we're going to loop through every dictionary in the array
-        sublist = []
-        keys.forEach(function(key_name, key_index) { //we're also going to loop through every key
-            sublist.push(dictionary_object[key_name]) //then we're going to get the key's definition to create the subli
-        })
-        list_of_lists.push(sublist) //push the sublist to the list_of_lists
-    })
-    return list_of_lists
-}
-
-//convert array to dictionary
-function array_to_dictionary(array, key_name) {
-    key_name = key_name || 'id'
-    new_dict = {}
-    array.forEach(function(item, index) {
-        new_dict[String(item[key_name])] = item
-    })
-    return new_dict
-}
-
-//check if key has a value and if not, add it a value
-function key_check_func_dictionary(check_keys, item) {
-    check_keys = check_keys || ['fullName', 'active', 'connectedAt', 'id']
-    check_keys.forEach(function(i) {
-        item[i] = item[i] || 'null'
-    })
-}
-
-//highlights syntax
-function syntaxHighlight(json) {
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
-        var cls = 'number';
-        if (/^"/.test(match)) {
-            if (/:$/.test(match)) {
-                cls = 'key';
-            } else {
-                cls = 'string';
-            }
-        } else if (/true|false/.test(match)) {
-            cls = 'boolean';
-        } else if (/null/.test(match)) {
-            cls = 'null';
-        }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
-}
-
-// prettifies the json or the list
-function json_prettify(json_input) {
-    var str = JSON.stringify(json_input, undefined, 4);
-    document.body.appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(str);
-
-}
-
-
-//combines dictionaries
-function combine_dicts(a, b) { //https://stackoverflow.com/questions/43449788/how-do-i-merge-two-dictionaries-in-javascript
-    var a = a || {
-            fruit: "apple"
-        },
-        b = b || {
-            vegetable: "carrot"
-        },
-        food = Object.assign({}, a, b);
-    return food
-}
-
-//check if the dictionary has two layers of key down and then pull and turn it to null to avoid error
-function key_check_make_double(item, primary_key, secondary_key) {
-    item[primary_key] = item[primary_key] || {}
-    item[primary_key][secondary_key] = item[primary_key][secondary_key] || 'null'
-}
-
-
-//date_functions.js
-
-
-//https://stackoverflow.com/questions/141348/what-is-the-best-way-to-parse-a-time-into-a-date-object-from-user-input-in-javas
-//parses a time such as 1:00PM
-function parseTime(t) {
-    var d = new Date();
-    var time = t.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-    d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
-    d.setMinutes(parseInt(time[2]) || 0);
-    return d;
-}
-
-//gives days in the month
-function daysInMonth(month, year) {
-    return new Date(year, month, 0).getDate();
-}
-
-//number of days this month
-function days_this_month() {
-    r = new Date()
-    return daysInMonth(r.getMonth() + 1, r.getYear())
-}
-
-//returns true if the date is todays date
-function date_is_today(input_date) {
-    // Create date from input value
-    var inputDate = new Date(input_date);
-
-    // Get today's date
-    var todaysDate = new Date();
-
-    // call setHours to take the time out of the comparison
-    return inputDate.setHours(0, 0, 0, 0) == todaysDate.setHours(0, 0, 0, 0)
-}
-
-
-
-
-
 //file_functions.js
 
 //read directly from a text file
@@ -416,6 +173,126 @@ function papa_parse_multiple_promise_old(params) {
 
 
 
+//pivot_functions.js
+
+
+
+
+
+
+
+
+
+function count_function(data, rowKey, colKey) {
+    return {
+        count: 0,
+        push: function(record) {
+            this.count++;
+        },
+        value: function() {
+            return this.count;
+        },
+        format: function(x) {
+            return x;
+        },
+    };
+}
+
+function rows_column_dictionary_create_instance(data) {
+    row_key_name = 'row_number'
+    col_key_name = 'col_number'
+    row_dict = _.groupBy(data, row_key_name);
+    rows = Object.keys(row_dict)
+    rows.forEach(function(row) {
+        subli = row_dict[row]
+        row_dict[row] = _.groupBy(subli, col_key_name);
+    })
+    return row_dict
+}
+
+function parent_element_create_from_row_dict_div(row_dict) {
+    row_keys = Object.keys(row_dict)
+    col_keys = Object.keys(row_dict[row_keys[0]])
+    parent_element = $("<span>", {})
+    row_keys.forEach(function(row, i) {
+        row_html = $("<div>", {
+            "row": row,
+            "class": "row row-eq-height show-grid nopadding tower-row"
+        })
+        col_keys.forEach(function(col) {
+            cell_dict = row_dict[row][col][0]
+            cell_text = cell_dict.cell_value
+            row_html.append($("<div>", cell_dict).html(cell_text))
+        })
+        parent_element.append(row_html)
+    })
+    return parent_element[0].innerHTML
+}
+
+function render_function(pivot_data_object) {
+    tree_data = pivot_data_object['tree']
+    row_keys = Object.keys(tree_data) //servicing, originations, etc.
+    col_keys = Object.keys(tree_data[row_keys[0]])
+    full_array = []
+    row_keys.forEach(function(row_key, row_number) {
+        col_keys.forEach(function(col_key, col_number) {
+
+
+
+            cell_class = " table-cell-value col-md-2 nopadding "
+
+
+
+            try {
+                cell_value = tree_data[row_key][col_key]['count']
+            } catch (err) {
+                cell_value = "-"
+            }
+            try {
+                if (row_key == "Total" && col_key != "Total") {
+                    cell_value = pivot_data_object['colTotals'][col_key]['count']
+                    cell_class = "total-cell " + cell_class
+                }
+                if (row_key != "Total" && col_key == "Total" && row_key != "Percentage") {
+                    cell_value = pivot_data_object['rowTotals'][row_key]['count']
+                    cell_class = "total-cell " + cell_class
+                }
+                if (row_key == "Total" && col_key == "Total") {
+                    cell_value = pivot_data_object['allTotal']['count']
+                    cell_class = "total-cell " + cell_class
+                }
+            } catch (err) {
+                cell_value = "-"
+            }
+            new_dictionary = {
+                row_name: row_key,
+                column_name: col_key,
+                row_number: row_number + 1,
+                col_number: col_number + 2,
+                class: cell_class,
+                style: "background-color:white",
+                cell_value: cell_value
+            }
+            full_array.push(new_dictionary)
+        })
+    })
+    row_dict = rows_column_dictionary_create_instance(full_array)
+    table_html = parent_element_create_from_row_dict_div(row_dict)
+    return table_html
+}
+
+// callback_array = [
+//     {color: "blue", shape: "circle", value: 1},
+//     {color: "red", shape: "triangle", value: 2},
+//     {color: "blue", shape: "circle", value: 3},
+//     {color: "red", shape: "triangle", value: 4}
+// ]
+// $(table_selector).pivot(callback_array, {
+//     rows: [row_field],
+//     cols: [col_field],
+//     aggregator: count_function,
+//     renderer: render_function
+// })
 //html_functions.js
 
 function widget_create_html_element(goal_color, goal_name, goal_metric) {
@@ -957,6 +834,79 @@ function append_metric_header_div(div_id, title_text, sub_title, metric_text, su
     $(div_id).append(metric_header_create(title_text, sub_title, metric_text, sub_metric_text))
 }
 
+//web_functions.js
+
+//open url in new tab
+function openInNewTab(url) {
+    var win = window.open(url, '_blank');
+    win.focus();
+}
+
+
+//get url parameter 
+function parameter_attain_from_url(param) {
+    var url = new URL(window.location.href);
+    var result = url.searchParams.get(param)
+    return result
+}
+
+
+function ipLookUp() {
+    $.ajax('http://ip-api.com/json')
+        .then(
+            function success(response) {
+                console.log('User\'s Location Data is ', response);
+                console.log('User\'s Country', response.country);
+
+            },
+
+            function fail(data, status) {
+                console.log('Request failed.  Returned status of',
+                    status);
+            }
+        );
+}
+
+//date_functions.js
+
+
+//https://stackoverflow.com/questions/141348/what-is-the-best-way-to-parse-a-time-into-a-date-object-from-user-input-in-javas
+//parses a time such as 1:00PM
+function parseTime(t) {
+    var d = new Date();
+    var time = t.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+    d.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+    d.setMinutes(parseInt(time[2]) || 0);
+    return d;
+}
+
+//gives days in the month
+function daysInMonth(month, year) {
+    return new Date(year, month, 0).getDate();
+}
+
+//number of days this month
+function days_this_month() {
+    r = new Date()
+    return daysInMonth(r.getMonth() + 1, r.getYear())
+}
+
+//returns true if the date is todays date
+function date_is_today(input_date) {
+    // Create date from input value
+    var inputDate = new Date(input_date);
+
+    // Get today's date
+    var todaysDate = new Date();
+
+    // call setHours to take the time out of the comparison
+    return inputDate.setHours(0, 0, 0, 0) == todaysDate.setHours(0, 0, 0, 0)
+}
+
+
+
+
+
 //math_functions.js
 
 //round the number
@@ -989,126 +939,209 @@ function create_guid() {
         s4() + '-' + s4() + s4() + s4();
 }
 
-//pivot_functions.js
+//array_functions.js
+
+
+//https://stackoverflow.com/questions/38304401/javascript-check-if-dictionary - determine object type
+function determine_object_type(a) {
+    if (typeof a === "object") {
+        return 'object'
+    } else if (Array.isArray(a)) {
+        return 'array'
+    } else {
+        return 'other'
+    }
 
 
 
-
-
-
-
-
-
-function count_function(data, rowKey, colKey) {
-    return {
-        count: 0,
-        push: function(record) {
-            this.count++;
-        },
-        value: function() {
-            return this.count;
-        },
-        format: function(x) {
-            return x;
-        },
-    };
 }
 
-function rows_column_dictionary_create_instance(data) {
-    row_key_name = 'row_number'
-    col_key_name = 'col_number'
-    row_dict = _.groupBy(data, row_key_name);
-    rows = Object.keys(row_dict)
-    rows.forEach(function(row) {
-        subli = row_dict[row]
-        row_dict[row] = _.groupBy(subli, col_key_name);
-    })
-    return row_dict
+//array from number. iterate
+function array_generate_from_number(number_of_rows) {
+    for (var i = 0; i < number_of_rows; i++) {
+        //console.log(i)
+    }
 }
 
-function parent_element_create_from_row_dict_div(row_dict) {
-    row_keys = Object.keys(row_dict)
-    col_keys = Object.keys(row_dict[row_keys[0]])
-    parent_element = $("<span>", {})
-    row_keys.forEach(function(row, i) {
-        row_html = $("<div>", {
-            "row": row,
-            "class": "row row-eq-height show-grid nopadding tower-row"
+function format_standardize_from_key_name(D, key_name) {
+    if (Array.isArray(key_name)) {
+        l = []
+        key_name.forEach(function(i) {
+            l.push(D[i])
         })
-        col_keys.forEach(function(col) {
-            cell_dict = row_dict[row][col][0]
-            cell_text = cell_dict.cell_value
-            row_html.append($("<div>", cell_dict).html(cell_text))
-        })
-        parent_element.append(row_html)
-    })
-    return parent_element[0].innerHTML
+        r = l.join(' ')
+        //console.log(r)
+        return r.toLowerCase()
+    } else {
+        return D[key_name].toLowerCase()
+    }
 }
 
-function render_function(pivot_data_object) {
-    tree_data = pivot_data_object['tree']
-    row_keys = Object.keys(tree_data) //servicing, originations, etc.
-    col_keys = Object.keys(tree_data[row_keys[0]])
-    full_array = []
-    row_keys.forEach(function(row_key, row_number) {
-        col_keys.forEach(function(col_key, col_number) {
-
-
-
-            cell_class = " table-cell-value col-md-2 nopadding "
-
-
-
-            try {
-                cell_value = tree_data[row_key][col_key]['count']
-            } catch (err) {
-                cell_value = "-"
-            }
-            try {
-                if (row_key == "Total" && col_key != "Total") {
-                    cell_value = pivot_data_object['colTotals'][col_key]['count']
-                    cell_class = "total-cell " + cell_class
-                }
-                if (row_key != "Total" && col_key == "Total" && row_key != "Percentage") {
-                    cell_value = pivot_data_object['rowTotals'][row_key]['count']
-                    cell_class = "total-cell " + cell_class
-                }
-                if (row_key == "Total" && col_key == "Total") {
-                    cell_value = pivot_data_object['allTotal']['count']
-                    cell_class = "total-cell " + cell_class
-                }
-            } catch (err) {
-                cell_value = "-"
-            }
-            new_dictionary = {
-                row_name: row_key,
-                column_name: col_key,
-                row_number: row_number + 1,
-                col_number: col_number + 2,
-                class: cell_class,
-                style: "background-color:white",
-                cell_value: cell_value
-            }
-            full_array.push(new_dictionary)
-        })
+//array filter tasks for text
+function array_filter_from_text(array, text, key_name) {
+    key_name = key_name || "content"
+    array = array.filter(function(D) {
+        return format_standardize_from_key_name(D, key_name).indexOf(text.toLowerCase()) !== -1
     })
-    row_dict = rows_column_dictionary_create_instance(full_array)
-    table_html = parent_element_create_from_row_dict_div(row_dict)
-    return table_html
+    return array
 }
 
-// callback_array = [
-//     {color: "blue", shape: "circle", value: 1},
-//     {color: "red", shape: "triangle", value: 2},
-//     {color: "blue", shape: "circle", value: 3},
-//     {color: "red", shape: "triangle", value: 4}
-// ]
-// $(table_selector).pivot(callback_array, {
-//     rows: [row_field],
-//     cols: [col_field],
-//     aggregator: count_function,
-//     renderer: render_function
-// })
+
+
+
+//converts list of lists to array
+function list_of_lists_to_array(lol, key_names) {
+    key_names = lol[0] || key_names
+    array = []
+    lol.forEach(function(row, row_num) {
+        var new_dict = {}
+        row.forEach(function(col, col_num) {
+            cell_val = lol[row_num][col_num]
+            key_name = key_names[col_num]
+
+            new_dict[key_name] = cell_val
+        })
+        array.push(new_dict)
+    })
+    return array
+}
+
+
+//filter tasks for text and return sum from it
+function array_filter_from_text_sum(array, text, key_name, sum_field) {
+    sum_field = sum_field || 'duration'
+    array = array_filter_from_text(array, text, key_name)
+    var sum_total = sum_float_convert_from_array_underscore(array, sum_field)
+    return sum_total
+}
+//make triple check for the key 
+function dictionary_check_keys_triple_return(item, check_key, second_key, third_key, alternative_val) {
+    alternative_val = alternative_val || "null"
+    check_key = check_key || 'fullName'
+    not_undefined = item[check_key] != undefined
+    if (not_undefined) {
+        not_second_undefined = item[check_key][second_key] != undefined
+        if (not_second_undefined) {
+            r = item[check_key][second_key][third_key] || alternative_val
+        } else {
+            r = alternative_val
+        }
+    } else {
+        r = alternative_val
+    }
+    return r
+}
+
+//check for the key on second layer or return null
+function dictionary_check_keys_double_return(item, check_key, second_key, alternative_val) {
+    alternative_val = alternative_val || "null"
+    check_key = check_key || 'fullName'
+    not_undefined = item[check_key] != undefined
+    if (not_undefined) {
+        r = item[check_key][second_key] || alternative_val
+
+    } else {
+        r = alternative_val
+    }
+    return r
+}
+
+//checks if item has a key and gives it null if not
+function dictionary_check_keys(item, check_keys, alternative_val) {
+    alternative_val = alternative_val || "null"
+    check_keys = check_keys || ['fullName', 'active', 'connectedAt', 'id']
+    check_keys.forEach(function(i) {
+        item[i] = item[i] || 'null'
+    })
+}
+
+//checks if item has a key and gives it null if not (for the whole array)
+function array_check_keys(array, check_keys) {
+    check_keys = check_keys || ['fullName', 'active', 'connectedAt', 'id']
+    array.forEach(function(item) {
+        dictionary_check_keys(item, check_keys)
+    })
+    return array
+}
+
+// turn an array  e.g. list of dictionaries into a list of lists because certain functions such as datatables takes an input of a list of lists
+function list_of_lists_from_array(array, keys) {
+    list_of_lists = [] //this is an empty list that will be filled with sublists
+    array.forEach(function(dictionary_object, index) { //we're going to loop through every dictionary in the array
+        sublist = []
+        keys.forEach(function(key_name, key_index) { //we're also going to loop through every key
+            sublist.push(dictionary_object[key_name]) //then we're going to get the key's definition to create the subli
+        })
+        list_of_lists.push(sublist) //push the sublist to the list_of_lists
+    })
+    return list_of_lists
+}
+
+//convert array to dictionary
+function array_to_dictionary(array, key_name) {
+    key_name = key_name || 'id'
+    new_dict = {}
+    array.forEach(function(item, index) {
+        new_dict[String(item[key_name])] = item
+    })
+    return new_dict
+}
+
+//check if key has a value and if not, add it a value
+function key_check_func_dictionary(check_keys, item) {
+    check_keys = check_keys || ['fullName', 'active', 'connectedAt', 'id']
+    check_keys.forEach(function(i) {
+        item[i] = item[i] || 'null'
+    })
+}
+
+//highlights syntax
+function syntaxHighlight(json) {
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}
+
+// prettifies the json or the list
+function json_prettify(json_input) {
+    var str = JSON.stringify(json_input, undefined, 4);
+    document.body.appendChild(document.createElement('pre')).innerHTML = syntaxHighlight(str);
+
+}
+
+
+//combines dictionaries
+function combine_dicts(a, b) { //https://stackoverflow.com/questions/43449788/how-do-i-merge-two-dictionaries-in-javascript
+    var a = a || {
+            fruit: "apple"
+        },
+        b = b || {
+            vegetable: "carrot"
+        },
+        food = Object.assign({}, a, b);
+    return food
+}
+
+//check if the dictionary has two layers of key down and then pull and turn it to null to avoid error
+function key_check_make_double(item, primary_key, secondary_key) {
+    item[primary_key] = item[primary_key] || {}
+    item[primary_key][secondary_key] = item[primary_key][secondary_key] || 'null'
+}
+
+
 //string_functions.js
 
 //convert stirng to fromatted string 
@@ -1160,617 +1193,371 @@ function text2Binary(string) {
         return char.charCodeAt(0).toString(2);
     }).join(' ');
 }
-//web_functions.js
+//underscore_functions.js
 
-//open url in new tab
-function openInNewTab(url) {
-    var win = window.open(url, '_blank');
-    win.focus();
+// get sum from array with key
+function sum_float_convert_from_array_underscore(arr, key_name) {
+    // returns the sum total of all values in the array
+    return _.reduce(arr, function(memo, num) {
+        r = memo + (parseFloat(num[key_name]) || 0)
+        return r
+    }, 0);
+}
+
+//group by an array
+function group_by_underscore(gspread_array_data) {
+    _.groupBy(gspread_array_data, 'status')['Red'] || []
 }
 
 
-//get url parameter 
-function parameter_attain_from_url(param) {
-    var url = new URL(window.location.href);
-    var result = url.searchParams.get(param)
-    return result
-}
-
-
-function ipLookUp() {
-    $.ajax('http://ip-api.com/json')
-        .then(
-            function success(response) {
-                console.log('User\'s Location Data is ', response);
-                console.log('User\'s Country', response.country);
-
-            },
-
-            function fail(data, status) {
-                console.log('Request failed.  Returned status of',
-                    status);
-            }
-        );
-}
-
-//calendar_functions.js
-
-
-
-
-function calendar_initiate_base(params) {
-    calendar_selector = params.calendar_selector || '#calendar'
-    events = params.events
-    calendar_object = $(calendar_selector).fullCalendar({
-        selectable: true,
-        selectHelper: true,
-        select: function(start, end) {
-            var title = prompt('Event Title:');
-            var eventData;
-            if (title) {
-                eventData = {
-                    title: title,
-                    start: start,
-                    end: end
-                };
-                console.log(eventData)
-                $(calendar_selector).fullCalendar('renderEvent', eventData, true); // stick? = true
-            }
-            $(calendar_selector).fullCalendar('unselect');
-        },
-        editable: true,
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay,listWeek,listDay,agendaFourDay'
-        },
-        views: {
-            listDay: {
-                buttonText: 'list day'
-            },
-            listWeek: {
-                buttonText: 'list week'
-            },
-            agendaFourDay: {
-                type: 'agenda',
-                duration: {
-                    days: 4
-                },
-                buttonText: '4 day'
-            }
-        },
-        defaultDate: moment().format('YYYY-MM-DD'), //'2018-06-12',
-        navLinks: true, // can click day/week names to navigate views
-        editable: true,
-        eventLimit: true, // allow "more" link when too many events
-        events: events,
-        overlap: false
-    });
-}
-
-
-function calendar_initiate(params) {
-    calendar_initiate_base(params)
-    //setTimeout(calendar_initiate_base,2000,params)
-
-}
-
-//chartjs_functions.js
-
-
-//initiates a simple bar chart using chartjs
-function bar_chart_initiate_render_chartjs(chart_id, labels, numbers_list, colors) {
-    labels = labels || ['No Data']
-    numbers_list = numbers_list || [0]
-    colors = colors || ["#a3e1d4"]
-
-    simple_chart_data = {
-        labels: labels,
-        datasets: [{
-            data: numbers_list,
-            backgroundColor: colors
-        }]
-    };
-
-
-
-
-    simple_options = {
-        events: false,
-        tooltips: {
-            enabled: false
-        },
-        hover: {
-            animationDuration: 0
-        },
-        animation: {
-            duration: 1,
-            onComplete: function() {
-                var chartInstance = this.chart,
-                    ctx = chartInstance.ctx;
-                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
-
-                this.data.datasets.forEach(function(dataset, i) {
-                    var meta = chartInstance.controller.getDatasetMeta(i);
-                    meta.data.forEach(function(bar, index) {
-                        var data = dataset.data[index];
-                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
-                    });
-                });
-            }
-        },
-        legend: {
-            display: false
-        },
-        scales: {
-            yAxes: [{
-                stacked: true,
-                ticks: {
-                    beginAtZero: true
-                }
-            }],
-            xAxes: [{
-                stacked: true,
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-
-        },
-        responsive: true,
-        tooltips: {
-            enabled: true
-        }
-    };
-
-
-
-    var ctx = document.getElementById(chart_id).getContext("2d");
-    simple_chart_object = new Chart(ctx, {
-        type: 'bar',
-        data: simple_chart_data,
-        options: simple_options
-    });
-    return simple_chart_object
-}
-
-
-//initiates a simple bar chart using chartjs
-function horizontal_bar_chart_initiate_render_chartjs(chart_id, labels, numbers_list, colors) {
-    labels = labels || ['No Data']
-    numbers_list = numbers_list || [0]
-    colors = colors || _.map(labels, function(D) {
-        return "#a3e1d4"
-    }) //["#a3e1d4"]
-
-    simple_chart_data = {
-        labels: labels,
-        datasets: [{
-            data: numbers_list,
-            backgroundColor: colors
-        }]
-    };
-    simple_options = {
-        legend: {
-            display: false
-        },
-        scales: {
-            yAxes: [{
-                stacked: true,
-                ticks: {
-                    beginAtZero: true
-                }
-            }],
-            xAxes: [{
-                stacked: true,
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-
-        },
-        responsive: true,
-        tooltips: {
-            enabled: true
-        }
-    };
-
-    var ctx = document.getElementById(chart_id).getContext("2d");
-    simple_chart_object = new Chart(ctx, {
-        type: 'horizontalBar',
-        data: simple_chart_data,
-        options: simple_options
-    });
-    return simple_chart_object
-}
-
-//
-//updates bar_chart for data 
-function bar_chart_update_chartjs(chart_object, new_labels, new_data_points, new_colors) {
-    chart_object.data.labels = new_labels // ['label a','label b']
-    chart_object.data.datasets[0].data = new_data_points //[1,2]
-    chart_object.data.datasets[0].backgroundColor = new_colors //["#a3e1d4","#dedede"]
-    chart_object.update()
-}
-
-//update based on days
-function bar_chart_update_category_calculate_function(chart_object, array, date_field, metric_func, date_strf, color_func) {
-    //date_func = date_func || function(D){return D.date_field}
-    metric_func = metric_func || function(l) {
-        return l.length
-    }
-    date_strf = date_strf || "MM/DD"
-
-    grouped_array_dictionary = _.groupBy(array, date_field)
-    color_func = color_func || function(key_name, index, grouped_array) {
-        return "#a3e1d4"
-    }
-    labels = []
-    vals = []
-    colors = []
-    dates = Object.keys(grouped_array_dictionary)
-
-    //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
-    dates.forEach(function(key_name, i) {
-        val = metric_func(grouped_array_dictionary[key_name])
-        color = color_func(key_name, i, grouped_array_dictionary)
-        labels.push(key_name)
-        vals.push(val)
-        colors.push(color)
+function min_date_from_array_underscore(array, key_name) {
+    key_name = key_name || 'task_date'
+    return _.min(array, function(D) {
+        return moment(D[key_name]).valueOf()
     })
-    bar_chart_update_chartjs(chart_object, labels, vals, colors)
-
 
 }
 
-//update based on days
-function bar_chart_update_time_scale_calculate_function(chart_object, array, date_field, metric_func, date_strf, color_func) {
-    //date_func = date_func || function(D){return D.date_field}
-    metric_func = metric_func || function(l) {
-        if (l == undefined) {
-            return 0
-        } else {
-            return l.length
-        }
-    }
-    date_strf = date_strf || "MM/DD"
-
-
-    grouped_array_dictionary = _.groupBy(array, function(D) {
-        return moment(D[date_field]).format(date_strf)
+function max_date_from_array_underscore(array, key_name) {
+    key_name = key_name || 'task_date'
+    return _.max(array, function(D) {
+        return moment(D[key_name]).valueOf()
     })
-    color_func = color_func || function(key_name, index, grouped_array) {
-        return "#a3e1d4"
+
+}
+//moment_functions.js
+
+// var a = moment('2016-06-06T21:03:55');//now
+// var b = moment('2016-05-06T20:03:55');
+
+
+
+
+function time_difference_moment_from_now(end, startTime) {
+    var duration = moment.duration(end.diff(startTime));
+    return duration
+}
+
+// console.log(a.diff(b, 'minutes')) // 44700
+// console.log(a.diff(b, 'hours')) // 745
+// console.log(a.diff(b, 'days')) // 31
+// console.log(a.diff(b, 'weeks')) // 4
+function time_difference_moment_from_interval(end, startTime, interval) {
+    var end = moment(end); //now
+    var startTime = moment(startTime);
+    duration = startTime.diff(end, interval) // 44700
+    //var duration = moment.duration(end.diff(startTime,interval));
+    return duration
+}
+
+
+function time_difference_moment_from_now_interval(end, interval) {
+    var duration = time_difference_moment_from_interval(end, moment(), interval)
+    return duration
+}
+
+function time_difference_moment(end, startTime) {
+    var duration = moment.duration(end.diff(startTime));
+    return duration
+}
+
+
+//create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time
+function time_interval_string_format_from_start_time(start_time_core) {
+    end_time = moment().format()
+    start_time = moment(start_time_core).format("h:mm:ssa")
+    end_time = moment(end_time).format("h:mm:ssa")
+    var now = moment().valueOf() //now is the time right now
+    start_time_instance = moment(start_time_core).valueOf()
+    var elapsed = now - start_time_instance;
+    seconds = elapsed / 1000
+    elapsed_minutes = String(parseFloat(seconds / 60).toFixed(2)) //add a two minute buffer
+    formatted_string = " [" + start_time + "-" + end_time + "|" + elapsed_minutes + "min]"
+    return formatted_string
+
+}
+
+//update the html of the timer
+function html_timer_update_from_jquery(jquery_identifier, start_time) {
+    time_text = time_since_start_time_moment(start_time)
+    $(jquery_identifier).html(time_text)
+    document.title = time_text
+}
+
+
+//update from jquery identifier the time 
+function timer_jquery_html_update_from_start_time_moment(start_time, jquery_identifier) {
+    jquery_identifier = jquery_identifier || "#input_label_timer"
+    setInterval(html_timer_update_from_jquery, 1000, jquery_identifier, start_time)
+}
+
+
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment_to(start_time) {
+    now = moment().valueOf() //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = start_time_instance - now;
+    time_text_value = moment(elapsed).subtract({
+        hours: 19
+    }); //have to subtract 19 hours for some reason
+    time_text = time_text_value.format("HH:mm:ss")
+    return time_text
+}
+
+
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment_compare(end_time, start_time) {
+    now = moment(end_time).valueOf() //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = now - start_time_instance;
+    time_text_value = moment(elapsed).subtract({
+        hours: 19
+    }); //have to subtract 19 hours for some reason
+
+
+    time_text = time_text_value.format("HH:mm:ss")
+    return time_text
+}
+
+function hours_difference_moment(startTime, end) {
+    var duration = moment.duration(end.diff(startTime));
+    var hours = duration.asHours();
+    return hours
+}
+//used in create_task_v2 to keep track of time
+function time_since_start_time_moment(start_time) {
+    now = moment().valueOf() //now is the time right now
+    start_time_instance = moment(start_time).valueOf()
+    elapsed = now - start_time_instance;
+    days_calculated = elapsed / (1000 * 60 * 60 * 24)
+    time_text_value = moment(elapsed).subtract({
+        hours: 19
+    }); //have to subtract 19 hours for some reason
+    days_passed = time_text_value.days() - 3
+    time_text = time_text_value.format("HH:mm:ss")
+    time_text = days_passed + ":" + time_text
+    return time_text
+}
+
+
+//tells us how long ago 
+function moment_time_ago(input_time) {
+    return moment(input_time).fromNow();
+}
+
+//check if the day is today, 'year, month, week, minute'
+function check_if_date_is_current_range(input_date, date_range) {
+    date_range = date_range || 'day'
+    return moment(input_date).isSame(Date.now(), date_range);
+}
+//creates a string that indicates whether its in the day,week,month,year
+function date_within_range_string_create(input_date) {
+    date_string = ''
+    if (moment(input_date).isSame(Date.now(), 'day')) {
+        date_string = date_string + "today"
     }
-    console.log(grouped_array_dictionary)
-    labels = []
-    vals = []
-    colors = []
-    dates = Object.keys(grouped_array_dictionary)
-    console.log(dates)
-    min_date = _.min(dates, function(num) {
-        return moment(num, date_strf).unix()
-    })
-    console.log(min_date)
-    dates = dates_between_dates_moment(moment(min_date, date_strf), moment())
-    console.log(dates)
-    //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
-    dates.forEach(function(key_name, i) {
-        key_name = key_name.format(date_strf)
-        //console.log(key_name)
-        val = metric_func(grouped_array_dictionary[key_name])
-        color = color_func(key_name, i, grouped_array_dictionary)
-        labels.push(key_name)
-        vals.push(val)
-        colors.push(color)
-    })
-    bar_chart_update_chartjs(chart_object, labels, vals, colors)
-
-
-}
-
-
-
-
-//crossfilter_functions.js
-
-
-
-function print_filter(filter) {
-    var f = eval(filter);
-    if (typeof(f.length) != "undefined") {} else {}
-    if (typeof(f.top) != "undefined") {
-        f = f.top(Infinity);
-    } else {}
-    if (typeof(f.dimension) != "undefined") {
-        f = f.dimension(function(d) {
-            return "";
-        }).top(Infinity);
-    } else {}
-    console.log(filter + "(" + f.length + ") = " + JSON.stringify(f).replace("[", "[\n\t").replace(/}\,/g, "},\n\t").replace("]", "\n]"));
-};
-
-
-
-
-function getMonthName(v) {
-    var n = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    return n[v]
-};
-
-
-
-function num_format() {
-    var numFormat = d3.format(".3s")
-
-
-}
-
-
-
-function generateYearMonth(lst) {
-    // Author: Koba
-    // Generates an array of full year concatenated woth a month number. 
-    // Ex.g., generateYearMonth(['20140','20142') will give ['20140','20141','20142']
-    var nlst = []
-    nlst.push(lst[0])
-    var counter = 0
-    var year = parseInt(nlst[counter].substring(0, 4))
-    var month = parseInt(nlst[counter].substring(4, 6))
-
-    while (nlst[nlst.length - 1] != lst[lst.length - 1]) {
-        month += 1
-
-        if (month % 12 === 0) {
-            year += 1
-            month = 0
-        }
-
-        nlst.push(String(year) + String(month))
-        counter += 1
+    if (moment(input_date).isSame(Date.now(), 'week')) {
+        date_string = date_string + "this_week"
     }
-    return nlst
-}
-
-function filtered_group(group, bins) {
-    return {
-        all: function() {
-            return group.all().filter(function(d) {
-                return bins.indexOf(d.key) != -1;
-            })
-        }
+    if (moment(input_date).isSame(Date.now(), 'month')) {
+        date_string = date_string + "this_month"
     }
-};
+    if (moment(input_date).isSame(Date.now(), 'year')) {
+        date_string = date_string + "this_year"
+    }
+    if (moment(input_date) >= moment(Date.now())) {
+        date_string = date_string + "future"
+    }
+    if (moment(input_date) <= moment(Date.now())) {
+        date_string = date_string + "past"
+    }
+    return date_string
+}
 
 
-
-function crossfilter_array_format(params) {
-    lst = params.data
-    var Strings = params.strings || ['Name', 'Type', 'StageName', 'Red_Account_Notes__c', 'OTF__c', 'Status_Notes__c', 'Account.Name', 'LeadSource', 'Industry__c', 'Success_Manager__c', 'Market_Developer__c', 'Product_Names__c'];
-    var Dates = params.dates || ['CloseDate', 'Contract_Start_Date__c', 'Contract_End_Date__c'];
-    var Integers = params.numbers || ['Amount', 'MRR__c', 'Probability', 'Account.Days_Since_Original_Close_Date__c'];
-
-    lst.forEach(function(d) {
-
-        Strings.forEach(function(key) {
-            d[key] = String(d[key]) || "None";
-        });
-        Dates.forEach(function(key) {
-            d.key = d.key || "9/30/10";
-        });
-        Dates.forEach(function(key) {
-            d[key] = new Date(d[key] + ' EST');
-        });
-        Dates.forEach(function(key) {
-            d[key + "Formatted"] = d3.time.format("%m/%d/%y")(d[key])
-        });
-        Dates.forEach(function(key) {
-            d[key + "YearString"] = d3.time.format("%y")(d[key])
-        });
-        Dates.forEach(function(key) {
-            d[key + "DayNumber"] = d3.time.format("%d")(d[key])
-        });
-        Dates.forEach(function(key) {
-            d[key + "Week"] = d[key].getWeek(1)
-        });
-        Dates.forEach(function(key) {
-            d[key + "MonthName"] = getMonthName(d[key].getMonth())
-        });
-        Dates.forEach(function(key) {
-            d[key + "YearMonth"] = String(d[key].getFullYear()) + String(d[key].getMonth())
-        });
-        Dates.forEach(function(key) {
-            d[key + "Quarter"] = String(d[key].getFullYear()) + String(Math.floor((d[key].getMonth() + 3) / 3))
-        });
-        Dates.forEach(function(key) {
-            d[key + "WeekDay"] = d[key].getDay() + "." + ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d[key].getDay()]
-        });
-        Dates.forEach(function(key) {
-            d[key + "Year"] = d[key].getFullYear('EST')
-        });
-        Dates.forEach(function(key) {
-            d[key + "MonthNumber"] = d[key].getMonth()
-        });
-        Dates.forEach(function(key) {
-            d[key + "Month"] = d3.time.month(d[key])
-        });
-        Integers.forEach(function(key) {
-            d[key] = d[key] || "0";
-        });
-        Integers.forEach(function(key) {
-            d[key] = parseInt(d[key], 10)
-        });
-        Integers.forEach(function(key) {
-            d[key + "Formatted"] = d3.format(",.0f")(d[key])
-        });
-
-    });
-
-    return lst
+//get hour from time
+function get_hour_from_time(i) {
+    r = Date(i)
+    hour = parseInt(moment(r).format("H")) + 5
+    return hour
+}
 
 
+//get the current time from moment
+function attain_now_from_moment() {
+    date_time = moment().format();
+    return date_time
+}
+
+//return unix now moment
+function unix_now_moment() {
+    return moment().unix()
+}
+
+//return hour-minute format using moment
+function hour_format_moment(timestamp) {
+    return moment(timestamp).format("hh:mmA")
+}
+
+//filter a certain date for current time range such as today, this month etc.
+function date_range_filter_moment(date_input, strf) {
+    if (date_input) {
+        this_month = moment().format(strf) //01
+        completed_date_moment = new moment(date_input)
+        completed_month = completed_date_moment.format(strf)
+        return completed_month === this_month
+    }
+}
+
+
+//set the hour from a given day
+function set_date_time_moment(date, hour) {
+    new_date = new Date(moment(date).format())
+    new_date.setHours(hour)
+    return moment(new_date)
+}
+
+function date_difference_from_today_days_moment(date_added) {
+    a = new moment()
+    b = new moment(date_added)
+    age_days = a.diff(b, 'days')
+    return age_days
+}
+
+function beginning_of_month_moment() {
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    date_string = year + "-" + month + "-01"
+    start_time = moment(date_string)
+    return start_time
 }
 
 
 
-function crossfilter_generate(params) {
-    lst = crossfilter_array_format(params)
-    var ndx = params.ndx || crossfilter(lst);
-    params.ndx = ndx
-    var numFormat = d3.format(".3s")
+//dates that are within this month
+function dates_within_this_month() {
+    days = moment().daysInMonth();
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    date_string = year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) {
+        next_time = start_time.clone()
+        next_time.add(i, 'day')
+        hours_list.push(next_time)
+
+    }
+    return hours_list
+}
+
+//return a list of days in the future 
+function number_of_days_ahead_calculate(days_ahead) {
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    start_time = moment()
+    hours_list = []
+    for (i = 0; i < days_ahead; i++) {
+        next_time = start_time.clone()
+        next_time.add(i, 'day')
+        hours_list.push(next_time.format())
+    }
+    return hours_list
+}
 
 
-    function row_bar_chart_cross_filter(params) {
+//return a list of days in the future. This returns an array 
+function number_of_days_ahead_calculate_array(days_ahead) {
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    start_time = moment()
+    hours_list = []
+    for (i = 0; i < days_ahead; i++) {
+        next_time = start_time.clone()
+        next_time.add(i, 'day')
 
-        D = params.dimension
-        N = params.metric
-        S = params.chart_identifier
-        T = params.calculation
-
-
-        var D1 = ndx.dimension(function(d) {
-            return d[D]
+        hours_list.push({
+            date: next_time.format()
         })
+    }
+    return hours_list
+}
 
-        var RowBarChart1 = dc.rowChart(S)
-        RowBarChart1
-            .width(180).height(500)
-            .margins({
-                top: 20,
-                left: 15,
-                right: 10,
-                bottom: 20
-            })
-            .dimension(D1)
-            .valueAccessor(function(d) { // must use valueAccessor
-                return d.value[T];
-            })
-            .group(D1.group().reduce(
-                function reduceAdd(p, d) {
-                    ++p.count;
-                    p.sum += d[N]
-                    if (d[N] in p.IDs) p.IDs[d[N]]++;
-                    else {
-                        p.IDs[d[N]] = 1;
-                        p.unique++;
-                    }
-                    p.avg = p.sum / p.count;
-                    return p;
-                },
-                function reduceRemove(p, d) {
-                    --p.count;
-                    p.sum -= d[N];
-                    p.IDs[d[N]]--;
-                    if (p.IDs[d[N]] === 0) {
-                        delete p.IDs[d[N]];
-                        p.unique--;
-                    }
-                    p.avg = p.sum / p.count;
-                    return p;
-                },
-                function reduceInitial() {
-                    return {
-                        count: 0,
-                        sum: 0,
-                        unique: 0,
-                        avg: 0,
-                        IDs: {}
-                    };
-                }
-            ))
-            .elasticX(true)
-            .label(function(d) {
-                return d.key + "  " + numFormat(d.value[T]);
-            })
-            .ordering(function(d) {
-                return -d.value[T]
-            })
-            .xAxis().tickFormat(function(v) {
-                return v
-            }).ticks(3);
+
+//return list of days in the past
+function dates_past_n_days(days) {
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    date_string = moment().format("YYYY-MM-DD") //year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) {
+        next_time = start_time.clone()
+        next_time.subtract(i, 'day')
+        hours_list.push(next_time)
 
     }
+    hours_list.reverse()
+    return hours_list
+}
 
-
-
-    function pie_chart_crossfilter(params, D, N, S) {
-        ndx = params.ndx || ndx
-        D = params.dimension || D
-        N = params.metric || N
-        S = params.chart_selector || S
-        var D1 = ndx.dimension(function(d) {
-            return d[D];
-        })
-        var Chart = dc.pieChart(S)
-        var Sum = ndx.groupAll().reduceSum(function(d) {
-            return d[N];
-        })
-
-        Chart
-            .width(370).height(200).radius(90).innerRadius(40)
-            .dimension(D1)
-            .group(D1.group().reduceSum(function(d) {
-                return d[N];
-            }))
-            .label(function(d) {
-                return d.key + " (" + (d.value / Sum.value() * 100).toFixed(2) + "%" + ")";
-            })
-            .legend(dc.legend().x(290).y(10).itemHeight(13).gap(4))
-            .renderLabel(true);
-
+//return list of days in the past but strf formatted
+function dates_past_n_days_formatted(days, strf) {
+    strf = strf || "YYYY-MM-DD"
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    date_string = moment().format("YYYY-MM-DD") //year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) {
+        next_time = start_time.clone()
+        next_time.subtract(i, 'day')
+        hours_list.push(next_time.format(strf))
     }
+    hours_list.reverse()
+    return hours_list
+}
 
 
 
-    if (params.charts) {
-        params.charts.forEach(function(chart_dict) {
-            if (chart_dict.type == 'pie') {
-                pie_chart_crossfilter({}, chart_dict.dimension, chart_dict.metric, chart_dict.chart_identifier);
-            }
-
-            if (chart_dict.type == 'row') {
-                row_bar_chart_cross_filter(chart_dict);
-            }
-
-
-
+//return list of days in the past but strf formatted. This is as an array.
+function dates_past_n_days_formatted_array(days, strf) {
+    strf = strf || "YYYY-MM-DD"
+    today = new Date()
+    month = String(today.getMonth() + 1)
+    year = String(today.getFullYear())
+    date_string = moment().format("YYYY-MM-DD") //year + "-" + month + "-01"
+    start_time = moment(date_string)
+    hours_list = []
+    for (i = 0; i < days; i++) {
+        next_time = start_time.clone()
+        next_time.subtract(i, 'day')
+        hours_list.push({
+            date: next_time.format(strf)
         })
 
     }
-
-
-    //pie_chart_crossfilter({},'Dress','Top Sizes','#chart2');
-
-
-
-
-    dc.renderAll();
-    return params
+    hours_list.reverse()
+    return hours_list
 }
 
 
-
-function crossfilter_filter(params) {
-    ndx = params.ndx
-    var D = params.dimension || "CloseDateYearString"
-    var CloseDateYearFilter = ndx.dimension(function(d) {
-        return d[D];
-    })
-    var types = params.types || ['14', '15']
-    CloseDateYearFilter.filter(function(d) {
-        return types.indexOf(d) > -1
-    });
-
-
+//pulls the dates between two dates
+function dates_between_dates_moment(startDate, stopDate) {
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push(currentDate.clone());
+        currentDate.add(1, 'day');
+    }
+    return dateArray;
 }
-
-
-
-
-
-
 
 
 
@@ -2250,6 +2037,586 @@ function datatables_initiate_render(table_id, columns_list, editor, input_data) 
     });
     return table_example
 }
+//typewriter_functions.js
+
+
+//create a typewritter effect using typewritter library (https://safi.me.uk/typewriterjs/)
+function typewriter_element_create(div_id, input_text) {
+    div_id = div_id || 'app'
+    input_text = input_text || $("#" + div_id).html()
+
+
+    var app = document.getElementById(div_id);
+    var typewriter = new Typewriter(app, {
+        loop: true
+    });
+
+    typewriter.typeString(input_text)
+        .pauseFor(10000)
+        .start();
+
+}
+
+
+function typewriter_multiple_questions_create(div_id) {
+    div_id = div_id || 'app'
+    questions = $("#" + div_id).attr("questions").split("|")
+
+
+    var app = document.getElementById(div_id);
+    var typewriter = new Typewriter(app, {
+        loop: true
+    });
+
+    questions.forEach(function(i) {
+        typewriter.typeString(String(i))
+            .pauseFor(1000)
+            .deleteAll()
+
+    })
+
+
+
+    typewriter.start();
+}
+//stock_functions.js
+
+//https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5
+
+
+
+function stock_pull(url) {
+    url = url || "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5"
+    l = $.ajax({
+        url: url,
+        method: "GET",
+        async: false,
+        headers: {
+            "Accept": "application/json; odata=verbose"
+        }
+    })
+    results = l.responseJSON
+    return results
+}
+//crossfilter_functions.js
+
+
+
+function print_filter(filter) {
+    var f = eval(filter);
+    if (typeof(f.length) != "undefined") {} else {}
+    if (typeof(f.top) != "undefined") {
+        f = f.top(Infinity);
+    } else {}
+    if (typeof(f.dimension) != "undefined") {
+        f = f.dimension(function(d) {
+            return "";
+        }).top(Infinity);
+    } else {}
+    console.log(filter + "(" + f.length + ") = " + JSON.stringify(f).replace("[", "[\n\t").replace(/}\,/g, "},\n\t").replace("]", "\n]"));
+};
+
+
+
+
+function getMonthName(v) {
+    var n = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    return n[v]
+};
+
+
+
+function num_format() {
+    var numFormat = d3.format(".3s")
+
+
+}
+
+
+
+function generateYearMonth(lst) {
+    // Author: Koba
+    // Generates an array of full year concatenated woth a month number. 
+    // Ex.g., generateYearMonth(['20140','20142') will give ['20140','20141','20142']
+    var nlst = []
+    nlst.push(lst[0])
+    var counter = 0
+    var year = parseInt(nlst[counter].substring(0, 4))
+    var month = parseInt(nlst[counter].substring(4, 6))
+
+    while (nlst[nlst.length - 1] != lst[lst.length - 1]) {
+        month += 1
+
+        if (month % 12 === 0) {
+            year += 1
+            month = 0
+        }
+
+        nlst.push(String(year) + String(month))
+        counter += 1
+    }
+    return nlst
+}
+
+function filtered_group(group, bins) {
+    return {
+        all: function() {
+            return group.all().filter(function(d) {
+                return bins.indexOf(d.key) != -1;
+            })
+        }
+    }
+};
+
+
+
+function crossfilter_array_format(params) {
+    lst = params.data
+    var Strings = params.strings || ['Name', 'Type', 'StageName', 'Red_Account_Notes__c', 'OTF__c', 'Status_Notes__c', 'Account.Name', 'LeadSource', 'Industry__c', 'Success_Manager__c', 'Market_Developer__c', 'Product_Names__c'];
+    var Dates = params.dates || ['CloseDate', 'Contract_Start_Date__c', 'Contract_End_Date__c'];
+    var Integers = params.numbers || ['Amount', 'MRR__c', 'Probability', 'Account.Days_Since_Original_Close_Date__c'];
+
+    lst.forEach(function(d) {
+
+        Strings.forEach(function(key) {
+            d[key] = String(d[key]) || "None";
+        });
+        Dates.forEach(function(key) {
+            d.key = d.key || "9/30/10";
+        });
+        Dates.forEach(function(key) {
+            d[key] = new Date(d[key] + ' EST');
+        });
+        Dates.forEach(function(key) {
+            d[key + "Formatted"] = d3.time.format("%m/%d/%y")(d[key])
+        });
+        Dates.forEach(function(key) {
+            d[key + "YearString"] = d3.time.format("%y")(d[key])
+        });
+        Dates.forEach(function(key) {
+            d[key + "DayNumber"] = d3.time.format("%d")(d[key])
+        });
+        Dates.forEach(function(key) {
+            d[key + "Week"] = d[key].getWeek(1)
+        });
+        Dates.forEach(function(key) {
+            d[key + "MonthName"] = getMonthName(d[key].getMonth())
+        });
+        Dates.forEach(function(key) {
+            d[key + "YearMonth"] = String(d[key].getFullYear()) + String(d[key].getMonth())
+        });
+        Dates.forEach(function(key) {
+            d[key + "Quarter"] = String(d[key].getFullYear()) + String(Math.floor((d[key].getMonth() + 3) / 3))
+        });
+        Dates.forEach(function(key) {
+            d[key + "WeekDay"] = d[key].getDay() + "." + ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d[key].getDay()]
+        });
+        Dates.forEach(function(key) {
+            d[key + "Year"] = d[key].getFullYear('EST')
+        });
+        Dates.forEach(function(key) {
+            d[key + "MonthNumber"] = d[key].getMonth()
+        });
+        Dates.forEach(function(key) {
+            d[key + "Month"] = d3.time.month(d[key])
+        });
+        Integers.forEach(function(key) {
+            d[key] = d[key] || "0";
+        });
+        Integers.forEach(function(key) {
+            d[key] = parseInt(d[key], 10)
+        });
+        Integers.forEach(function(key) {
+            d[key + "Formatted"] = d3.format(",.0f")(d[key])
+        });
+
+    });
+
+    return lst
+
+
+}
+
+
+
+function crossfilter_generate(params) {
+    lst = crossfilter_array_format(params)
+    var ndx = params.ndx || crossfilter(lst);
+    params.ndx = ndx
+    var numFormat = d3.format(".3s")
+
+
+    function row_bar_chart_cross_filter(params) {
+
+        D = params.dimension
+        N = params.metric
+        S = params.chart_identifier
+        T = params.calculation
+
+
+        var D1 = ndx.dimension(function(d) {
+            return d[D]
+        })
+
+        var RowBarChart1 = dc.rowChart(S)
+        RowBarChart1
+            .width(180).height(500)
+            .margins({
+                top: 20,
+                left: 15,
+                right: 10,
+                bottom: 20
+            })
+            .dimension(D1)
+            .valueAccessor(function(d) { // must use valueAccessor
+                return d.value[T];
+            })
+            .group(D1.group().reduce(
+                function reduceAdd(p, d) {
+                    ++p.count;
+                    p.sum += d[N]
+                    if (d[N] in p.IDs) p.IDs[d[N]]++;
+                    else {
+                        p.IDs[d[N]] = 1;
+                        p.unique++;
+                    }
+                    p.avg = p.sum / p.count;
+                    return p;
+                },
+                function reduceRemove(p, d) {
+                    --p.count;
+                    p.sum -= d[N];
+                    p.IDs[d[N]]--;
+                    if (p.IDs[d[N]] === 0) {
+                        delete p.IDs[d[N]];
+                        p.unique--;
+                    }
+                    p.avg = p.sum / p.count;
+                    return p;
+                },
+                function reduceInitial() {
+                    return {
+                        count: 0,
+                        sum: 0,
+                        unique: 0,
+                        avg: 0,
+                        IDs: {}
+                    };
+                }
+            ))
+            .elasticX(true)
+            .label(function(d) {
+                return d.key + "  " + numFormat(d.value[T]);
+            })
+            .ordering(function(d) {
+                return -d.value[T]
+            })
+            .xAxis().tickFormat(function(v) {
+                return v
+            }).ticks(3);
+
+    }
+
+
+
+    function pie_chart_crossfilter(params, D, N, S) {
+        ndx = params.ndx || ndx
+        D = params.dimension || D
+        N = params.metric || N
+        S = params.chart_selector || S
+        var D1 = ndx.dimension(function(d) {
+            return d[D];
+        })
+        var Chart = dc.pieChart(S)
+        var Sum = ndx.groupAll().reduceSum(function(d) {
+            return d[N];
+        })
+
+        Chart
+            .width(370).height(200).radius(90).innerRadius(40)
+            .dimension(D1)
+            .group(D1.group().reduceSum(function(d) {
+                return d[N];
+            }))
+            .label(function(d) {
+                return d.key + " (" + (d.value / Sum.value() * 100).toFixed(2) + "%" + ")";
+            })
+            .legend(dc.legend().x(290).y(10).itemHeight(13).gap(4))
+            .renderLabel(true);
+
+    }
+
+
+
+    if (params.charts) {
+        params.charts.forEach(function(chart_dict) {
+            if (chart_dict.type == 'pie') {
+                pie_chart_crossfilter({}, chart_dict.dimension, chart_dict.metric, chart_dict.chart_identifier);
+            }
+
+            if (chart_dict.type == 'row') {
+                row_bar_chart_cross_filter(chart_dict);
+            }
+
+
+
+        })
+
+    }
+
+
+    //pie_chart_crossfilter({},'Dress','Top Sizes','#chart2');
+
+
+
+
+    dc.renderAll();
+    return params
+}
+
+
+
+function crossfilter_filter(params) {
+    ndx = params.ndx
+    var D = params.dimension || "CloseDateYearString"
+    var CloseDateYearFilter = ndx.dimension(function(d) {
+        return d[D];
+    })
+    var types = params.types || ['14', '15']
+    CloseDateYearFilter.filter(function(d) {
+        return types.indexOf(d) > -1
+    });
+
+
+}
+
+
+
+
+
+
+
+
+
+//chartjs_functions.js
+
+
+//initiates a simple bar chart using chartjs
+function bar_chart_initiate_render_chartjs(chart_id, labels, numbers_list, colors) {
+    labels = labels || ['No Data']
+    numbers_list = numbers_list || [0]
+    colors = colors || ["#a3e1d4"]
+
+    simple_chart_data = {
+        labels: labels,
+        datasets: [{
+            data: numbers_list,
+            backgroundColor: colors
+        }]
+    };
+
+
+
+
+    simple_options = {
+        events: false,
+        tooltips: {
+            enabled: false
+        },
+        hover: {
+            animationDuration: 0
+        },
+        animation: {
+            duration: 1,
+            onComplete: function() {
+                var chartInstance = this.chart,
+                    ctx = chartInstance.ctx;
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+
+                this.data.datasets.forEach(function(dataset, i) {
+                    var meta = chartInstance.controller.getDatasetMeta(i);
+                    meta.data.forEach(function(bar, index) {
+                        var data = dataset.data[index];
+                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                    });
+                });
+            }
+        },
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                stacked: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                stacked: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+
+        },
+        responsive: true,
+        tooltips: {
+            enabled: true
+        }
+    };
+
+
+
+    var ctx = document.getElementById(chart_id).getContext("2d");
+    simple_chart_object = new Chart(ctx, {
+        type: 'bar',
+        data: simple_chart_data,
+        options: simple_options
+    });
+    return simple_chart_object
+}
+
+
+//initiates a simple bar chart using chartjs
+function horizontal_bar_chart_initiate_render_chartjs(chart_id, labels, numbers_list, colors) {
+    labels = labels || ['No Data']
+    numbers_list = numbers_list || [0]
+    colors = colors || _.map(labels, function(D) {
+        return "#a3e1d4"
+    }) //["#a3e1d4"]
+
+    simple_chart_data = {
+        labels: labels,
+        datasets: [{
+            data: numbers_list,
+            backgroundColor: colors
+        }]
+    };
+    simple_options = {
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                stacked: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                stacked: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+
+        },
+        responsive: true,
+        tooltips: {
+            enabled: true
+        }
+    };
+
+    var ctx = document.getElementById(chart_id).getContext("2d");
+    simple_chart_object = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: simple_chart_data,
+        options: simple_options
+    });
+    return simple_chart_object
+}
+
+//
+//updates bar_chart for data 
+function bar_chart_update_chartjs(chart_object, new_labels, new_data_points, new_colors) {
+    chart_object.data.labels = new_labels // ['label a','label b']
+    chart_object.data.datasets[0].data = new_data_points //[1,2]
+    chart_object.data.datasets[0].backgroundColor = new_colors //["#a3e1d4","#dedede"]
+    chart_object.update()
+}
+
+//update based on days
+function bar_chart_update_category_calculate_function(chart_object, array, date_field, metric_func, date_strf, color_func) {
+    //date_func = date_func || function(D){return D.date_field}
+    metric_func = metric_func || function(l) {
+        return l.length
+    }
+    date_strf = date_strf || "MM/DD"
+
+    grouped_array_dictionary = _.groupBy(array, date_field)
+    color_func = color_func || function(key_name, index, grouped_array) {
+        return "#a3e1d4"
+    }
+    labels = []
+    vals = []
+    colors = []
+    dates = Object.keys(grouped_array_dictionary)
+
+    //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
+    dates.forEach(function(key_name, i) {
+        val = metric_func(grouped_array_dictionary[key_name])
+        color = color_func(key_name, i, grouped_array_dictionary)
+        labels.push(key_name)
+        vals.push(val)
+        colors.push(color)
+    })
+    bar_chart_update_chartjs(chart_object, labels, vals, colors)
+
+
+}
+
+//update based on days
+function bar_chart_update_time_scale_calculate_function(chart_object, array, date_field, metric_func, date_strf, color_func) {
+    //date_func = date_func || function(D){return D.date_field}
+    metric_func = metric_func || function(l) {
+        if (l == undefined) {
+            return 0
+        } else {
+            return l.length
+        }
+    }
+    date_strf = date_strf || "MM/DD"
+
+
+    grouped_array_dictionary = _.groupBy(array, function(D) {
+        return moment(D[date_field]).format(date_strf)
+    })
+    color_func = color_func || function(key_name, index, grouped_array) {
+        return "#a3e1d4"
+    }
+    console.log(grouped_array_dictionary)
+    labels = []
+    vals = []
+    colors = []
+    dates = Object.keys(grouped_array_dictionary)
+    console.log(dates)
+    min_date = _.min(dates, function(num) {
+        return moment(num, date_strf).unix()
+    })
+    console.log(min_date)
+    dates = dates_between_dates_moment(moment(min_date, date_strf), moment())
+    console.log(dates)
+    //dates = _.sortBy(dates, function(num){ return moment(num,date_strf).unix(); });
+    dates.forEach(function(key_name, i) {
+        key_name = key_name.format(date_strf)
+        //console.log(key_name)
+        val = metric_func(grouped_array_dictionary[key_name])
+        color = color_func(key_name, i, grouped_array_dictionary)
+        labels.push(key_name)
+        vals.push(val)
+        colors.push(color)
+    })
+    bar_chart_update_chartjs(chart_object, labels, vals, colors)
+
+
+}
+
+
+
+
 //excel_functions.js
 
 
@@ -2315,6 +2682,140 @@ function excel_define_sheet_name(excel) {
 
 
 
+//jquery_functions.js
+
+//https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up/21067431
+function updateScroll(yourDivID) {
+    var element = document.getElementById(yourDivID);
+    element.scrollTop = element.scrollHeight;
+}
+
+//how to find parent elements
+function find_parent_elements(this_elem) {
+    $(this_elem).closest('.ibox').find(".markdown_edit_form").show()
+
+}
+
+//sort a list of divs https://stackoverflow.com/questions/32362404/javascript-jquery-reorder-divs
+
+function sort_divs_jquery(parent_identifier, sort_attribute) {
+    sort_attribute = sort_attribute || 'data-status'
+    parent_identifier = parent_identifier || '#target'
+    $(parent_identifier + ' > div').sort(function(a, b) {
+        var contentA = parseInt($(a).attr(sort_attribute), 10);
+        var contentB = parseInt($(b).attr(sort_attribute), 10);
+        return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+    }).appendTo(parent_identifier);
+
+}
+
+//get the td jquery objects from a table based on a table id
+function table_jquery_objects_to_array(table_id) {
+    list_of_lists = []
+    $("#" + table_id + " tr").each(function(row_number) {
+        col_values = Object.values($(this).find('td'))
+        if (col_values.length > 0) {
+            col_values.forEach(function(col_val, col_number) {
+                new_dictionary = {
+                    row_number: row_number,
+                    col_number: col_number,
+                    cell_value: $(col_val).text(),
+                    class_name: $(col_val).attr('class')
+                }
+                list_of_lists.push(new_dictionary)
+            })
+        }
+    });
+    return list_of_lists
+}
+
+//upon hovering over change the css
+function style_change_upon_hover(class_name) {
+    class_name = class_name || '.moreBtn'
+
+    $(class_name).hover(function() {
+        $(this).css("background", "blue")
+    })
+}
+
+
+//change text upon mouse over 
+function style_change_upon_mouse_over(class_name) {
+    class_name = class_name || '.moreBtn'
+    $(class_name).mouseover(function() {
+        $(this).css({
+            'color': 'red',
+            //other styles
+        })
+    });
+}
+
+
+
+
+//add tooltip to element
+function tooltip_add_jquery(div_id, tooltip_text) {
+    $(div_id).attr("data-toggle", "tooltip")
+    $(div_id).attr("title", tooltip_text)
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
+
+//click on a button
+function div_click_jquery(ref_id) {
+    $(ref_id).click();
+}
+
+//press enter when clicked
+function enter_press_down_jquery(ref_id) {
+    $(ref_id).keypress(function(e) {
+        var key = e.which;
+        if (key == 13) // the enter key code
+        {
+            run_function()
+        }
+    });
+
+
+}
+
+//function that uses jquery to run a function from a click
+function update_from_click_jquery(div_id) {
+    div_id = div_id || ".cell-value"
+    $(div_id).on('click', function(e) {
+        $(this)
+    })
+}
+
+//get the td jquery objects from a table based on a table id
+function table_jquery_objects(table_id) {
+    list_of_lists = []
+    $("#" + table_id + " tr").each(function(row_number) {
+        row_list = []
+        col_values = Object.values($(this).find('td'))
+        if (col_values.length > 0) {
+            col_values.forEach(function(col_val, col_number) {
+                col_val['row_number'] = row_number
+                col_val['col_number'] = col_number
+                row_list.push(col_val)
+            })
+            list_of_lists.push(row_list)
+        }
+    });
+    return list_of_lists
+}
+
+//toastr_functions.js
+
+
+//message notification once something is done
+function toastr_notification(message) {
+    toastr.options.closeButton = true;
+    toastr.options.onclick = function() {
+        console.log('clicked');
+    }
+    toastr.info(message)
+}
 //firebase_functions.js
 
 function firebaseui_auth_configuration(signInSuccessUrl) {
@@ -2617,768 +3118,126 @@ function firebase_auth_user_process(user_process_func) {
         }
     });
 }
-//jquery_functions.js
-
-//https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up/21067431
-function updateScroll(yourDivID) {
-    var element = document.getElementById(yourDivID);
-    element.scrollTop = element.scrollHeight;
-}
-
-//how to find parent elements
-function find_parent_elements(this_elem) {
-    $(this_elem).closest('.ibox').find(".markdown_edit_form").show()
-
-}
-
-//sort a list of divs https://stackoverflow.com/questions/32362404/javascript-jquery-reorder-divs
-
-function sort_divs_jquery(parent_identifier, sort_attribute) {
-    sort_attribute = sort_attribute || 'data-status'
-    parent_identifier = parent_identifier || '#target'
-    $(parent_identifier + ' > div').sort(function(a, b) {
-        var contentA = parseInt($(a).attr(sort_attribute), 10);
-        var contentB = parseInt($(b).attr(sort_attribute), 10);
-        return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
-    }).appendTo(parent_identifier);
-
-}
-
-//get the td jquery objects from a table based on a table id
-function table_jquery_objects_to_array(table_id) {
-    list_of_lists = []
-    $("#" + table_id + " tr").each(function(row_number) {
-        col_values = Object.values($(this).find('td'))
-        if (col_values.length > 0) {
-            col_values.forEach(function(col_val, col_number) {
-                new_dictionary = {
-                    row_number: row_number,
-                    col_number: col_number,
-                    cell_value: $(col_val).text(),
-                    class_name: $(col_val).attr('class')
-                }
-                list_of_lists.push(new_dictionary)
-            })
-        }
-    });
-    return list_of_lists
-}
-
-//upon hovering over change the css
-function style_change_upon_hover(class_name) {
-    class_name = class_name || '.moreBtn'
-
-    $(class_name).hover(function() {
-        $(this).css("background", "blue")
-    })
-}
+//calendar_functions.js
 
 
-//change text upon mouse over 
-function style_change_upon_mouse_over(class_name) {
-    class_name = class_name || '.moreBtn'
-    $(class_name).mouseover(function() {
-        $(this).css({
-            'color': 'red',
-            //other styles
-        })
+
+
+function calendar_initiate_base(params) {
+    calendar_selector = params.calendar_selector || '#calendar'
+    events = params.events
+    calendar_object = $(calendar_selector).fullCalendar({
+        selectable: true,
+        selectHelper: true,
+        select: function(start, end) {
+            var title = prompt('Event Title:');
+            var eventData;
+            if (title) {
+                eventData = {
+                    title: title,
+                    start: start,
+                    end: end
+                };
+                console.log(eventData)
+                $(calendar_selector).fullCalendar('renderEvent', eventData, true); // stick? = true
+            }
+            $(calendar_selector).fullCalendar('unselect');
+        },
+        editable: true,
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay,listWeek,listDay,agendaFourDay'
+        },
+        views: {
+            listDay: {
+                buttonText: 'list day'
+            },
+            listWeek: {
+                buttonText: 'list week'
+            },
+            agendaFourDay: {
+                type: 'agenda',
+                duration: {
+                    days: 4
+                },
+                buttonText: '4 day'
+            }
+        },
+        defaultDate: moment().format('YYYY-MM-DD'), //'2018-06-12',
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        events: events,
+        overlap: false
     });
 }
 
 
+function calendar_initiate(params) {
+    calendar_initiate_base(params)
+    //setTimeout(calendar_initiate_base,2000,params)
 
-
-//add tooltip to element
-function tooltip_add_jquery(div_id, tooltip_text) {
-    $(div_id).attr("data-toggle", "tooltip")
-    $(div_id).attr("title", tooltip_text)
-    $('[data-toggle="tooltip"]').tooltip();
 }
 
+//tableau_functions.js
 
-//click on a button
-function div_click_jquery(ref_id) {
-    $(ref_id).click();
-}
+function tableau_connector_run(tableua_dictionary, tablea_array_process) {
 
-//press enter when clicked
-function enter_press_down_jquery(ref_id) {
-    $(ref_id).keypress(function(e) {
-        var key = e.which;
-        if (key == 13) // the enter key code
-        {
-            run_function()
-        }
+    // Create the connector object
+    var myConnector = tableau.makeConnector();
+    //tableua_dictionary = table_info_get()
+
+    // Define the schema
+    myConnector.getSchema = function(schemaCallback) {
+        var tableSchema = tableua_dictionary
+        schemaCallback([tableSchema]);
+    };
+
+    //tableua_dictionary = tableau_meta_data_get()
+    // Download the data
+    myConnector.getData = function(table, doneCallback) {
+        $.getJSON(tableua_dictionary['ur'], function(resp) {
+            tableData = tablea_array_process(resp)
+            table.appendRows(tableData);
+            doneCallback();
+        });
+    };
+
+    tableau.registerConnector(myConnector);
+
+    // Create event listeners for when the user submits the form
+    $(document).ready(function() {
+        $("#submitButton").click(function() {
+            tableau.connectionName = tableua_dictionary['connectionName']; // This will be the data source name in Tableau
+            tableau.submit(); // This sends the connector object to Tableau
+        });
     });
-
-
 }
+//slack_functions.js
 
-//function that uses jquery to run a function from a click
-function update_from_click_jquery(div_id) {
-    div_id = div_id || ".cell-value"
-    $(div_id).on('click', function(e) {
-        $(this)
-    })
-}
 
-//get the td jquery objects from a table based on a table id
-function table_jquery_objects(table_id) {
-    list_of_lists = []
-    $("#" + table_id + " tr").each(function(row_number) {
-        row_list = []
-        col_values = Object.values($(this).find('td'))
-        if (col_values.length > 0) {
-            col_values.forEach(function(col_val, col_number) {
-                col_val['row_number'] = row_number
-                col_val['col_number'] = col_number
-                row_list.push(col_val)
-            })
-            list_of_lists.push(row_list)
-        }
-    });
-    return list_of_lists
-}
 
-//moment_functions.js
 
-// var a = moment('2016-06-06T21:03:55');//now
-// var b = moment('2016-05-06T20:03:55');
 
-
-
-
-function time_difference_moment_from_now(end, startTime) {
-    var duration = moment.duration(end.diff(startTime));
-    return duration
-}
-
-// console.log(a.diff(b, 'minutes')) // 44700
-// console.log(a.diff(b, 'hours')) // 745
-// console.log(a.diff(b, 'days')) // 31
-// console.log(a.diff(b, 'weeks')) // 4
-function time_difference_moment_from_interval(end, startTime, interval) {
-    var end = moment(end); //now
-    var startTime = moment(startTime);
-    duration = startTime.diff(end, interval) // 44700
-    //var duration = moment.duration(end.diff(startTime,interval));
-    return duration
-}
-
-
-function time_difference_moment_from_now_interval(end, interval) {
-    var duration = time_difference_moment_from_interval(end, moment(), interval)
-    return duration
-}
-
-function time_difference_moment(end, startTime) {
-    var duration = moment.duration(end.diff(startTime));
-    return duration
-}
-
-
-//create an interval string with start time, end time and minutes elapsed. used in create_task_v2 to keep track of time
-function time_interval_string_format_from_start_time(start_time_core) {
-    end_time = moment().format()
-    start_time = moment(start_time_core).format("h:mm:ssa")
-    end_time = moment(end_time).format("h:mm:ssa")
-    var now = moment().valueOf() //now is the time right now
-    start_time_instance = moment(start_time_core).valueOf()
-    var elapsed = now - start_time_instance;
-    seconds = elapsed / 1000
-    elapsed_minutes = String(parseFloat(seconds / 60).toFixed(2)) //add a two minute buffer
-    formatted_string = " [" + start_time + "-" + end_time + "|" + elapsed_minutes + "min]"
-    return formatted_string
-
-}
-
-//update the html of the timer
-function html_timer_update_from_jquery(jquery_identifier, start_time) {
-    time_text = time_since_start_time_moment(start_time)
-    $(jquery_identifier).html(time_text)
-    document.title = time_text
-}
-
-
-//update from jquery identifier the time 
-function timer_jquery_html_update_from_start_time_moment(start_time, jquery_identifier) {
-    jquery_identifier = jquery_identifier || "#input_label_timer"
-    setInterval(html_timer_update_from_jquery, 1000, jquery_identifier, start_time)
-}
-
-
-//used in create_task_v2 to keep track of time
-function time_since_start_time_moment_to(start_time) {
-    now = moment().valueOf() //now is the time right now
-    start_time_instance = moment(start_time).valueOf()
-    elapsed = start_time_instance - now;
-    time_text_value = moment(elapsed).subtract({
-        hours: 19
-    }); //have to subtract 19 hours for some reason
-    time_text = time_text_value.format("HH:mm:ss")
-    return time_text
-}
-
-
-//used in create_task_v2 to keep track of time
-function time_since_start_time_moment_compare(end_time, start_time) {
-    now = moment(end_time).valueOf() //now is the time right now
-    start_time_instance = moment(start_time).valueOf()
-    elapsed = now - start_time_instance;
-    time_text_value = moment(elapsed).subtract({
-        hours: 19
-    }); //have to subtract 19 hours for some reason
-
-
-    time_text = time_text_value.format("HH:mm:ss")
-    return time_text
-}
-
-function hours_difference_moment(startTime, end) {
-    var duration = moment.duration(end.diff(startTime));
-    var hours = duration.asHours();
-    return hours
-}
-//used in create_task_v2 to keep track of time
-function time_since_start_time_moment(start_time) {
-    now = moment().valueOf() //now is the time right now
-    start_time_instance = moment(start_time).valueOf()
-    elapsed = now - start_time_instance;
-    days_calculated = elapsed / (1000 * 60 * 60 * 24)
-    time_text_value = moment(elapsed).subtract({
-        hours: 19
-    }); //have to subtract 19 hours for some reason
-    days_passed = time_text_value.days() - 3
-    time_text = time_text_value.format("HH:mm:ss")
-    time_text = days_passed + ":" + time_text
-    return time_text
-}
-
-
-//tells us how long ago 
-function moment_time_ago(input_time) {
-    return moment(input_time).fromNow();
-}
-
-//check if the day is today, 'year, month, week, minute'
-function check_if_date_is_current_range(input_date, date_range) {
-    date_range = date_range || 'day'
-    return moment(input_date).isSame(Date.now(), date_range);
-}
-//creates a string that indicates whether its in the day,week,month,year
-function date_within_range_string_create(input_date) {
-    date_string = ''
-    if (moment(input_date).isSame(Date.now(), 'day')) {
-        date_string = date_string + "today"
-    }
-    if (moment(input_date).isSame(Date.now(), 'week')) {
-        date_string = date_string + "this_week"
-    }
-    if (moment(input_date).isSame(Date.now(), 'month')) {
-        date_string = date_string + "this_month"
-    }
-    if (moment(input_date).isSame(Date.now(), 'year')) {
-        date_string = date_string + "this_year"
-    }
-    if (moment(input_date) >= moment(Date.now())) {
-        date_string = date_string + "future"
-    }
-    if (moment(input_date) <= moment(Date.now())) {
-        date_string = date_string + "past"
-    }
-    return date_string
-}
-
-
-//get hour from time
-function get_hour_from_time(i) {
-    r = Date(i)
-    hour = parseInt(moment(r).format("H")) + 5
-    return hour
-}
-
-
-//get the current time from moment
-function attain_now_from_moment() {
-    date_time = moment().format();
-    return date_time
-}
-
-//return unix now moment
-function unix_now_moment() {
-    return moment().unix()
-}
-
-//return hour-minute format using moment
-function hour_format_moment(timestamp) {
-    return moment(timestamp).format("hh:mmA")
-}
-
-//filter a certain date for current time range such as today, this month etc.
-function date_range_filter_moment(date_input, strf) {
-    if (date_input) {
-        this_month = moment().format(strf) //01
-        completed_date_moment = new moment(date_input)
-        completed_month = completed_date_moment.format(strf)
-        return completed_month === this_month
-    }
-}
-
-
-//set the hour from a given day
-function set_date_time_moment(date, hour) {
-    new_date = new Date(moment(date).format())
-    new_date.setHours(hour)
-    return moment(new_date)
-}
-
-function date_difference_from_today_days_moment(date_added) {
-    a = new moment()
-    b = new moment(date_added)
-    age_days = a.diff(b, 'days')
-    return age_days
-}
-
-function beginning_of_month_moment() {
-    today = new Date()
-    month = String(today.getMonth() + 1)
-    year = String(today.getFullYear())
-    date_string = year + "-" + month + "-01"
-    start_time = moment(date_string)
-    return start_time
-}
-
-
-
-//dates that are within this month
-function dates_within_this_month() {
-    days = moment().daysInMonth();
-    today = new Date()
-    month = String(today.getMonth() + 1)
-    year = String(today.getFullYear())
-    date_string = year + "-" + month + "-01"
-    start_time = moment(date_string)
-    hours_list = []
-    for (i = 0; i < days; i++) {
-        next_time = start_time.clone()
-        next_time.add(i, 'day')
-        hours_list.push(next_time)
-
-    }
-    return hours_list
-}
-
-//return a list of days in the future 
-function number_of_days_ahead_calculate(days_ahead) {
-    today = new Date()
-    month = String(today.getMonth() + 1)
-    year = String(today.getFullYear())
-    start_time = moment()
-    hours_list = []
-    for (i = 0; i < days_ahead; i++) {
-        next_time = start_time.clone()
-        next_time.add(i, 'day')
-        hours_list.push(next_time.format())
-    }
-    return hours_list
-}
-
-
-//return a list of days in the future. This returns an array 
-function number_of_days_ahead_calculate_array(days_ahead) {
-    today = new Date()
-    month = String(today.getMonth() + 1)
-    year = String(today.getFullYear())
-    start_time = moment()
-    hours_list = []
-    for (i = 0; i < days_ahead; i++) {
-        next_time = start_time.clone()
-        next_time.add(i, 'day')
-
-        hours_list.push({
-            date: next_time.format()
-        })
-    }
-    return hours_list
-}
-
-
-//return list of days in the past
-function dates_past_n_days(days) {
-    today = new Date()
-    month = String(today.getMonth() + 1)
-    year = String(today.getFullYear())
-    date_string = moment().format("YYYY-MM-DD") //year + "-" + month + "-01"
-    start_time = moment(date_string)
-    hours_list = []
-    for (i = 0; i < days; i++) {
-        next_time = start_time.clone()
-        next_time.subtract(i, 'day')
-        hours_list.push(next_time)
-
-    }
-    hours_list.reverse()
-    return hours_list
-}
-
-//return list of days in the past but strf formatted
-function dates_past_n_days_formatted(days, strf) {
-    strf = strf || "YYYY-MM-DD"
-    today = new Date()
-    month = String(today.getMonth() + 1)
-    year = String(today.getFullYear())
-    date_string = moment().format("YYYY-MM-DD") //year + "-" + month + "-01"
-    start_time = moment(date_string)
-    hours_list = []
-    for (i = 0; i < days; i++) {
-        next_time = start_time.clone()
-        next_time.subtract(i, 'day')
-        hours_list.push(next_time.format(strf))
-    }
-    hours_list.reverse()
-    return hours_list
-}
-
-
-
-//return list of days in the past but strf formatted. This is as an array.
-function dates_past_n_days_formatted_array(days, strf) {
-    strf = strf || "YYYY-MM-DD"
-    today = new Date()
-    month = String(today.getMonth() + 1)
-    year = String(today.getFullYear())
-    date_string = moment().format("YYYY-MM-DD") //year + "-" + month + "-01"
-    start_time = moment(date_string)
-    hours_list = []
-    for (i = 0; i < days; i++) {
-        next_time = start_time.clone()
-        next_time.subtract(i, 'day')
-        hours_list.push({
-            date: next_time.format(strf)
-        })
-
-    }
-    hours_list.reverse()
-    return hours_list
-}
-
-
-//pulls the dates between two dates
-function dates_between_dates_moment(startDate, stopDate) {
-    var dateArray = new Array();
-    var currentDate = startDate;
-    while (currentDate <= stopDate) {
-        dateArray.push(currentDate.clone());
-        currentDate.add(1, 'day');
-    }
-    return dateArray;
-}
-
-
-
-//stock_functions.js
-
-//https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5
-
-
-
-function stock_pull(url) {
-    url = url || "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5"
-    l = $.ajax({
-        url: url,
-        method: "GET",
-        async: false,
-        headers: {
-            "Accept": "application/json; odata=verbose"
-        }
-    })
-    results = l.responseJSON
-    return results
-}
-//toastr_functions.js
-
-
-//message notification once something is done
-function toastr_notification(message) {
-    toastr.options.closeButton = true;
-    toastr.options.onclick = function() {
-        console.log('clicked');
-    }
-    toastr.info(message)
-}
-//typewriter_functions.js
-
-
-//create a typewritter effect using typewritter library (https://safi.me.uk/typewriterjs/)
-function typewriter_element_create(div_id, input_text) {
-    div_id = div_id || 'app'
-    input_text = input_text || $("#" + div_id).html()
-
-
-    var app = document.getElementById(div_id);
-    var typewriter = new Typewriter(app, {
-        loop: true
-    });
-
-    typewriter.typeString(input_text)
-        .pauseFor(10000)
-        .start();
-
-}
-
-
-function typewriter_multiple_questions_create(div_id) {
-    div_id = div_id || 'app'
-    questions = $("#" + div_id).attr("questions").split("|")
-
-
-    var app = document.getElementById(div_id);
-    var typewriter = new Typewriter(app, {
-        loop: true
-    });
-
-    questions.forEach(function(i) {
-        typewriter.typeString(String(i))
-            .pauseFor(1000)
-            .deleteAll()
-
-    })
-
-
-
-    typewriter.start();
-}
-//underscore_functions.js
-
-// get sum from array with key
-function sum_float_convert_from_array_underscore(arr, key_name) {
-    // returns the sum total of all values in the array
-    return _.reduce(arr, function(memo, num) {
-        r = memo + (parseFloat(num[key_name]) || 0)
-        return r
-    }, 0);
-}
-
-//group by an array
-function group_by_underscore(gspread_array_data) {
-    _.groupBy(gspread_array_data, 'status')['Red'] || []
-}
-
-
-function min_date_from_array_underscore(array, key_name) {
-    key_name = key_name || 'task_date'
-    return _.min(array, function(D) {
-        return moment(D[key_name]).valueOf()
-    })
-
-}
-
-function max_date_from_array_underscore(array, key_name) {
-    key_name = key_name || 'task_date'
-    return _.max(array, function(D) {
-        return moment(D[key_name]).valueOf()
-    })
-
-}
-//asana_functions.js
-
-
-asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
-
-///0/781b6a9daca621f04ff29e4cf4c741ae
-//https://asana.com/developers/api-reference/users
-//https://github.com/Asana/node-asana/
-// <script src="https://github.com/Asana/node-asana/releases/download/<LATEST_RELEASE>/asana-min.js"></script>
-//client = asana.Client.create().useAccessToken('my_access_token');
-//client.users.me().then(function(me) {
-//   console.log(me);
-// });
-
-
-
-function asana_users_me_get() {
-    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
-    result = $.ajax({
-        type: "GET",
-        url: "https://app.asana.com/api/1.0/users/me",
+//slack_push({'text':"<http://aesopba.com/bug_features.html|New Bug Feature: "+message+">",'channel':"CBJFKKB35"})
+function slack_post_message(text, channel) {
+    slack_token = "1111000 1101111 1111000 1110000 101101 110011 110101 110100 110111 110110 111000 110001 110000 110100 110000 111001 110110 101101 110011 110101 110101 110010 110011 111000 110101 110111 110000 111001 110011 110010 101101 110011 110101 110111 110001 110100 110001 110000 110000 110101 110010 110111 110000 101101 110100 1100010 111001 110010 111001 110100 110001 110101 110000 110011 110100 110000 110011 110001 110111 110101 1100101 1100011 1100011 111000 1100010 110110 111001 110001 111001 110111 1100011 110111 110101 111001 110111 110100"
+    channel = channel || "CBJFKKB35" //CAFB12X8T
+    //chat_url = "<https://chriscruze.github.io/Aesop/admin.html?viewer=Aesop&id="+String(chat_id)+"|New Website Message: "+message+">"
+    r = $.ajax({
+        type: "POST",
+        url: "https://slack.com/api/chat.postMessage",
         dataType: 'json',
         async: false,
         data: {
-            'access_token': binary_to_string(asana_token),
+            "channel": channel,
+            "username": "Chat",
+            "text": text,
+            "token": binary_to_string(slack_token)
         }
     });
-    return result.responseJSON
-}
-
-function asana_workspaces_get() {
-    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
-    result = $.ajax({
-        type: "GET",
-        url: "https://app.asana.com/api/1.0/workspaces",
-        dataType: 'json',
-        async: false,
-        data: {
-            'access_token': binary_to_string(asana_token),
-        }
-    });
-    return result.responseJSON
-
-    //800363353090437
-}
-
-
-function asana_projects_get() {
-    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
-    result = $.ajax({
-        type: "GET",
-        url: "https://app.asana.com/api/1.0/projects",
-        dataType: 'json',
-        async: false,
-        data: {
-            'access_token': binary_to_string(asana_token),
-            'workspace': 800363353090437,
-
-        }
-    });
-    return result.responseJSON['data']
-
-    //
-}
-
-
-
-function asana_tasks_get(project_id) {
-    //projects_array = asana_projects_get()//['data']
-    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
-    result = $.ajax({
-        type: "GET",
-        url: "https://app.asana.com/api/1.0/projects/" + project_id + "/tasks",
-        dataType: 'json',
-        async: false,
-        data: {
-            'access_token': binary_to_string(asana_token),
-        }
-    });
-
-    return result.responseJSON['data']
-    //
-}
-
-
-
-function asana_task_get(task_id) {
-    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
-    result = $.ajax({
-        type: "GET",
-        url: "https://app.asana.com/api/1.0/tasks/" + task_id,
-        dataType: 'json',
-        async: false,
-        data: {
-            'access_token': binary_to_string(asana_token),
-        }
-    });
-
-    return result.responseJSON['data']
-}
-//800362391724583
-
-function asana_tasks_get_from_projects() {
-    projects_array = asana_projects_get()
-    full_array = []
-    project_ids = _.map(projects_array, function(D) {
-        tasks_group = asana_tasks_get(D['id'])
-        full_array = full_array.concat(tasks_group)
-        return tasks_group
-
-    })
-    return full_array
-}
-
-function asana_tasks_detail_pull() {
-    full_array = asana_tasks_get_from_projects()
-    task_details = _.map(full_array, function(D) {
-        return asana_task_get(D['id'])
-    })
-    return task_details
-}
-
-
-
-
-
-
-
-
-
-//GET    /projects/project-id/tasks
-//GET    /projects/project-id/tasks
-//gspread_functions.js
-
-//query google spreadsheets
-function gspread_query(range, spreadsheet_id, api_key) {
-    api_key = api_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
-    spreadsheet_id = spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
-    range = range || "Checklists!A1"
-    url = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadsheet_id + "/values/" + range
-    return $.ajax({
-        type: "GET",
-        url: url,
-        dataType: 'json',
-        async: false,
-        data: {
-            'key': api_key
-        }
-    });
-
-}
-
-//pulls from gspread in different format
-function gspread_pull(params, sheet_name, spreadsheet_id, api_key, key_names) {
-    api_key = paramsapi_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
-    spreadsheet_id = params.spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
-    sheet_name = params.sheet_name || "Checklists"
-    sheet_range = params.sheet_range || "A:Z"
-    range = params.sheet_name_range || sheet_name + "!" + sheet_range //"!A:Z"
-    lol = gspread_query(range, spreadsheet_id, api_key).responseJSON.values
-    key_names = lol[0] || key_names
-    array = list_of_lists_to_array(lol, key_names)
-    array.shift()
-    return array
-}
-
-// sheet_name = 'Tasks'
-// spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
-// gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
-
-
-//pulls from gspread in different format
-function gspread_array_pull(sheet_name, spreadsheet_id, api_key, key_names) {
-    api_key = api_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
-    spreadsheet_id = spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
-    sheet_name = sheet_name || "Checklists"
-    range = sheet_name + "!A:Z"
-    lol = gspread_query(range, spreadsheet_id, api_key).responseJSON.values
-    key_names = lol[0] || key_names
-    array = list_of_lists_to_array(lol, key_names)
-    array.shift()
-    return array
-}
-
-//query from gspread directly using api key
-function array_pull_from_gspread(sheet_name, spreadsheet_id, api_key, key_names) {
-    // sheet_name = 'Tasks'
-    // spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
-    // gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
-
-    api_key = api_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
-    spreadsheet_id = spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
-    sheet_name = sheet_name || "Checklists"
-    range = sheet_name + "!A:Z"
-    lol = gspread_query(range, spreadsheet_id, api_key).responseJSON.values
-    key_names = lol[0] || key_names
-    array = list_of_lists_to_array(lol, key_names)
-    array.shift()
-    return array
+    console.log(r)
 }
 
 //guesty_functions.js
@@ -3524,6 +3383,21 @@ function guest_airbnb_url_create(data, type, row, meta) {
     return data;
 }
 
+//ip_functions.js
+
+function ipLookUp() {
+    $.ajax('https://ip-api.com/json').then(
+        function success(response) {
+            console.log(response)
+            session_dictionary['ip_data'] = response
+            update_firebase_session_dictionary(response, 'ip_data')
+            console.log('User\'s Location Data is ', response);
+        },
+        function fail(data, status) {
+            console.log('Request failed.  Returned status of', status);
+        }
+    );
+}
 //iextrading_functions.js
 
 //https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5
@@ -3564,81 +3438,131 @@ function stocks_batch_pull(stocks) {
 ///stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5
 //    url = url||"https://api.iextrading.com/1.0/stock/market/batch?symbols=PZZA&types=quote,news,chart&range=1m&last=5"
 
-//ip_functions.js
+//gspread_functions.js
 
-function ipLookUp() {
-    $.ajax('https://ip-api.com/json').then(
-        function success(response) {
-            console.log(response)
-            session_dictionary['ip_data'] = response
-            update_firebase_session_dictionary(response, 'ip_data')
-            console.log('User\'s Location Data is ', response);
-        },
-        function fail(data, status) {
-            console.log('Request failed.  Returned status of', status);
-        }
-    );
-}
-//slack_functions.js
-
-
-
-
-
-//slack_push({'text':"<http://aesopba.com/bug_features.html|New Bug Feature: "+message+">",'channel':"CBJFKKB35"})
-function slack_post_message(text, channel) {
-    slack_token = "1111000 1101111 1111000 1110000 101101 110011 110101 110100 110111 110110 111000 110001 110000 110100 110000 111001 110110 101101 110011 110101 110101 110010 110011 111000 110101 110111 110000 111001 110011 110010 101101 110011 110101 110111 110001 110100 110001 110000 110000 110101 110010 110111 110000 101101 110100 1100010 111001 110010 111001 110100 110001 110101 110000 110011 110100 110000 110011 110001 110111 110101 1100101 1100011 1100011 111000 1100010 110110 111001 110001 111001 110111 1100011 110111 110101 111001 110111 110100"
-    channel = channel || "CBJFKKB35" //CAFB12X8T
-    //chat_url = "<https://chriscruze.github.io/Aesop/admin.html?viewer=Aesop&id="+String(chat_id)+"|New Website Message: "+message+">"
-    r = $.ajax({
-        type: "POST",
-        url: "https://slack.com/api/chat.postMessage",
+//query google spreadsheets
+function gspread_query(range, spreadsheet_id, api_key) {
+    api_key = api_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+    spreadsheet_id = spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+    range = range || "Checklists!A1"
+    url = "https://sheets.googleapis.com/v4/spreadsheets/" + spreadsheet_id + "/values/" + range
+    return $.ajax({
+        type: "GET",
+        url: url,
         dataType: 'json',
         async: false,
         data: {
-            "channel": channel,
-            "username": "Chat",
-            "text": text,
-            "token": binary_to_string(slack_token)
+            'key': api_key
         }
     });
-    console.log(r)
+
 }
 
-//tableau_functions.js
-
-function tableau_connector_run(tableua_dictionary, tablea_array_process) {
-
-    // Create the connector object
-    var myConnector = tableau.makeConnector();
-    //tableua_dictionary = table_info_get()
-
-    // Define the schema
-    myConnector.getSchema = function(schemaCallback) {
-        var tableSchema = tableua_dictionary
-        schemaCallback([tableSchema]);
-    };
-
-    //tableua_dictionary = tableau_meta_data_get()
-    // Download the data
-    myConnector.getData = function(table, doneCallback) {
-        $.getJSON(tableua_dictionary['ur'], function(resp) {
-            tableData = tablea_array_process(resp)
-            table.appendRows(tableData);
-            doneCallback();
-        });
-    };
-
-    tableau.registerConnector(myConnector);
-
-    // Create event listeners for when the user submits the form
-    $(document).ready(function() {
-        $("#submitButton").click(function() {
-            tableau.connectionName = tableua_dictionary['connectionName']; // This will be the data source name in Tableau
-            tableau.submit(); // This sends the connector object to Tableau
-        });
-    });
+//pulls from gspread in different format
+function gspread_pull(params, sheet_name, spreadsheet_id, api_key, key_names) {
+    api_key = paramsapi_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+    spreadsheet_id = params.spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+    sheet_name = params.sheet_name || "Checklists"
+    sheet_range = params.sheet_range || "A:Z"
+    range = params.sheet_name_range || sheet_name + "!" + sheet_range //"!A:Z"
+    lol = gspread_query(range, spreadsheet_id, api_key).responseJSON.values
+    key_names = lol[0] || key_names
+    array = list_of_lists_to_array(lol, key_names)
+    array.shift()
+    return array
 }
+
+// sheet_name = 'Tasks'
+// spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
+// gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
+
+
+//pulls from gspread in different format
+function gspread_array_pull(sheet_name, spreadsheet_id, api_key, key_names) {
+    api_key = api_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+    spreadsheet_id = spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+    sheet_name = sheet_name || "Checklists"
+    range = sheet_name + "!A:Z"
+    lol = gspread_query(range, spreadsheet_id, api_key).responseJSON.values
+    key_names = lol[0] || key_names
+    array = list_of_lists_to_array(lol, key_names)
+    array.shift()
+    return array
+}
+
+//query from gspread directly using api key
+function array_pull_from_gspread(sheet_name, spreadsheet_id, api_key, key_names) {
+    // sheet_name = 'Tasks'
+    // spreadsheet_id = "1-tszr-k0KcENCI5J4LfCOybmqpLtvsijeUvfJbC9bu0"
+    // gspread_array_data = gspread_array_pull(sheet_name,spreadsheet_id)
+
+    api_key = api_key || "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg"
+    spreadsheet_id = spreadsheet_id || "1P0m6nu4CoXVD3nHrCgfm0pEvSpEkLsErjJxTLJLFjp8"
+    sheet_name = sheet_name || "Checklists"
+    range = sheet_name + "!A:Z"
+    lol = gspread_query(range, spreadsheet_id, api_key).responseJSON.values
+    key_names = lol[0] || key_names
+    array = list_of_lists_to_array(lol, key_names)
+    array.shift()
+    return array
+}
+
+//toggl_functions.js
+
+
+//pulls from toggl with custom fields
+function toggl_data_pull_custom(since) {
+    array = toggl_data_pull(since)
+    array.forEach(function(item) {
+        minutes = (parseFloat(item.dur) / 1000) / 60
+        cost = minutes * (15 / 60)
+        item['cost'] = cost //.toFixed(2)
+        item['minutes'] = minutes //.toFixed(2)
+        item['hours'] = minutes / 60
+    })
+    return array
+}
+
+
+
+function toggl_data_pull_iterate(since, page) {
+    since = since || "2018-04-28"
+    secret = "api_token"
+    key = "a764cd7b58fea643f44ef579b606168d"
+    json_response = $.ajax({
+        type: "GET",
+        url: "https://toggl.com/reports/api/v2/details",
+        headers: {
+            "Authorization": "Basic " + btoa(key + ":" + secret)
+        },
+        dataType: 'json',
+        async: false,
+        data: {
+            user_agent: "kcruz29@gmail.com",
+            workspace_id: "246697",
+            since: since,
+            page: page
+        }
+    }).responseJSON.data
+    return json_response
+}
+
+
+
+function toggl_data_pull(since) {
+    since = since || "2018-04-28"
+    todoist_tasks_pulled = []
+    iterator = 0
+    master_list = []
+    while (todoist_tasks_pulled.length == 50 || iterator == 0) { //if todoist pulls 50 tasks, then it should try again. when it pulls less, we know that it's the last loop we need to do. since the first loop will be less than 50 tasks length, i put in or clause that is iterator is 0 which will only be when it does the first loop
+        limit_variable = iterator + 1 //this will go into the todoist completed tasks query
+        todoist_tasks_pulled = toggl_data_pull_iterate(since, limit_variable)
+        master_list = master_list.concat(todoist_tasks_pulled)
+        iterator += 1; //this will be 1 in the first loop, 2 in the second loop, etc. 
+    }
+    return master_list
+}
+
 //todoist_functions.js
 
 //toodoist custom functions 
@@ -4821,501 +4745,1024 @@ function todoist_tasks_pull_custom_gspread() {
 
 
 
-//toggl_functions.js
+//asana_functions.js
 
 
-//pulls from toggl with custom fields
-function toggl_data_pull_custom(since) {
-    array = toggl_data_pull(since)
-    array.forEach(function(item) {
-        minutes = (parseFloat(item.dur) / 1000) / 60
-        cost = minutes * (15 / 60)
-        item['cost'] = cost //.toFixed(2)
-        item['minutes'] = minutes //.toFixed(2)
-        item['hours'] = minutes / 60
-    })
-    return array
-}
+asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+
+///0/781b6a9daca621f04ff29e4cf4c741ae
+//https://asana.com/developers/api-reference/users
+//https://github.com/Asana/node-asana/
+// <script src="https://github.com/Asana/node-asana/releases/download/<LATEST_RELEASE>/asana-min.js"></script>
+//client = asana.Client.create().useAccessToken('my_access_token');
+//client.users.me().then(function(me) {
+//   console.log(me);
+// });
 
 
 
-function toggl_data_pull_iterate(since, page) {
-    since = since || "2018-04-28"
-    secret = "api_token"
-    key = "a764cd7b58fea643f44ef579b606168d"
-    json_response = $.ajax({
+function asana_users_me_get() {
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
         type: "GET",
-        url: "https://toggl.com/reports/api/v2/details",
-        headers: {
-            "Authorization": "Basic " + btoa(key + ":" + secret)
-        },
+        url: "https://app.asana.com/api/1.0/users/me",
         dataType: 'json',
         async: false,
         data: {
-            user_agent: "kcruz29@gmail.com",
-            workspace_id: "246697",
-            since: since,
-            page: page
+            'access_token': binary_to_string(asana_token),
         }
-    }).responseJSON.data
-    return json_response
-}
-
-
-
-function toggl_data_pull(since) {
-    since = since || "2018-04-28"
-    todoist_tasks_pulled = []
-    iterator = 0
-    master_list = []
-    while (todoist_tasks_pulled.length == 50 || iterator == 0) { //if todoist pulls 50 tasks, then it should try again. when it pulls less, we know that it's the last loop we need to do. since the first loop will be less than 50 tasks length, i put in or clause that is iterator is 0 which will only be when it does the first loop
-        limit_variable = iterator + 1 //this will go into the todoist completed tasks query
-        todoist_tasks_pulled = toggl_data_pull_iterate(since, limit_variable)
-        master_list = master_list.concat(todoist_tasks_pulled)
-        iterator += 1; //this will be 1 in the first loop, 2 in the second loop, etc. 
-    }
-    return master_list
-}
-
-//area_row_chart.js
-
-function row_chart_create_from_array(array, table_id) {
-    table_html = ""
-
-    function html_section_create(item, index) {
-        width_percentage = String(item.width) //width: 19.9476%
-        background_color = item.color //"rgb(250, 210, 50)"//item.color //background: #dd514c;
-        style_attribute = "width: " + width_percentage + "%;background: " + background_color
-        $("div[field='row_bar_color_width']").attr('style', style_attribute)
-        name_title = item.name
-        $("span[field='row_bar_title']").html(name_title)
-        table_html = table_html + $(table_id).html()
-    }
-    array.forEach(html_section_create)
-    $(table_id).html(table_html)
-}
-
-function area_row_chart_initiate(params) {
-    completed_tasks_today = params.completed_tasks
-
-    chart_id = params.chart_id || "#row_bar_size_chart"
-
-    completed_tasks_today_duration = sum_float_convert_from_array(completed_tasks_today, 'duration')
-    completed_dict_today = _.groupBy(completed_tasks_today, function(num) {
-        return num['sub_project']
     });
-    completed_dict_today_keys = Object.keys(completed_dict_today)
-    task_row = []
-    color_list = ['#B8860B', '#A9A9A9', '#2F4F4F', '#006400', '#BDB76B', '#8B008B', '#556B2F', '#FF8C00', '#9932CC', '#8B0000', '#E9967A', '#8FBC8F', '#483D8B', '#2F4F4F', '#2F4F4F', '#00CED1', '#9400D3', '#FF1493', '#00BFFF', '#696969', '#696969', '#1E90FF', '#B22222', '#FFFAF0', '#228B22', '#FF00FF']
-    completed_dict_today_keys.forEach(function(k, i) {
-        project_dur = sum_float_convert_from_array(completed_dict_today[k], 'duration')
-        hours = (project_dur / 60).toFixed(2)
-        task_name = k + " - " + hours
-        width = (project_dur / completed_tasks_today_duration) * 100
-        task_row.push({
-            width: width,
-            color: color_list[i],
-            name: task_name
-        })
+    return result.responseJSON
+}
+
+function asana_workspaces_get() {
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/workspaces",
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+        }
+    });
+    return result.responseJSON
+
+    //800363353090437
+}
+
+
+function asana_projects_get() {
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/projects",
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+            'workspace': 800363353090437,
+
+        }
+    });
+    return result.responseJSON['data']
+
+    //
+}
+
+
+
+function asana_tasks_get(project_id) {
+    //projects_array = asana_projects_get()//['data']
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/projects/" + project_id + "/tasks",
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+        }
+    });
+
+    return result.responseJSON['data']
+    //
+}
+
+
+
+function asana_task_get(task_id) {
+    asana_token = "110000 101111 110111 111000 110001 1100010 110110 1100001 111001 1100100 1100001 1100011 1100001 110110 110010 110001 1100110 110000 110100 1100110 1100110 110010 111001 1100101 110100 1100011 1100110 110100 1100011 110111 110100 110001 1100001 1100101"
+    result = $.ajax({
+        type: "GET",
+        url: "https://app.asana.com/api/1.0/tasks/" + task_id,
+        dataType: 'json',
+        async: false,
+        data: {
+            'access_token': binary_to_string(asana_token),
+        }
+    });
+
+    return result.responseJSON['data']
+}
+//800362391724583
+
+function asana_tasks_get_from_projects() {
+    projects_array = asana_projects_get()
+    full_array = []
+    project_ids = _.map(projects_array, function(D) {
+        tasks_group = asana_tasks_get(D['id'])
+        full_array = full_array.concat(tasks_group)
+        return tasks_group
+
     })
-
-    row_chart_create_from_array(task_row, chart_id)
-
+    return full_array
 }
 
-//calendar_datatables_firebase.js
-
-
-function full_calendar_generate(params) {
-
-
-    calendar_selector = params.calendar_selector || '#calendar'
-    calendar_date = params.calendar_date || moment().format('YYYY-MM-DD')
-
-
-    // $(calendar_selector).fullCalendar({
-    //   header: {
-    //     left: 'prev,next today',
-    //     center: 'title',
-    //     right: 'month,agendaWeek,agendaDay,listWeek'
-    //   },
-    //   defaultDate: calendar_date,
-    //   navLinks: true, // can click day/week names to navigate views
-    //   editable: true,
-    //   eventLimit: true, // allow "more" link when too many events
-    //   events: datatables_firebase_table_generate(params).data().toArray()
-    // });
-
-    table = datatables_firebase_table_generate(params)
-
-
-    console.log(table.data().toArray())
-
-    function array_from_datatables_pull() {
-        // Simulate async response
-        return new Promise(function(resolve, reject) {
-            while (true) {
-                setTimeout(function() {
-                    console.log(table.data().toArray())
-                }, 1000)
-                if (table.data().toArray().length > 0) {
-                    console.log(table.data().toArray())
-                    resolve(table.data().toArray());
-
-                    break
-                }
-            }
-
-            console.log('here')
-
-        })
-    }
-
-    function calendar_create_from_array() {
-        console.log('Calling function and waiting for result for 5secs....')
-        let getResult = array_from_datatables_pull();
-        console.log('Got result after 5secs', getResult)
-
-    }
-    getResult = array_from_datatables_pull();
-
-    //calendar_create_from_array()
-
-
-    // function calendar_create_from_array() {
-    //     array_from_datatables_pull().then(function(response) {
-    //         console.log(response);
-    //     $(calendar_selector).fullCalendar({
-    //       header: {
-    //         left: 'prev,next today',
-    //         center: 'title',
-    //         right: 'month,agendaWeek,agendaDay,listWeek'
-    //       },
-    //       defaultDate: calendar_date,
-    //       navLinks: true, // can click day/week names to navigate views
-    //       editable: true,
-    //       eventLimit: true, // allow "more" link when too many events
-    //       events: response
-    //     });
-
-    //       })
-    // }
-
-    calendar_create_from_array();
-
-
-    // function create_task_promise(params) {
-    //   return new Promise(function(resolve, reject) {
-
-    //     //table = datatables_firebase_table_generate(params)
-    //     if (datatables_firebase_table_generate(params).length != 0){
-    //       resolve(table.data().toArray())
-    //     }
-    //   });}
-
-    //create_task_promise(params).then(function(calendar_events) {
-    //   console.log(calendar_events)
-    // console.log(table.data().toArray())
-
-
-    // calendar_events = table.data().toArray()
-
-
-
-    // });
-
-
+function asana_tasks_detail_pull() {
+    full_array = asana_tasks_get_from_projects()
+    task_details = _.map(full_array, function(D) {
+        return asana_task_get(D['id'])
+    })
+    return task_details
 }
 
 
 
-//cycling_age_status_list.js
 
 
 
 
 
-//var dbRef = dbRef || firebase.database();
 
-function surplus_time_calculate(hours_age, recurrence_age) {
-    recurrence_age = parseFloat(recurrence_age) || 0
-    surplus_time = recurrence_age - hours_age
-    return surplus_time
-}
+//GET    /projects/project-id/tasks
+//GET    /projects/project-id/tasks
+//firebase_array_generate.js
 
-function determine_state_from_age(hours_age, recurrence_age) {
-    recurrence_age = parseFloat(recurrence_age) || 0
-    surplus_time = recurrence_age - hours_age
-    if (surplus_time > 0) {
-        state = 'green'
+$("#drogas_submit").click(function(event) {
+    input_text = $("#drogas_input").val()
+    date_time = moment().format(); //new Date()
+
+    input_text_is_length_one = input_text.length == 1
+    if (input_text_is_length_one) {
+        type = 'count'
     } else {
-        state = 'red'
+        type = 'text'
     }
-    return state
 
-}
+    within_system = $("#within_system").html()
 
-function label_create_from_rag_input(data, field_name, text_input) {
-    label_name = {
-        'green': 'label-primary',
-        'amber': 'label-warning',
-        'red': 'label-danger'
-    } [data] || 'label-primary'
-    span_element = $("<span>").append($("<span>", {
-        "value": data,
-        "field": field_name,
-        "class": "rag label " + label_name
-    }).text(text_input).clone()).html()
-    return span_element
-}
-
-function determine_state_from_row_dictionary_calculate(row) {
-    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
-    return determine_state_from_age(hours_age, row['recurrence_age'])
-}
-
-function determine_age_from_row_dictionary_calculate(row) {
-    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
-    return surplus_time_calculate(hours_age, row['recurrence_age'])
-}
-
-function columns_generate_cycling_list() {
-    columns = [{
-        'data': 'name',
-        'format': '',
-        visible: true
-
-    }, {
-        'data': 'recurrence_age',
-        'format': '',
-        visible: false
-    }, {
-
-        'data': 'rag',
-        'format': 'rag',
-        'title': 'Hrs Remain',
-        visible: true,
-        render: function(data, type, row, meta) {
-            field_name = 'rag' //new_dictionary.name
-            rag_status = determine_state_from_row_dictionary_calculate(row)
-            text_input = determine_age_from_row_dictionary_calculate(row)
-
-            span_element = label_create_from_rag_input(rag_status, field_name, text_input.toFixed(1))
-            return span_element
-        }
+    data_to_push = {
+        'input_text': input_text,
+        'date_time': date_time,
+        'type': type,
+        'within_system': within_system
+    }
+    contactsRef.push(data_to_push)
+    $("#drogas_input").val("")
+});
 
 
-    }, {
-        //     'data': 'rag',
-        //     'format': 'rag',
-        //     visible:true
-        // }, {
-        'data': 'time_stamp',
-        'format': 'date',
-        visible: false
-    }, {
-
-        'data': 'age',
-        'format': '',
-        visible: false,
-        render: function(data, type, row, meta) {
-            return time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
-        }
-    }, {
-        'data': 'state',
-        'format': 'state',
-        visible: false,
-        render: function(data, type, row, meta) {
-            hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
-            return determine_state_from_age(hours_age, row['recurrence_age'])
-        }
-    }, {
-
-        'data': 'rank',
-        'format': 'rank',
-        visible: false
-    }, {
-        'data': 'summary',
-        visible: false
-    }, {
-        'data': 'group',
-        visible: false
-    }, {
-        'data': 'identifier',
-        visible: false
-    }]
-    return columns
-}
-
-function cycling_list_generate() {
-    columns = columns_generate_cycling_list()
-    datatables_params = datatables_firebase({
-        table_selector: "#cycling_list",
-        firebase_reference: dbRef.ref('omni').child('cycling_list'),
-        columns: columns
-        // sort: 'rank'
-    })
-
-}
 
 
-//datatables_array.js
-
-
-function dataeditor_options_from_arrays(table_id, row_id, fields, editor_create_function, editor_update_function, editor_delete_function, params) {
-    editor_object = new $.fn.dataTable.Editor({
+function firebase_editor_initiate(table_id, fields) {
+    editor = new $.fn.dataTable.Editor({
         table: table_id,
-        idSrc: row_id,
-        fields: fields
+        idSrc: 'DT_RowId',
+        fields: editor_fields_array_from_custom_fields(fields)
     });
-
-    row_id = row_id || 'DT_RowId'
-    editor_object.on("postSubmit", function(e, json, data, action, xhr) {
-        if (action == 'create') {
+    editor.on("postSubmit", function(e, json, data, action, xhr) {
+        if (action == 'edit') {
+            json_array = json.data;
+            json_array.forEach(function(D) {
+                record_id = D["DT_RowId"];
+                D["time_stamp"] = moment().format();
+                firebaseRef.child(record_id).set(D);
+            });
+        } else {
             items_to_add = Object.values(data.data)
             items_to_add.forEach(function(item) {
-                editor_create_function(item)
+                item['time_stamp'] = moment().format()
+                r = firebaseRef.push(item)
             })
-        } else if (action == 'edit') {
+        }
+    })
+
+    return editor
+}
+
+
+function firebase_generate_datatable(table_id, fields, firebaseRef) {
+    //DEFINE FIREBASE
+    //firebase.initializeApp({databaseURL: "https://shippy-ac235.firebaseio.com/"});
+    //var dbRef = firebase.database();
+    var firebaseRef = firebaseRef || dbRef.ref('drogas');
+    table_id = table_id || "#ds_table"
+    fields = fields || ['input_text', 'date_time', 'type', 'within_system', 'DT_RowId']
+
+    editor = firebase_editor_initiate(table_id, fields)
+    table = datatables_initiate_render(table_id, datatable_fields_array_from_custom_fields(fields), editor)
+
+
+    firebaseRef.on("child_added", function(snap) {
+        directory_addresses = snap.getRef().path.n
+        id = directory_addresses[directory_addresses.length - 1]
+        firebase_dictionary = snap.val()
+        firebase_dictionary['DT_RowId'] = id
+        key_check_func_dictionary(fields, firebase_dictionary)
+        console.log(firebase_dictionary)
+        table.row.add(firebase_dictionary).draw(false);
+    })
+
+
+}
+
+function firebase_dataeditor_table_editor_instance_options(firebaseRef, row_id) {
+
+    row_id = row_id || 'DT_RowId'
+
+    editor.on("postSubmit", function(e, json, data, action, xhr) {
+
+
+        if (action == 'edit') {
             json_array = json.data;
             json_array.forEach(function(D) {
                 record_id = D[row_id];
-                editor_update_function(D)
+                D["time_stamp"] = moment().format();
+                firebaseRef.child(record_id).set(D);
             });
-        } else if (action == 'remove') {
-            items_to_delete = Object.values(data.data)
-            items_to_delete.forEach(function(D) {
-                editor_delete_function(D)
-            })
         } else {
-            return false
+            items_to_add = Object.values(data.data)
+            items_to_add.forEach(function(item) {
+                item['time_stamp'] = moment().format()
+                r = firebaseRef.push(item)
+                //console.log(r)
+            })
+
         }
-    })
-    params.editor = editor_object
-    return params
+    });
+
 }
 
+function firebase_dataeditor_table_editor_instance(table_id, fields, firebaseRef, row_id) {
+    row_id = row_id || 'DT_RowId'
+    editor = new $.fn.dataTable.Editor({
+        table: table_id,
+        idSrc: row_id,
+        fields: editor_fields_array_from_custom_fields(fields)
+    });
 
-function datatable_generate_from_array(table_id, columns_list, editor, data, params) {
-
-    button_params = [{
-        extend: "excel",
-        title: document.title
-    }, {
-        extend: "colvis",
-        title: document.title
-    }, {
-        extend: 'create',
-        editor: editor,
-        text: 'Create'
-    }, {
-        extend: 'remove',
-        editor: editor
-    }, {
-        extend: "edit",
-        editor: editor
-    }, {
-        text: 'Clear',
-        name: 'Clear',
-        action: function(e, dt, node, config) {
-            dt.columns('').search('').draw()
-            $.fn.dataTable.ext.search = []
-            dt.draw()
-        }
-    }]
-
-    if (params.additional_buttons != undefined) {
-        button_params = button_params.concat(params.additional_buttons)
-    }
-
-    config = {
-        dom: '<"html5buttons"B>lTfgitp',
-        data: data,
-        columns: columns_list,
-        select: true,
-        ///drawCallback:function(){params.callback_function(this.api().rows({page:'current'}).data())} ,
-        paging: false,
-        scrollX: true,
-        colReorder: true,
-        autoWidth: true,
-        buttons: button_params
-    }
-    if (params.callback_function != null) {
-        config.drawCallback = function() {
-            data_callback = this.api().rows({
-                page: 'current'
-            }).data()
-
-            params.callback_function(data_callback.toArray())
-        }
-    }
-
-    if (params.sort != undefined) {
-        sort_order = params.sort_order || 'desc'
-        config.order = [
-            [_.findIndex(columns_list, function(D) {
-                return D['data'] == params.sort
-            }), 'desc']
-        ]
-    }
-    params.config = config
-    table_example = $(table_id).DataTable(config);
-    params.table = table_example
-    return params
+    firebase_dataeditor_table_editor_instance_options(firebaseRef, row_id)
+    return editor
 }
 
 
 
-//
-function datatables_generate_from_array(params) {
-    console.log(Object.keys(params.data[0]))
-    columns = params.columns || Object.keys(params.data[0])
-    table_id = params.table_selector
-    row_id = params.row_id || 'DT_RowId'
+function firebase_dataeditor_table_generate(table_id, fields, firebaseRef, row_id) {
+    //DEFINE FIREBASE
+    //firebase.initializeApp({databaseURL: "https://shippy-ac235.firebaseio.com/"});
+    //var dbRef = firebase.database();
+    var firebaseRef = firebaseRef || dbRef.ref('drogas');
+    table_id = table_id || "#ds_table"
+    fields = fields || ['input_text', 'date_time', 'type', 'within_system', 'DT_RowId']
+    row_id = row_id || 'DT_RowId'
 
-    editor_create_function = params.editor_create_function
-    editor_update_function = params.editor_update_function
-    editor_delete_function = params.editor_delete_function
+    editor = firebase_dataeditor_table_editor_instance(table_id, fields, firebaseRef, row_id)
+    table = datatables_initiate_render(table_id, datatable_fields_array_from_custom_fields(fields), editor)
 
 
-
-    params.fields = datatable_column_fields_generate(columns, params)
-    params.field_names = _.map(params.fields, function(D) {
-        return D['data']
+    firebaseRef.on("child_added", function(snap) {
+        directory_addresses = snap.getRef().path.n
+        id = directory_addresses[directory_addresses.length - 1]
+        firebase_dictionary = snap.val()
+        firebase_dictionary['DT_RowId'] = id
+        key_check_func_dictionary(fields, firebase_dictionary)
+        console.log(firebase_dictionary)
+        table.row.add(firebase_dictionary).draw(false);
     })
 
 
-    params = dataeditor_options_from_arrays(
-        table_id,
-        row_id,
-        params.fields,
-        editor_create_function,
-        editor_update_function,
-        editor_delete_function,
-        params)
+}
+//goal_widgets.js
 
 
-    params.data = array_check_keys(params.data, params.field_names)
-    params = datatable_generate_from_array(
-        params.table_selector,
-        params.fields,
-        params.editor,
-        params.data,
-        params)
+
+function less_than_number_of_days(date_added, number_of_days) {
+    return date_difference_from_today_days_moment(date_added) < number_of_days
+}
+
+function array_filter_last_number_of_days(array, key_name, number_of_days) {
+    filtered_day = array.filter(function(D) {
+        return less_than_number_of_days(D[key_name], number_of_days)
+    })
+    return filtered_day
+}
+
+//"https://shippy-ac235.firebaseio.com/run_log.json"),'time_stamp',number_of_days
+function array_firebase_url_filter(url, key_name, number_of_days) {
+    array = firebase_json_pull_values(url)
+    filtered_array = array_filter_last_number_of_days(array, key_name, number_of_days)
+    return filtered_array
+}
+
+function array_firebase_url_filter_sum(url, key_name, number_of_days, sum_field) {
+    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+    return sum_value
+}
+
+function array_filter_sum_return(array, key_name, number_of_days, sum_field) {
+    filtered_array = array_filter_last_number_of_days(array, key_name, number_of_days)
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+    return sum_value
+}
+
+function goal_widget_of_goal_percentage(sum_value, goal_metric) {
+    percentage_of_goal = sum_value / goal_metric
+    return percentage_of_goal
+}
+
+function color_from_percentage(percentage_of_goal) {
+    if (percentage_of_goal >= 1) {
+        color = 'navy-bg'
+    } else if (percentage_of_goal >= .66) {
+        color = 'yellow-bg'
+    } else {
+        color = 'red-bg'
+    }
+    return color
+}
+
+function number_single_decimal_format(sum_value) {
+    return sum_value.toFixed(1)
+}
+
+function percentage_single_decimal_format(percentage_of_goal) {
+    percentage_of_goal_formatted = (percentage_of_goal * 100).toFixed(1) + "%"
+    return percentage_of_goal_formatted
+}
+
+function metric_text_create(sum_value, percentage_of_goal, goal_number) {
+    sum_value_formatted = number_single_decimal_format(sum_value)
+    percentage_of_goal_formatted = percentage_single_decimal_format(percentage_of_goal)
+    text = sum_value_formatted + "/" + goal_number + " (" + percentage_of_goal_formatted + ")"
+    return text
+}
+
+function metric_dict_create(sum_value, goal_number, name) {
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: name
+    }
+    return metric_dict
+}
+
+function reads_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/lists/reads/data.json"
+    key_name = "created_time"
+    number_of_days = 7
+    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
+    sum_value = filtered_array.length
+    goal_number = 2
+    name = 'Reads'
+    return metric_dict_create(sum_value, goal_number, name)
+}
 
 
-    editor_rank_apply(params.editor, params.table_selector)
-    editor_rag_status(params.editor, params.table_selector)
+
+function lift_goal_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/exercise/detail.json"
+    key_name = "time_stamp"
+    number_of_days = 30
+    number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(), 'days') + 1
+    sum_field = "reps"
+
+    array = firebase_json_pull_values(url)
+    filtered_array = array.filter(function(D) {
+        return date_range_filter_moment(D['time_stamp'], 'MMM-Y')
+    })
+
+
+
+    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+
+
+    //sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+    goal_number = 40
+    days_this_month = dates_within_this_month().length
+    goal_number = (number_of_days / days_this_month) * 50
+
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number.toFixed(1))
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Lift'
+    }
+    return metric_dict
+}
+
+function run_goal_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/run_log.json"
+    key_name = "time_stamp"
+    number_of_days = 30
+    number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(), 'days') + 1
+    sum_field = "miles"
+
+    array = firebase_json_pull_values(url)
+    filtered_array = array.filter(function(D) {
+        return date_range_filter_moment(D['time_stamp'], 'MMM-Y')
+    })
+
+
+
+    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
+
+
+    //sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+    goal_number = 40
+    days_this_month = dates_within_this_month().length
+    goal_number = (number_of_days / days_this_month) * 50
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number.toFixed(1))
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Run'
+    }
+    return metric_dict
+}
+
+function hours_age_determine_dict(row) {
+    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+    recurrence_age = parseFloat(row['recurrence_age']) || 0
+    surplus_time = recurrence_age - hours_age
+    is_surplus = recurrence_age > hours_age
+    return is_surplus
+}
+
+function recurring_tasks_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/omni/cycling_list.json"
+    array = firebase_json_pull_values(url)
+    filtered_array = array.filter(function(D) {
+        return hours_age_determine_dict(D)
+    })
+
+    key_name = "time_stamp"
+    number_of_days = 21
+    sum_field = "miles"
+    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
+    //filtered_array_true = filtered_array.filter(function(D){return D['status'] == 'true'})
+    sum_value = filtered_array.length //array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+    goal_number = array.length
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Cycle'
+    }
+    return metric_dict
+}
+
+function gs_goal_widget_dictionary() {
+    url = "https://shippy-ac235.firebaseio.com/Gs/data.json"
+    key_name = "time_stamp"
+    number_of_days = 21
+    sum_field = "miles"
+    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
+    filtered_array_true = filtered_array.filter(function(D) {
+        return D['status'] == 'true'
+    })
+    sum_value = filtered_array_true.length //array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
+    goal_number = 1
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Gs'
+    }
+    return metric_dict
+}
+
+function metric_widget_calculate_from_completed_tasks(completed_tasks) {
+    filtered_array = completed_tasks.filter(function(D) {
+        return D['content'].indexOf('Travel:') > -1
+    })
+    sum_value = array_filter_sum_return(filtered_array, 'completed_date', 7, 'duration')
+    goal_number = 30
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Travel'
+    }
+    return metric_dict
+}
+
+function academy_widget_calculate_from_completed_tasks(completed_tasks) {
+    filtered_array = completed_tasks.filter(function(D) {
+        return D['content'].toLowerCase().indexOf('academy') > -1
+    })
+    filtered_array = array_filter_last_number_of_days(filtered_array, 'completed_date', 7)
+    sum_value = filtered_array.length
+    goal_number = 50
+    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
+    widget_color = color_from_percentage(percentage_of_goal)
+    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
+    metric_dict = {
+        text: metric_text,
+        value: sum_value_formatted,
+        percentage: percentage_of_goal,
+        color: widget_color,
+        name: 'Academy'
+    }
+    return metric_dict
+}
+
+
+function run_goal_widget_create() {
+    run_dict = run_goal_widget_dictionary()
+    widget_create_html_element_append("#goal_widgets", run_dict['color'], run_dict['name'], run_dict['text'])
+}
+
+function travel_goal_widget_create(completed_tasks) {
+    metric_dict = metric_widget_calculate_from_completed_tasks(completed_tasks)
+    widget_create_html_element_append("#goal_widgets", metric_dict['color'], metric_dict['name'], metric_dict['text'])
+}
+
+function widget_create_from_metric_dict(metric_dict) {
+    widget_create_html_element_append("#goal_widgets", metric_dict['color'], metric_dict['name'], metric_dict['text'])
+}
+
+function metric_widgets_create(completed_tasks) {
+    run_goal_widget_create()
+
+
+
+    widget_create_from_metric_dict(recurring_tasks_widget_dictionary())
+    travel_goal_widget_create(completed_tasks)
+    //widget_create_from_metric_dict(academy_widget_calculate_from_completed_tasks(completed_tasks))
+    widget_create_from_metric_dict(gs_goal_widget_dictionary())
+    widget_create_from_metric_dict(lift_goal_widget_dictionary())
+
+    widget_create_from_metric_dict(reads_widget_dictionary())
 
 
 
 }
 
+//sum_float_convert_from_array_underscore(array, sum_field)
+// yellow-bg
+// navy-bg
+// redy-bg
+
+// widget_create_html_element_append("#goal_widgets",goal_color,goal_name,goal_metric)
+//timer.js
+
+//update the html of the timer
+function html_timer_update_from_jquery(timer_instance_dictionary) {
+    time_text = time_since_start_time_moment(timer_instance_dictionary.start_time)
+    $("#timer_text").html(time_text)
+    $("#task_content").html(html_link_from_todoist_task(task_content, timer_instance_dictionary.id))
+    document.title = time_text
+}
+
+
+//ispecific to todoist on updating page for omni.html
+//timer_instance_page_initiate
+function timer_instance_page_initiate(timer_instance_dictionary) {
+    $("#input_text").attr('task_id', timer_instance_dictionary.id)
+    $("#input_text").val(timer_instance_dictionary.content)
+    return setInterval(html_timer_update_from_jquery, 1000, timer_instance_dictionary)
+}
+
+function timer_instance_page_initiate_2(time) {
+    //$("#input_text").val()
+    return setInterval(html_timer_update_from_jquery, 1000, timer_instance_dictionary)
+}
 
 
 
 
+function datatables_firebase_columns_define(params) {
+    ref = params.firebase_reference
 
+    function firebase_pull_json() {
+        return new Promise(function(resolve, reject) {
+            ref.limitToLast(1).on("child_added", function(snapshot) {
+                resolve(snapshot.val())
+            })
+        })
+    };
+    var p1 = firebase_pull_json();
+    p1.then(function(array) {
+        col_names = Object.keys(array)
+        if (params.columns != undefined) {
+            col_names_to_add = _.difference(col_names, _.map(params.columns, function(D) {
+                return D.data || D
+            }))
+            col_names = params.columns.concat(col_names_to_add)
+        }
+        params.columns = col_names
+        console.log(params)
+        firebase_dataeditor_table_generate_core(params)
+    });
+}
+
+
+function task_complete_todoist_promise_generate(timer_instance_dictionary, timer_instance) {
+    function complete_task_via_zapier() {
+        return new Promise(function(resolve, reject) {
+            r = $.ajax({
+                type: "POST",
+                data: timer_instance_dictionary,
+                url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/"
+            })
+            console.log(r)
+            if (r.readyState == 1) {
+                resolve(r)
+            }
+        })
+    }
+    complete_task_via_zapier().then(function(r) {
+        console.log(r)
+        if (r.status == 'success') {
+            timer_instance.set({})
+
+        }
+    })
+}
+
+
+function task_complete_todoist(timer_instance_dictionary, timer_instance, timer_instance_archive) {
+    input_text = $("#input_text").val()
+    html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+    new_task_name = input_text + html_timer
+    timer_instance_dictionary['new_task_name'] = new_task_name
+    console.log(timer_instance_dictionary)
+    timer_instance_archive.set(timer_instance_dictionary)
+
+
+    swal({
+        title: 'Are you sure?',
+        text: new_task_name,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then(function(result) {
+        if (result) {
+            task_complete_todoist_promise_generate(timer_instance_dictionary, timer_instance)
+            swal(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+            )
+        }
+    })
+
+
+
+}
+
+function page_update_from_timer(timer_instance_dictionary) {
+    $("#input_text").attr('task_id', timer_instance_dictionary.id)
+    $("#input_text").val(timer_instance_dictionary.content)
+}
+//if timer instances exists, add certain tactions to the timer
+function timer_instance_exists_process(timer_instance_dictionary, timer_instance, timer_instance_archive) {
+
+    empty_timer_html = $("#timer_text_container").html()
+    page_update_from_timer(timer_instance_dictionary)
+    my_interval_timer = setInterval(html_timer_update_from_jquery, 1000, timer_instance_dictionary)
+
+
+    $("#input_update").click(function(event) {
+        event.preventDefault()
+        html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
+        todoist_update_task(timer_instance_dictionary.id, $("#input_text").val() + html_timer)
+        timer_instance_dictionary['content'] = $("#input_text").val()
+        timer_instance.set(timer_instance_dictionary)
+    })
+
+    $("#input_complete").click(function(event) {
+        event.preventDefault()
+        task_complete_todoist(timer_instance_dictionary, timer_instance, timer_instance_archive)
+    })
+
+    $("#input_delete").click(function(event) {
+        event.preventDefault()
+        todoist_delete_task(timer_instance_dictionary.id)
+        timer_instance.set({})
+    })
+    return my_interval_timer
+}
+
+//creates timer for omni.html
+function add_dropdown_item_todoist_app(title_text, id) {
+    title_text = title_text || "hello_world 2"
+    var outer_div = $("<li>", {});
+    var link_elem = $("<a>", {
+        "href": "#",
+        "id": id,
+        "class": "favicon_select"
+    }).text(title_text)
+    var final_div = outer_div.append(link_elem)
+    $("#favicon_dropdown_menu").append(final_div)
+    return final_div
+}
+
+//for omni.html 
+function create_project_dropdown_list(projects_dictionary) {
+    projects_dictionary.forEach(function(D) {
+        add_dropdown_item_todoist_app(D['name'], D['id'])
+    })
+    $('.favicon_select').on('click', function(e) {
+        $("#favicon_select_button").html($(this))
+    })
+
+}
+
+//firebase_blog.js
+
+
+function timer_instance_dictionary_load(timer_instance_dictionary, blog_selector, converter) {
+    if (timer_instance_dictionary != null) {
+        saved_content = timer_instance_dictionary.content
+        timestamp = moment(timer_instance_dictionary.timestamp).format("MM-DD HH:mm")
+        $(timer_instance_dictionary.id).find(".timestamp").html(timestamp)
+        //instance_blog.find(".markdown_area").html(saved_content)
+        $(timer_instance_dictionary.id).find(".markdown_area").html(saved_content)
+
+        $(timer_instance_dictionary.id).find(".text_content").html(converter.makeHtml(saved_content))
+        //instance_blog.find(".text_content").html(converter.makeHtml(saved_content))
+    } else {
+        saved_content = '-'
+        $(blog_selector).find(".markdown_area").html(saved_content)
+        $(blog_selector).find(".text_content").html(converter.makeHtml(saved_content))
+    }
+
+}
+
+function timer_instance_markdown_generate(blog_selector, firebase_reference, converter) {
+    instance_blog = $(blog_selector)
+
+    function set_timer_instance(input_content) {
+        firebase_reference.set({
+            content: input_content,
+            timestamp: moment().format(),
+            id: blog_selector
+        })
+    }
+
+    $(blog_selector).find(".markdown_area").markdown({
+        savable: true,
+        onShow: function(e) {
+            instance_blog.find(".text_content").html(converter.makeHtml(e.getContent()))
+        },
+        onPreview: function(e) {
+            var originalContent = e.getContent()
+            instance_blog.find(".text_content").html(converter.makeHtml(e.getContent()))
+            instance_blog.find(".text_content").html(e.parseContent())
+            return e
+        },
+        onSave: function(e) {
+            $(this).closest('.ibox').find(".text_content").html(converter.makeHtml(e.getContent()))
+            set_timer_instance(e.getContent())
+        },
+        onChange: function(e) {},
+        onFocus: function(e) {},
+        onBlur: function(e) {}
+    })
+
+
+    instance_blog.find(".edit_content").click(function() {
+        console.log($(this))
+        $(this).closest('.ibox').find(".markdown_edit_form").show()
+    });
+
+
+}
+
+function load_firebase_blog(params) {
+    firebase_reference = params.firebase_reference || dbRef.ref('omni').child('omni_blog')
+    blog_selector = params.blog_selector || "#morning_review"
+    var converter = params.converter || new showdown.Converter()
+
+    firebase_reference.on('value', function(snapshot) {
+        timer_instance_dictionary = snapshot.val()
+        timer_instance_dictionary_load(timer_instance_dictionary, blog_selector, converter)
+    })
+    timer_instance_markdown_generate(blog_selector, firebase_reference, converter)
+}
+
+
+//$(blog_selector).find('.date_picker_calendar').daterangepicker({singleDatePicker: true,showDropdowns: true}, function(start, end, label) {load_blog('end_of_day_review',moment(start).format("YYYY-MM-DD"))})
+//firebase_chart_update.js
+
+function chart_update_from_params(completed_tasks_array, chart_object, calculation_func, dates_this_month, date_key, bar_chart_name, line_chart_name) {
+    //dates_this_month =  dates_past_thirty_days()
+    bar_chart_name = bar_chart_name || 'Tasks Completed by Day'
+    line_chart_name = line_chart_name || 'Rolling Total'
+
+    function length_func(l) {
+        return l.length
+    }
+    calculation_func = calculation_func || length_func
+
+    y_axis_values = []
+    y_axis_values_secondary = []
+    x_axis_labels = []
+    running_total = 0
+    counter_of_day_i_did_it = 0
+    dates_this_month.forEach(function(item, index) {
+        item.add(1, 'day')
+        filtered_array = completed_tasks_array.filter(function(D) {
+            return moment(D[date_key]).format("YYYY-MM-DD") == item.format("YYYY-MM-DD")
+        })
+        if (filtered_array.length > 0) {
+            counter_of_day_i_did_it = 1 + counter_of_day_i_did_it
+        }
+        //console.log(filtered_array)
+        y_axis_value = calculation_func(filtered_array) //.length
+        //console.log(y_axis_value)
+        y_axis_values.push(y_axis_value)
+        running_total = running_total + y_axis_value
+        y_axis_values_secondary.push(running_total)
+        x_axis_labels.push(item.format("MM-DD (ddd)"))
+    })
+
+
+    chart_object.data.datasets[0].data = y_axis_values
+    chart_object.data.datasets[0].label = bar_chart_name
+    //chart_object.data.datasets[1].data = y_axis_values_secondary
+    //chart_object.data.datasets[1].label = line_chart_name
+    chart_object.data.labels = x_axis_labels
+    chart_object.update()
+    //console.log(counter_of_day_i_did_it,dates_this_month.length)
+    //console.log(dates_this_month)
+    ds_percentage = String(parseFloat((counter_of_day_i_did_it / dates_this_month.length) * 100).toFixed()) + "%"
+    //$("#ds_percentage").html(ds_percentage)
+
+
+    average_per_d_time = (running_total / counter_of_day_i_did_it).toFixed(2)
+    //console.log(average_per_d_time)
+    //$("#average_per_d_time").html(average_per_d_time)
+
+
+
+    return chart_object
+}
+
+// function firebase_chart_update(params){
+// 	chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
+
+// 	firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
+// 	filter_function = params.filter_function||function(D){return D.type == 'count'}
+//   	dates = params.dates||dates_past_n_days(30)
+
+//   	array = Object.values(firebase_json_pull(firebase_url))
+//   	array = array.filter(filter_function)
+// 	calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
+// 	date_key = params.date_key||'date_time'
+// 	chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
+
+// }
+
+
+function firebase_chart_update(params) {
+    chart_object = params.chart_object || line_bar_chart_create('drogas_bar_chart')
+
+    filter_function = params.filter_function || function(D) {
+        return D.type == 'count'
+    }
+    dates = params.dates || dates_past_n_days(30)
+
+    if (params.firebase_url != null) {
+        firebase_url = params.firebase_url || "https://shippy-ac235.firebaseio.com/drogas.json"
+        array = Object.values(firebase_json_pull(firebase_url))
+    }
+    if (params.data != null) {
+        array = params.data
+    }
+
+
+    array = array.filter(filter_function)
+    calculation_function = params.calculation_function || function(l) {
+        return sum_float_convert_from_array_underscore(l, 'input_text')
+    }
+    date_key = params.date_key || 'date_time'
+    chart_update_from_params(array, chart_object, calculation_function, dates, date_key)
+
+}
+
+//firebase_chat_input.js
+
+
+
+
+function initiate_firebase_chat_bubbles_base(chatRef, parent_div, chat_id, message_content_id, message_box_id, favicon, small_chat_date, chat_title, small_chat_box_style, small_chat_style) {
+    chatRef = chatRef || 'null'
+    parent_div = parent_div || "#wrapper"
+    chat_id = chat_id || "smallchat"
+    message_content_id = message_content_id || "message_content"
+    message_box_id = message_box_id || "message_box_text"
+    favicon = favicon || "fa fa-comments"
+    small_chat_date = small_chat_date || "02.19.2015"
+    chat_title = chat_title || "Small Chat"
+    small_chat_box_style = small_chat_box_style || ""
+    small_chat_style = small_chat_style || ""
+
+
+    add_floating_chat_box(parent_div, chat_id, message_content_id, message_box_id, favicon, small_chat_date, chat_title, small_chat_box_style, small_chat_style)
+
+    $(".message_send").click(function(event) {
+        input_text = $(this).closest('.chat').find(".message_box").val()
+        date_time = moment().format() //new Date()
+        data_to_push = {
+            'content': input_text,
+            'timestamp': date_time
+        }
+        chatRef.push(data_to_push)
+        $(this).closest('.chat').find(".message_box").val("")
+        $(".message_box").val("")
+    })
+
+
+    $(".message_box").keypress(function(e) {
+        var key = e.which;
+        if (key == 13) // the enter key code
+
+        // {$(".message_send").click();
+        {
+            $(this).closest('.chat').find(".message_send").click();
+
+            return false;
+        }
+    });
+
+
+
+    chatRef.on('child_added', function(snapshot) {
+        timer_instance_dictionary = snapshot.val()
+        if (timer_instance_dictionary != null) {
+            saved_content = timer_instance_dictionary.content
+            viewer = timer_instance_dictionary.viewer
+            timestamp = moment(timer_instance_dictionary.timestamp).format("hh:mmA") //MM-DD 
+            message_content = '<div class="left"> <div class="author-name"> <small class="chat-date"> ' + timestamp + '</small> </div> <div class="chat-message active">' + saved_content + ' </div> </div>'
+            //console.log(message_content)
+            //message_content = '<div class="right"> <div class="author-name"> Aesop <small class="chat-date"> '+ timestamp+'</small> </div> <div class="chat-message"> '+ saved_content+ '</div> </div>'
+            $("#" + chat_id).closest('.chat').find(".message_content").append(message_content)
+            //$("#"+message_content_id).append(message_content)
+
+        }
+    });
+
+}
+
+
+function initiate_firebase_chat_bubbles(params) {
+
+    chatRef = params.firebase_reference || dbRef.ref('omni').child('ideas')
+    parent_div = params.parent_div || "#wrapper"
+    chat_id = params.chat_id || "smallchat"
+    message_content_id = params.message_content_id || "message_content"
+    message_box_id = params.message_box_id || "message_box_text"
+    favicon = params.favicon || "fa fa-comments"
+    small_chat_date = params.small_chat_date || "02.19.2015"
+    chat_title = params.chat_title || "Small Chat"
+    small_chat_box_style = params.box_style || "right: 75px"
+    small_chat_style = params.bubble_style || "right: 20px"
+
+    //chatRef = dbRef.ref('omni').child('tasks')
+    initiate_firebase_chat_bubbles_base(chatRef, parent_div, chat_id, message_content_id, message_box_id, favicon, small_chat_date, chat_title, small_chat_box_style, small_chat_style)
+
+
+
+    // Open close small chat
+    $('.open-small-chat').on('click', function() {
+        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
+        //console.log(this)
+        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
+        //$('.small-chat-box').toggleClass('active');
+    });
+
+    // Initialize slimscroll for small chat
+    $('.small-chat-box .content').slimScroll({
+        height: '234px',
+        railOpacity: 0.4,
+        start: 'bottom'
+    });
+
+
+
+}
 //datatables_firebase.js
 
 function datatables_firebase_params() {
@@ -5906,507 +6353,49 @@ function datatables_firebase(params) {
     }
     return params
 }
-//firebase_array_generate.js
+//area_row_chart.js
 
-$("#drogas_submit").click(function(event) {
-    input_text = $("#drogas_input").val()
-    date_time = moment().format(); //new Date()
+function row_chart_create_from_array(array, table_id) {
+    table_html = ""
 
-    input_text_is_length_one = input_text.length == 1
-    if (input_text_is_length_one) {
-        type = 'count'
-    } else {
-        type = 'text'
+    function html_section_create(item, index) {
+        width_percentage = String(item.width) //width: 19.9476%
+        background_color = item.color //"rgb(250, 210, 50)"//item.color //background: #dd514c;
+        style_attribute = "width: " + width_percentage + "%;background: " + background_color
+        $("div[field='row_bar_color_width']").attr('style', style_attribute)
+        name_title = item.name
+        $("span[field='row_bar_title']").html(name_title)
+        table_html = table_html + $(table_id).html()
     }
+    array.forEach(html_section_create)
+    $(table_id).html(table_html)
+}
 
-    within_system = $("#within_system").html()
+function area_row_chart_initiate(params) {
+    completed_tasks_today = params.completed_tasks
 
-    data_to_push = {
-        'input_text': input_text,
-        'date_time': date_time,
-        'type': type,
-        'within_system': within_system
-    }
-    contactsRef.push(data_to_push)
-    $("#drogas_input").val("")
-});
+    chart_id = params.chart_id || "#row_bar_size_chart"
 
-
-
-
-function firebase_editor_initiate(table_id, fields) {
-    editor = new $.fn.dataTable.Editor({
-        table: table_id,
-        idSrc: 'DT_RowId',
-        fields: editor_fields_array_from_custom_fields(fields)
+    completed_tasks_today_duration = sum_float_convert_from_array(completed_tasks_today, 'duration')
+    completed_dict_today = _.groupBy(completed_tasks_today, function(num) {
+        return num['sub_project']
     });
-    editor.on("postSubmit", function(e, json, data, action, xhr) {
-        if (action == 'edit') {
-            json_array = json.data;
-            json_array.forEach(function(D) {
-                record_id = D["DT_RowId"];
-                D["time_stamp"] = moment().format();
-                firebaseRef.child(record_id).set(D);
-            });
-        } else {
-            items_to_add = Object.values(data.data)
-            items_to_add.forEach(function(item) {
-                item['time_stamp'] = moment().format()
-                r = firebaseRef.push(item)
-            })
-        }
-    })
-
-    return editor
-}
-
-
-function firebase_generate_datatable(table_id, fields, firebaseRef) {
-    //DEFINE FIREBASE
-    //firebase.initializeApp({databaseURL: "https://shippy-ac235.firebaseio.com/"});
-    //var dbRef = firebase.database();
-    var firebaseRef = firebaseRef || dbRef.ref('drogas');
-    table_id = table_id || "#ds_table"
-    fields = fields || ['input_text', 'date_time', 'type', 'within_system', 'DT_RowId']
-
-    editor = firebase_editor_initiate(table_id, fields)
-    table = datatables_initiate_render(table_id, datatable_fields_array_from_custom_fields(fields), editor)
-
-
-    firebaseRef.on("child_added", function(snap) {
-        directory_addresses = snap.getRef().path.n
-        id = directory_addresses[directory_addresses.length - 1]
-        firebase_dictionary = snap.val()
-        firebase_dictionary['DT_RowId'] = id
-        key_check_func_dictionary(fields, firebase_dictionary)
-        console.log(firebase_dictionary)
-        table.row.add(firebase_dictionary).draw(false);
-    })
-
-
-}
-
-function firebase_dataeditor_table_editor_instance_options(firebaseRef, row_id) {
-
-    row_id = row_id || 'DT_RowId'
-
-    editor.on("postSubmit", function(e, json, data, action, xhr) {
-
-
-        if (action == 'edit') {
-            json_array = json.data;
-            json_array.forEach(function(D) {
-                record_id = D[row_id];
-                D["time_stamp"] = moment().format();
-                firebaseRef.child(record_id).set(D);
-            });
-        } else {
-            items_to_add = Object.values(data.data)
-            items_to_add.forEach(function(item) {
-                item['time_stamp'] = moment().format()
-                r = firebaseRef.push(item)
-                //console.log(r)
-            })
-
-        }
-    });
-
-}
-
-function firebase_dataeditor_table_editor_instance(table_id, fields, firebaseRef, row_id) {
-    row_id = row_id || 'DT_RowId'
-    editor = new $.fn.dataTable.Editor({
-        table: table_id,
-        idSrc: row_id,
-        fields: editor_fields_array_from_custom_fields(fields)
-    });
-
-    firebase_dataeditor_table_editor_instance_options(firebaseRef, row_id)
-    return editor
-}
-
-
-
-function firebase_dataeditor_table_generate(table_id, fields, firebaseRef, row_id) {
-    //DEFINE FIREBASE
-    //firebase.initializeApp({databaseURL: "https://shippy-ac235.firebaseio.com/"});
-    //var dbRef = firebase.database();
-    var firebaseRef = firebaseRef || dbRef.ref('drogas');
-    table_id = table_id || "#ds_table"
-    fields = fields || ['input_text', 'date_time', 'type', 'within_system', 'DT_RowId']
-    row_id = row_id || 'DT_RowId'
-
-    editor = firebase_dataeditor_table_editor_instance(table_id, fields, firebaseRef, row_id)
-    table = datatables_initiate_render(table_id, datatable_fields_array_from_custom_fields(fields), editor)
-
-
-    firebaseRef.on("child_added", function(snap) {
-        directory_addresses = snap.getRef().path.n
-        id = directory_addresses[directory_addresses.length - 1]
-        firebase_dictionary = snap.val()
-        firebase_dictionary['DT_RowId'] = id
-        key_check_func_dictionary(fields, firebase_dictionary)
-        console.log(firebase_dictionary)
-        table.row.add(firebase_dictionary).draw(false);
-    })
-
-
-}
-//firebase_blog.js
-
-
-function timer_instance_dictionary_load(timer_instance_dictionary, blog_selector, converter) {
-    if (timer_instance_dictionary != null) {
-        saved_content = timer_instance_dictionary.content
-        timestamp = moment(timer_instance_dictionary.timestamp).format("MM-DD HH:mm")
-        $(timer_instance_dictionary.id).find(".timestamp").html(timestamp)
-        //instance_blog.find(".markdown_area").html(saved_content)
-        $(timer_instance_dictionary.id).find(".markdown_area").html(saved_content)
-
-        $(timer_instance_dictionary.id).find(".text_content").html(converter.makeHtml(saved_content))
-        //instance_blog.find(".text_content").html(converter.makeHtml(saved_content))
-    } else {
-        saved_content = '-'
-        $(blog_selector).find(".markdown_area").html(saved_content)
-        $(blog_selector).find(".text_content").html(converter.makeHtml(saved_content))
-    }
-
-}
-
-function timer_instance_markdown_generate(blog_selector, firebase_reference, converter) {
-    instance_blog = $(blog_selector)
-
-    function set_timer_instance(input_content) {
-        firebase_reference.set({
-            content: input_content,
-            timestamp: moment().format(),
-            id: blog_selector
-        })
-    }
-
-    $(blog_selector).find(".markdown_area").markdown({
-        savable: true,
-        onShow: function(e) {
-            instance_blog.find(".text_content").html(converter.makeHtml(e.getContent()))
-        },
-        onPreview: function(e) {
-            var originalContent = e.getContent()
-            instance_blog.find(".text_content").html(converter.makeHtml(e.getContent()))
-            instance_blog.find(".text_content").html(e.parseContent())
-            return e
-        },
-        onSave: function(e) {
-            $(this).closest('.ibox').find(".text_content").html(converter.makeHtml(e.getContent()))
-            set_timer_instance(e.getContent())
-        },
-        onChange: function(e) {},
-        onFocus: function(e) {},
-        onBlur: function(e) {}
-    })
-
-
-    instance_blog.find(".edit_content").click(function() {
-        console.log($(this))
-        $(this).closest('.ibox').find(".markdown_edit_form").show()
-    });
-
-
-}
-
-function load_firebase_blog(params) {
-    firebase_reference = params.firebase_reference || dbRef.ref('omni').child('omni_blog')
-    blog_selector = params.blog_selector || "#morning_review"
-    var converter = params.converter || new showdown.Converter()
-
-    firebase_reference.on('value', function(snapshot) {
-        timer_instance_dictionary = snapshot.val()
-        timer_instance_dictionary_load(timer_instance_dictionary, blog_selector, converter)
-    })
-    timer_instance_markdown_generate(blog_selector, firebase_reference, converter)
-}
-
-
-//$(blog_selector).find('.date_picker_calendar').daterangepicker({singleDatePicker: true,showDropdowns: true}, function(start, end, label) {load_blog('end_of_day_review',moment(start).format("YYYY-MM-DD"))})
-//firebase_chart_update.js
-
-function chart_update_from_params(completed_tasks_array, chart_object, calculation_func, dates_this_month, date_key, bar_chart_name, line_chart_name) {
-    //dates_this_month =  dates_past_thirty_days()
-    bar_chart_name = bar_chart_name || 'Tasks Completed by Day'
-    line_chart_name = line_chart_name || 'Rolling Total'
-
-    function length_func(l) {
-        return l.length
-    }
-    calculation_func = calculation_func || length_func
-
-    y_axis_values = []
-    y_axis_values_secondary = []
-    x_axis_labels = []
-    running_total = 0
-    counter_of_day_i_did_it = 0
-    dates_this_month.forEach(function(item, index) {
-        item.add(1, 'day')
-        filtered_array = completed_tasks_array.filter(function(D) {
-            return moment(D[date_key]).format("YYYY-MM-DD") == item.format("YYYY-MM-DD")
-        })
-        if (filtered_array.length > 0) {
-            counter_of_day_i_did_it = 1 + counter_of_day_i_did_it
-        }
-        //console.log(filtered_array)
-        y_axis_value = calculation_func(filtered_array) //.length
-        //console.log(y_axis_value)
-        y_axis_values.push(y_axis_value)
-        running_total = running_total + y_axis_value
-        y_axis_values_secondary.push(running_total)
-        x_axis_labels.push(item.format("MM-DD (ddd)"))
-    })
-
-
-    chart_object.data.datasets[0].data = y_axis_values
-    chart_object.data.datasets[0].label = bar_chart_name
-    //chart_object.data.datasets[1].data = y_axis_values_secondary
-    //chart_object.data.datasets[1].label = line_chart_name
-    chart_object.data.labels = x_axis_labels
-    chart_object.update()
-    //console.log(counter_of_day_i_did_it,dates_this_month.length)
-    //console.log(dates_this_month)
-    ds_percentage = String(parseFloat((counter_of_day_i_did_it / dates_this_month.length) * 100).toFixed()) + "%"
-    //$("#ds_percentage").html(ds_percentage)
-
-
-    average_per_d_time = (running_total / counter_of_day_i_did_it).toFixed(2)
-    //console.log(average_per_d_time)
-    //$("#average_per_d_time").html(average_per_d_time)
-
-
-
-    return chart_object
-}
-
-// function firebase_chart_update(params){
-// 	chart_object = params.chart_object||line_bar_chart_create('drogas_bar_chart')
-
-// 	firebase_url = params.firebase_url||"https://shippy-ac235.firebaseio.com/drogas.json"
-// 	filter_function = params.filter_function||function(D){return D.type == 'count'}
-//   	dates = params.dates||dates_past_n_days(30)
-
-//   	array = Object.values(firebase_json_pull(firebase_url))
-//   	array = array.filter(filter_function)
-// 	calculation_function = params.calculation_function||function(l){return sum_float_convert_from_array_underscore(l,'input_text')}
-// 	date_key = params.date_key||'date_time'
-// 	chart_update_from_params(array,chart_object,calculation_function,dates,date_key)
-
-// }
-
-
-function firebase_chart_update(params) {
-    chart_object = params.chart_object || line_bar_chart_create('drogas_bar_chart')
-
-    filter_function = params.filter_function || function(D) {
-        return D.type == 'count'
-    }
-    dates = params.dates || dates_past_n_days(30)
-
-    if (params.firebase_url != null) {
-        firebase_url = params.firebase_url || "https://shippy-ac235.firebaseio.com/drogas.json"
-        array = Object.values(firebase_json_pull(firebase_url))
-    }
-    if (params.data != null) {
-        array = params.data
-    }
-
-
-    array = array.filter(filter_function)
-    calculation_function = params.calculation_function || function(l) {
-        return sum_float_convert_from_array_underscore(l, 'input_text')
-    }
-    date_key = params.date_key || 'date_time'
-    chart_update_from_params(array, chart_object, calculation_function, dates, date_key)
-
-}
-
-//firebase_chat_input.js
-
-
-
-
-function initiate_firebase_chat_bubbles_base(chatRef, parent_div, chat_id, message_content_id, message_box_id, favicon, small_chat_date, chat_title, small_chat_box_style, small_chat_style) {
-    chatRef = chatRef || 'null'
-    parent_div = parent_div || "#wrapper"
-    chat_id = chat_id || "smallchat"
-    message_content_id = message_content_id || "message_content"
-    message_box_id = message_box_id || "message_box_text"
-    favicon = favicon || "fa fa-comments"
-    small_chat_date = small_chat_date || "02.19.2015"
-    chat_title = chat_title || "Small Chat"
-    small_chat_box_style = small_chat_box_style || ""
-    small_chat_style = small_chat_style || ""
-
-
-    add_floating_chat_box(parent_div, chat_id, message_content_id, message_box_id, favicon, small_chat_date, chat_title, small_chat_box_style, small_chat_style)
-
-    $(".message_send").click(function(event) {
-        input_text = $(this).closest('.chat').find(".message_box").val()
-        date_time = moment().format() //new Date()
-        data_to_push = {
-            'content': input_text,
-            'timestamp': date_time
-        }
-        chatRef.push(data_to_push)
-        $(this).closest('.chat').find(".message_box").val("")
-        $(".message_box").val("")
-    })
-
-
-    $(".message_box").keypress(function(e) {
-        var key = e.which;
-        if (key == 13) // the enter key code
-
-        // {$(".message_send").click();
-        {
-            $(this).closest('.chat').find(".message_send").click();
-
-            return false;
-        }
-    });
-
-
-
-    chatRef.on('child_added', function(snapshot) {
-        timer_instance_dictionary = snapshot.val()
-        if (timer_instance_dictionary != null) {
-            saved_content = timer_instance_dictionary.content
-            viewer = timer_instance_dictionary.viewer
-            timestamp = moment(timer_instance_dictionary.timestamp).format("hh:mmA") //MM-DD 
-            message_content = '<div class="left"> <div class="author-name"> <small class="chat-date"> ' + timestamp + '</small> </div> <div class="chat-message active">' + saved_content + ' </div> </div>'
-            //console.log(message_content)
-            //message_content = '<div class="right"> <div class="author-name"> Aesop <small class="chat-date"> '+ timestamp+'</small> </div> <div class="chat-message"> '+ saved_content+ '</div> </div>'
-            $("#" + chat_id).closest('.chat').find(".message_content").append(message_content)
-            //$("#"+message_content_id).append(message_content)
-
-        }
-    });
-
-}
-
-
-function initiate_firebase_chat_bubbles(params) {
-
-    chatRef = params.firebase_reference || dbRef.ref('omni').child('ideas')
-    parent_div = params.parent_div || "#wrapper"
-    chat_id = params.chat_id || "smallchat"
-    message_content_id = params.message_content_id || "message_content"
-    message_box_id = params.message_box_id || "message_box_text"
-    favicon = params.favicon || "fa fa-comments"
-    small_chat_date = params.small_chat_date || "02.19.2015"
-    chat_title = params.chat_title || "Small Chat"
-    small_chat_box_style = params.box_style || "right: 75px"
-    small_chat_style = params.bubble_style || "right: 20px"
-
-    //chatRef = dbRef.ref('omni').child('tasks')
-    initiate_firebase_chat_bubbles_base(chatRef, parent_div, chat_id, message_content_id, message_box_id, favicon, small_chat_date, chat_title, small_chat_box_style, small_chat_style)
-
-
-
-    // Open close small chat
-    $('.open-small-chat').on('click', function() {
-        $(this).children().toggleClass('fa-comments').toggleClass('fa-remove');
-        //console.log(this)
-        $(this).closest('.chat').find(".small-chat-box").toggleClass('active')
-        //$('.small-chat-box').toggleClass('active');
-    });
-
-    // Initialize slimscroll for small chat
-    $('.small-chat-box .content').slimScroll({
-        height: '234px',
-        railOpacity: 0.4,
-        start: 'bottom'
-    });
-
-
-
-}
-//firebase_drogas.js
-
-
-function dose_remaining_now_base(input_text, date_time) {
-    beginning_count = parseInt(input_text) || 0
-    beginning_count = beginning_count * 20
-    date_time_string = date_time
-    m = moment(date_time_string)
-    now = moment()
-    hours_difference = now.diff(m, 'hours', true);
-    dose_remaining = beginning_count * Math.pow(.5, (hours_difference / 10));
-    return dose_remaining
-}
-
-
-function dose_remaining_now(dictionary_obj) {
-    return dose_remaining_now_base(dictionary_obj.input_text, dictionary_obj.date_time)
-}
-
-
-//firebase_snapshot.js
-
-
-function key_metrics_save() {
-    metrics_array = []
-    $(".metric_snapshot").each(function(row_number) {
-        metrics_array.push({
-            number: row_number,
-            html: $(this).html(),
-            text: $(this).text(),
-            class: $(this).attr('class')
+    completed_dict_today_keys = Object.keys(completed_dict_today)
+    task_row = []
+    color_list = ['#B8860B', '#A9A9A9', '#2F4F4F', '#006400', '#BDB76B', '#8B008B', '#556B2F', '#FF8C00', '#9932CC', '#8B0000', '#E9967A', '#8FBC8F', '#483D8B', '#2F4F4F', '#2F4F4F', '#00CED1', '#9400D3', '#FF1493', '#00BFFF', '#696969', '#696969', '#1E90FF', '#B22222', '#FFFAF0', '#228B22', '#FF00FF']
+    completed_dict_today_keys.forEach(function(k, i) {
+        project_dur = sum_float_convert_from_array(completed_dict_today[k], 'duration')
+        hours = (project_dur / 60).toFixed(2)
+        task_name = k + " - " + hours
+        width = (project_dur / completed_tasks_today_duration) * 100
+        task_row.push({
+            width: width,
+            color: color_list[i],
+            name: task_name
         })
     })
-    var current_snapshot_ref = dbRef.ref('todoist_snapshots').child('metrics').child(moment().format("YYYYMMDD"))
-    current_snapshot_ref.set(metrics_dict)
 
-}
-
-function key_metrics_save_minute(params) {
-    //selector = params.selector||
-    metrics_array = []
-    // $('.kpi').each(function(row_number) {
-    // 	metrics_array.push({number:row_number,html:$(this).html(),text:$(this).text(),class:$(this).attr('class'),name:$(this).attr('name')||'null'})
-    // })
-    // console.log(metrics_array)
-
-    metric_dict = {
-        tasks_age: $("#tasks_age").find('.metric_text').text(),
-        tasks_current_number: $("#tasks_current_number").find('.metric_text').text(),
-        gspread_percentage: $("#gspread_percentage").find('.metric_text').text(),
-        gspread_percentage_sub_metric_text: $("#gspread_percentage").find('.sub_metric_text').text(),
-        time_stamp: moment().format()
-    }
-
-    dbRef.ref('todoist_snapshots').child('kpis').push(metric_dict)
-    dbRef.ref('todoist_snapshots').child('metric_hours').child(moment().format("YYYYMMDD_HH")).set(metric_dict)
-
-}
-
-function todoist_snapshot_store() {
-    var snapshot_ref = dbRef.ref('todoist_snapshots').child('gspread_recurring_tasks').child(moment().format("YYYYMMDD"))
-    snapshot_ref.set(gspread_array)
-
-    var current_snapshot_ref = dbRef.ref('todoist_snapshots').child('todoist_current_tasks').child(moment().format("YYYYMMDD"))
-    current_snapshot_ref.set(current_tasks)
-
-
-}
-
-
-
-
-
-function todoist_gspread_pull_firebase() {
-    try {
-        todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
-    } catch (err) {
-        todoist_gspread_pull = firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/snapshot.json")
-    }
-    return todoist_gspread_pull
-
+    row_chart_create_from_array(task_row, chart_id)
 
 }
 
@@ -6683,932 +6672,112 @@ function stock_table() {
 
     return stocks_table()
 }
-//goal_widgets.js
+//calendar_datatables_firebase.js
 
 
+function full_calendar_generate(params) {
 
-function less_than_number_of_days(date_added, number_of_days) {
-    return date_difference_from_today_days_moment(date_added) < number_of_days
-}
 
-function array_filter_last_number_of_days(array, key_name, number_of_days) {
-    filtered_day = array.filter(function(D) {
-        return less_than_number_of_days(D[key_name], number_of_days)
-    })
-    return filtered_day
-}
+    calendar_selector = params.calendar_selector || '#calendar'
+    calendar_date = params.calendar_date || moment().format('YYYY-MM-DD')
 
-//"https://shippy-ac235.firebaseio.com/run_log.json"),'time_stamp',number_of_days
-function array_firebase_url_filter(url, key_name, number_of_days) {
-    array = firebase_json_pull_values(url)
-    filtered_array = array_filter_last_number_of_days(array, key_name, number_of_days)
-    return filtered_array
-}
 
-function array_firebase_url_filter_sum(url, key_name, number_of_days, sum_field) {
-    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
-    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
-    return sum_value
-}
+    // $(calendar_selector).fullCalendar({
+    //   header: {
+    //     left: 'prev,next today',
+    //     center: 'title',
+    //     right: 'month,agendaWeek,agendaDay,listWeek'
+    //   },
+    //   defaultDate: calendar_date,
+    //   navLinks: true, // can click day/week names to navigate views
+    //   editable: true,
+    //   eventLimit: true, // allow "more" link when too many events
+    //   events: datatables_firebase_table_generate(params).data().toArray()
+    // });
 
-function array_filter_sum_return(array, key_name, number_of_days, sum_field) {
-    filtered_array = array_filter_last_number_of_days(array, key_name, number_of_days)
-    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
-    return sum_value
-}
+    table = datatables_firebase_table_generate(params)
 
-function goal_widget_of_goal_percentage(sum_value, goal_metric) {
-    percentage_of_goal = sum_value / goal_metric
-    return percentage_of_goal
-}
 
-function color_from_percentage(percentage_of_goal) {
-    if (percentage_of_goal >= 1) {
-        color = 'navy-bg'
-    } else if (percentage_of_goal >= .66) {
-        color = 'yellow-bg'
-    } else {
-        color = 'red-bg'
-    }
-    return color
-}
+    console.log(table.data().toArray())
 
-function number_single_decimal_format(sum_value) {
-    return sum_value.toFixed(1)
-}
-
-function percentage_single_decimal_format(percentage_of_goal) {
-    percentage_of_goal_formatted = (percentage_of_goal * 100).toFixed(1) + "%"
-    return percentage_of_goal_formatted
-}
-
-function metric_text_create(sum_value, percentage_of_goal, goal_number) {
-    sum_value_formatted = number_single_decimal_format(sum_value)
-    percentage_of_goal_formatted = percentage_single_decimal_format(percentage_of_goal)
-    text = sum_value_formatted + "/" + goal_number + " (" + percentage_of_goal_formatted + ")"
-    return text
-}
-
-function metric_dict_create(sum_value, goal_number, name) {
-    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
-    widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
-    metric_dict = {
-        text: metric_text,
-        value: sum_value_formatted,
-        percentage: percentage_of_goal,
-        color: widget_color,
-        name: name
-    }
-    return metric_dict
-}
-
-function reads_widget_dictionary() {
-    url = "https://shippy-ac235.firebaseio.com/lists/reads/data.json"
-    key_name = "created_time"
-    number_of_days = 7
-    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
-    sum_value = filtered_array.length
-    goal_number = 2
-    name = 'Reads'
-    return metric_dict_create(sum_value, goal_number, name)
-}
-
-
-
-function lift_goal_widget_dictionary() {
-    url = "https://shippy-ac235.firebaseio.com/exercise/detail.json"
-    key_name = "time_stamp"
-    number_of_days = 30
-    number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(), 'days') + 1
-    sum_field = "reps"
-
-    array = firebase_json_pull_values(url)
-    filtered_array = array.filter(function(D) {
-        return date_range_filter_moment(D['time_stamp'], 'MMM-Y')
-    })
-
-
-
-    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
-    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
-
-
-    //sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
-    goal_number = 40
-    days_this_month = dates_within_this_month().length
-    goal_number = (number_of_days / days_this_month) * 50
-
-    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
-    widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number.toFixed(1))
-    metric_dict = {
-        text: metric_text,
-        value: sum_value_formatted,
-        percentage: percentage_of_goal,
-        color: widget_color,
-        name: 'Lift'
-    }
-    return metric_dict
-}
-
-function run_goal_widget_dictionary() {
-    url = "https://shippy-ac235.firebaseio.com/run_log.json"
-    key_name = "time_stamp"
-    number_of_days = 30
-    number_of_days = time_difference_moment_from_now_interval(beginning_of_month_moment(), 'days') + 1
-    sum_field = "miles"
-
-    array = firebase_json_pull_values(url)
-    filtered_array = array.filter(function(D) {
-        return date_range_filter_moment(D['time_stamp'], 'MMM-Y')
-    })
-
-
-
-    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
-    sum_value = sum_float_convert_from_array_underscore(filtered_array, sum_field)
-
-
-    //sum_value = array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
-    goal_number = 40
-    days_this_month = dates_within_this_month().length
-    goal_number = (number_of_days / days_this_month) * 50
-    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
-    widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number.toFixed(1))
-    metric_dict = {
-        text: metric_text,
-        value: sum_value_formatted,
-        percentage: percentage_of_goal,
-        color: widget_color,
-        name: 'Run'
-    }
-    return metric_dict
-}
-
-function hours_age_determine_dict(row) {
-    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
-    recurrence_age = parseFloat(row['recurrence_age']) || 0
-    surplus_time = recurrence_age - hours_age
-    is_surplus = recurrence_age > hours_age
-    return is_surplus
-}
-
-function recurring_tasks_widget_dictionary() {
-    url = "https://shippy-ac235.firebaseio.com/omni/cycling_list.json"
-    array = firebase_json_pull_values(url)
-    filtered_array = array.filter(function(D) {
-        return hours_age_determine_dict(D)
-    })
-
-    key_name = "time_stamp"
-    number_of_days = 21
-    sum_field = "miles"
-    //filtered_array = array_firebase_url_filter(url,key_name,number_of_days)	
-    //filtered_array_true = filtered_array.filter(function(D){return D['status'] == 'true'})
-    sum_value = filtered_array.length //array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
-    goal_number = array.length
-    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
-    widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
-    metric_dict = {
-        text: metric_text,
-        percentage: percentage_of_goal,
-        color: widget_color,
-        name: 'Cycle'
-    }
-    return metric_dict
-}
-
-function gs_goal_widget_dictionary() {
-    url = "https://shippy-ac235.firebaseio.com/Gs/data.json"
-    key_name = "time_stamp"
-    number_of_days = 21
-    sum_field = "miles"
-    filtered_array = array_firebase_url_filter(url, key_name, number_of_days)
-    filtered_array_true = filtered_array.filter(function(D) {
-        return D['status'] == 'true'
-    })
-    sum_value = filtered_array_true.length //array_firebase_url_filter_sum(url,key_name,number_of_days,sum_field)
-    goal_number = 1
-    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
-    widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
-    metric_dict = {
-        text: metric_text,
-        value: sum_value_formatted,
-        percentage: percentage_of_goal,
-        color: widget_color,
-        name: 'Gs'
-    }
-    return metric_dict
-}
-
-function metric_widget_calculate_from_completed_tasks(completed_tasks) {
-    filtered_array = completed_tasks.filter(function(D) {
-        return D['content'].indexOf('Travel:') > -1
-    })
-    sum_value = array_filter_sum_return(filtered_array, 'completed_date', 7, 'duration')
-    goal_number = 30
-    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
-    widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
-    metric_dict = {
-        text: metric_text,
-        value: sum_value_formatted,
-        percentage: percentage_of_goal,
-        color: widget_color,
-        name: 'Travel'
-    }
-    return metric_dict
-}
-
-function academy_widget_calculate_from_completed_tasks(completed_tasks) {
-    filtered_array = completed_tasks.filter(function(D) {
-        return D['content'].toLowerCase().indexOf('academy') > -1
-    })
-    filtered_array = array_filter_last_number_of_days(filtered_array, 'completed_date', 7)
-    sum_value = filtered_array.length
-    goal_number = 50
-    percentage_of_goal = goal_widget_of_goal_percentage(sum_value, goal_number)
-    widget_color = color_from_percentage(percentage_of_goal)
-    metric_text = metric_text_create(sum_value, percentage_of_goal, goal_number)
-    metric_dict = {
-        text: metric_text,
-        value: sum_value_formatted,
-        percentage: percentage_of_goal,
-        color: widget_color,
-        name: 'Academy'
-    }
-    return metric_dict
-}
-
-
-function run_goal_widget_create() {
-    run_dict = run_goal_widget_dictionary()
-    widget_create_html_element_append("#goal_widgets", run_dict['color'], run_dict['name'], run_dict['text'])
-}
-
-function travel_goal_widget_create(completed_tasks) {
-    metric_dict = metric_widget_calculate_from_completed_tasks(completed_tasks)
-    widget_create_html_element_append("#goal_widgets", metric_dict['color'], metric_dict['name'], metric_dict['text'])
-}
-
-function widget_create_from_metric_dict(metric_dict) {
-    widget_create_html_element_append("#goal_widgets", metric_dict['color'], metric_dict['name'], metric_dict['text'])
-}
-
-function metric_widgets_create(completed_tasks) {
-    run_goal_widget_create()
-
-
-
-    widget_create_from_metric_dict(recurring_tasks_widget_dictionary())
-    travel_goal_widget_create(completed_tasks)
-    //widget_create_from_metric_dict(academy_widget_calculate_from_completed_tasks(completed_tasks))
-    widget_create_from_metric_dict(gs_goal_widget_dictionary())
-    widget_create_from_metric_dict(lift_goal_widget_dictionary())
-
-    widget_create_from_metric_dict(reads_widget_dictionary())
-
-
-
-}
-
-//sum_float_convert_from_array_underscore(array, sum_field)
-// yellow-bg
-// navy-bg
-// redy-bg
-
-// widget_create_html_element_append("#goal_widgets",goal_color,goal_name,goal_metric)
-//intermittent_timer.js
-
-function html_timer_update_from_jquery_intermittent(start_timer, drogas_array) {
-
-
-
-    time_text = time_since_start_time_moment(start_timer)
-    $("#intermittent_timer").find(".metric_text").html(time_text)
-
-
-
-    drogas_array.forEach(function(D) {
-        D['remaining_in_system'] = dose_remaining_now(D)
-    })
-    in_system = sum_float_convert_from_array_underscore(drogas_array, 'remaining_in_system')
-    end_text = in_system.toFixed(3)
-
-
-    last_time = moment(start_timer).format('MM/DD h:mma')
-
-    $("#intermittent_timer").find(".sub_title").html(last_time)
-    $("#intermittent_timer").find(".sub_metric_text").html(end_text)
-
-
-
-}
-
-
-
-
-
-
-
-
-
-//date_time
-function start_drogas_timer(l) {
-    $('#metric_headers').append(metric_header_create_label('Timer', sub_title, metric_text, sub_metric_text, 'intermittent_timer'))
-    //$('#metric_headers').append(metric_header_create_label('Cals',sub_title,metric_text,sub_metric_text,'calorie_counter'))
-
-    max_dict = max_date_from_array_underscore(l, 'date_time')
-    setInterval(html_timer_update_from_jquery_intermittent, 1000, max_dict['date_time'], l)
-    //html_timer_update_from_jquery_intermittent(max_dict['time_stamp'])
-}
-
-
-
-
-
-
-function start_intermittent_timer() {
-    $('#metric_headers').append(metric_header_create_label('Timer', sub_title, metric_text, sub_metric_text, 'intermittent_timer'))
-    $('#metric_headers').append(metric_header_create_label('Cals', sub_title, metric_text, sub_metric_text, 'calorie_counter'))
-
-
-
-    var firebaseRef = dbRef.ref('cruz_control').child('food2');
-    l = firebase_json_pull("https://shippy-ac235.firebaseio.com/cruz_control/food2.json")
-    filtered_array = Object.values(l).filter(function(D) {
-        return moment(D['time_stamp']) > moment().subtract(24, 'hours')
-    })
-    calories = sum_float_convert_from_array_underscore(filtered_array, 'comment')
-    $("#calorie_counter").find(".metric_text").html(calories)
-
-
-    max_dict = max_date_from_array_underscore(l, 'time_stamp')
-    console.log(max_dict)
-    console.log('here')
-    console.log(max_dict['time_stamp'])
-    setInterval(html_timer_update_from_jquery_intermittent, 1000, max_dict['time_stamp'])
-    //html_timer_update_from_jquery_intermittent(max_dict['time_stamp'])
-}
-//
-//time_since_start_time_moment_to('2018-06-24T12:46:50-04:00')
-//meditation_row.js
-
-
-
-function formulate_label_square() {
-    html = '<span class="label label-success" style="margin:0">1</span>'
-    return html
-}
-
-function meditation_dates_loop_instance(date) {
-    html = formulate_label_square()
-    $("#meditation_row").append($(html))
-}
-
-function meditation_dates_loop(dates) {
-    dates.forEach(function(date) {
-        meditation_dates_loop_instance(date)
-    })
-}
-
-function meditation_dates(days) {
-    dates = dates_past_n_days(days)
-    meditation_dates_loop(dates)
-}
-//timer.js
-
-//update the html of the timer
-function html_timer_update_from_jquery(timer_instance_dictionary) {
-    time_text = time_since_start_time_moment(timer_instance_dictionary.start_time)
-    $("#timer_text").html(time_text)
-    $("#task_content").html(html_link_from_todoist_task(task_content, timer_instance_dictionary.id))
-    document.title = time_text
-}
-
-
-//ispecific to todoist on updating page for omni.html
-//timer_instance_page_initiate
-function timer_instance_page_initiate(timer_instance_dictionary) {
-    $("#input_text").attr('task_id', timer_instance_dictionary.id)
-    $("#input_text").val(timer_instance_dictionary.content)
-    return setInterval(html_timer_update_from_jquery, 1000, timer_instance_dictionary)
-}
-
-function timer_instance_page_initiate_2(time) {
-    //$("#input_text").val()
-    return setInterval(html_timer_update_from_jquery, 1000, timer_instance_dictionary)
-}
-
-
-
-
-function datatables_firebase_columns_define(params) {
-    ref = params.firebase_reference
-
-    function firebase_pull_json() {
+    function array_from_datatables_pull() {
+        // Simulate async response
         return new Promise(function(resolve, reject) {
-            ref.limitToLast(1).on("child_added", function(snapshot) {
-                resolve(snapshot.val())
-            })
-        })
-    };
-    var p1 = firebase_pull_json();
-    p1.then(function(array) {
-        col_names = Object.keys(array)
-        if (params.columns != undefined) {
-            col_names_to_add = _.difference(col_names, _.map(params.columns, function(D) {
-                return D.data || D
-            }))
-            col_names = params.columns.concat(col_names_to_add)
-        }
-        params.columns = col_names
-        console.log(params)
-        firebase_dataeditor_table_generate_core(params)
-    });
-}
+            while (true) {
+                setTimeout(function() {
+                    console.log(table.data().toArray())
+                }, 1000)
+                if (table.data().toArray().length > 0) {
+                    console.log(table.data().toArray())
+                    resolve(table.data().toArray());
 
-
-function task_complete_todoist_promise_generate(timer_instance_dictionary, timer_instance) {
-    function complete_task_via_zapier() {
-        return new Promise(function(resolve, reject) {
-            r = $.ajax({
-                type: "POST",
-                data: timer_instance_dictionary,
-                url: "https://hooks.zapier.com/hooks/catch/229795/k1jh44/"
-            })
-            console.log(r)
-            if (r.readyState == 1) {
-                resolve(r)
+                    break
+                }
             }
+
+            console.log('here')
+
         })
     }
-    complete_task_via_zapier().then(function(r) {
-        console.log(r)
-        if (r.status == 'success') {
-            timer_instance.set({})
 
-        }
-    })
-}
+    function calendar_create_from_array() {
+        console.log('Calling function and waiting for result for 5secs....')
+        let getResult = array_from_datatables_pull();
+        console.log('Got result after 5secs', getResult)
 
-
-function task_complete_todoist(timer_instance_dictionary, timer_instance, timer_instance_archive) {
-    input_text = $("#input_text").val()
-    html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-    new_task_name = input_text + html_timer
-    timer_instance_dictionary['new_task_name'] = new_task_name
-    console.log(timer_instance_dictionary)
-    timer_instance_archive.set(timer_instance_dictionary)
-
-
-    swal({
-        title: 'Are you sure?',
-        text: new_task_name,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then(function(result) {
-        if (result) {
-            task_complete_todoist_promise_generate(timer_instance_dictionary, timer_instance)
-            swal(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-            )
-        }
-    })
-
-
-
-}
-
-function page_update_from_timer(timer_instance_dictionary) {
-    $("#input_text").attr('task_id', timer_instance_dictionary.id)
-    $("#input_text").val(timer_instance_dictionary.content)
-}
-//if timer instances exists, add certain tactions to the timer
-function timer_instance_exists_process(timer_instance_dictionary, timer_instance, timer_instance_archive) {
-
-    empty_timer_html = $("#timer_text_container").html()
-    page_update_from_timer(timer_instance_dictionary)
-    my_interval_timer = setInterval(html_timer_update_from_jquery, 1000, timer_instance_dictionary)
-
-
-    $("#input_update").click(function(event) {
-        event.preventDefault()
-        html_timer = time_interval_string_format_from_start_time(timer_instance_dictionary.start_time)
-        todoist_update_task(timer_instance_dictionary.id, $("#input_text").val() + html_timer)
-        timer_instance_dictionary['content'] = $("#input_text").val()
-        timer_instance.set(timer_instance_dictionary)
-    })
-
-    $("#input_complete").click(function(event) {
-        event.preventDefault()
-        task_complete_todoist(timer_instance_dictionary, timer_instance, timer_instance_archive)
-    })
-
-    $("#input_delete").click(function(event) {
-        event.preventDefault()
-        todoist_delete_task(timer_instance_dictionary.id)
-        timer_instance.set({})
-    })
-    return my_interval_timer
-}
-
-//creates timer for omni.html
-function add_dropdown_item_todoist_app(title_text, id) {
-    title_text = title_text || "hello_world 2"
-    var outer_div = $("<li>", {});
-    var link_elem = $("<a>", {
-        "href": "#",
-        "id": id,
-        "class": "favicon_select"
-    }).text(title_text)
-    var final_div = outer_div.append(link_elem)
-    $("#favicon_dropdown_menu").append(final_div)
-    return final_div
-}
-
-//for omni.html 
-function create_project_dropdown_list(projects_dictionary) {
-    projects_dictionary.forEach(function(D) {
-        add_dropdown_item_todoist_app(D['name'], D['id'])
-    })
-    $('.favicon_select').on('click', function(e) {
-        $("#favicon_select_button").html($(this))
-    })
-
-}
-
-//todoist_gspread_table.js
-
-function percentage_complete_metric_generate(gspread_array) {
-    complete_array = gspread_array.filter(function(D) {
-        return D.status == 'Green'
-    })
-    percentage_complete = (complete_array.length / gspread_array.length) * 100
-    title_text = 'Complete %'
-    metric_text = percentage_complete.toFixed(1) + "%"
-    sub_title = 'Remaining: ' + (gspread_array.length - complete_array.length)
-    sub_metric_text = complete_array.length + "/" + gspread_array.length
-
-
-
-    percentage_to_goal = parseFloat(complete_array.length / gspread_array.length)
-    console.log(percentage_to_goal)
-    if (.4 > percentage_to_goal) {
-        label_color = {
-            'green': 'label-primary',
-            'amber': 'label-warning',
-            'red': 'label-danger'
-        } ['red']
-
-    } else if (.7 > percentage_to_goal) {
-        label_color = {
-            'green': 'label-primary',
-            'amber': 'label-warning',
-            'red': 'label-danger'
-        } ['amber']
-
-    } else if (.9 > percentage_to_goal) {
-        label_color = {
-            'green': 'label-primary',
-            'amber': 'label-warning',
-            'red': 'label-danger'
-        } ['green']
-    } else {
-        label_color = 'label-default'
     }
+    getResult = array_from_datatables_pull();
 
-    $('#metric_headers').append(metric_header_create_label(title_text, sub_title, metric_text, sub_metric_text, "gspread_percentage", label_color))
-
-
-
-
-}
-
-//remaining tasks populate
-function remaining_tasks_populate(gspread_array) {
-    $.fn.dataTable.ext.type.order["number-float-pre"] = function(d) {
-        r = parseFloat(d) || -1000
-        return r;
-    };
-
-    columns = [{
-        data: 'Task',
-        title: 'Task',
-        name: 'Task'
-    }, {
-        data: 'days_remaining',
-        title: 'days_remaining',
-        name: 'days_remaining',
-        visible: false,
-        type: 'number-float',
-        render: number_format_render
-    }, {
-        data: 'due_date',
-        title: 'Time Remaining',
-        name: 'time_remaining',
-        visible: true,
-        render: moment_from_now_reder
-    }, {
-        data: 'Estimated Duration',
-        title: 'Estimated Duration',
-        name: 'Estimated Duration',
-        visible: false
-    }, {
-        data: 'status',
-        title: 'status',
-        name: 'status',
-        visible: false
-    }, {
-        data: 'days_to_incomplete',
-        title: 'days_to_incomplete',
-        name: 'days_to_incomplete',
-        visible: false
-    }, {
-        data: 'days_since_last_completed',
-        title: 'days_since_last_completed',
-        name: 'days_since_last_completed',
-        visible: false
-    }, {
-        data: 'due_date',
-        title: 'due_date',
-        name: 'due_date',
-        visible: false,
-        createdCell: date_time_datatable_format
-    }, {
-        data: 'task_assigned',
-        title: 'task_assigned',
-        name: 'task_assigned',
-        visible: false
-    }, {
-        data: 'Category',
-        title: 'Category',
-        name: 'Category',
-        visible: false
-    }, {
-        data: 'project_id',
-        title: 'project_id',
-        name: 'project_id',
-        visible: false
-    }]
+    //calendar_create_from_array()
 
 
-    array_check_keys(gspread_array, _.map(columns, function(D) {
-        return D['data']
-    }))
-    editor = new $.fn.dataTable.Editor({
-        table: "#remaining_tasks_table",
-        idSrc: 'Task',
-        fields: [{
-            label: "Task:",
-            name: "Task"
-        }, {
-            label: "project_id:",
-            name: "project_id"
-        }]
-    });
+    // function calendar_create_from_array() {
+    //     array_from_datatables_pull().then(function(response) {
+    //         console.log(response);
+    //     $(calendar_selector).fullCalendar({
+    //       header: {
+    //         left: 'prev,next today',
+    //         center: 'title',
+    //         right: 'month,agendaWeek,agendaDay,listWeek'
+    //       },
+    //       defaultDate: calendar_date,
+    //       navLinks: true, // can click day/week names to navigate views
+    //       editable: true,
+    //       eventLimit: true, // allow "more" link when too many events
+    //       events: response
+    //     });
+
+    //       })
+    // }
+
+    calendar_create_from_array();
 
 
-    editor.on("postSubmit", function(e, json, data, action, xhr) {
-        console.log(json)
-        console.log(action)
-        console.log(e)
-        items_to_delete = Object.values(data.data)
-        console.log(items_to_delete)
-        items_to_delete.forEach(function(todoist_dictionary) {
-            console.log(todoist_dictionary)
-            task_create_todoist(todoist_dictionary.Task, todoist_dictionary.project_id)
+    // function create_task_promise(params) {
+    //   return new Promise(function(resolve, reject) {
+
+    //     //table = datatables_firebase_table_generate(params)
+    //     if (datatables_firebase_table_generate(params).length != 0){
+    //       resolve(table.data().toArray())
+    //     }
+    //   });}
+
+    //create_task_promise(params).then(function(calendar_events) {
+    //   console.log(calendar_events)
+    // console.log(table.data().toArray())
+
+
+    // calendar_events = table.data().toArray()
 
 
 
-        })
-
-    });
-
-    dt = $("#remaining_tasks_table").DataTable({
-        paging: false,
-        dom: '<"html5buttons"B>lTfgitp',
-        data: gspread_array,
-        scrollY: "200px",
-        columns: columns,
-        select: true,
-        colReorder: true,
-        createdRow: function(row, data, dataIndex) {
-            if (data['days_remaining'] < 0) {
-                $(row).addClass('danger');
-            } else if (data['days_remaining'] < 1) {
-                $(row).addClass('warning');
-            } else {
-                $(row).addClass('success');
-            }
-        },
-        buttons: [{
-                extend: "excel",
-                title: document.title
-            }, {
-                extend: "colvis",
-                title: document.title
-            }, {
-                extend: "edit",
-                editor: editor
-            },
-
-            {
-                text: 'Add',
-                name: 'Add',
-                action: function(e, dt, node, config) {
-
-                    row_data = dt.rows({
-                        selected: true
-                    }).data()[0]
-                    console.log(row_data)
-                    task_create_todoist(row_data.Task, row_data.project_id)
-
-                },
-
-
-
-
-
-
-                //ref.child('detail').push(row_data)
-            }, {
-                text: 'Not Assigned',
-                name: 'Not Assigned',
-                action: function(e, dt, node, config) {
-                    dt.columns('task_assigned:name').search('Red').draw()
-                }
-            }, {
-                text: 'Not Assigned All',
-                name: 'Not Assigned',
-                action: function(e, dt, node, config) {
-                    dt.columns('task_assigned:name').search('Amber').draw()
-                }
-            }, {
-                text: 'Red',
-                name: 'Red',
-                action: function(e, dt, node, config) {
-                    dt.columns('status:name').search('Red').draw()
-                }
-            }, {
-                text: 'Clear',
-                name: 'Clear',
-                action: function(e, dt, node, config) {
-                    dt.columns('').search('').draw()
-                }
-            },
-        ],
-        order: [1, "asc"]
-    });
-    //dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
-}
-
-
-
-
-
-
-//todoist_progress_bars.js
-
-function update_progress() {
-    current_completed_tasks = todoist_table_complete.rows({
-        page: "current"
-    }).data().toArray();
-    measure_progress_bars(current_completed_tasks, progress_table)
-
-}
-
-
-function progress_bar_table_formulate(table_id) {
-    var firebaseRef = dbRef.ref('cruz_control').child('progress');
-    fields = ['name', 'multiplier', 'description', 'percentage', 'priority']
-    table_id = table_id || "#progress_table"
-
-    editor = new $.fn.dataTable.Editor({
-        table: table_id,
-        idSrc: 'DT_RowId',
-        fields: editor_fields_array_from_custom_fields(fields)
-    });
-
-    editor.on("postSubmit", function(e, json, data, action, xhr) {
-
-
-        if (action == 'edit') {
-            json_array = json.data;
-            json_array.forEach(function(D) {
-                record_id = D["DT_RowId"];
-                D["time_stamp"] = moment().format();
-                firebaseRef.child(record_id).set(D);
-            });
-        } else {
-            items_to_add = Object.values(data.data)
-            items_to_add.forEach(function(item) {
-                item['time_stamp'] = moment().format()
-                r = firebaseRef.push(item)
-                //console.log(r)
-            })
-
-        }
-    });
-
-
-    table = $(table_id).DataTable({
-        paging: false,
-        dom: '<"html5buttons"B>lTfgitp',
-        data: [],
-        columns: [{
-            data: 'name',
-            title: 'name',
-            visible: true,
-            name: 'name',
-            createdCell: bar_create_datatable_cell,
-            className: 'progress_metric_measure'
-        }, {
-            data: 'multiplier',
-            title: 'multiplier',
-            visible: false,
-            name: 'multiplier'
-        }, {
-            data: 'description',
-            title: 'description',
-            visible: false,
-            name: 'description'
-        }, {
-            data: 'percentage',
-            title: 'percentage',
-            visible: false,
-            name: 'percentage',
-            type: 'num'
-        }, {
-            data: 'priority',
-            title: 'priority',
-            visible: false,
-            name: 'priority'
-        }, {
-            data: 'time_stamp',
-            title: 'time_stamp',
-            visible: false,
-            name: 'time_stamp'
-        }, {
-            data: 'DT_RowId',
-            title: 'DT_RowId',
-            visible: false,
-            name: 'DT_RowId'
-        }],
-        select: true,
-        colReorder: true,
-        buttons: [{
-                extend: "excel",
-                title: document.title
-            }, {
-                extend: "colvis",
-                title: document.title
-            }, {
-                extend: 'create',
-                editor: editor
-            }, {
-                extend: "edit",
-                editor: editor
-            }, {
-                text: 'Progress',
-                name: 'Progress',
-                action: function(e, dt, node, config) {
-                    update_progress()
-                }
-            },
-
-            //update_progress
-            {
-                text: 'Clear',
-                name: 'Clear',
-                action: function(e, dt, node, config) {
-                    dt.columns('').search('').draw()
-                }
-            }
-        ]
-    });
-
-
-    firebaseRef.on("child_added", function(snap) {
-        directory_addresses = snap.getRef().path.n
-        id = directory_addresses[directory_addresses.length - 1]
-        firebase_dictionary = snap.val()
-        firebase_dictionary['DT_RowId'] = id
-        firebase_dictionary['percentage'] = ''
-        table.row.add(firebase_dictionary).draw(false);
-    })
+    // });
 
 
 }
+
+
+
 //todoist_table.js
 
 
@@ -8241,4 +7410,834 @@ function todoist_table_create_complete(array, table_id, metric_headers_update_li
     // console.log(table)
     //console.log(Object.values(table.rows({ page: "current" }).data()))
     return table
+}
+
+//datatables_array.js
+
+
+function dataeditor_options_from_arrays(table_id, row_id, fields, editor_create_function, editor_update_function, editor_delete_function, params) {
+    editor_object = new $.fn.dataTable.Editor({
+        table: table_id,
+        idSrc: row_id,
+        fields: fields
+    });
+
+    row_id = row_id || 'DT_RowId'
+    editor_object.on("postSubmit", function(e, json, data, action, xhr) {
+        if (action == 'create') {
+            items_to_add = Object.values(data.data)
+            items_to_add.forEach(function(item) {
+                editor_create_function(item)
+            })
+        } else if (action == 'edit') {
+            json_array = json.data;
+            json_array.forEach(function(D) {
+                record_id = D[row_id];
+                editor_update_function(D)
+            });
+        } else if (action == 'remove') {
+            items_to_delete = Object.values(data.data)
+            items_to_delete.forEach(function(D) {
+                editor_delete_function(D)
+            })
+        } else {
+            return false
+        }
+    })
+    params.editor = editor_object
+    return params
+}
+
+
+function datatable_generate_from_array(table_id, columns_list, editor, data, params) {
+
+    button_params = [{
+        extend: "excel",
+        title: document.title
+    }, {
+        extend: "colvis",
+        title: document.title
+    }, {
+        extend: 'create',
+        editor: editor,
+        text: 'Create'
+    }, {
+        extend: 'remove',
+        editor: editor
+    }, {
+        extend: "edit",
+        editor: editor
+    }, {
+        text: 'Clear',
+        name: 'Clear',
+        action: function(e, dt, node, config) {
+            dt.columns('').search('').draw()
+            $.fn.dataTable.ext.search = []
+            dt.draw()
+        }
+    }]
+
+    if (params.additional_buttons != undefined) {
+        button_params = button_params.concat(params.additional_buttons)
+    }
+
+    config = {
+        dom: '<"html5buttons"B>lTfgitp',
+        data: data,
+        columns: columns_list,
+        select: true,
+        ///drawCallback:function(){params.callback_function(this.api().rows({page:'current'}).data())} ,
+        paging: false,
+        scrollX: true,
+        colReorder: true,
+        autoWidth: true,
+        buttons: button_params
+    }
+    if (params.callback_function != null) {
+        config.drawCallback = function() {
+            data_callback = this.api().rows({
+                page: 'current'
+            }).data()
+
+            params.callback_function(data_callback.toArray())
+        }
+    }
+
+    if (params.sort != undefined) {
+        sort_order = params.sort_order || 'desc'
+        config.order = [
+            [_.findIndex(columns_list, function(D) {
+                return D['data'] == params.sort
+            }), 'desc']
+        ]
+    }
+    params.config = config
+    table_example = $(table_id).DataTable(config);
+    params.table = table_example
+    return params
+}
+
+
+
+//
+function datatables_generate_from_array(params) {
+    console.log(Object.keys(params.data[0]))
+    columns = params.columns || Object.keys(params.data[0])
+    table_id = params.table_selector
+    row_id = params.row_id || 'DT_RowId'
+
+    editor_create_function = params.editor_create_function
+    editor_update_function = params.editor_update_function
+    editor_delete_function = params.editor_delete_function
+
+
+
+    params.fields = datatable_column_fields_generate(columns, params)
+    params.field_names = _.map(params.fields, function(D) {
+        return D['data']
+    })
+
+
+    params = dataeditor_options_from_arrays(
+        table_id,
+        row_id,
+        params.fields,
+        editor_create_function,
+        editor_update_function,
+        editor_delete_function,
+        params)
+
+
+    params.data = array_check_keys(params.data, params.field_names)
+    params = datatable_generate_from_array(
+        params.table_selector,
+        params.fields,
+        params.editor,
+        params.data,
+        params)
+
+
+    editor_rank_apply(params.editor, params.table_selector)
+    editor_rag_status(params.editor, params.table_selector)
+
+
+
+}
+
+
+
+
+
+
+//intermittent_timer.js
+
+function html_timer_update_from_jquery_intermittent(start_timer, drogas_array) {
+
+
+
+    time_text = time_since_start_time_moment(start_timer)
+    $("#intermittent_timer").find(".metric_text").html(time_text)
+
+
+
+    drogas_array.forEach(function(D) {
+        D['remaining_in_system'] = dose_remaining_now(D)
+    })
+    in_system = sum_float_convert_from_array_underscore(drogas_array, 'remaining_in_system')
+    end_text = in_system.toFixed(3)
+
+
+    last_time = moment(start_timer).format('MM/DD h:mma')
+
+    $("#intermittent_timer").find(".sub_title").html(last_time)
+    $("#intermittent_timer").find(".sub_metric_text").html(end_text)
+
+
+
+}
+
+
+
+
+
+
+
+
+
+//date_time
+function start_drogas_timer(l) {
+    $('#metric_headers').append(metric_header_create_label('Timer', sub_title, metric_text, sub_metric_text, 'intermittent_timer'))
+    //$('#metric_headers').append(metric_header_create_label('Cals',sub_title,metric_text,sub_metric_text,'calorie_counter'))
+
+    max_dict = max_date_from_array_underscore(l, 'date_time')
+    setInterval(html_timer_update_from_jquery_intermittent, 1000, max_dict['date_time'], l)
+    //html_timer_update_from_jquery_intermittent(max_dict['time_stamp'])
+}
+
+
+
+
+
+
+function start_intermittent_timer() {
+    $('#metric_headers').append(metric_header_create_label('Timer', sub_title, metric_text, sub_metric_text, 'intermittent_timer'))
+    $('#metric_headers').append(metric_header_create_label('Cals', sub_title, metric_text, sub_metric_text, 'calorie_counter'))
+
+
+
+    var firebaseRef = dbRef.ref('cruz_control').child('food2');
+    l = firebase_json_pull("https://shippy-ac235.firebaseio.com/cruz_control/food2.json")
+    filtered_array = Object.values(l).filter(function(D) {
+        return moment(D['time_stamp']) > moment().subtract(24, 'hours')
+    })
+    calories = sum_float_convert_from_array_underscore(filtered_array, 'comment')
+    $("#calorie_counter").find(".metric_text").html(calories)
+
+
+    max_dict = max_date_from_array_underscore(l, 'time_stamp')
+    console.log(max_dict)
+    console.log('here')
+    console.log(max_dict['time_stamp'])
+    setInterval(html_timer_update_from_jquery_intermittent, 1000, max_dict['time_stamp'])
+    //html_timer_update_from_jquery_intermittent(max_dict['time_stamp'])
+}
+//
+//time_since_start_time_moment_to('2018-06-24T12:46:50-04:00')
+//firebase_snapshot.js
+
+
+function key_metrics_save() {
+    metrics_array = []
+    $(".metric_snapshot").each(function(row_number) {
+        metrics_array.push({
+            number: row_number,
+            html: $(this).html(),
+            text: $(this).text(),
+            class: $(this).attr('class')
+        })
+    })
+    var current_snapshot_ref = dbRef.ref('todoist_snapshots').child('metrics').child(moment().format("YYYYMMDD"))
+    current_snapshot_ref.set(metrics_dict)
+
+}
+
+function key_metrics_save_minute(params) {
+    //selector = params.selector||
+    metrics_array = []
+    // $('.kpi').each(function(row_number) {
+    // 	metrics_array.push({number:row_number,html:$(this).html(),text:$(this).text(),class:$(this).attr('class'),name:$(this).attr('name')||'null'})
+    // })
+    // console.log(metrics_array)
+
+    metric_dict = {
+        tasks_age: $("#tasks_age").find('.metric_text').text(),
+        tasks_current_number: $("#tasks_current_number").find('.metric_text').text(),
+        gspread_percentage: $("#gspread_percentage").find('.metric_text').text(),
+        gspread_percentage_sub_metric_text: $("#gspread_percentage").find('.sub_metric_text').text(),
+        time_stamp: moment().format()
+    }
+
+    dbRef.ref('todoist_snapshots').child('kpis').push(metric_dict)
+    dbRef.ref('todoist_snapshots').child('metric_hours').child(moment().format("YYYYMMDD_HH")).set(metric_dict)
+
+}
+
+function todoist_snapshot_store() {
+    var snapshot_ref = dbRef.ref('todoist_snapshots').child('gspread_recurring_tasks').child(moment().format("YYYYMMDD"))
+    snapshot_ref.set(gspread_array)
+
+    var current_snapshot_ref = dbRef.ref('todoist_snapshots').child('todoist_current_tasks').child(moment().format("YYYYMMDD"))
+    current_snapshot_ref.set(current_tasks)
+
+
+}
+
+
+
+
+
+function todoist_gspread_pull_firebase() {
+    try {
+        todoist_gspread_pull = todoist_tasks_pull_custom_gspread()
+    } catch (err) {
+        todoist_gspread_pull = firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/snapshot.json")
+    }
+    return todoist_gspread_pull
+
+
+}
+
+//todoist_progress_bars.js
+
+function update_progress() {
+    current_completed_tasks = todoist_table_complete.rows({
+        page: "current"
+    }).data().toArray();
+    measure_progress_bars(current_completed_tasks, progress_table)
+
+}
+
+
+function progress_bar_table_formulate(table_id) {
+    var firebaseRef = dbRef.ref('cruz_control').child('progress');
+    fields = ['name', 'multiplier', 'description', 'percentage', 'priority']
+    table_id = table_id || "#progress_table"
+
+    editor = new $.fn.dataTable.Editor({
+        table: table_id,
+        idSrc: 'DT_RowId',
+        fields: editor_fields_array_from_custom_fields(fields)
+    });
+
+    editor.on("postSubmit", function(e, json, data, action, xhr) {
+
+
+        if (action == 'edit') {
+            json_array = json.data;
+            json_array.forEach(function(D) {
+                record_id = D["DT_RowId"];
+                D["time_stamp"] = moment().format();
+                firebaseRef.child(record_id).set(D);
+            });
+        } else {
+            items_to_add = Object.values(data.data)
+            items_to_add.forEach(function(item) {
+                item['time_stamp'] = moment().format()
+                r = firebaseRef.push(item)
+                //console.log(r)
+            })
+
+        }
+    });
+
+
+    table = $(table_id).DataTable({
+        paging: false,
+        dom: '<"html5buttons"B>lTfgitp',
+        data: [],
+        columns: [{
+            data: 'name',
+            title: 'name',
+            visible: true,
+            name: 'name',
+            createdCell: bar_create_datatable_cell,
+            className: 'progress_metric_measure'
+        }, {
+            data: 'multiplier',
+            title: 'multiplier',
+            visible: false,
+            name: 'multiplier'
+        }, {
+            data: 'description',
+            title: 'description',
+            visible: false,
+            name: 'description'
+        }, {
+            data: 'percentage',
+            title: 'percentage',
+            visible: false,
+            name: 'percentage',
+            type: 'num'
+        }, {
+            data: 'priority',
+            title: 'priority',
+            visible: false,
+            name: 'priority'
+        }, {
+            data: 'time_stamp',
+            title: 'time_stamp',
+            visible: false,
+            name: 'time_stamp'
+        }, {
+            data: 'DT_RowId',
+            title: 'DT_RowId',
+            visible: false,
+            name: 'DT_RowId'
+        }],
+        select: true,
+        colReorder: true,
+        buttons: [{
+                extend: "excel",
+                title: document.title
+            }, {
+                extend: "colvis",
+                title: document.title
+            }, {
+                extend: 'create',
+                editor: editor
+            }, {
+                extend: "edit",
+                editor: editor
+            }, {
+                text: 'Progress',
+                name: 'Progress',
+                action: function(e, dt, node, config) {
+                    update_progress()
+                }
+            },
+
+            //update_progress
+            {
+                text: 'Clear',
+                name: 'Clear',
+                action: function(e, dt, node, config) {
+                    dt.columns('').search('').draw()
+                }
+            }
+        ]
+    });
+
+
+    firebaseRef.on("child_added", function(snap) {
+        directory_addresses = snap.getRef().path.n
+        id = directory_addresses[directory_addresses.length - 1]
+        firebase_dictionary = snap.val()
+        firebase_dictionary['DT_RowId'] = id
+        firebase_dictionary['percentage'] = ''
+        table.row.add(firebase_dictionary).draw(false);
+    })
+
+
+}
+//todoist_gspread_table.js
+
+function percentage_complete_metric_generate(gspread_array) {
+    complete_array = gspread_array.filter(function(D) {
+        return D.status == 'Green'
+    })
+    percentage_complete = (complete_array.length / gspread_array.length) * 100
+    title_text = 'Complete %'
+    metric_text = percentage_complete.toFixed(1) + "%"
+    sub_title = 'Remaining: ' + (gspread_array.length - complete_array.length)
+    sub_metric_text = complete_array.length + "/" + gspread_array.length
+
+
+
+    percentage_to_goal = parseFloat(complete_array.length / gspread_array.length)
+    console.log(percentage_to_goal)
+    if (.4 > percentage_to_goal) {
+        label_color = {
+            'green': 'label-primary',
+            'amber': 'label-warning',
+            'red': 'label-danger'
+        } ['red']
+
+    } else if (.7 > percentage_to_goal) {
+        label_color = {
+            'green': 'label-primary',
+            'amber': 'label-warning',
+            'red': 'label-danger'
+        } ['amber']
+
+    } else if (.9 > percentage_to_goal) {
+        label_color = {
+            'green': 'label-primary',
+            'amber': 'label-warning',
+            'red': 'label-danger'
+        } ['green']
+    } else {
+        label_color = 'label-default'
+    }
+
+    $('#metric_headers').append(metric_header_create_label(title_text, sub_title, metric_text, sub_metric_text, "gspread_percentage", label_color))
+
+
+
+
+}
+
+//remaining tasks populate
+function remaining_tasks_populate(gspread_array) {
+    $.fn.dataTable.ext.type.order["number-float-pre"] = function(d) {
+        r = parseFloat(d) || -1000
+        return r;
+    };
+
+    columns = [{
+        data: 'Task',
+        title: 'Task',
+        name: 'Task'
+    }, {
+        data: 'days_remaining',
+        title: 'days_remaining',
+        name: 'days_remaining',
+        visible: false,
+        type: 'number-float',
+        render: number_format_render
+    }, {
+        data: 'due_date',
+        title: 'Time Remaining',
+        name: 'time_remaining',
+        visible: true,
+        render: moment_from_now_reder
+    }, {
+        data: 'Estimated Duration',
+        title: 'Estimated Duration',
+        name: 'Estimated Duration',
+        visible: false
+    }, {
+        data: 'status',
+        title: 'status',
+        name: 'status',
+        visible: false
+    }, {
+        data: 'days_to_incomplete',
+        title: 'days_to_incomplete',
+        name: 'days_to_incomplete',
+        visible: false
+    }, {
+        data: 'days_since_last_completed',
+        title: 'days_since_last_completed',
+        name: 'days_since_last_completed',
+        visible: false
+    }, {
+        data: 'due_date',
+        title: 'due_date',
+        name: 'due_date',
+        visible: false,
+        createdCell: date_time_datatable_format
+    }, {
+        data: 'task_assigned',
+        title: 'task_assigned',
+        name: 'task_assigned',
+        visible: false
+    }, {
+        data: 'Category',
+        title: 'Category',
+        name: 'Category',
+        visible: false
+    }, {
+        data: 'project_id',
+        title: 'project_id',
+        name: 'project_id',
+        visible: false
+    }]
+
+
+    array_check_keys(gspread_array, _.map(columns, function(D) {
+        return D['data']
+    }))
+    editor = new $.fn.dataTable.Editor({
+        table: "#remaining_tasks_table",
+        idSrc: 'Task',
+        fields: [{
+            label: "Task:",
+            name: "Task"
+        }, {
+            label: "project_id:",
+            name: "project_id"
+        }]
+    });
+
+
+    editor.on("postSubmit", function(e, json, data, action, xhr) {
+        console.log(json)
+        console.log(action)
+        console.log(e)
+        items_to_delete = Object.values(data.data)
+        console.log(items_to_delete)
+        items_to_delete.forEach(function(todoist_dictionary) {
+            console.log(todoist_dictionary)
+            task_create_todoist(todoist_dictionary.Task, todoist_dictionary.project_id)
+
+
+
+        })
+
+    });
+
+    dt = $("#remaining_tasks_table").DataTable({
+        paging: false,
+        dom: '<"html5buttons"B>lTfgitp',
+        data: gspread_array,
+        scrollY: "200px",
+        columns: columns,
+        select: true,
+        colReorder: true,
+        createdRow: function(row, data, dataIndex) {
+            if (data['days_remaining'] < 0) {
+                $(row).addClass('danger');
+            } else if (data['days_remaining'] < 1) {
+                $(row).addClass('warning');
+            } else {
+                $(row).addClass('success');
+            }
+        },
+        buttons: [{
+                extend: "excel",
+                title: document.title
+            }, {
+                extend: "colvis",
+                title: document.title
+            }, {
+                extend: "edit",
+                editor: editor
+            },
+
+            {
+                text: 'Add',
+                name: 'Add',
+                action: function(e, dt, node, config) {
+
+                    row_data = dt.rows({
+                        selected: true
+                    }).data()[0]
+                    console.log(row_data)
+                    task_create_todoist(row_data.Task, row_data.project_id)
+
+                },
+
+
+
+
+
+
+                //ref.child('detail').push(row_data)
+            }, {
+                text: 'Not Assigned',
+                name: 'Not Assigned',
+                action: function(e, dt, node, config) {
+                    dt.columns('task_assigned:name').search('Red').draw()
+                }
+            }, {
+                text: 'Not Assigned All',
+                name: 'Not Assigned',
+                action: function(e, dt, node, config) {
+                    dt.columns('task_assigned:name').search('Amber').draw()
+                }
+            }, {
+                text: 'Red',
+                name: 'Red',
+                action: function(e, dt, node, config) {
+                    dt.columns('status:name').search('Red').draw()
+                }
+            }, {
+                text: 'Clear',
+                name: 'Clear',
+                action: function(e, dt, node, config) {
+                    dt.columns('').search('').draw()
+                }
+            },
+        ],
+        order: [1, "asc"]
+    });
+    //dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
+}
+
+
+
+
+
+
+//meditation_row.js
+
+
+
+function formulate_label_square() {
+    html = '<span class="label label-success" style="margin:0">1</span>'
+    return html
+}
+
+function meditation_dates_loop_instance(date) {
+    html = formulate_label_square()
+    $("#meditation_row").append($(html))
+}
+
+function meditation_dates_loop(dates) {
+    dates.forEach(function(date) {
+        meditation_dates_loop_instance(date)
+    })
+}
+
+function meditation_dates(days) {
+    dates = dates_past_n_days(days)
+    meditation_dates_loop(dates)
+}
+//firebase_drogas.js
+
+
+function dose_remaining_now_base(input_text, date_time) {
+    beginning_count = parseInt(input_text) || 0
+    beginning_count = beginning_count * 20
+    date_time_string = date_time
+    m = moment(date_time_string)
+    now = moment()
+    hours_difference = now.diff(m, 'hours', true);
+    dose_remaining = beginning_count * Math.pow(.5, (hours_difference / 10));
+    return dose_remaining
+}
+
+
+function dose_remaining_now(dictionary_obj) {
+    return dose_remaining_now_base(dictionary_obj.input_text, dictionary_obj.date_time)
+}
+
+
+//cycling_age_status_list.js
+
+
+
+
+
+//var dbRef = dbRef || firebase.database();
+
+function surplus_time_calculate(hours_age, recurrence_age) {
+    recurrence_age = parseFloat(recurrence_age) || 0
+    surplus_time = recurrence_age - hours_age
+    return surplus_time
+}
+
+function determine_state_from_age(hours_age, recurrence_age) {
+    recurrence_age = parseFloat(recurrence_age) || 0
+    surplus_time = recurrence_age - hours_age
+    if (surplus_time > 0) {
+        state = 'green'
+    } else {
+        state = 'red'
+    }
+    return state
+
+}
+
+function label_create_from_rag_input(data, field_name, text_input) {
+    label_name = {
+        'green': 'label-primary',
+        'amber': 'label-warning',
+        'red': 'label-danger'
+    } [data] || 'label-primary'
+    span_element = $("<span>").append($("<span>", {
+        "value": data,
+        "field": field_name,
+        "class": "rag label " + label_name
+    }).text(text_input).clone()).html()
+    return span_element
+}
+
+function determine_state_from_row_dictionary_calculate(row) {
+    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+    return determine_state_from_age(hours_age, row['recurrence_age'])
+}
+
+function determine_age_from_row_dictionary_calculate(row) {
+    hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+    return surplus_time_calculate(hours_age, row['recurrence_age'])
+}
+
+function columns_generate_cycling_list() {
+    columns = [{
+        'data': 'name',
+        'format': '',
+        visible: true
+
+    }, {
+        'data': 'recurrence_age',
+        'format': '',
+        visible: false
+    }, {
+
+        'data': 'rag',
+        'format': 'rag',
+        'title': 'Hrs Remain',
+        visible: true,
+        render: function(data, type, row, meta) {
+            field_name = 'rag' //new_dictionary.name
+            rag_status = determine_state_from_row_dictionary_calculate(row)
+            text_input = determine_age_from_row_dictionary_calculate(row)
+
+            span_element = label_create_from_rag_input(rag_status, field_name, text_input.toFixed(1))
+            return span_element
+        }
+
+
+    }, {
+        //     'data': 'rag',
+        //     'format': 'rag',
+        //     visible:true
+        // }, {
+        'data': 'time_stamp',
+        'format': 'date',
+        visible: false
+    }, {
+
+        'data': 'age',
+        'format': '',
+        visible: false,
+        render: function(data, type, row, meta) {
+            return time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+        }
+    }, {
+        'data': 'state',
+        'format': 'state',
+        visible: false,
+        render: function(data, type, row, meta) {
+            hours_age = time_difference_moment_from_now_interval(moment(row['time_stamp']), 'minutes') / 60
+            return determine_state_from_age(hours_age, row['recurrence_age'])
+        }
+    }, {
+
+        'data': 'rank',
+        'format': 'rank',
+        visible: false
+    }, {
+        'data': 'summary',
+        visible: false
+    }, {
+        'data': 'group',
+        visible: false
+    }, {
+        'data': 'identifier',
+        visible: false
+    }]
+    return columns
+}
+
+function cycling_list_generate() {
+    columns = columns_generate_cycling_list()
+    datatables_params = datatables_firebase({
+        table_selector: "#cycling_list",
+        firebase_reference: dbRef.ref('omni').child('cycling_list'),
+        columns: columns
+        // sort: 'rank'
+    })
+
 }
