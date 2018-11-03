@@ -3,23 +3,35 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Calendar</title>
+        <title>Priorities</title>
         <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
         <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
-        <link href=https://rawgit.com/vderm9/jutility/master/style.css rel="stylesheet">
-        <link href='https://cruzco.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
-        <link href='https://cruzco.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
-        <link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
+        <link href="https://cruz.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
+        <link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
+        <link href='https://cruz.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
+        <link href='https://cruz.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+        <link href='https://cruz.site44.com/lib/scheduler.min.css' rel='stylesheet' />
         <link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
         <link href="https://cruz.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
+        <link href="https://cruz.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
         <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
         <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
         <link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
+        <link rel="stylesheet" href="css/small_chat.css">
+
+            <link href='///cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet' />
+
+<!--         <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+ -->        <link href="https://cruz.site44.com/css/plugins/summernote/summernote.css" rel="stylesheet">
+
+
+
         <!-- Mainly scripts -->
         <script src="https://cruz.site44.com/js/jquery-3.1.1.min.js"></script>
         <script src="https://cruz.site44.com/js/bootstrap.min.js"></script>
@@ -52,26 +64,35 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
         <!-- FirebaseJS-->
+
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
         <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
         <script>
         firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authDomain: "shippy-ac235.firebaseapp.com", databaseURL: "https://shippy-ac235.firebaseio.com"});
         </script>
         <script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
         <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
+        <!-- Bootstrap markdown -->
         <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
         <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/markdown.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js'></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-        <script src='https://cruzco.site44.com/lib/moment.min.js'></script>
+        <script src='https://cruz.site44.com/lib/moment.min.js'></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.min.js
         '></script>
         <script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
         <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
         <script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
-        <script src="https://cruzco.site44.com/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+        <script src="https://cruz.site44.com/js/plugins/fullcalendar/fullcalendar.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
+
+<!--         <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+ -->
+        <script src="https://cruz.site44.com/plugins/summernote/summernote.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
         <script type="text/javascript" src="https://cdn.rawgit.com/vderm9/jutility/master/js/dataTables.editor.min.js"></script>
@@ -81,14 +102,19 @@
         <link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js"></script>
+        <script src="https://cruz.site44.com/js/plugins/daterangepicker/daterangepicker.js"></script>
         <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
-        <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+        <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+        -->
+        <script src="https://chriscross.site44.com/js/jutility.js"></script>
+
         <script src="jutility.js"></script>
     </head>
     <body>
+
 <div id="wrapper">
-    <div id="page-wrapper" class="gray-bg">
+    <div class="gray-bg" id="page-wrapper">
         <div class="wrapper wrapper-content">
             <div id='main_content'>
                 <div class="container">
@@ -96,12 +122,23 @@
                         <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5></h5>
+                                    <h5>Editor</h5>
                                 </div>
-                                <div class="ibox-content">
-                                    <div id="calendar"></div>
-                                <table id="table" class="display nowrap" style="width:100%"></table>
+                                <div class="ibox-content" id="summernote_ibox">
+                                    <select class="selectpicker">
+                                        <option>
+                                            Mustard
+                                        </option>
+                                        <option>
+                                            Ketchup
+                                        </option>
+                                        <option>
+                                            Barbecue
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -109,152 +146,12 @@
         </div>
     </div>
 </div>
-</div>
-
 <script>
 
-var dbRef = dbRef||firebase.database();
-firebaseRef  = dbRef.ref('omni').child('calendar');
-
-
-
-
-
-
-
-firebase_json_dictionary = firebase_json_pull("https://shippy-ac235.firebaseio.com/omni/calendar.json")
-events = Object.values(firebase_json_dictionary)
-key_ids = Object.keys(firebase_json_dictionary)
-
-
-
-
-function firebase_id_if_created_through_drop(events_array,event_index){
-    try {
-        firebase_id = events_array[event_index]['firebase_id']
-    console.log({firebase_id:firebase_id})
-    return firebase_id 
-    }
-    catch(err){
-        return undefined
-    }
-
-}
-
-function calendar_time_stamp_update_firebase(event){
-    event_id = event['_id']////
-    events_array = event['source']['events']
-    console.log({events_array:events_array,event_id:event_id})
-    event_index = _.findIndex(events_array, function(D){return D['_id'] == event_id})
-    
-    firebase_id = firebase_id_if_created_through_drop(events_array,event_index)
-    if (firebase_id == undefined){
-        firebase_id = key_ids[event_index]
-    }
-    
-
-    console.log({event_index:event_index,firebase_id:firebase_id})
-
-    new_start = moment(event.start.format()).format()
-    new_end = moment(event.end.format()).format()
-    firebaseRef.child(firebase_id).child('start').set(new_start)
-    firebaseRef.child(firebase_id).child('end').set(new_end)
-    message = event.title + " start: "+ event.start.format() + " end: " + event.end.format()
-    toastr_notification(message)
-}
-
-
-function firebase_push_from_rendered_event(eventData){
-    eventData['start'] = moment( eventData['start']).format()
-    eventData['end'] = moment( eventData['end']).format()
-
-    eventData['time_stamp'] = moment().format()
-    eventData['created_time'] = moment().format()
-
-
-    console.log(eventData)
-    firebase_reference = firebase.database().ref('omni').child('calendar')
-    r = firebase_reference.push(eventData)
-    firebase_id = r.getKey()
-    eventData['firebase_id'] = firebase_id
-    return eventData
-}
-
-
-calendar_object = $('#calendar').fullCalendar({
-    header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'agendaDay,month,agendaWeek,listWeek,listDay,agendaFourDay'
-    },
-      views: {
-        listDay: { buttonText: 'list day' },
-        listWeek: { buttonText: 'list week' },
-    agendaFourDay: {
-      type: 'agenda',
-      duration: { days: 4 },
-      buttonText: '4 day'
-    }
-      },
-    defaultDate: moment().format('YYYY-MM-DD'),
-    selectable: true,
-    defaultView:'agendaDay',
-    selectHelper: true,
-    select: function(start, end) {
-        var title = prompt('Event Title:');
-        var eventData;
-        if (title) {
-            eventData = {
-                title: title,
-                start: start,
-                end: end,
-                color:'blue'
-            };
-            new_event_data = firebase_push_from_rendered_event(eventData)
-
-            //console.log(eventData)
-            $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-            
-        }
-        $('#calendar').fullCalendar('unselect');
-    },
-    eventResize: function(event, delta, revertFunc) {
-        calendar_time_stamp_update_firebase(event)
-    },
-    eventDrop: function(event, delta, revertFunc) {
-        calendar_time_stamp_update_firebase(event)
-    },
-    navLinks: true, // can click day/week names to navigate views
-    editable: true,
-    droppable: true, // this allows things to be dropped onto the calendar
-    eventLimit: true, // allow "more" link when too many events
-    events: events
-});
-
-
-        datatables_firebase({
-            firebase_reference: firebase.database().ref('omni').child('calendar'),
-            columns: [{
-                data: 'title',
-                format: 'title'
-            }, {
-                data: 'start',
-                format: 'date'
-            }, {
-                data: 'end',
-                format: 'date'
-            }, {
-                data: 'color'
-            }, ],
-            table_selector: "#table",
-            columns_generate: false
-        })
-
-
+datatables_table_cell_click_options_data_return_with_modal()
+//modal-body
 replace_side_panel_platform_omni()
 
-
 </script>
-
 </body>
 </html>
