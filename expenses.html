@@ -1,745 +1,367 @@
-
-
 <!doctype html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Aesop Admin</title>
-	<link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
-	<link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
-	<link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
-	<link href='https://cruzco.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
-	<link href='https://cruzco.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
-	<link href='https://cruzco.site44.com/lib/scheduler.min.css' rel='stylesheet' />
-	<link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
-	<link href="https://cruz.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
-	<link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
-	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
-	<link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
-	<script src="https://cruz.site44.com/js/jquery-3.1.1.min.js"></script>
-	<script src="https://cruz.site44.com/js/bootstrap.min.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-	<!-- Flot -->
-	<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.spline.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.resize.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.pie.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.symbol.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/flot/curvedLines.js"></script>
-	<!-- Peity -->
-	<script src="https://cruz.site44.com/js/plugins/peity/jquery.peity.min.js"></script>
-	<!-- Custom and plugin javascript -->
-	<script src="https://cruz.site44.com/js/inspinia.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/pace/pace.min.js"></script>
-	<!-- jQuery UI -->
-	<script src="https://cruz.site44.com/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses</title>
+    <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/plugins/bootstrap-markdown/bootstrap-markdown.min.css" rel="stylesheet">
+    <link href='https://rawgit.com/vderm9/jutility/master/style.css' rel="stylesheet">
+    <link href='https://cruz.site44.com/lib/fullcalendar.min.css' rel='stylesheet' />
+    <link href='https://cruz.site44.com/lib/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+    <link href='https://cruz.site44.com/lib/scheduler.min.css' rel='stylesheet' />
+    <link href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' rel='stylesheet' />
+    <link href="https://cruz.site44.com/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/css/bootstrap-select.min.css">
 
-	<!-- Jvectormap -->
-	<script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
-	<script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <link href="https://cruz.site44.com/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+    <link rel="stylesheet" href="https://cdn.firebase.com/libs/firepad/1.4.0/firepad.css" />
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/vderm9/jutility/master/css/editor.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.css">
+    <link rel="stylesheet" href="css/small_chat.css">
 
-	<!-- Sparkline -->
-	<script src="https://cruz.site44.com/js/plugins/sparkline/jquery.sparkline.min.js"></script>
 
-	<!-- ChartJS-->
-	<script src="https://cruz.site44.com/js/plugins/chartJs/Chart.min.js"></script>
+    <!--         <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+     -->        <link href="https://cruz.site44.com/css/plugins/summernote/summernote.css" rel="stylesheet">
 
-	<!-- CodeMirror-->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
-	<!-- FirebaseJS-->
-	<script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
-<script>
-firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authDomain: "shippy-ac235.firebaseapp.com", databaseURL: "https://shippy-ac235.firebaseio.com"});
-</script>
-	<script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
-	<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
-	<!-- Underscore-->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-	<script src='https://cruzco.site44.com/lib/moment.min.js'></script>
-	<script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
-	<script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
-	<script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
-	<script src="https://cruzco.site44.com/js/plugins/fullcalendar/fullcalendar.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
-	<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
-	<script type="text/javascript" src="https://cdn.rawgit.com/vderm9/jutility/master/js/dataTables.editor.min.js"></script>
-	<link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
-	<link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
-	<link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
-	<script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
-	<script src="jutility.js"></script>
 
+
+    <!-- Mainly scripts -->
+    <script src="https://cruz.site44.com/js/jquery-3.1.1.min.js"></script>
+    <script src="https://cruz.site44.com/js/bootstrap.min.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <!-- Flot -->
+    <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.pie.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/flot/jquery.flot.symbol.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/flot/curvedLines.js"></script>
+    <!-- Peity -->
+    <script src="https://cruz.site44.com/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="https://cruz.site44.com/js/demo/peity-demo.js"></script>
+    <!-- Custom and plugin javascript -->
+    <script src="https://cruz.site44.com/js/inspinia.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/pace/pace.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="https://cruz.site44.com/js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Jvectormap -->
+    <script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <!-- Sparkline -->
+    <script src="https://cruz.site44.com/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!-- ChartJS-->
+    <script src="https://cruz.site44.com/js/plugins/chartJs/Chart.min.js"></script>
+    <!-- CodeMirror-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/mode/javascript/javascript.js"></script>
+    <!-- FirebaseJS-->
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.2/js/bootstrap-select.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+    <script>
+        firebase.initializeApp({apiKey: "AIzaSyApJBfnH0j3TSugzEABiMFkI_tU_XXeGzg", authDomain: "shippy-ac235.firebaseapp.com", databaseURL: "https://shippy-ac235.firebaseio.com"});
+    </script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.6.2/firebaseui.css" />
+    <!-- Bootstrap markdown -->
+    <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/bootstrap-markdown.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/bootstrap-markdown/markdown.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src='https://cruz.site44.com/lib/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment-duration-format/2.2.2/moment-duration-format.min.js
+        '></script>
+    <script src='http://isaaccambron.com/twix.js/twix.js/dist/twix.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+    <script src="https://cruz.site44.com/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
+
+    <!--         <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+     -->
+    <script src="https://cruz.site44.com/plugins/summernote/summernote.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/datetime-moment.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/vderm9/jutility/master/js/dataTables.editor.min.js"></script>
+    <link href="https://cruz.site44.com/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/animate.css" rel="stylesheet">
+    <link href="https://cruz.site44.com/css/style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.rawgit.com/ChrisCruze/jutility/master/libs/jquery.dataTables.yadcf.js"></script>
+    <script src="https://cruz.site44.com/js/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="https://rawgit.com/vderm9/jutility/master/jutility.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcomponentsjs/1.1.0/webcomponents-hi.js"></script>
+    <!-- <script src="https://rawgit.com/ChrisCruze/jutility/master/jutility.js"></script>
+    -->
+    <script src="https://cruz.site44.com/js/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <script src="https://chriscross.site44.com/js/jutility.js"></script>
+    <script src="https://chriscross.site44.com/js/firebase.js"></script>
+
+    <script src="jutility.js"></script>
 </head>
 <body>
 <div id="wrapper">
-<div id='navigation_side'></div>
-
-<div id="page-wrapper" class="gray-bg">
-<div id='navigation_top'></div>
-
-<div class="wrapper wrapper-content">
-<div id='main_content'>
-<div class="container">
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-success pull-right"></span>
-                        <h5>Visits</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins" id="visitors_number">-</h1>
-                        <div class="stat-percent font-bold text-success"></div>
-                        <small></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right"></span>
-                        <h5>Sessions</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins" id="sessions_number">-</h1>
-                        <div class="stat-percent font-bold text-info"></div>
-                        <small></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right"></span>
-                        <h5>Forms</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins" id="forms_number">-</h1>
-                        <div class="stat-percent font-bold text-info"></div>
-                        <small></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right"></span>
-                        <h5>URLs</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins" id="urls_number">-</h1>
-                        <div class="stat-percent font-bold text-info"></div>
-                        <small></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right"></span>
-                        <h5>Open Bugs</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins" id="bugs_number">-</h1>
-                        <div class="stat-percent font-bold text-info"></div>
-                        <small></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4" style='display:none'>
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>Tasks by Category</h5>
-                        <div class="ibox-tools">
-                            <span class="label label-primary">Last 30 Days</span>
-                        </div>
-                    </div>
-                    <div class="ibox-content no-padding">
-                        <div class="flot-chart m-t-lg" style="height: 55px;">
-                            <div class="flot-chart-content" id="flot-chart1"></div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-content">
-                        <div>
-                                        <span class="pull-right text-right">
-                                        <small></small>
-                                        </span>
-                            <h3 class="font-bold no-margins">
-                                Visits
-                            </h3>
-                            <small></small>
-                        </div>
-
-                        <div class="m-t-sm">
-
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div>
-                                        <canvas id="barChart" height="114"></canvas>
+    <div class="gray-bg" id="page-wrapper">
+        <div class="wrapper wrapper-content">
+            <div id='main_content'>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title">
+                                    <h5>Date Range Picker</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a> <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-wrench"></i></a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li>
+                                                <a href="#">Config option 1</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Config option 2</a>
+                                            </li>
+                                        </ul><a class="close-link"><i class="fa fa-times"></i></a>
                                     </div>
                                 </div>
-                                <div class="col-md-4" style='display:none'>
-                                    <ul class="stat-list m-t-lg">
-                                        <li>
-                                            <h2 class="no-margins">70%</h2>
-                                            <small>Tasks Completed</small>
-                                            <div class="progress progress-mini">
-                                                <div class="progress-bar" style="width: 48%;"></div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <h2 class="no-margins ">10</h2>
-                                            <small>Times Prices Updated</small>
-                                            <div class="progress progress-mini">
-                                                <div class="progress-bar" style="width: 60%;"></div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                <div class="ibox-content" id="daterange_selector_container">
+                                <input id="daterange_picker" class="form-control" type="text" name="daterange" value="01/01/2015 - 01/31/2015" />
+
+                                                                <input id="demo" class="form-control" type="text" name="daterange" />
+
                                 </div>
                             </div>
-
                         </div>
-
-                        <div class="m-t-md">
-                            <small class="pull-right">
-                                <i class="fa fa-clock-o"> </i>
-                            </small>
-                            <small>
-                            </small>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5></h5>
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="chartjs_section" style="position:relative;margin:auto">
+                                        <canvas id="horizontal_bar_chart_cost" style="display: block;" width="819"></canvas>
+                                    </div>`
+                                    <div class="chartjs_section" style="position:relative;margin:auto">
+                                        <canvas id="horizontal_bar_chart" style="display: block;" width="819"></canvas>
+                                    </div>`
+                                    <table class="display nowrap" id="table" style="width:100%"></table>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4" style='display:none'>
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-warning pull-right">40%</span>
-                        <h5>Key Performance Metrics</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <small class="stats-label">Amount Owed</small>
-                                <h4>236 321.80</h4>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <small class="stats-label">% Inventory</small>
-                                <h4>-</h4>
-                            </div>
-                            <div class="col-xs-4">
-                                <small class="stats-label">% Guest Rules</small>
-                                <h4>-</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <small class="stats-label">Prices Updated</small>
-                                <h4>643 321.10</h4>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <small class="stats-label">5 Star Reviews</small>
-                                <h4>92.43%</h4>
-                            </div>
-                            <div class="col-xs-4">
-                                <small class="stats-label">Time Spent</small>
-                                <h4>564.554</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <small class="stats-label"></small>
-                                <h4>436 547.20</h4>
-                            </div>
-
-                            <div class="col-xs-4">
-                                <small class="stats-label">% New</small>
-                                <h4>150.23%</h4>
-                            </div>
-                            <div class="col-xs-4">
-                                <small class="stats-label">Last week</small>
-                                <h4>124.990</h4>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
-            </div>
-
         </div>
-
-  
-
-
-
-        <div class="row">
-
-        <div class="col-lg-12">
-        <div class="ibox float-e-margins">
-        <div class="ibox-title">
-            <h5>Todoist Tasks </h5>
-
-        </div>
-        <div class="ibox-content">
-            <div class="row">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a id='visits_button' href="#tab-1" data-toggle="tab" onClick="">Visits</a></li>
-                    <li class=""><a id='users_button' href="#tab-2" data-toggle="tab">Sessions</a></li>
-                    <li class=""><a id='forms_button' href="#tab-6" data-toggle="tab">Forms</a></li>
-
-                    <li class=""><a id='bugs_button' href="#tab-3" data-toggle="tab" onClick="">Bugs</a></li>
-<!--                     <li class=""><a id='actions_button' href="#tab-4" data-toggle="tab" onClick="">Actions</a></li>
- -->                    <li class=""><a id='urls_button' href="#tab-7" data-toggle="tab" onClick="">URLs</a></li>
-
-
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="tab-1">
-                        <table id="visits_table" class="display nowrap" cellspacing="0" width="100%"></table>
-                    </div>
-                    <div class="tab-pane" id="tab-2">
-                        <table id="users_table" class="display nowrap" cellspacing="0" width="100%"></table>
-
-                    </div>
-                    <div class="tab-pane" id="tab-6">
-                        <table id="forms_table" class="display nowrap" cellspacing="0" width="100%"></table>
-
-                    </div>
-                    <div class="tab-pane" id="tab-3">
-                        <table id="bugs_table" class="display nowrap" cellspacing="0" width="100%"></table>
-
-                    </div>
-                    <div class="tab-pane" id="tab-4">
-                        <table id="actions_table" class="display nowrap" cellspacing="0" width="100%"></table>
-
-                    </div>
-
-                    <div class="tab-pane" id="tab-5">
-                        <table id="chats_table" class="display nowrap" cellspacing="0" width="100%"></table>
-
-                    </div>
-
-                    <div class="tab-pane" id="tab-7">
-                        <table id="urls_table" class="display nowrap" cellspacing="0" width="100%"></table>
-
-                    </div>
-
-
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-        </div>
-        </div>
-
-        </div>
-
-
-
-
+    </div>
 </div>
-</div>
-</div>
-
-
-</div>
-</div>
-
 <script>
 
+    function chartjs_horizontal_data_create(labels, data) {
+        data_config = {
+            labels: labels,
+            datasets: [{
+                label: 'Dataset 1',
+                backgroundColor: 'red',
+                borderWidth: 1,
+                data: data
+            }]
+        }
+        return data_config
+    }
 
-// l = firebase_json_pull("https://aesop-d00e2.firebaseio.com/visits.json")
-// console.log(l)
+    function chart_create_from_callback_array(callback_array) {
+        result_dict = array_group_by_calculation_length(callback_array, 'vendor')
+        labels = result_dict['keys']
+        data_points = result_dict['values']
 
-// function generate_headers(){
+        chart_identifier = "horizontal_bar_chart"
+        data = chartjs_horizontal_data_create(labels, data_points)
+        options = chartjs_horizontal_bar_chart_options_example()
+        chart_type = "horizontalBar"
+        chartjs_determine_creation(chart_identifier, data, options, chart_type)
+    }
 
-// 	sub_title = ''
-// 	metric_text = ''
-// 	sub_metric_text = ''
+    function chart_create_from_callback_array_cost(callback_array) {
+        result_dict = array_group_by_calculation_sum(callback_array, 'vendor','cost')
+        labels = result_dict['keys']
+        data_points = result_dict['values']
 
-// 	$('#metric_headers').append(metric_header_create_label('Visits',sub_title,metric_text,sub_metric_text,'visitors_number'))
-
-// 	$('#metric_headers').append(metric_header_create_label('Forms',sub_title,metric_text,sub_metric_text,'forms_number'))
-
-// 	// $('#metric_headers').append(metric_header_create_label('Conversion Rate',sub_title,metric_text,sub_metric_text,'conversion_rate_number'))
-
-
-// 	$('#metric_headers').append(metric_header_create_label('Uniques(Sessions)',sub_title,metric_text,sub_metric_text,'sessions_number'))
-// }
-
-
-// generate_headers()
-
-bar_chart_object = bar_chart_initiate_render_chartjs("barChart")
-
-
-var dbRef = firebase.database();
-
-// function render_function(data,type,row,meta){return "<a href='"+"https://www.google.com/maps/search/"+row.latitude_longitude+"'"">"+data+"</a>"}
-
-function render_function(data,type,row,meta){return '<a href="https://www.google.com/maps/search/'+row.latitude_longitude+'">'+data+'</a>'}
+        chart_identifier = "horizontal_bar_chart_cost"
+        data = chartjs_horizontal_data_create(labels, data_points)
+        options = chartjs_horizontal_bar_chart_options_example()
+        chart_type = "horizontalBar"
+        chartjs_determine_creation(chart_identifier, data, options, chart_type)
+    }
 
 
-//visits stores: internet_service_provider,latitude_longitude,ip_address,city,zip_code,autonomous_system_number
-//start_time,end_time,duration,visit_id,session_id,site_viewer,url,time_stamp
 
-function visits_callback(callback_data){
-	$("#visitors_number").html(callback_data.length)
 
-    firebase_chart_update({
-        chart_object:bar_chart_object,
-        //firebase_url:"https://shippy-ac235.firebaseio.com/run_log.json",
-        data:callback_data,
-        filter_function:function(D){return true},
-        calculation_function:function(l){return l.length},
-        date_key:'time_stamp',
-        dates:dates_past_n_days(7)
+    function callback_function() {
+        callback_array = datatables_callback_array_from_this(this)
+        chart_create_from_callback_array(callback_array)
+        chart_create_from_callback_array_cost(callback_array)
+
+
+    }
+
+    var editor = new $.fn.dataTable.Editor({
+        table: '#table',
+        idSrc: 'dropbox_id',
+        fields: [{
+            label: 'name',
+            name: 'name'
+        }, {
+                label: 'vendor',
+                name: 'vendor'
+            }
+        ]
+    });
+
+    $('#table').DataTable({
+        dom: '<"html5buttons"B>lTfgitp',
+        data: [],
+        columns: [
+            {'data':'direct_media_link','visible':false,title:'direct_media_link'},
+            {'data':'file_name',title:'file_name','visible':true,render:function(data, type, row, meta) {
+                    return "<a target='_blank' href='" + row.dropbox_link + "'>" + data + "</a>"
+                }},
+            {'data':'cost',title:'cost','visible':true},
+            {'data':'vendor',title:'vendor','visible':false},
+            {'data':'category',title:'category','visible':false},
+            {'data':'section','title':'section','visible':false},
+            {'data':'type','title':'type','visible':false},
+            {'data':'time_stamp',title:'time_stamp','visible':false,format:'date'},
+
+            {'data':'dropbox_link',title:'dropbox_link','visible':false},
+            {'data':'evernote_url',title:'evernote_url','visible':false},
+            {'data':'time_created',title:'time_created','visible':true},
+        ],
+        select: true,
+        drawCallback:callback_function,
+        paging: false,
+        scrollX: true,
+        colReorder: true,
+        autoWidth: true,
+        buttons: datatables_config_buttons_create_base_editor(editor)
     })
 
-
-}
-
-function sessions_callback(callback_data){
-	$("#sessions_number").html(callback_data.length)
-
-
-
-
-
-}
-
-function forms_callback(callback_data){
-	$("#forms_number").html(callback_data.length)
-}
-
-function bugs_callback(callback_data){
-	$("#bugs_number").html(callback_data.length)
-
-
-
-
-
-}
-
-
-//visits stores: internet_service_provider,latitude_longitude,ip_address,city,zip_code,autonomous_system_number
-//start_time,end_time,duration,visit_id,session_id,site_viewer,url,time_stamp
-$('#visits_button').on('click', function (e) {
-	if (typeof visits_params === 'undefined') {
-			visits_params = datatables_firebase({
-			    firebase_reference:dbRef.ref('receipts'),
-			    table_selector:"#visits_table",
-			    columns_generate:true,
-			    default_visible:false,
-			    columns: [
-			    	{'data':'direct_media_link','visible':true},
-			    	{'data':'file_name','visible':true},
-			    	{'data':'dropbox_link','visible':true},
-			    	{'data':'evernote_url','visible':true},
-			    	{'data':'time_created','visible':true},
-			        ],
-			    //sort:'start_time',
-			    //callback_function:visits_callback,
-
-			})
-			visits_table = visits_params.table 
-		}
-})
-
-function encodeQueryData(data) {
-   let ret = [];
-   for (let d in data)
-     ret.push(btoa(encodeURIComponent(d)) + '=' + btoa(encodeURIComponent(data[d])));
-   return ret.join('&');
-}
-
-
-function url_render_function(data,type,row,meta){
-
-	//new_row = _.omit(row,'url')
-	input_dictionary = {
-		name:row.name,
-		owner:row.owner,
-		campaign:row.campaign,
-		source:row.source,
-		url:row.url
-	}
-
-	new_dict = {}
-
-	Object.keys(input_dictionary).forEach(function(key_name){
-		if (input_dictionary[key_name] != 'null'){
-			new_dict[key_name]  = input_dictionary[key_name] 
-		}
-
-	})
-
-
-	console.log(input_dictionary)
-	console.log(new_dict)
-
-	encoded = encodeQueryData(new_dict)
-
-	return 'aesopba.com/?' + encoded
-
-	// var querystring = encodeQueryData(data);
-	// return ''
-
-}
-
-
-
-$('#urls_button').on('click', function (e) {
-	if (typeof url_params === 'undefined') {
-
-			url_params = datatables_firebase({
-			    firebase_reference:dbRef.ref('urls').child('urls'),
-			    table_selector:"#urls_table",
-			    //columns_generate:true,
-			    //default_visible:false,
-			    columns: [
-			    	{'data':'name','visible':true},
-			    	{'data':'owner','visible':false},
-			    	{'data':'campaign','visible':false},
-			    	{'data':'source','visible':false},
-			    	{'data':'url','visible':true,render:url_render_function},
-			        ]
-
-			})
-		}
-})
-
-$('#bugs_button').on('click', function (e) {
-	if (typeof bugs_params === 'undefined') {
-		bugs_params = datatables_firebase({
-		    firebase_reference:dbRef.ref('bug_features'),
-		    table_selector:"#bugs_table",
-		    callback_function:bugs_callback,
-		     columns: [
-		        {'data':'priority','format':'rank'},
-		        'status',
-		        {'data':'id','visible':false},
-		        'content',
-		        {'data':'session_id','visible':false},
-		        {'data':'viewer','visible':false},
-		        {'data':'timestamp','format':'date'},
-		        ],
-		    sort:'priority'
-		})
-
-
-
-
-		function filter_for_done(){
-
-
-
-  //$.fn.dataTable.ext.search.push(
-  $.fn.dataTableExt.afnFiltering.push(
-
-    function( settings, searchData, index, rowData, counter ) {
-    	    	console.log(settings.nTable.id)
-
-    	if (settings.nTable.id == 'bugs_table'){
-    		    	//console.log(settings.nTable.id)
-
-    		//console.log('filtering')
-
-    		return rowData['status'] != 'Done'
-
-    	}
-    	else {
-    		return true
-    	}
-    })
-    bugs_params.table.draw()  
-}
-
-filter_for_done()
-
-
-
-	}	
-})
-
-//visit_id,time_stamp, name, email, company, additional_info,check_out_form, sign_up_form, subscribed, session_id
-$('#users_button').on('click', function (e) {
-	if (typeof users_params === 'undefined') {
-		users_params = datatables_firebase({
-		    firebase_reference:dbRef.ref('sessions'),
-		    callback_function:sessions_callback,
-		    table_selector:"#users_table",
-		    columns:['session_id','notes','name','email','company','visit_id','time_stamp']
-		})
-	}	
-})
-
-// $('#users_button').on('click', function (e) {
-// 	if (typeof users_params === 'undefined') {
-// 		users_params = datatables_firebase({
-// 		    firebase_reference:dbRef.ref('users'),
-// 		    table_selector:"#users_table"
-// 		})
-// 	}	
-// })
-
-$('#forms_button').on('click', function (e) {
-	if (typeof forms_params === 'undefined') {
-		forms_params = datatables_firebase({
-		    firebase_reference:dbRef.ref('forms'),
-		    table_selector:"#forms_table",
-		    callback_function:forms_callback,
-		    columns:['form_id','notes','session_id','visit_id'],
-		    columns_generate:true,
-
-		})
-	}	
-})
-
-
-
-
-
-$('#actions_button').on('click', function (e) {
-	if (typeof actions_params === 'undefined') {
-		actions_params = datatables_firebase({
-		    firebase_reference:dbRef.ref('actions'),
-		    table_selector:"#actions_table",
-		    columns:[
-		      {'data':'time_stamp','format':'date'},
-		      {'data':'object',visible:false},
-
-		    ],
-		    columns_generate:true,
-		    sort:'time_stamp'
-
-		})
-
-	}	
-})
-
-
-
-$('#chats_button').on('click', function (e) {
-	if (typeof chats_params === 'undefined') {
-		chats_params = datatables_firebase({
-		    firebase_reference:dbRef.ref('chat'),
-		    table_selector:"#chats_table"
-		})
-
-	}	
-})
-
-
-
-
-
-// function initiate_chat(session_id){
-// var chatRef = dbRef.ref('chat').child(session_id)
-// 	viewer = 'admin'
-// $("#message_send").click(function(event) {
-//   input_text = $("#message_box_text").val()
-//   date_time = moment().format(); //new Date()
-//   data_to_push = {
-//     'session_id':session_id,
-//     'viewer':'admin',
-//     'content': input_text,
-//     'timestamp': date_time
-//   }
-//   chatRef.push(data_to_push)
-//   $("#message_box_text").val("")
-//   if (site_viewer == 'client'){
-//     slack_notification(session_id,input_text)
-//   }
-// });
-
-// $('#message_box_text').keypress(function (e) {
-//  var key = e.which;
-//  if(key == 13)  // the enter key code
-//   {$('#message_send').click();
-//     return false;  
-//   }
-// });   
-
-// function activate_chat_window(){
-//     $(".small-chat-box").addClass('active')
-//     $("#small-chat").find('i').attr('class','fa fa-remove')   
-// }
+    function cost_calculate_from_string(file_name){
+        cost = file_name.split('-')[0]
+        dollars = cost.split('.')[0]
+        cents = cost.split('.')[1]
+        dollars = parseFloat(dollars)||0
+        cents = parseFloat(cents)||0
+        cost_total = dollars + cents/100
+        return cost_total
+
+    }
+
+    function cost_calculate_from_dictionary(update_dictionary){
+        file_name = update_dictionary['file_name']
+        cost = cost_calculate_from_string(file_name)//regex_number_from_string(file_name)
+        return cost
+    }
+
+    function cost_update_from_dictionary(update_dictionary){
+        update_dictionary['cost'] = cost_calculate_from_dictionary(update_dictionary)
+        return update_dictionary
+    }
+
+    function firebase_snap_dictionary_convert(snap){
+        update_dictionary = firebase_dictionary_from_snapshot(snap)
+        update_dictionary = cost_update_from_dictionary(update_dictionary)
+        update_dictionary = dictionary_check_keys_ensure(update_dictionary, ['vendor','category','section','type','time_stamp','time_created'])
+        return update_dictionary
+    }
+
+
+    var dbRef = dbRef || firebase.database();
     
-// chatRef.on('child_added', function(snapshot) {
-//     activate_chat_window()
-//   timer_instance_dictionary = snapshot.val()
-//   if (timer_instance_dictionary != null){
-//       saved_content = timer_instance_dictionary.content
-//       viewer= timer_instance_dictionary.viewer
-//       timestamp = moment(timer_instance_dictionary.timestamp).format("hh:mmA")//MM-DD 
-//       if (viewer == 'client'){
-//         message_content = '<div class="left"> <div class="author-name"> <small class="chat-date"> '+ timestamp +'</small> </div> <div class="chat-message active">'+ saved_content + ' </div> </div>'
-//       }
-//       else {
-//         message_content = '<div class="right"> <div class="author-name"> Aesop <small class="chat-date"> '+ timestamp+'</small> </div> <div class="chat-message"> '+ saved_content+ '</div> </div>'
-//       }
-//       $("#message_content").append(message_content)
-//     }
+    firebase_reference = dbRef.ref('receipts')
+    firebase_reference.limitToLast(100).on("child_added", function(snap) {
+        update_dictionary = firebase_snap_dictionary_convert(snap)
+        $("#table").DataTable().row.add(update_dictionary).draw(false);
+    })
+    firebase_reference.on("child_changed", function(snap) {
+        firebase_id = firebase_id_get_from_child(snap)
+        update_dictionary = firebase_snap_dictionary_convert(snap)
+        datatables_row_update_based_on_identifier("#table",update_dictionary, 'firebase_id', firebase_id)
+    })
+
+
+    function editor_create_function(D){
+        console.log({D:D})
+    }
+
+
+    function editor_update_function(D) {
+        firebase_id = D['firebase_id']
+        r = firebase_reference.child(firebase_id).set(D);
+        console.log({r:r})
+    }
+
+
+
+
+
+
+    datatables_editor_function_actions_apply(editor, editor_create_function, editor_update_function, editor_create_function)
+
+
+    datatables_column_filter_initiate("#table")
+
+
+    // function daterange_func(start,end,label){
+    //     console.log({start:start,end:end,r:r})
+    //     $("#table").DataTable().draw()
+
+    // }
+    // daterangepicker_literal_append_with_function('01/01/2018 - 01/31/2019', "#daterange_selector_container", daterange_func) 
+
+
+
+
+
+
+
+
+
+
+daterangepicker_datatables_filter_initiate("#table","#demo",'time_created')
+
+
+
+
+
+
+
+// $('#daterange_picker').daterangepicker();
+// $('#daterange_picker').on('apply.daterangepicker', function(ev, picker) {
+//   console.log(picker.startDate.format('YYYY-MM-DD'));
+//   console.log(picker.endDate.format('YYYY-MM-DD'));
 // });
- 
-
-// }
 
 
-// var url = new URL(window.location.href );           //get the url of the page
-// var session_id = url.searchParams.get("id")
-// console.log(session_id)
-// if (session_id != null){
-// 	console.log('initiated')
-// 	initiate_chat(session_id)
 
-// }
+//daterangepicker_callback("#daterange_picker","#table")
 
-// visits, sessions, forms, bugs, actions per day
-// also create a url
-
-// $('#users_button').click()
-// $('#visits_button').click()
-// $('#forms_button').click()
-// $('#urls_button').click()
-// $('#bugs_button').click()
-replace_side_panel_platform_omni()
 
 </script>
 </body>
 </html>
-
-
-
