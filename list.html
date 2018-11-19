@@ -185,6 +185,7 @@ datatables_params = datatables_firebase({
     firebase_reference: firebase_reference_instance,
     columns: [{
             'data': 'name',
+            visible:false,
             render: function(data, type, row, meta) {
                 return "<a target='_blank' href='" + "list.html?id=" + file_formatted_string(data) + "'>" + data + "</a>"
             }

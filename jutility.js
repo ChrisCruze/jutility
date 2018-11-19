@@ -7893,6 +7893,14 @@ function remaining_tasks_populate(gspread_array) {
         return r;
     };
 
+    $.fn.dataTable.ext.type.order["moment-sort-pre"] = function(d) {
+        input_date = $(d)[0].attributes[0].nodeValue
+        r = moment(input_date, "MM/DD/YY hh:mm:ssA (dd)").valueOf()
+        //console.log({input_date:input_date,d:d,r:r})
+        // r = parseFloat(d)||-1000
+        return r;
+    };
+
     columns = [{
         data: 'Task',
         title: 'Task',
@@ -7909,7 +7917,8 @@ function remaining_tasks_populate(gspread_array) {
         title: 'Time Remaining',
         name: 'time_remaining',
         visible: true,
-        render: moment_from_now_reder
+        render: moment_from_now_reder,
+        type: 'moment-sort'
     }, {
         data: 'Estimated Duration',
         title: 'Estimated Duration',
@@ -8059,7 +8068,7 @@ function remaining_tasks_populate(gspread_array) {
                 }
             },
         ],
-        order: [1, "asc"]
+        order: [2, "asc"]
     });
     //dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
 }

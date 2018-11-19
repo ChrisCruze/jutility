@@ -39,10 +39,18 @@ function remaining_tasks_populate(gspread_array){
     return r;
   };
 
+  $.fn.dataTable.ext.type.order["moment-sort-pre"] = function(d) {
+    input_date = $(d)[0].attributes[0].nodeValue
+    r = moment(input_date, "MM/DD/YY hh:mm:ssA (dd)").valueOf()
+    //console.log({input_date:input_date,d:d,r:r})
+    // r = parseFloat(d)||-1000
+    return r;
+  };
+
   columns = [
     {data:'Task',title:'Task',name:'Task'},
     {data:'days_remaining',title:'days_remaining',name:'days_remaining',visible:false,type:'number-float',render:number_format_render},
-    {data:'due_date',title:'Time Remaining',name:'time_remaining',visible:true,render:moment_from_now_reder},
+    {data:'due_date',title:'Time Remaining',name:'time_remaining',visible:true,render:moment_from_now_reder,type:'moment-sort'},
     {data:'Estimated Duration',title:'Estimated Duration',name:'Estimated Duration',visible:false},
     {data:'status',title:'status',name:'status',visible:false},
     {data:'days_to_incomplete',title:'days_to_incomplete',name:'days_to_incomplete',visible:false},
@@ -130,7 +138,7 @@ function remaining_tasks_populate(gspread_array){
           dt.columns('').search('').draw()
         }}, 
     ],
-    order: [1, "asc"]
+    order: [2, "asc"]
     });
     //dt.columns('status:name').search('^((?!Green).)*$',true,false).draw()
 }
