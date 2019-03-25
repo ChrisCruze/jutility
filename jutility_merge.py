@@ -226,18 +226,18 @@ def run():
         f.write(jsbeautifier.beautify(s))
         f.close()
     save_file()
-    save_file(directory="/Users/chriscruz/Dropbox/Github/Dashbot/js/jutility.js")
-    save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
-    #save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
-    #save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
-    save_file(directory="/Users/chriscruz/Dropbox/Github/Taskr/js/jutility.js")
+    # save_file(directory="/Users/chriscruz/Dropbox/Github/Dashbot/js/jutility.js")
+    # save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
+    # #save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
+    # #save_file(directory="/Users/chriscruz/Dropbox/Github/Stock/js/jutility.js")
+    # save_file(directory="/Users/chriscruz/Dropbox/Github/Taskr/js/jutility.js")
 
 
-    save_file(directory="/Users/chriscruz/Dropbox/Github/Aesop-WearWell/js/jutility.js")
-    save_file(directory="/Users/chriscruz/Documents/Aesop_080518/Aesop/js/jutility.js")
-    #save_file(directory="/Users/chriscruz/Dropbox/Github/Aesop/Aesop/js/jutility.js")
-    save_file(directory="/Users/chriscruz/Dropbox/Github/ChrisCross/jutility.js")
-    save_file(directory="/Users/chriscruz/Dropbox/Apps/site44/cruzco.site44.com/jutility.js")
+    # save_file(directory="/Users/chriscruz/Dropbox/Github/Aesop-WearWell/js/jutility.js")
+    # save_file(directory="/Users/chriscruz/Documents/Aesop_080518/Aesop/js/jutility.js")
+    # #save_file(directory="/Users/chriscruz/Dropbox/Github/Aesop/Aesop/js/jutility.js")
+    # save_file(directory="/Users/chriscruz/Dropbox/Github/ChrisCross/jutility.js")
+    # save_file(directory="/Users/chriscruz/Dropbox/Apps/site44/cruzco.site44.com/jutility.js")
 
 
     

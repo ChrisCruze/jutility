@@ -3929,7 +3929,7 @@ function todoist_delete_task(task_id) {
 
 //child function of todoist_completed_tasks_all
 function todoist_completed_tasks_with_offset(todoist_api_token, offset, since) {
-    since = since || moment().subtract(70, 'days').format('YYYY-MM-DD') + "T10:00" // '2018-05-08T10:00'//moment().subtract(60,'days').format('YYYY-MM-DD') //
+    since = since || moment().subtract(30, 'days').format('YYYY-MM-DD') + "T10:00" // '2018-05-08T10:00'//moment().subtract(60,'days').format('YYYY-MM-DD') //
     results = $.ajax({
         type: "GET",
         url: 'https://en.todoist.com/api/v7/completed/get_all',
